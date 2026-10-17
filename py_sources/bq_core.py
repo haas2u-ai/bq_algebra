@@ -201,6 +201,71 @@ def triple_rule(d, C):
             's': [dxS[k] - m(d0, cK[k]) for k in range(3)]}
 
 
+# ---------------------------------------------------------------------------
+# 4b. The table route: expand term by term and read each basis product from the
+#     multiplication table of the BQ-Pauli slides (row . column), no matrices.
+#     bq_pauli_table.py checks this table against the explicit matrices.
+# ---------------------------------------------------------------------------
+TABLE = {
+    'T':  ['-1', '-sI', '-sJ', '-sK', 'I', 'J', 'K', 'T'],
+    'I':  ['-sI', '-1', 'K', '-J', 'T', 'sK', '-sJ', 'I'],
+    'J':  ['-sJ', '-K', '-1', 'I', '-sK', 'T', 'sI', 'J'],
+    'K':  ['-sK', 'J', '-I', '-1', 'sJ', '-sI', 'T', 'K'],
+    'sI': ['I', 'T', 'sK', '-sJ', '1', '-K', 'J', 'sI'],
+    'sJ': ['J', '-sK', 'T', 'sI', 'K', '1', '-I', 'sJ'],
+    'sK': ['K', 'sJ', '-sI', 'T', '-J', 'I', '1', 'sK'],
+    '1':  ['T', 'I', 'J', 'K', 'sI', 'sJ', 'sK', '1'],
+}
+
+
+def table_entry(x, y):
+    """(sign, element) of the basis product x . y from the table."""
+    e = TABLE[x][ORDER.index(y)]
+    return (-1, e[1:]) if e.startswith('-') else (1, e)
+
+
+def table_product(left, right, log=None):
+    """Product of two expansions {basis key: coordinate}; the left coordinate acts on the right one.
+    Returns {basis key: coefficient} for all eight elements."""
+    out = {k: sp.Integer(0) for k in ORDER}
+    for x, a in left.items():
+        for y, b in right.items():
+            if not isinstance(b, Op) and b == 0:
+                continue
+            sgn, el = table_entry(x, y)
+            out[el] += sgn * apply(a, b)
+            if log is not None:
+                log.append((x, a, y, b, sgn, el))
+    return out
+
+
+def as_channels(out):
+    return {'1': out['1'], 'T': out['T'], 'K': [out['I'], out['J'], out['K']], 's': [out['sI'], out['sJ'], out['sK']]}
+
+
+def bilinear_table(A, B, log=None):
+    """A^T B term by term: (-a0 T^ + a.K^)(b0 T^ + b.K^)."""
+    left = dict(zip(['T', 'I', 'J', 'K'], A.time_reversed()))
+    right = dict(zip(['T', 'I', 'J', 'K'], right_values(B)))
+    return as_channels(table_product(left, right, log))
+
+
+def triple_table(D, C, log=None):
+    """D C term by term: (d0 T^ + d.K^)(c1 1^ + cK.K^ + cs.sigma^)."""
+    left = dict(zip(['T', 'I', 'J', 'K'], D.comps))
+    right = {'1': C['1'], 'I': C['K'][0], 'J': C['K'][1], 'K': C['K'][2], 'sI': C['s'][0], 'sJ': C['s'][1], 'sK': C['s'][2]}
+    return as_channels(table_product(left, right, log))
+
+
+def show_log(log):
+    """One line per product, as on the web pages."""
+    lines = []
+    for x, a, y, b, sgn, el in log:
+        sa = a.label if isinstance(a, Op) else show(a)
+        lines.append(f"  ({sa}) {PRETTY[x]} . ({show(b)}) {PRETTY[y]}  ->  {PRETTY[x]}{PRETTY[y]} = {'-' if sgn < 0 else '+'}{PRETTY[el]}")
+    return '\n'.join(lines)
+
+
 def compare(ch_matrix, ch_rule):
     """True when every channel of the matrix product equals the rule exactly."""
     pairs = [(ch_matrix['1'], ch_rule['1']), (ch_matrix['T'], ch_rule['T'])]
@@ -229,6 +294,6 @@ def show_channels(ch, title):
     lines.append(f"  1^      : {show(ch['1'])}")
     if 'T' in ch:
         lines.append(f"  T^      : {show(ch['T'])}")
-    for lab, key in (('K^', 'K'), ('sigma^', 's')):
+    for lab, key in (('vec K^', 'K'), ('sigma^', 's')):
         lines.append(f"  {lab:<8}: ({', '.join(show(v) for v in ch[key])})")
     return '\n'.join(lines)

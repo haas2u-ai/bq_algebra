@@ -9,19 +9,10 @@ Element names: T I J K sI sJ sK 1
 """
 import sys
 import sympy as sp
-from bq_core import BASIS, ORDER, PRETTY, SPACE_TIME
+from bq_core import BASIS, ORDER, PRETTY, SPACE_TIME, TABLE
 
-# the table of slide 17 (row . column)
-PAPER = {
-    'T':  ['-1', '-sI', '-sJ', '-sK', 'I', 'J', 'K', 'T'],
-    'I':  ['-sI', '-1', 'K', '-J', 'T', 'sK', '-sJ', 'I'],
-    'J':  ['-sJ', '-K', '-1', 'I', '-sK', 'T', 'sI', 'J'],
-    'K':  ['-sK', 'J', '-I', '-1', 'sJ', '-sI', 'T', 'K'],
-    'sI': ['I', 'T', 'sK', '-sJ', '1', '-K', 'J', 'sI'],
-    'sJ': ['J', '-sK', 'T', 'sI', 'K', '1', '-I', 'sJ'],
-    'sK': ['K', 'sJ', '-sI', 'T', '-J', 'I', '1', 'sK'],
-    '1':  ['T', 'I', 'J', 'K', 'sI', 'sJ', 'sK', '1'],
-}
+# the table of slide 17 (row . column), shared with the table route in bq_core
+PAPER = TABLE
 
 
 def identify(M):
