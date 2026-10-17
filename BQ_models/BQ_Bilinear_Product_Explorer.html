@@ -85,13 +85,29 @@ table.dc td:first-child,table.dc th:first-child{text-align:left;font-family:var(
 .cap{font-size:12.5px;color:var(--soft);margin:10px 0 0}
 a{color:var(--sn)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.sstep{margin:14px 0 0}
+.sstep h3{margin:0 0 6px}
+.sline{font:500 15.5px/1.9 var(--serif);overflow-x:auto;white-space:nowrap;padding:2px 0}
+.sline .lab{display:inline-block;min-width:3.2em;color:var(--soft)}
+.sbox{background:var(--bg);border:1px solid var(--edge);border-radius:10px;padding:8px 12px}
+.skey{font:14px/1.8 var(--serif);color:var(--soft);overflow-x:auto;white-space:nowrap}
+.sres{font-weight:600}
+.cre{color:var(--ink)}.cim{color:var(--sel)}
+.sgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:900px){.sgrid{grid-template-columns:minmax(0,1fr)}}
+.sgrid .sline{font-size:14.5px}
+.ctlline{margin:0 0 8px}
+.chk{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--soft);cursor:pointer}
+.numdet{margin-top:16px;border-top:1px solid var(--edge);padding-top:10px}
+.numdet summary{cursor:pointer;font:500 14px var(--sans);color:var(--soft)}
+.kv{font-weight:700}
 </style>
 
 </head><body>
 <div class="wrap">
 <header>
   <h1>BQ Bilinear Product Explorer</h1>
-  <p class="lede">A physical four-vector is four real coordinates contracted with the minquat basis, A = A<sub>μ</sub>K̂<sup>μ</sup> = a<sub>0</sub>T̂ + <b>a</b>·K̂. For two such vectors the physically relevant product is A<sup>T</sup>B, and the BQ algebra sorts it into three channels on its own: a norm, a rotation bivector and a boost bivector. Choose A and B from the four-vectors used in the BQ papers.</p>
+  <p class="lede">A physical four-vector is four real coordinates contracted with the minquat basis, A = A<sub>μ</sub>K̂<sup>μ</sup> = a<sub>0</sub>T̂ + <b>a</b>·<b class="kv">K̂</b>, with <b class="kv">K̂</b> = (Î, Ĵ, K̂) the spatial basis vector. For two such vectors the physically relevant product is A<sup>T</sup>B, and the BQ algebra sorts it into three channels on its own: a norm, a rotation bivector and a boost bivector. Choose A and B from the four-vectors used in the BQ papers.</p>
 </header>
 
 <div class="grid">
@@ -106,12 +122,12 @@ a{color:var(--sn)}
     <div class="qs" id="qs" role="group" aria-label="Example products"></div>
     <div class="vec" id="vA"></div>
     <div class="vec" id="vB"></div>
-    <p class="note">The superscript T is the BQ time-reversal operation, A<sup>T</sup> = −a<sub>0</sub>T̂ + <b>a</b>·K̂. It flips the sign of the time coordinate; it is not the matrix transpose, not conjugation and not multiplication by T̂.</p>
+    <p class="note">The superscript T is the BQ time-reversal operation, A<sup>T</sup> = −a<sub>0</sub>T̂ + <b>a</b>·<b class="kv">K̂</b>. It flips the sign of the time coordinate; it is not the matrix transpose, not conjugation and not multiplication by T̂.</p>
   </section>
 
   <section class="card" aria-labelledby="h-ch" aria-live="polite">
     <h2 id="h-ch">Channels of A<sup>T</sup>B</h2>
-    <div class="formula">A<sup>T</sup>B = (a<sub>0</sub>b<sub>0</sub> − <b>a</b>·<b>b</b>) <span class="ns">1̂</span> + (<b>a</b>×<b>b</b>)·<span class="ts">K̂</span> + (a<sub>0</sub><b>b</b> − <b>a</b>b<sub>0</sub>)·<span class="ns">σ̂</span></div>
+    <div class="formula">A<sup>T</sup>B = (a<sub>0</sub>b<sub>0</sub> − <b>a</b>·<b>b</b>) <span class="ns">1̂</span> + (<b>a</b>×<b>b</b>)·<span class="ts"><b class="kv">K̂</b></span> + (a<sub>0</sub><b>b</b> − <b>a</b>b<sub>0</sub>)·<span class="ns">σ̂</span></div>
     <div id="chans"></div>
     <div class="total" id="total"></div>
     <div class="interp" id="interp"></div>
@@ -119,23 +135,24 @@ a{color:var(--sn)}
 </div>
 
 <section class="card" style="margin-top:18px" aria-labelledby="h-num">
-  <h2 id="h-num">Check by explicit matrix multiplication</h2>
-  <div id="numwrap"></div>
+  <h2 id="h-num">The multiplication, term by term</h2>
+  <div id="symwrap"></div>
+  <details class="numdet"><summary>Check with numbers, by explicit 2×2 matrix multiplication</summary><div id="numwrap"></div></details>
 </section>
 
 <div class="notes">
   <section class="card"><h2>How the channels arise</h2>
     <ul>
       <li><b>Norm, 1̂.</b> From T̂T̂ = −1̂ and K̂<sub>i</sub>K̂<sub>i</sub> = −1̂ together with the sign flip of A<sup>T</sup>: a<sub>0</sub>b<sub>0</sub> − <b>a</b>·<b>b</b> = η<sup>μν</sup>A<sub>μ</sub>B<sub>ν</sub>. The Lorentz signature enters through the basis, not through index lowering.</li>
-      <li><b>Rotation bivector, K̂.</b> From K̂<sub>i</sub>K̂<sub>j</sub> = ε<sub>ijk</sub>K̂<sub>k</sub> for i ≠ j: the cross product <b>a</b>×<b>b</b>.</li>
+      <li><b>Rotation bivector, <b class="kv">K̂</b>.</b> From K̂<sub>i</sub>K̂<sub>j</sub> = ε<sub>ijk</sub>K̂<sub>k</sub> for i ≠ j: the cross product <b>a</b>×<b>b</b>.</li>
       <li><b>Boost bivector, σ̂.</b> From T̂K̂<sub>i</sub> = K̂<sub>i</sub>T̂ = −σ̂<sub>i</sub>: the time–space mixing a<sub>0</sub><b>b</b> − <b>a</b>b<sub>0</sub>. The factor order is kept as in the product, A on the left and B on the right, so that a derivative in A acts on B: with A = ∂ the term <b>a</b>b<sub>0</sub> becomes ∇b<sub>0</sub>, not b<sub>0</sub>∇.</li>
       <li><b>No T̂ channel.</b> A bilinear of two minquats never has a T̂ part; the numerical check below shows it as exactly zero.</li>
       <li><b>A<sup>T</sup>A.</b> For identical factors <b>a</b>×<b>a</b> = 0 and a<sub>0</sub><b>a</b> − <b>a</b>a<sub>0</sub> = 0, so only the invariant norm survives.</li>
     </ul>
   </section>
   <section class="card"><h2>Reading the derivative ∂</h2>
-    <p class="note">∂ = −(1/c)∂<sub>t</sub> T̂ + ∇·K̂ is an operator. In A<sup>T</sup>B each component of A stands to the left of each component of B, so when ∂ is the left factor its derivatives act on B (∂<sup>T</sup>A gives the fields). When ∂ is the right factor nothing follows it, and the result is an operator written with ∂<sub>t</sub> and ∇ on the right. The coordinates t and <b>r</b> are independent, so ∂<sub>t</sub>t = 1, ∇·<b>r</b> = 3, ∇×<b>r</b> = 0, ∇t = 0 and ∂<sub>t</sub><b>r</b> = 0.</p>
-    <p class="cap">Definitions as in the BQ-Pauli slides on the bilinear product and in de Haas (2026), BQ electromagnetism and fluid dynamics: P = (E/c)T̂ + <b>p</b>·K̂, ∂ = −(1/c)∂<sub>t</sub>T̂ + ∇·K̂, A = (φ/c)T̂ + <b>A</b>·K̂, J = cρT̂ + <b>J</b>·K̂, U = γcT̂ + γ<b>v</b>·K̂, G = (ε/c)T̂ + <b>g</b>·K̂. Channels are derived symbolically in the page and checked numerically from the explicit matrices. Part of <a href="../index.html">the BQ algebra models</a>; see also <a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>.</p>
+    <p class="note">∂ = −(1/c)∂<sub>t</sub> T̂ + ∇·<b class="kv">K̂</b> is an operator. In A<sup>T</sup>B each component of A stands to the left of each component of B, so when ∂ is the left factor its derivatives act on B (∂<sup>T</sup>A gives the fields). When ∂ is the right factor nothing follows it, and the result is an operator written with ∂<sub>t</sub> and ∇ on the right. The coordinates t and <b>r</b> are independent, so ∂<sub>t</sub>t = 1, ∇·<b>r</b> = 3, ∇×<b>r</b> = 0, ∇t = 0 and ∂<sub>t</sub><b>r</b> = 0.</p>
+    <p class="cap">Definitions as in the BQ-Pauli slides on the bilinear product and in de Haas (2026), BQ electromagnetism and fluid dynamics: P = (E/c)T̂ + <b>p</b>·<b class="kv">K̂</b>, ∂ = −(1/c)∂<sub>t</sub>T̂ + ∇·<b class="kv">K̂</b>, A = (φ/c)T̂ + <b>A</b>·<b class="kv">K̂</b>, J = cρT̂ + <b>J</b>·<b class="kv">K̂</b>, U = γcT̂ + γ<b>v</b>·<b class="kv">K̂</b>, G = (ε/c)T̂ + <b>g</b>·<b class="kv">K̂</b>. Channels are derived symbolically in the page and checked numerically from the explicit matrices. Part of <a href="../index.html">the BQ algebra models</a>; see also <a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>.</p>
   </section>
 </div>
 </div>
@@ -248,20 +265,20 @@ const isVecChan = list => list.length > 0;
 
 /* ---------- curated readings from the papers ---------- */
 const INTERP = {
-  'R.P':'Norm: Et − <b>r</b>·<b>p</b> = −S, the action or phase scalar. K̂: <b>L</b> = <b>r</b>×<b>p</b>, the orbital angular momentum (rotation bivector). σ̂: <b>M</b> = ct<b>p</b> − <b>r</b>E/c, the boost bivector or mass moment. Together <b>L</b> and <b>M</b> are the six components of the relativistic angular-momentum bivector M<sup>μν</sup>.|BQ-Pauli bilinear slides, R<sup>T</sup>P',
+  'R.P':'Norm: Et − <b>r</b>·<b>p</b> = −S, the action or phase scalar. <b class="kv">K̂</b>: <b>L</b> = <b>r</b>×<b>p</b>, the orbital angular momentum (rotation bivector). σ̂: <b>M</b> = ct<b>p</b> − <b>r</b>E/c, the boost bivector or mass moment. Together <b>L</b> and <b>M</b> are the six components of the relativistic angular-momentum bivector M<sup>μν</sup>.|BQ-Pauli bilinear slides, R<sup>T</sup>P',
   'P.R':'The reversed product keeps the norm Et − <b>r</b>·<b>p</b> and flips both bivectors: <b>p</b>×<b>r</b> = −<b>L</b> and (E/c)<b>r</b> − ct<b>p</b> = −<b>M</b>.|',
   'R.R':'R<sup>T</sup>R = (c²t² − <b>r</b>²)1̂ = s²1̂, the invariant interval from the origin; both bivector channels vanish.|BQ-Pauli bilinear slides',
   'dR.dR':'dR<sup>T</sup>dR = (c²dt² − d<b>r</b>²)1̂ = c²dτ²1̂ = ds²1̂: the metric line element as a pure norm.|BQ-Pauli bilinear slides',
   'V.V':'V<sup>T</sup>V = (c² − v²)1̂ = c²/γ² 1̂.|',
   'U.U':'U<sup>T</sup>U = (γ²c² − γ²v²)1̂ = c²1̂ for every velocity: the four-velocity has fixed norm.|BQ-Pauli bilinear slides',
   'P.P':'P<sup>T</sup>P = (E²/c² − <b>p</b>²)1̂ = m₀²c²1̂ = E₀²/c² 1̂, the mass shell behind the Klein–Gordon equation.|BQ-Pauli bilinear slides',
-  'D.A':'B = ∂<sup>T</sup>A. Norm: −(1/c²)∂<sub>t</sub>φ − ∇·<b>A</b>, zero in the Lorenz gauge. K̂: ∇×<b>A</b> = <b>B</b>, the magnetic field. σ̂: −(1/c)(∂<sub>t</sub><b>A</b> + ∇φ) = <b>E</b>/c. So in the Lorenz gauge B = <b>B</b>·K̂ + (1/c)<b>E</b>·σ̂.|BQ-Pauli bilinear slides; de Haas (2026) BQ EM, eq. 80–81',
-  'D.J':'Norm: −(∂<sub>t</sub>ρ + ∇·<b>J</b>), zero by charge conservation. K̂: ∇×<b>J</b>. σ̂: −(1/c)∂<sub>t</sub><b>J</b> − c∇ρ.|',
+  'D.A':'B = ∂<sup>T</sup>A. Norm: −(1/c²)∂<sub>t</sub>φ − ∇·<b>A</b>, zero in the Lorenz gauge. <b class="kv">K̂</b>: ∇×<b>A</b> = <b>B</b>, the magnetic field. σ̂: −(1/c)(∂<sub>t</sub><b>A</b> + ∇φ) = <b>E</b>/c. So in the Lorenz gauge B = <b>B</b>·<b class="kv">K̂</b> + (1/c)<b>E</b>·σ̂.|BQ-Pauli bilinear slides; de Haas (2026) BQ EM, eq. 80–81',
+  'D.J':'Norm: −(∂<sub>t</sub>ρ + ∇·<b>J</b>), zero by charge conservation. <b class="kv">K̂</b>: ∇×<b>J</b>. σ̂: −(1/c)∂<sub>t</sub><b>J</b> − c∇ρ.|',
   'D.R':'∂<sup>T</sup>R = −(1 + 3)1̂ = −4·1̂: the four-gradient of the position counts the four dimensions; ∇×<b>r</b> = 0 and ∂<sub>t</sub><b>r</b> = ∇t = 0 leave both bivectors empty.|',
   'D.D':'∂<sup>T</sup>∂ = ((1/c²)∂<sub>t</sub>² − ∇²)1̂, so −∂<sup>T</sup>∂ = (−(1/c²)∂<sub>t</sub>² + ∇²)1̂ is the d’Alembert operator; ∇×∇ = 0 and the mixed derivatives cancel.|de Haas (2026) BQ EM, remark after eq. 73',
-  'J.A':'Norm: ρφ − <b>J</b>·<b>A</b> = L = −L<sub>int</sub>, the interaction Lagrangian density with opposite sign. K̂: <b>T</b> = <b>J</b>×<b>A</b>, the angular-momentum interaction density. σ̂: <b>S</b> = cρ<b>A</b> − (φ/c)<b>J</b>, the interaction transport current.|de Haas (2026) BQ EM, eq. 152–154',
-  'U.G':'Norm: (u₀/c)ε − <b>u</b>·<b>g</b> = L, the Lagrangian density; for g = ρ₀u it is ρ₀c² = ε₀. K̂: <b>u</b>×<b>g</b>, the intrinsic spin density, zero for a single-component fluid. σ̂: u₀<b>g</b> − (ε/c)<b>u</b>, the relativistic energy transport, also zero for g = ρ₀u. Here u₀ = γc and <b>u</b> = γ<b>v</b>.|de Haas (2026) BQ EM and fluid dynamics, eq. 409–415',
-  'D.G':'H = ∂<sup>T</sup>G, the fluid field. Norm: −(1/c²)∂<sub>t</sub>ε − ∇·<b>g</b>, the energy balance (−σ<sub>E</sub>). K̂: ∇×<b>g</b>, the vorticity Ω. σ̂: −(1/c)(∂<sub>t</sub><b>g</b> + ∇ε), the momentum-pressure channel −Π/c.|de Haas (2026) BQ EM and fluid dynamics, eq. 450',
+  'J.A':'Norm: ρφ − <b>J</b>·<b>A</b> = L = −L<sub>int</sub>, the interaction Lagrangian density with opposite sign. <b class="kv">K̂</b>: <b>T</b> = <b>J</b>×<b>A</b>, the angular-momentum interaction density. σ̂: <b>S</b> = cρ<b>A</b> − (φ/c)<b>J</b>, the interaction transport current.|de Haas (2026) BQ EM, eq. 152–154',
+  'U.G':'Norm: (u₀/c)ε − <b>u</b>·<b>g</b> = L, the Lagrangian density; for g = ρ₀u it is ρ₀c² = ε₀. <b class="kv">K̂</b>: <b>u</b>×<b>g</b>, the intrinsic spin density, zero for a single-component fluid. σ̂: u₀<b>g</b> − (ε/c)<b>u</b>, the relativistic energy transport, also zero for g = ρ₀u. Here u₀ = γc and <b>u</b> = γ<b>v</b>.|de Haas (2026) BQ EM and fluid dynamics, eq. 409–415',
+  'D.G':'H = ∂<sup>T</sup>G, the fluid field. Norm: −(1/c²)∂<sub>t</sub>ε − ∇·<b>g</b>, the energy balance (−σ<sub>E</sub>). <b class="kv">K̂</b>: ∇×<b>g</b>, the vorticity Ω. σ̂: −(1/c)(∂<sub>t</sub><b>g</b> + ∇ε), the momentum-pressure channel −Π/c.|de Haas (2026) BQ EM and fluid dynamics, eq. 450',
   'J.J':'J<sup>T</sup>J = (c²ρ² − <b>J</b>²)1̂ = c²ρ₀²1̂, the rest charge density squared.|',
   'A.A':'A<sup>T</sup>A = (φ²/c² − <b>A</b>²)1̂, the invariant square of the potential.|',
   'U.A':'Norm: γ(φ − <b>v</b>·<b>A</b>); times the charge q this is the velocity-dependent potential energy of a moving charge, γ times q(φ − <b>v</b>·<b>A</b>).|',
@@ -282,8 +299,8 @@ const vvHTML = v => tsHTML([term(v.vv.k, v.vv.f, VECH[v.vv.v])]);
 function vecCard(v, role){
   const tC = s0HTML(v), sC = vvHTML(v), tCT = tsHTML([term(-v.s0.k, v.s0.f, v.s0.op ? '∂<sub>t</sub>' : '')]);
   const sp = s => s.trim().startsWith('−') ? ' ' + s.trim() : ' + ' + s.trim();
-  return `<div class="what">${role}: ${v.what}</div><div class="math">${v.nm} = ${v.nm}<sub>μ</sub>K̂<sup>μ</sup> = [${v.comp.join(', ')}]·[<span class="ts">T̂, Î, Ĵ, K̂</span>]<sup>t</sup> = ${tC} <span class="ts">T̂</span>${sp(sC)}·<span class="ts">K̂</span></div>`
-    + (role === 'A' ? `<div class="math">${v.nm}<sup>T</sup> = ${tCT} <span class="ts">T̂</span>${sp(sC)}·<span class="ts">K̂</span></div>` : '');
+  return `<div class="what">${role}: ${v.what}</div><div class="math">${v.nm} = ${v.nm}<sub>μ</sub>K̂<sup>μ</sup> = [${v.comp.join(', ')}]·[<span class="ts">T̂, Î, Ĵ, K̂</span>]<sup>t</sup> = ${tC} <span class="ts">T̂</span>${sp(sC)}·<span class="ts"><b class="kv">K̂</b></span></div>`
+    + (role === 'A' ? `<div class="math">${v.nm}<sup>T</sup> = ${tCT} <span class="ts">T̂</span>${sp(sC)}·<span class="ts"><b class="kv">K̂</b></span></div>` : '');
 }
 const pairName = (a, b) => `${a.nm}<sup>T</sup>${b.nm}`;
 let SA = 'R', SB = 'P';
@@ -297,15 +314,15 @@ function render(){
   const row = (cls, nm, sub, gen, res) => `<div class="ch ${cls}"><div class="nm">${nm}<small>${sub}</small></div><div class="ex"><div class="gen">${gen}</div><div class="res">= ${res}</div></div></div>`;
   $('chans').innerHTML =
     row('n', 'Norm · <span class="ns">1̂</span>', 'Lorentz scalar', `a<sub>0</sub>b<sub>0</sub> − <b>a</b>·<b>b</b> = ${P(t0(A.s0))}${P(t0(B.s0))} − ${P(vH(A))}·${P(vH(B))}`, tsHTML(ch.norm))
-  + row('k', 'Rotation · <span class="ts">K̂</span>', 'rotation bivector', `<b>a</b>×<b>b</b> = ${P(vH(A))}×${P(vH(B))}`, tsHTML(ch.rot))
+  + row('k', 'Rotation · <span class="ts"><b class="kv">K̂</b></span>', 'rotation bivector', `<b>a</b>×<b>b</b> = ${P(vH(A))}×${P(vH(B))}`, tsHTML(ch.rot))
   + row('s', 'Boost · <span class="ns">σ̂</span>', 'boost bivector', `a<sub>0</sub><b>b</b> − <b>a</b>b<sub>0</sub> = ${P(t0(A.s0))}${P(vH(B))} − ${P(vH(A))}${P(t0(B.s0))}`, tsHTML(ch.boost));
   const part = (list, basis, vec) => { if (!list.length) return ''; const s = tsHTML(list); return { s, basis, vec }; };
-  const parts = [part(ch.norm, '<span class="ns">1̂</span>', false), part(ch.rot, '<span class="ts">K̂</span>', true), part(ch.boost, '<span class="ns">σ̂</span>', true)].filter(Boolean);
+  const parts = [part(ch.norm, '<span class="ns">1̂</span>', false), part(ch.rot, '<span class="ts"><b class="kv">K̂</b></span>', true), part(ch.boost, '<span class="ns">σ̂</span>', true)].filter(Boolean);
   $('total').innerHTML = pairName(A, B) + ' = ' + (parts.length ? parts.map((p, i) => (i ? ' + ' : '') + '(' + p.s.trim() + ')' + (p.vec ? '·' : ' ') + p.basis).join('') : '0');
   const key = SA + '.' + SB, it = INTERP[key];
   if (it){ const [txt, src] = it.split('|'); $('interp').innerHTML = txt + (src ? `<span class="src">Source: ${src}</span>` : ''); }
   else $('interp').innerHTML = `No physical reading of ${pairName(A, B)} is given in the papers yet; the channels above follow from the general rule. The norm is symmetric in A and B, so ${pairName(B, A)} has the same norm and opposite bivectors.`;
-  renderNum();
+  renderSym(); renderNum();
 }
 
 /* ---------- numerical check by explicit 2×2 matrices ---------- */
@@ -323,6 +340,79 @@ const fz = z => { const r = Math.abs(z[0]) < 1e-12 ? 0 : z[0], i = Math.abs(z[1]
   if (i === 0) return f(r); if (r === 0) return f(i) + 'i'; return f(r) + (i < 0 ? ' − ' : ' + ') + f(Math.abs(i)) + 'i'; };
 const fn = x => (Math.abs(x) < 1e-12 ? 0 : +x.toFixed(4)).toString().replace('-', '−');
 const mxH = M => '<span class="mx">' + M.flat().map(z => `<span>${fz(z)}</span>`).join('') + '</span>';
+
+/* ---------- the product term by term, with the multiplication table ---------- */
+/* the space-time block of the BQ-Pauli table (row . column), as in the BQ-Pauli slides */
+const TAB = [
+  [['1',-1], ['sI',-1], ['sJ',-1], ['sK',-1]],   // T̂T̂ = −1̂, T̂Î = −σ̂_I, T̂Ĵ = −σ̂_J, T̂K̂ = −σ̂_K
+  [['sI',-1], ['1',-1], ['K',1],   ['J',-1]],    // ÎT̂ = −σ̂_I, ÎÎ = −1̂, ÎĴ = K̂, ÎK̂ = −Ĵ
+  [['sJ',-1], ['K',-1], ['1',-1],  ['I',1]],     // ĴT̂ = −σ̂_J, ĴÎ = −K̂, ĴĴ = −1̂, ĴK̂ = Î
+  [['sK',-1], ['J',1],  ['I',-1],  ['1',-1]] ];  // K̂T̂ = −σ̂_K, K̂Î = Ĵ, K̂Ĵ = −Î, K̂K̂ = −1̂
+const KB = ['T̂', 'Î', 'Ĵ', 'K̂'];
+const EL = {'1':'<span class="ns">1̂</span>', I:'<span class="ts">Î</span>', J:'<span class="ts">Ĵ</span>', K:'<span class="ts">K̂</span>',
+            sI:'<span class="ns">σ̂<sub>I</sub></span>', sJ:'<span class="ns">σ̂<sub>J</sub></span>', sK:'<span class="ns">σ̂<sub>K</sub></span>', T:'<span class="ts">T̂</span>'};
+const ab = (m, n) => `a<sub>${m}</sub>b<sub>${n}</sub>`;
+const sgnS = (v, lead) => v < 0 ? (lead ? '−' : ' − ') : (lead ? '' : ' + ');
+const GEN_A = ['a<sub>0</sub>','a<sub>1</sub>','a<sub>2</sub>','a<sub>3</sub>'], GEN_B = ['b<sub>0</sub>','b<sub>1</sub>','b<sub>2</sub>','b<sub>3</sub>'];
+/* a coordinate label as a factor: its sign split off, brackets when it is more than one symbol */
+function factor(lbl){
+  let neg = false, body = lbl.trim();
+  if (body.startsWith('−')){ neg = true; body = body.slice(1).trim(); }
+  const plain = body.replace(/<[^>]+>/g, '');
+  const len = plain.replace(/\d/g, '').length;
+  return {neg, body: (len <= 1 || body.startsWith('(')) ? body : '(' + body + ')'};
+}
+let GENERAL = false;
+function renderSym(){
+  const A = VI[SA], B = VI[SB], SA0 = [-1, 1, 1, 1];
+  const la = GENERAL ? GEN_A : A.comp, lb = GENERAL ? GEN_B : B.comp;
+  const coll = {'1':[], T:[], I:[], J:[], K:[], sI:[], sJ:[], sK:[]};
+  const leftTerm = m => { const f = factor(la[m]), neg = (SA0[m] < 0) !== f.neg; return {neg, txt:(neg ? '−' : '') + f.body + ' ' + KB[m], f}; };
+  const rightTerm = n => { const f = factor(lb[n]); return {neg:f.neg, txt:(f.neg ? '−' : '') + f.body + ' ' + KB[n], f}; };
+  const sum4 = (L, sgnFirst) => [0,1,2,3].map(m => { const t = L(m); return (m ? (t.neg ? ' − ' : ' + ') : (t.neg ? '−' : '')) + t.f.body + KB[m]; }).join('');
+  let h = `<div class="sstep"><h3>1 · Write the product term by term</h3>
+    <div class="ctlline"><label class="chk"><input type="checkbox" id="genToggle"${GENERAL ? ' checked' : ''}> <span>Show with general coordinates a<sub>μ</sub>, b<sub>ν</sub></span></label></div>
+    <div class="formula">${A.nm}<sup>T</sup>${B.nm} = (${sum4(leftTerm)})(${sum4(rightTerm)})</div>
+    <p class="note">${GENERAL ? `Here a<sub>0</sub> = ${A.comp[0]}, (a<sub>1</sub>, a<sub>2</sub>, a<sub>3</sub>) = (${A.comp.slice(1).join(', ')}); b<sub>0</sub> = ${B.comp[0]}, (b<sub>1</sub>, b<sub>2</sub>, b<sub>3</sub>) = (${B.comp.slice(1).join(', ')}). ` : ''}Every term of the left factor multiplies every term of the right factor, 16 products in all, with the ${A.nm}-coordinate always to the left of the ${B.nm}-coordinate. Each product of two basis elements is read from the <a href="BQ_Pauli_Multiplication_Table.html">BQ-Pauli multiplication table</a>.</p></div>`;
+  h += `<div class="sstep"><h3>2 · Multiply, using the table</h3><div class="sgrid">`;
+  for (let m = 0; m < 4; m++){
+    h += '<div class="sbox">';
+    const L = leftTerm(m);
+    for (let n = 0; n < 4; n++){
+      const R = rightTerm(n), [el, ts] = TAB[m][n];
+      const pre = (L.neg !== R.neg) ? '−' : '', fin = (L.neg !== R.neg) !== (ts < 0) ? -1 : 1;
+      const coef = L.f.body + R.f.body;
+      coll[el].push({v:fin, coef});
+      h += `<div class="sline">(${L.txt})(${R.txt}) = ${pre}${coef}(${KB[m]}${KB[n]}) = ${pre}${coef}(${ts < 0 ? '−' : ''}${EL[el]}) = <span class="sres">${fin < 0 ? '−' : ''}${coef} ${EL[el]}</span></div>`;
+    }
+    h += '</div>';
+  }
+  h += `</div></div>`;
+  const ORD = [['1','norm'], ['T',''], ['I','K̂<sub>I</sub>'], ['J','K̂<sub>J</sub>'], ['K','K̂<sub>K</sub>'], ['sI',''], ['sJ',''], ['sK','']];
+  const sumH = list => list.length ? list.slice().sort((x, y) => y.v - x.v).map((t, k) => sgnS(t.v, k === 0) + t.coef).join('') : '0';
+  h += `<div class="sstep"><h3>3 · Collect the terms by basis element</h3><div class="sbox">`;
+  ORD.forEach(([el, note]) => { h += `<div class="sline"><span class="lab" style="min-width:5.4em">${EL[el]}${note ? ' <span style="color:var(--soft);font-size:13px">' + note + '</span>' : ''}</span>: <span class="sres">${sumH(coll[el])}</span>${el === 'T' ? ' &nbsp;<span style="color:var(--soft);font-size:13.5px">(no product of two space-time elements lands on T̂)</span>' : ''}</div>`; });
+  h += `</div></div>`;
+  /* structural check: the 16 table products against the channel rule, by index */
+  const want = {'1':{'0,0':1,'1,1':-1,'2,2':-1,'3,3':-1}, T:{}, I:{'2,3':1,'3,2':-1}, J:{'3,1':1,'1,3':-1}, K:{'1,2':1,'2,1':-1}, sI:{'0,1':1,'1,0':-1}, sJ:{'0,2':1,'2,0':-1}, sK:{'0,3':1,'3,0':-1}};
+  const got = {'1':{}, T:{}, I:{}, J:{}, K:{}, sI:{}, sJ:{}, sK:{}};
+  for (let m = 0; m < 4; m++) for (let n = 0; n < 4; n++){ const [el, ts] = TAB[m][n]; got[el][m + ',' + n] = SA0[m]*ts; }
+  const ok = Object.keys(want).every(el => { const ks = new Set(Object.keys(got[el]).concat(Object.keys(want[el]))); return [...ks].every(k => (got[el][k] || 0) === (want[el][k] || 0)); });
+  const ch = channels(A, B), vecs = l => tsHTML(l).trim();
+  const tri = (a, b, c) => `(${a}, ${b}, ${c})`;
+  const g = el => sumH(coll[el]);
+  h += `<div class="sstep"><h3>4 · Write the channels as vector products</h3>
+    <div class="sbox">
+      <div class="sline"><span class="lab" style="min-width:5.4em">${EL['1']}</span>: a<sub>0</sub>b<sub>0</sub> − <b>a</b>·<b>b</b>${GENERAL ? '' : ` = ${g('1')} = <span class="sres">${vecs(ch.norm)}</span>`}</div>
+      <div class="sline"><span class="lab" style="min-width:5.4em">${EL.I}, ${EL.J}, ${EL.K}</span>: <b>a</b>×<b>b</b>${GENERAL ? ' = ' + tri(g('I'), g('J'), g('K')) : ` = ${tri(g('I'), g('J'), g('K'))} = <span class="sres">${vecs(ch.rot)}</span>`}</div>
+      <div class="sline"><span class="lab" style="min-width:5.4em">${EL.sI}, ${EL.sJ}, ${EL.sK}</span>: a<sub>0</sub><b>b</b> − <b>a</b>b<sub>0</sub>${GENERAL ? ' = ' + tri(g('sI'), g('sJ'), g('sK')) : ` = ${tri(g('sI'), g('sJ'), g('sK'))} = <span class="sres">${vecs(ch.boost)}</span>`}</div>
+    </div>
+    <div class="formula" style="margin-top:10px">${A.nm}<sup>T</sup>${B.nm} = ${GENERAL ? `(a<sub>0</sub>b<sub>0</sub> − <b>a</b>·<b>b</b>) ${EL['1']} + (<b>a</b>×<b>b</b>)·<span class="ts"><b class="kv">K̂</b></span> + (a<sub>0</sub><b>b</b> − <b>a</b>b<sub>0</sub>)·<span class="ns">σ̂</span>` : [[ch.norm, ' ' + EL['1']], [ch.rot, '·<span class="ts"><b class="kv">K̂</b></span>'], [ch.boost, '·<span class="ns">σ̂</span>']].filter(x => x[0].length).map((x, k) => (k ? ' + ' : '') + '(' + vecs(x[0]) + ')' + x[1]).join('') || '0'}</div>
+    <span class="pill ${ok ? 'ok' : 'no'}">${ok ? '✓ the 16 table products give exactly the channel rule' : '✗ the collected terms differ from the channel rule'}</span></div>`;
+  $('symwrap').innerHTML = h;
+  $('genToggle').addEventListener('change', e => { GENERAL = e.target.checked; renderSym(); });
+}
+
 const NUM = {};
 function vals(id){ const v = VI[id]; if (!NUM[id]) NUM[id] = v.def.slice(); return NUM[id]; }
 function renderNum(){

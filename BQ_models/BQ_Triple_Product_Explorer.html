@@ -89,16 +89,29 @@ a{color:var(--sn)}
 .chk{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--soft);cursor:pointer}
 .split{margin-top:8px}
 .pill.st{border-color:var(--st);color:var(--st)}.pill.sn{border-color:var(--sn);color:var(--sn)}
+.sstep{margin:14px 0 0}
+.sstep h3{margin:0 0 6px}
+.sline{font:500 15px/1.9 var(--serif);overflow-x:auto;white-space:nowrap;padding:1px 0}
+.sline .lab{display:inline-block;min-width:5.6em;color:var(--soft)}
+.sbox{background:var(--bg);border:1px solid var(--edge);border-radius:10px;padding:8px 12px}
+.sgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:900px){.sgrid{grid-template-columns:minmax(0,1fr)}}
+.sgrid .sline{font-size:14.5px}
+.sres{font-weight:600}
+.ctlline{margin:0 0 8px}
+.numdet{margin-top:16px;border-top:1px solid var(--edge);padding-top:10px}
+.numdet summary{cursor:pointer;font:500 14px var(--sans);color:var(--soft)}
 .numgrid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media (max-width:900px){.numgrid.three{grid-template-columns:minmax(0,1fr)}}
 .vec .math .what{margin:0 0 4px 0}
+.kv{font-weight:700}
 </style>
 
 </head><body>
 <div class="wrap">
 <header>
   <h1>BQ Triple Product Explorer</h1>
-  <p class="lede">The bilinear C = A<sup>T</sup>B of two minquats has three channels, c<sub>1</sub>1̂ + <b>c</b><sub>K</sub>·K̂ + <b>c</b><sub>σ</sub>·σ̂. Multiplying it from the left by a third minquat D = d<sub>0</sub>T̂ + <b>d</b>·K̂ gives the triple product E = D(A<sup>T</sup>B), which fills all four BQ channels 1̂, T̂, K̂ and σ̂. Choose D, A and B from the four-vectors used in the BQ papers.</p>
+  <p class="lede">The bilinear C = A<sup>T</sup>B of two minquats has three channels, c<sub>1</sub>1̂ + <b>c</b><sub>K</sub>·<b class="kv">K̂</b> + <b>c</b><sub>σ</sub>·σ̂. Multiplying it from the left by a third minquat D = d<sub>0</sub>T̂ + <b>d</b>·<b class="kv">K̂</b>, with <b class="kv">K̂</b> = (Î, Ĵ, K̂), gives the triple product E = D(A<sup>T</sup>B), which fills all four BQ channels 1̂, T̂, <b class="kv">K̂</b> and σ̂. Choose D, A and B from the four-vectors used in the BQ papers.</p>
 </header>
 
 <div class="grid">
@@ -116,12 +129,12 @@ a{color:var(--sn)}
     <div class="qs" id="qs" role="group" aria-label="Example triple products"></div>
     <div class="vec" id="vD"></div>
     <div class="vec" id="vC"></div>
-    <p class="note">The superscript T is the BQ time-reversal operation, A<sup>T</sup> = −a<sub>0</sub>T̂ + <b>a</b>·K̂. D stands to the left of C throughout, so when D = ∂ its derivatives act on the channels of C.</p>
+    <p class="note">The superscript T is the BQ time-reversal operation, A<sup>T</sup> = −a<sub>0</sub>T̂ + <b>a</b>·<b class="kv">K̂</b>. D stands to the left of C throughout, so when D = ∂ its derivatives act on the channels of C.</p>
   </section>
 
   <section class="card" aria-labelledby="h-ch" aria-live="polite">
     <h2 id="h-ch">Channels of E = D(A<sup>T</sup>B)</h2>
-    <div class="formula">E = −(<b>d</b>·<b>c</b><sub>K</sub>) <span class="ns">1̂</span> + (d<sub>0</sub>c<sub>1</sub> + <b>d</b>·<b>c</b><sub>σ</sub>) <span class="ts">T̂</span> + (<b>d</b>c<sub>1</sub> + d<sub>0</sub><b>c</b><sub>σ</sub> + <b>d</b>×<b>c</b><sub>K</sub>)·<span class="ts">K̂</span> + (<b>d</b>×<b>c</b><sub>σ</sub> − d<sub>0</sub><b>c</b><sub>K</sub>)·<span class="ns">σ̂</span></div>
+    <div class="formula">E = −(<b>d</b>·<b>c</b><sub>K</sub>) <span class="ns">1̂</span> + (d<sub>0</sub>c<sub>1</sub> + <b>d</b>·<b>c</b><sub>σ</sub>) <span class="ts">T̂</span> + (<b>d</b>c<sub>1</sub> + d<sub>0</sub><b>c</b><sub>σ</sub> + <b>d</b>×<b>c</b><sub>K</sub>)·<span class="ts"><b class="kv">K̂</b></span> + (<b>d</b>×<b>c</b><sub>σ</sub> − d<sub>0</sub><b>c</b><sub>K</sub>)·<span class="ns">σ̂</span></div>
     <div id="chans"></div>
     <div class="total" id="total"></div>
     <div class="split" id="split"></div>
@@ -130,17 +143,18 @@ a{color:var(--sn)}
 </div>
 
 <section class="card" style="margin-top:18px" aria-labelledby="h-num">
-  <h2 id="h-num">Check by explicit matrix multiplication</h2>
-  <div id="numwrap"></div>
+  <h2 id="h-num">The multiplication, term by term</h2>
+  <div id="symwrap"></div>
+  <details class="numdet"><summary>Check with numbers, by explicit 2×2 matrix multiplication</summary><div id="numwrap"></div></details>
 </section>
 
 <div class="notes">
   <section class="card"><h2>How the channels arise</h2>
     <ul>
-      <li><b>From the multiplication table.</b> (<b>d</b>·K̂)(<b>c</b><sub>K</sub>·K̂) = −<b>d</b>·<b>c</b><sub>K</sub> 1̂ + (<b>d</b>×<b>c</b><sub>K</sub>)·K̂ and (<b>d</b>·K̂)(<b>c</b><sub>σ</sub>·σ̂) = (<b>d</b>·<b>c</b><sub>σ</sub>)T̂ + (<b>d</b>×<b>c</b><sub>σ</sub>)·σ̂; the time part gives d<sub>0</sub>T̂(<b>c</b><sub>K</sub>·K̂) = −d<sub>0</sub><b>c</b><sub>K</sub>·σ̂ and d<sub>0</sub>T̂(<b>c</b><sub>σ</sub>·σ̂) = d<sub>0</sub><b>c</b><sub>σ</sub>·K̂.</li>
-      <li><b>Selective coupling.</b> The 1̂ output sees only <b>c</b><sub>K</sub>; the T̂ output sees only c<sub>1</sub> and <b>c</b><sub>σ</sub>; the K̂ and σ̂ outputs mix all three.</li>
+      <li><b>From the multiplication table.</b> (<b>d</b>·<b class="kv">K̂</b>)(<b>c</b><sub>K</sub>·<b class="kv">K̂</b>) = −<b>d</b>·<b>c</b><sub>K</sub> 1̂ + (<b>d</b>×<b>c</b><sub>K</sub>)·<b class="kv">K̂</b> and (<b>d</b>·<b class="kv">K̂</b>)(<b>c</b><sub>σ</sub>·σ̂) = (<b>d</b>·<b>c</b><sub>σ</sub>)T̂ + (<b>d</b>×<b>c</b><sub>σ</sub>)·σ̂; the time part gives d<sub>0</sub>T̂(<b>c</b><sub>K</sub>·<b class="kv">K̂</b>) = −d<sub>0</sub><b>c</b><sub>K</sub>·σ̂ and d<sub>0</sub>T̂(<b>c</b><sub>σ</sub>·σ̂) = d<sub>0</sub><b>c</b><sub>σ</sub>·<b class="kv">K̂</b>.</li>
+      <li><b>Selective coupling.</b> The 1̂ output sees only <b>c</b><sub>K</sub>; the T̂ output sees only c<sub>1</sub> and <b>c</b><sub>σ</sub>; the <b class="kv">K̂</b> and σ̂ outputs mix all three.</li>
       <li><b>Closure.</b> E stays inside the eight-element BQ-Pauli basis, 1 + 3 + 3 + 1: no new algebraic element appears.</li>
-      <li><b>Minquat and pauliquat sectors.</b> The T̂ + K̂ part of E is a minquat (a space-time four-vector such as a four-force); the 1̂ + σ̂ part is a pauliquat in the spin-norm sector.</li>
+      <li><b>Minquat and pauliquat sectors.</b> The T̂ + <b class="kv">K̂</b> part of E is a minquat (a space-time four-vector such as a four-force); the 1̂ + σ̂ part is a pauliquat in the spin-norm sector.</li>
     </ul>
   </section>
   <section class="card"><h2>Named channels and the full form</h2>
@@ -290,12 +304,12 @@ const NAMED = {
     cK:{k:1,f:{},v:'Om', def:'<b>Ω</b> = ∇×<b>g</b>'}, cS:{k:-1,f:{c:-1},v:'Pi', def:'<b>Π</b> = ∂<sub>t</sub><b>g</b> + ∇ε'}}
 };
 const TRI = {
-  'D.D.A':'∂B with B = ∂<sup>T</sup>A. In the Lorenz gauge: 1̂: −∇·<b>B</b>; T̂: (1/c)∇·<b>E</b>; K̂: ∇×<b>B</b> − (1/c²)∂<sub>t</sub><b>E</b>; σ̂: (1/c)(∇×<b>E</b> + ∂<sub>t</sub><b>B</b>). Setting ∂B = μ<sub>0</sub>J with J = cρT̂ + <b>J</b>·K̂ gives the four Maxwell equations: ∇·<b>B</b> = 0, ∇·<b>E</b> = ρ/ε<sub>0</sub>, ∇×<b>B</b> − (1/c²)∂<sub>t</sub><b>E</b> = μ<sub>0</sub><b>J</b> and ∇×<b>E</b> + ∂<sub>t</sub><b>B</b> = 0.|BQ-Pauli triple-product slides, ∂B',
-  'J.D.A':'JB = F. The minquat part (1/c)(<b>J</b>·<b>E</b>)T̂ + (ρ<b>E</b> + <b>J</b>×<b>B</b>)·K̂ is the electromagnetic four-force density: power density and Lorentz-force density. The pauliquat part −(<b>J</b>·<b>B</b>)1̂ + (1/c)(<b>J</b>×<b>E</b> − c²ρ<b>B</b>)·σ̂ is the additional spin-norm sector of the BQ product.|BQ-Pauli triple-product slides, JB = F',
-  'D.J.A':'∂(J<sup>T</sup>A). 1̂: −∇·<b>T</b>; T̂: ∇·<b>S</b> − (1/c)∂<sub>t</sub>L, the interaction-sector Poynting theorem; K̂: ∇×<b>T</b> + ∇L − (1/c)∂<sub>t</sub><b>S</b>, the spatial Euler–Lagrange equation; σ̂: ∇×<b>S</b> + (1/c)∂<sub>t</sub><b>T</b>, the interaction-sector Faraday law.|de Haas (2026) BQ EM, eq. 417–420 and Table 1',
-  'D.U.G':'∂(U<sup>T</sup>G). 1̂: −∇·<b>T</b><sub>K</sub>; T̂: ∇·<b>T</b><sub>σ</sub> − (1/c)∂<sub>t</sub>𝓛; K̂: ∇×<b>T</b><sub>K</sub> + ∇𝓛 − (1/c)∂<sub>t</sub><b>T</b><sub>σ</sub>; σ̂: ∇×<b>T</b><sub>σ</sub> + (1/c)∂<sub>t</sub><b>T</b><sub>K</sub>. For a single-component fluid <b>T</b><sub>K</sub> = <b>T</b><sub>σ</sub> = 0 and this reduces to F = ∂𝓛.|de Haas (2026) BQ EM and fluid dynamics, eq. 416–426',
-  'U.D.G':'UH = F, the fluid force equation and the only equation of the hierarchy with all four channels active. 1̂: −<b>u</b>·<b>Ω</b>, helicity; T̂: −u<sub>0</sub>σ<sub>E</sub> − (1/c)<b>u</b>·<b>Π</b>, power balance; K̂: <b>u</b>×<b>Ω</b> − (u<sub>0</sub>/c)<b>Π</b> − σ<sub>E</sub><b>u</b>, Euler–Lamb force; σ̂: −(1/c)<b>u</b>×<b>Π</b> − u<sub>0</sub><b>Ω</b>, rotational transport. Here u<sub>0</sub> = γc and <b>u</b> = γ<b>v</b>.|de Haas (2026) BQ EM and fluid dynamics, eq. 450–454',
-  'D.D.G':'∂H = F′, the fluid wave equation. The 1̂ channel −∇·<b>Ω</b> = −∇·(∇×<b>g</b>) and the σ̂ channel vanish identically (BQ Bianchi identities), leaving the wave operator on ε and <b>g</b> in T̂ and K̂.|de Haas (2026) BQ EM and fluid dynamics, eq. 455',
+  'D.D.A':'∂B with B = ∂<sup>T</sup>A. In the Lorenz gauge: 1̂: −∇·<b>B</b>; T̂: (1/c)∇·<b>E</b>; <b class="kv">K̂</b>: ∇×<b>B</b> − (1/c²)∂<sub>t</sub><b>E</b>; σ̂: (1/c)(∇×<b>E</b> + ∂<sub>t</sub><b>B</b>). Setting ∂B = μ<sub>0</sub>J with J = cρT̂ + <b>J</b>·<b class="kv">K̂</b> gives the four Maxwell equations: ∇·<b>B</b> = 0, ∇·<b>E</b> = ρ/ε<sub>0</sub>, ∇×<b>B</b> − (1/c²)∂<sub>t</sub><b>E</b> = μ<sub>0</sub><b>J</b> and ∇×<b>E</b> + ∂<sub>t</sub><b>B</b> = 0.|BQ-Pauli triple-product slides, ∂B',
+  'J.D.A':'JB = F. The minquat part (1/c)(<b>J</b>·<b>E</b>)T̂ + (ρ<b>E</b> + <b>J</b>×<b>B</b>)·<b class="kv">K̂</b> is the electromagnetic four-force density: power density and Lorentz-force density. The pauliquat part −(<b>J</b>·<b>B</b>)1̂ + (1/c)(<b>J</b>×<b>E</b> − c²ρ<b>B</b>)·σ̂ is the additional spin-norm sector of the BQ product.|BQ-Pauli triple-product slides, JB = F',
+  'D.J.A':'∂(J<sup>T</sup>A). 1̂: −∇·<b>T</b>; T̂: ∇·<b>S</b> − (1/c)∂<sub>t</sub>L, the interaction-sector Poynting theorem; <b class="kv">K̂</b>: ∇×<b>T</b> + ∇L − (1/c)∂<sub>t</sub><b>S</b>, the spatial Euler–Lagrange equation; σ̂: ∇×<b>S</b> + (1/c)∂<sub>t</sub><b>T</b>, the interaction-sector Faraday law.|de Haas (2026) BQ EM, eq. 417–420 and Table 1',
+  'D.U.G':'∂(U<sup>T</sup>G). 1̂: −∇·<b>T</b><sub>K</sub>; T̂: ∇·<b>T</b><sub>σ</sub> − (1/c)∂<sub>t</sub>𝓛; <b class="kv">K̂</b>: ∇×<b>T</b><sub>K</sub> + ∇𝓛 − (1/c)∂<sub>t</sub><b>T</b><sub>σ</sub>; σ̂: ∇×<b>T</b><sub>σ</sub> + (1/c)∂<sub>t</sub><b>T</b><sub>K</sub>. For a single-component fluid <b>T</b><sub>K</sub> = <b>T</b><sub>σ</sub> = 0 and this reduces to F = ∂𝓛.|de Haas (2026) BQ EM and fluid dynamics, eq. 416–426',
+  'U.D.G':'UH = F, the fluid force equation and the only equation of the hierarchy with all four channels active. 1̂: −<b>u</b>·<b>Ω</b>, helicity; T̂: −u<sub>0</sub>σ<sub>E</sub> − (1/c)<b>u</b>·<b>Π</b>, power balance; <b class="kv">K̂</b>: <b>u</b>×<b>Ω</b> − (u<sub>0</sub>/c)<b>Π</b> − σ<sub>E</sub><b>u</b>, Euler–Lamb force; σ̂: −(1/c)<b>u</b>×<b>Π</b> − u<sub>0</sub><b>Ω</b>, rotational transport. Here u<sub>0</sub> = γc and <b>u</b> = γ<b>v</b>.|de Haas (2026) BQ EM and fluid dynamics, eq. 450–454',
+  'D.D.G':'∂H = F′, the fluid wave equation. The 1̂ channel −∇·<b>Ω</b> = −∇·(∇×<b>g</b>) and the σ̂ channel vanish identically (BQ Bianchi identities), leaving the wave operator on ε and <b>g</b> in T̂ and <b class="kv">K̂</b>.|de Haas (2026) BQ EM and fluid dynamics, eq. 455',
   'd.a.b':'',
 };
 const QUICK3 = [['D','D','A','∂B: Maxwell'],['J','D','A','JB: Lorentz force'],['D','J','A','∂(J<sup>T</sup>A)'],['D','U','G','∂(U<sup>T</sup>G)'],['U','D','G','UH: fluid force'],['D','D','G','∂H: fluid waves'],['d','a','b','general D(A<sup>T</sup>B)']];
@@ -334,7 +348,7 @@ let SD = 'D', SA = 'D', SB = 'A', C1Z = true;
 const pName3 = (D, A, B) => `${D.nm}(${A.nm}<sup>T</sup>${B.nm})`;
 function vecLine(v, tag){
   const sp = s => s.trim().startsWith('−') ? ' ' + s.trim() : ' + ' + s.trim();
-  return `<div class="what">${tag}: ${v.what}</div><div class="math">${v.nm} = ${s0HTML(v)} <span class="ts">T̂</span>${sp(vvHTML(v))}·<span class="ts">K̂</span></div>`;
+  return `<div class="what">${tag}: ${v.what}</div><div class="math">${v.nm} = ${s0HTML(v)} <span class="ts">T̂</span>${sp(vvHTML(v))}·<span class="ts"><b class="kv">K̂</b></span></div>`;
 }
 function render(){
   $('selD').value = SD; $('selA').value = SA; $('selB').value = SB; $('c1zero').checked = C1Z;
@@ -356,17 +370,17 @@ function render(){
   $('chans').innerHTML =
       ch('n', 'Norm · <span class="ns">1̂</span>', 'pauliquat scalar', `−<b>d</b>·<b>c</b><sub>K</sub> = −${P(dv)}·${P(scK)}`, E.e1)
     + ch('k', 'Time · <span class="ts">T̂</span>', 'minquat time part', `d<sub>0</sub>c<sub>1</sub> + <b>d</b>·<b>c</b><sub>σ</sub> = ${P(d0)}${P(sc1)} + ${P(dv)}·${P(scS)}`, E.eT)
-    + ch('k', 'Space · <span class="ts">K̂</span>', 'minquat space part', `<b>d</b>c<sub>1</sub> + d<sub>0</sub><b>c</b><sub>σ</sub> + <b>d</b>×<b>c</b><sub>K</sub> = ${P(dv)}${P(sc1)} + ${P(d0)}${P(scS)} + ${P(dv)}×${P(scK)}`, E.eK)
+    + ch('k', 'Space · <span class="ts"><b class="kv">K̂</b></span>', 'minquat space part', `<b>d</b>c<sub>1</sub> + d<sub>0</sub><b>c</b><sub>σ</sub> + <b>d</b>×<b>c</b><sub>K</sub> = ${P(dv)}${P(sc1)} + ${P(d0)}${P(scS)} + ${P(dv)}×${P(scK)}`, E.eK)
     + ch('s', 'Spin · <span class="ns">σ̂</span>', 'pauliquat bivector', `<b>d</b>×<b>c</b><sub>σ</sub> − d<sub>0</sub><b>c</b><sub>K</sub> = ${P(dv)}×${P(scS)} − ${P(d0)}${P(scK)}`, E.eS);
-  const parts = [[E.e1, '<span class="ns">1̂</span>', false], [E.eT, '<span class="ts">T̂</span>', false], [E.eK, '<span class="ts">K̂</span>', true], [E.eS, '<span class="ns">σ̂</span>', true]].filter(p => p[0].length);
+  const parts = [[E.e1, '<span class="ns">1̂</span>', false], [E.eT, '<span class="ts">T̂</span>', false], [E.eK, '<span class="ts"><b class="kv">K̂</b></span>', true], [E.eS, '<span class="ns">σ̂</span>', true]].filter(p => p[0].length);
   $('total').innerHTML = pName3(D, A, B) + ' = ' + (parts.length ? parts.map((p, i) => (i ? ' + ' : '') + '(' + tsHTML(p[0]).trim() + ')' + (p[2] ? '·' : ' ') + p[1]).join('') : '0');
   const mq = E.eT.length + E.eK.length, pq = E.e1.length + E.eS.length;
-  $('split').innerHTML = `<span class="pill ${mq ? 'st' : ''}">minquat T̂ + K̂: ${mq ? 'present' : 'zero'}</span> <span class="pill ${pq ? 'sn' : ''}">pauliquat 1̂ + σ̂: ${pq ? 'present' : 'zero'}</span>`;
+  $('split').innerHTML = `<span class="pill ${mq ? 'st' : ''}">minquat T̂ + <b class="kv">K̂</b>: ${mq ? 'present' : 'zero'}</span> <span class="pill ${pq ? 'sn' : ''}">pauliquat 1̂ + σ̂: ${pq ? 'present' : 'zero'}</span>`;
   const it = TRI[SD + '.' + SA + '.' + SB];
   if (it){ const [txt, src] = it.split('|'); $('interp').innerHTML = txt + (src ? `<span class="src">Source: ${src}</span>` : ''); $('interp').hidden = false; }
   else if (it === ''){ $('interp').hidden = true; }
   else $('interp').innerHTML = `No physical reading of ${pName3(D, A, B)} is given in the papers yet; the channels follow from the triple rule.`, $('interp').hidden = false;
-  renderNum();
+  renderSym(); renderNum();
 }
 
 /* ---------- numerical check ---------- */
@@ -383,6 +397,87 @@ const fz = z => { const r = Math.abs(z[0]) < 1e-12 ? 0 : z[0], i = Math.abs(z[1]
   if (i === 0) return f(r); if (r === 0) return f(i) + 'i'; return f(r) + (i < 0 ? ' − ' : ' + ') + f(Math.abs(i)) + 'i'; };
 const fn = x => (Math.abs(x) < 1e-12 ? 0 : +x.toFixed(4)).toString().replace('-', '−');
 const mxH = M => '<span class="mx">' + M.flat().map(z => `<span>${fz(z)}</span>`).join('') + '</span>';
+
+/* ---------- the triple product term by term, with the multiplication table ---------- */
+/* rows T̂, Î, Ĵ, K̂ (left factor D) · columns 1̂, Î, Ĵ, K̂, σ̂_I, σ̂_J, σ̂_K (channels of C), from the BQ-Pauli table */
+const TAB3 = [
+  [['T',1], ['sI',-1], ['sJ',-1], ['sK',-1], ['I',1],  ['J',1],  ['K',1]],
+  [['I',1], ['1',-1],  ['K',1],   ['J',-1],  ['T',1],  ['sK',1], ['sJ',-1]],
+  [['J',1], ['K',-1],  ['1',-1],  ['I',1],   ['sK',-1],['T',1],  ['sI',1]],
+  [['K',1], ['J',1],   ['I',-1],  ['1',-1],  ['sJ',1], ['sI',-1],['T',1]] ];
+const KB4 = ['T̂', 'Î', 'Ĵ', 'K̂'], CB = ['1̂', 'Î', 'Ĵ', 'K̂', 'σ̂<sub>I</sub>', 'σ̂<sub>J</sub>', 'σ̂<sub>K</sub>'];
+const EL3 = {'1':'<span class="ns">1̂</span>', T:'<span class="ts">T̂</span>', I:'<span class="ts">Î</span>', J:'<span class="ts">Ĵ</span>', K:'<span class="ts">K̂</span>',
+             sI:'<span class="ns">σ̂<sub>I</sub></span>', sJ:'<span class="ns">σ̂<sub>J</sub></span>', sK:'<span class="ns">σ̂<sub>K</sub></span>'};
+function factor3(lbl){
+  let neg = false, body = String(lbl).trim();
+  if (body.startsWith('−')){ neg = true; body = body.slice(1).trim(); }
+  const len = body.replace(/<sub>.*?<\/sub>/g, '').replace(/<[^>]+>/g, '').length;
+  return {neg, body: (len <= 1 || body.startsWith('(')) ? body : '(' + body + ')'};
+}
+/* component labels of a named vector channel, e.g. E/c -> E1/c, -Π/c -> -Π1/c */
+function compLabels(t){
+  if (!t) return null;
+  const base = VECH[t.v].replace(/<\/?b>/g, ''), num = fhtml(t.f), den = fden(t.f), ak = Math.abs(t.k);
+  return [1, 2, 3].map(i => { const nm = base.includes('</sub>') ? base.replace('</sub>', i + '</sub>') : base + '<sub>' + i + '</sub>';
+    return (t.k < 0 ? '−' : '') + (ak === 1 ? '' : ak) + num + nm + (den ? '/' + den : ''); });
+}
+let GEN3 = false;
+function renderSym(){
+  const D = VI[SD], A = VI[SA], B = VI[SB], expand = $('expand').checked;
+  const C = cChannels(A, B, C1Z, false), E = triple(D, C);
+  const dl = GEN3 ? ['d<sub>0</sub>','d<sub>1</sub>','d<sub>2</sub>','d<sub>3</sub>'] : D.comp;
+  const c1l = C.c1 ? (GEN3 ? 'c<sub>1</sub>' : cTermHTML(C.c1, false).trim()) : null;
+  const cKl = C.cK ? (GEN3 ? ['c<sub>KI</sub>','c<sub>KJ</sub>','c<sub>KK</sub>'] : compLabels(C.cK)) : null;
+  const cSl = C.cS ? (GEN3 ? ['c<sub>σI</sub>','c<sub>σJ</sub>','c<sub>σK</sub>'] : compLabels(C.cS)) : null;
+  const cl = [c1l].concat(cKl || [null, null, null], cSl || [null, null, null]);
+  const coll = {'1':[], T:[], I:[], J:[], K:[], sI:[], sJ:[], sK:[]};
+  const term = (lbl, basis) => { const f = factor3(lbl); return {neg:f.neg, body:f.body, txt:(f.neg ? '−' : '') + f.body + ' ' + basis}; };
+  const sumRow = (labels, bases) => labels.map((l, k) => l === null ? '' : (() => { const f = factor3(l); return (f.neg ? ' − ' : ' + ') + f.body + bases[k]; })()).join('').replace(/^ \+ /, '').replace(/^ − /, '−');
+  let h = `<div class="sstep"><h3>1 · Write the product term by term</h3>
+    <div class="ctlline"><label class="chk"><input type="checkbox" id="gen3"${GEN3 ? ' checked' : ''}> <span>Show with general coordinates d<sub>μ</sub> and c-channels</span></label></div>
+    <div class="formula">E = DC = (${sumRow(dl, KB4)})(${sumRow(cl, CB) || '0'})</div>
+    <p class="note">D = ${D.nm} on the left, C = ${A.nm}<sup>T</sup>${B.nm} on the right with its seven channel coordinates${C1Z ? ' (c<sub>1</sub> set to 0)' : ''}. Every term of D multiplies every term of C, with the D-coordinate always to the left, so a derivative in D acts on C. Each basis product is read from the <a href="BQ_Pauli_Multiplication_Table.html">BQ-Pauli multiplication table</a>.</p></div>`;
+  h += `<div class="sstep"><h3>2 · Multiply, using the table</h3><div class="sgrid">`;
+  let count = 0;
+  for (let m = 0; m < 4; m++){
+    const L = term(dl[m], KB4[m]);
+    h += '<div class="sbox">';
+    for (let n = 0; n < 7; n++){
+      if (cl[n] === null) continue;
+      const R = term(cl[n], CB[n]), [el, ts] = TAB3[m][n];
+      const pre = (L.neg !== R.neg) ? '−' : '', fin = ((L.neg !== R.neg) !== (ts < 0)) ? -1 : 1, coef = L.body + R.body;
+      coll[el].push({v:fin, coef}); count++;
+      h += `<div class="sline">(${L.txt})(${R.txt}) = ${pre}${coef}(${KB4[m]}${CB[n]}) = ${pre}${coef}(${ts < 0 ? '−' : ''}${EL3[el]}) = <span class="sres">${fin < 0 ? '−' : ''}${coef} ${EL3[el]}</span></div>`;
+    }
+    h += '</div>';
+  }
+  h += `</div></div>`;
+  const sumH = list => list.length ? list.slice().sort((x, y) => y.v - x.v).map((t, k) => (t.v < 0 ? (k ? ' − ' : '−') : (k ? ' + ' : '')) + t.coef).join('') : '0';
+  h += `<div class="sstep"><h3>3 · Collect the ${count} terms by basis element</h3><div class="sbox">`;
+  [['1','norm'], ['T','time'], ['I',''], ['J',''], ['K',''], ['sI',''], ['sJ',''], ['sK','']].forEach(([el, note]) => {
+    h += `<div class="sline"><span class="lab">${EL3[el]}${note ? ' <span style="font-size:13px">' + note + '</span>' : ''}</span>: <span class="sres">${sumH(coll[el])}</span></div>`; });
+  h += `</div></div>`;
+  const want = {'1':{'1,1':-1,'2,2':-1,'3,3':-1}, T:{'0,0':1,'1,4':1,'2,5':1,'3,6':1},
+    I:{'1,0':1,'0,4':1,'2,3':1,'3,2':-1}, J:{'2,0':1,'0,5':1,'3,1':1,'1,3':-1}, K:{'3,0':1,'0,6':1,'1,2':1,'2,1':-1},
+    sI:{'2,6':1,'3,5':-1,'0,1':-1}, sJ:{'3,4':1,'1,6':-1,'0,2':-1}, sK:{'1,5':1,'2,4':-1,'0,3':-1}};
+  const got = {'1':{}, T:{}, I:{}, J:{}, K:{}, sI:{}, sJ:{}, sK:{}};
+  for (let m = 0; m < 4; m++) for (let n = 0; n < 7; n++){ const [el, ts] = TAB3[m][n]; got[el][m + ',' + n] = ts; }
+  const ok = Object.keys(want).every(el => { const ks = new Set(Object.keys(got[el]).concat(Object.keys(want[el]))); return [...ks].every(k => (got[el][k] || 0) === (want[el][k] || 0)); });
+  const res = l => tsHTML(l).trim(), g = el => sumH(coll[el]), tri = (a, b, c) => `(${a}, ${b}, ${c})`;
+  const BKv = '<b class="kv">K̂</b>';
+  const line = (lab, rule, cv, fin) => `<div class="sline"><span class="lab">${lab}</span>: ${rule}${GEN3 ? ' = ' + cv : ` = ${cv} = <span class="sres">${fin}</span>`}</div>`;
+  h += `<div class="sstep"><h3>4 · Write the channels as vector products</h3><div class="sbox">
+    ${line(EL3['1'], '−<b>d</b>·<b>c</b><sub>K</sub>', g('1'), res(E.e1))}
+    ${line(EL3.T, 'd<sub>0</sub>c<sub>1</sub> + <b>d</b>·<b>c</b><sub>σ</sub>', g('T'), res(E.eT))}
+    ${line(`<span class="ts">${BKv}</span>`, '<b>d</b>c<sub>1</sub> + d<sub>0</sub><b>c</b><sub>σ</sub> + <b>d</b>×<b>c</b><sub>K</sub>', tri(g('I'), g('J'), g('K')), res(E.eK))}
+    ${line('<span class="ns">σ̂</span>', '<b>d</b>×<b>c</b><sub>σ</sub> − d<sub>0</sub><b>c</b><sub>K</sub>', tri(g('sI'), g('sJ'), g('sK')), res(E.eS))}
+    </div>
+    <span class="pill ${ok ? 'ok' : 'no'}">${ok ? '✓ the table products give exactly the triple rule' : '✗ the collected terms differ from the triple rule'}</span></div>`;
+  $('symwrap').innerHTML = h;
+  $('gen3').addEventListener('change', e => { GEN3 = e.target.checked; renderSym(); });
+  cChannels(A, B, C1Z, expand);
+}
+
 const NUM = {};
 function vals(id){ if (!NUM[id]) NUM[id] = VI[id].def.slice(); return NUM[id]; }
 function renderNum(){
