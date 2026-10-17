@@ -1,0 +1,276 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BQ-Pauli Multiplication Table</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Pick any pair from the BQ-Pauli multiplication table and see the explicit 2×2 matrix multiplication, entry by entry, and its identification as a signed basis element.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+<style>
+/* Layout: the 8×8 table on the left as the chooser, the worked product on the right (stacked on phones), notes beneath. Same family as the bq-galaxy-models pages. */
+:root{
+  --bg:#f5f6fa;--surface:#ffffff;--edge:#d6dce8;--ink:#141a28;--soft:#55607a;
+  --st:#b8620f;--st-bg:rgba(184,98,15,.10);      /* space-time basis T̂, K̂_i (minquat) */
+  --sn:#0f7fb0;--sn-bg:rgba(15,127,176,.10);     /* spin-norm basis 1̂, σ̂_i (pauliquat) */
+  --sel:#5b4fd6;--good:#2f8a4f;--bad:#b23a3a;--grid:rgba(20,26,40,.09);
+  --serif:"Source Serif 4",Georgia,serif;--sans:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.13);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.11);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;--grid:rgba(231,235,243,.08);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.13);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.11);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;--grid:rgba(231,235,243,.08);color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans)}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font:600 clamp(24px,3.4vw,34px)/1.15 var(--serif);margin:0 0 6px;text-wrap:balance}
+h2{font:600 18px/1.3 var(--serif);margin:0 0 10px;text-wrap:balance}
+h3{font:600 12px/1.3 var(--sans);margin:0 0 8px;color:var(--soft);letter-spacing:.06em;text-transform:uppercase}
+.lede{color:var(--soft);max-width:80ch;margin:0 0 20px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:18px;align-items:start}
+@media (max-width:960px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--edge);border-radius:12px;padding:16px;min-width:0}
+.ctl{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-bottom:12px;font-size:13.5px;color:var(--soft)}
+select,button{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:5px 8px}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--sel);outline-offset:2px}
+.chk{display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+/* table */
+.tscroll{overflow-x:auto}
+table.mt{border-collapse:separate;border-spacing:3px;margin:0 auto;font-family:var(--serif)}
+table.mt th{font:600 16px var(--serif);padding:4px 6px;min-width:44px;text-align:center}
+table.mt th.corner{font:500 11px var(--sans);color:var(--soft);line-height:1.2}
+table.mt th.st,table.mt td button.st{color:var(--st)}
+table.mt th.sn,table.mt td button.sn{color:var(--sn)}
+table.mt td button{width:100%;min-width:46px;height:40px;font:500 16px var(--serif);border-radius:7px;padding:0 4px;border:1px solid transparent}
+table.mt td button.st{background:var(--st-bg)}
+table.mt td button.sn{background:var(--sn-bg)}
+table.mt td button:hover{border-color:var(--soft)}
+table.mt td button[aria-pressed=true]{border:2px solid var(--sel);box-shadow:0 0 0 2px var(--sel) inset}
+table.mt th.hl{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+table.mt td.cross button{outline:1px dashed var(--soft);outline-offset:-1px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--soft);margin-top:10px;justify-content:center}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{display:inline-block;width:14px;height:14px;border-radius:4px}
+/* worked product */
+.eqrow{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;font:500 20px var(--serif);margin:4px 0 2px}
+.op{color:var(--soft);font-size:20px}
+.mx{display:inline-grid;grid-template-columns:auto auto;gap:2px 14px;padding:6px 12px;position:relative;font:500 16px var(--mono);font-variant-numeric:tabular-nums}
+.mx::before,.mx::after{content:"";position:absolute;top:0;bottom:0;width:7px;border:1.6px solid var(--ink)}
+.mx::before{left:0;border-right:none}.mx::after{right:0;border-left:none}
+.mx span{text-align:center;min-width:2.2ch}
+.lbl{display:flex;flex-direction:column;align-items:center;gap:2px}
+.lbl small{font:11px var(--sans);color:var(--soft)}
+.sym{font:600 22px var(--serif)}
+.sym.st{color:var(--st)}.sym.sn{color:var(--sn)}
+.steps{font:14px var(--mono);font-variant-numeric:tabular-nums;background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:10px 12px;margin:12px 0;overflow-x:auto}
+.steps div{white-space:nowrap;line-height:1.85}
+.steps .ix{color:var(--soft)}
+.steps .rs{color:var(--sel);font-weight:500}
+.verdict{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pill{font:500 12.5px var(--sans);border:1px solid var(--edge);border-radius:99px;padding:2px 10px;color:var(--soft)}
+.pill.ok{border-color:var(--good);color:var(--good)}
+.pill.no{border-color:var(--bad);color:var(--bad)}
+.pill.st{border-color:var(--st);color:var(--st)}.pill.sn{border-color:var(--sn);color:var(--sn)}
+.sub{border-top:1px solid var(--edge);margin-top:16px;padding-top:14px}
+.note{font-size:14px;color:var(--soft);max-width:72ch;margin:8px 0 0}
+.note b{color:var(--ink)}
+.basis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:640px){.basis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.basis .b{display:flex;align-items:center;gap:8px;font:500 15px var(--serif)}
+.basis .b .mx{font-size:13px;gap:1px 10px;padding:4px 10px}
+.notes{margin-top:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:900px){.notes{grid-template-columns:minmax(0,1fr)}}
+.notes li{font-size:14px;max-width:70ch;margin-bottom:6px}
+.notes ul{padding-left:18px;margin:6px 0}
+.cap{font-size:12.5px;color:var(--soft);margin:10px 0 0}
+a{color:var(--sn)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head><body>
+<div class="wrap">
+<header>
+  <h1>BQ-Pauli Multiplication Table</h1>
+  <p class="lede">The BQ-Pauli algebra has eight 2×2 complex basis matrices: the space-time basis T̂, Î, Ĵ, K̂ (minquat) and the spin-norm basis 1̂, σ̂<sub>I</sub>, σ̂<sub>J</sub>, σ̂<sub>K</sub> (pauliquat), with T̂ = i1̂ and K̂<sub>i</sub> = T̂σ̂<sub>i</sub>. Choose a cell: the row is the left factor, the column the right factor. The page multiplies the two matrices entry by entry and identifies the outcome as a signed basis element.</p>
+</header>
+
+<div class="grid">
+  <section class="card" aria-labelledby="h-tab">
+    <h2 id="h-tab">Choose a product</h2>
+    <div class="ctl">
+      <label for="selA">Left</label><select id="selA"></select>
+      <span aria-hidden="true">·</span>
+      <label for="selB">right</label><select id="selB"></select>
+      <button id="swap" type="button">Swap order</button>
+      <label class="chk"><input type="checkbox" id="kNote"> Write Î, Ĵ, K̂ as K̂<sub>I</sub>, K̂<sub>J</sub>, K̂<sub>K</sub></label>
+    </div>
+    <div class="tscroll"><table class="mt" id="tab" aria-label="BQ-Pauli multiplication table, row times column"></table></div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--st-bg);border:1px solid var(--st)"></i>result in the space-time basis T̂, K̂<sub>i</sub></span>
+      <span><i class="sw" style="background:var(--sn-bg);border:1px solid var(--sn)"></i>result in the spin-norm basis 1̂, σ̂<sub>i</sub></span>
+      <span><i class="sw" style="border:2px solid var(--sel)"></i>selected</span>
+      <span><i class="sw" style="outline:1px dashed var(--soft);outline-offset:-1px"></i>reversed order</span>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="h-work" aria-live="polite">
+    <h2 id="h-work">The explicit multiplication</h2>
+    <div id="work"></div>
+    <div class="sub">
+      <h3>Reversed order</h3>
+      <div id="rev"></div>
+    </div>
+  </section>
+</div>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-basis">
+  <h2 id="h-basis">The eight basis matrices</h2>
+  <div class="basis" id="basis"></div>
+  <p class="cap">Matrices as defined in the BQ-Pauli slides (de Haas, 24 September 2026). Every product on this page is computed live from these entries; nothing is looked up except the check against the paper's table.</p>
+</section>
+
+<div class="notes">
+  <section class="card"><h2>What the table shows</h2>
+    <ul>
+      <li><b>Squares.</b> Every space-time element squares to −1̂ (T̂² = Î² = Ĵ² = K̂² = −1̂); every spin-norm element squares to +1̂.</li>
+      <li><b>Quaternion products.</b> ÎĴ = −ĴÎ = K̂, ĴK̂ = −K̂Ĵ = Î, K̂Î = −ÎK̂ = Ĵ: the spatial K̂<sub>i</sub> anticommute and close on themselves.</li>
+      <li><b>Pauli products.</b> σ̂<sub>I</sub>σ̂<sub>J</sub> = −K̂, σ̂<sub>J</sub>σ̂<sub>K</sub> = −Î, σ̂<sub>K</sub>σ̂<sub>I</sub> = −Ĵ: two spin-norm elements give a space-time element, with a minus sign in cyclic order.</li>
+      <li><b>Mixed products.</b> K̂<sub>i</sub>σ̂<sub>i</sub> = σ̂<sub>i</sub>K̂<sub>i</sub> = T̂ on the diagonal; off the diagonal K̂<sub>i</sub>σ̂<sub>j</sub> = −σ̂<sub>j</sub>K̂<sub>i</sub> lands on ±σ̂<sub>k</sub>.</li>
+      <li><b>T̂ is central.</b> T̂ = i1̂ commutes with everything: T̂σ̂<sub>i</sub> = K̂<sub>i</sub> and T̂K̂<sub>i</sub> = −σ̂<sub>i</sub>. Multiplying by T̂ moves an element between the two bases.</li>
+    </ul>
+  </section>
+  <section class="card"><h2>Reading the colours</h2>
+    <p class="note">Because T̂ = i1̂ and K̂<sub>i</sub> = iσ̂<sub>i</sub>, each space-time element is i times its spin-norm partner. Which basis a product lands in depends on the pair:</p>
+    <ul>
+      <li>space-time · space-time: K̂<sub>i</sub>K̂<sub>j</sub> (i ≠ j) stays in the space-time basis; the squares give −1̂ and T̂K̂<sub>i</sub> gives −σ̂<sub>i</sub>, both in the spin-norm basis;</li>
+      <li>spin-norm · spin-norm: σ̂<sub>i</sub>σ̂<sub>j</sub> (i ≠ j) gives ∓K̂<sub>k</sub> in the space-time basis; the squares give +1̂;</li>
+      <li>mixed: T̂σ̂<sub>i</sub> = K̂<sub>i</sub> and K̂<sub>i</sub>σ̂<sub>i</sub> = T̂ land in the space-time basis, K̂<sub>i</sub>σ̂<sub>j</sub> (i ≠ j) in the spin-norm basis.</li>
+    </ul>
+    <p class="note">So the space-time basis alone does not close under multiplication: <b>T̂T̂ = −1̂</b> and <b>T̂K̂<sub>i</sub> = −σ̂<sub>i</sub></b> leave it, and the spin-norm basis is needed to span the full biquaternion algebra.</p>
+    <p class="cap">Method, as in the reproduction appendix: use the explicit matrices, execute the multiplication, decompose the result on the basis, and compare with the stated table. The green pill confirms the computed outcome equals the entry in the paper's table. E.P.J. de Haas, BQ algebra. Part of <a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>; back to the <a href="../models.html">models</a>.</p>
+  </section>
+</div>
+</div>
+
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+/* complex numbers as [re, im]; all entries here are 0, ±1, ±i */
+const C = (re, im) => [re, im];
+const cm = (a, b) => [a[0]*b[0] - a[1]*b[1], a[0]*b[1] + a[1]*b[0]];
+const ca = (a, b) => [a[0] + b[0], a[1] + b[1]];
+const ceq = (a, b) => Math.abs(a[0]-b[0]) < 1e-12 && Math.abs(a[1]-b[1]) < 1e-12;
+function fc(z){ const [r, i] = z.map(v => Math.abs(v) < 1e-12 ? 0 : v);
+  if (i === 0) return r < 0 ? '−' + (-r) : String(r);
+  const im = Math.abs(i) === 1 ? 'i' : Math.abs(i) + 'i';
+  if (r === 0) return (i < 0 ? '−' : '') + im;
+  return (r < 0 ? '−' + (-r) : r) + (i < 0 ? ' − ' : ' + ') + im; }
+const par = z => { const s = fc(z); return '(' + s + ')'; };
+const O = C(0,0), P = C(1,0), N = C(-1,0), I = C(0,1), NI = C(0,-1);
+
+/* basis, order and matrices exactly as in the BQ-Pauli slides */
+const B = [
+  {k:'T',  st:true,  m:[[I,O],[O,I]]},
+  {k:'I',  st:true,  m:[[I,O],[O,NI]]},
+  {k:'J',  st:true,  m:[[O,P],[N,O]]},
+  {k:'K',  st:true,  m:[[O,I],[I,O]]},
+  {k:'sI', st:false, m:[[P,O],[O,N]]},
+  {k:'sJ', st:false, m:[[O,NI],[I,O]]},
+  {k:'sK', st:false, m:[[O,P],[P,O]]},
+  {k:'1',  st:false, m:[[P,O],[O,P]]}
+];
+const IDX = Object.fromEntries(B.map((b, i) => [b.k, i]));
+let kNote = false;
+function nm(k){
+  const t = {T:'T̂', '1':'1̂', sI:'σ̂<sub>I</sub>', sJ:'σ̂<sub>J</sub>', sK:'σ̂<sub>K</sub>'};
+  if (t[k]) return t[k];
+  return kNote ? 'K̂<sub>' + k + '</sub>' : {I:'Î', J:'Ĵ', K:'K̂'}[k];
+}
+const nmPlain = k => nm(k).replace(/<sub>(.*?)<\/sub>/g, '$1');
+
+/* the paper's table (slide 17), row · column, for the check */
+const PAPER = {
+  T:  ['-1','-sI','-sJ','-sK','I','J','K','T'],
+  I:  ['-sI','-1','K','-J','T','sK','-sJ','I'],
+  J:  ['-sJ','-K','-1','I','-sK','T','sI','J'],
+  K:  ['-sK','J','-I','-1','sJ','-sI','T','K'],
+  sI: ['I','T','sK','-sJ','1','-K','J','sI'],
+  sJ: ['J','-sK','T','sI','K','1','-I','sJ'],
+  sK: ['K','sJ','-sI','T','-J','I','1','sK'],
+  '1':['T','I','J','K','sI','sJ','sK','1']
+};
+/* equation numbers in the slides for each product */
+const EQ = {}; const put = (n, pairs) => pairs.forEach(p => EQ[p] = n);
+put(1,['I.I']); put(2,['J.J']); put(3,['K.K']); put(4,['T.T']);
+put(5,['1.1']); put(6,['sI.sI']); put(7,['sJ.sJ']); put(8,['sK.sK']);
+put(9,['I.J','J.I']); put(10,['J.K','K.J']); put(11,['K.I','I.K']);
+put(12,['sI.sJ','sJ.sI']); put(13,['sJ.sK','sK.sJ']); put(14,['sK.sI','sI.sK']);
+put(15,['I.sI','sI.I']); put(16,['J.sJ','sJ.J']); put(17,['K.sK','sK.K']);
+put(18,['I.sJ','sJ.I']); put(19,['I.sK','sK.I']); put(20,['J.sI','sI.J']); put(21,['J.sK','sK.J']); put(22,['K.sI','sI.K']); put(23,['K.sJ','sJ.K']);
+put(24,['T.sI','sI.T']); put(25,['T.sJ','sJ.T']); put(26,['T.sK','sK.T']); put(27,['T.I','I.T']); put(28,['T.J','J.T']); put(29,['T.K','K.T']);
+const GROUP = n => n <= 4 ? 'Quaternion basis: squares' : n <= 8 ? 'Pauli basis: squares' : n <= 11 ? 'Quaternion basis: anticommuting products' : n <= 14 ? 'Pauli basis: anticommuting products' : n <= 17 ? 'Mixed basis: K̂<sub>i</sub>σ̂<sub>i</sub> = σ̂<sub>i</sub>K̂<sub>i</sub> = T̂' : n <= 23 ? 'Mixed basis: off-axis products' : n <= 26 ? 'Products involving T̂: Pauli sector' : 'Products involving T̂: quaternion sector';
+
+function mul(A, Bm){ const r = [[O,O],[O,O]], terms = [];
+  for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++){
+    const t1 = cm(A[i][0], Bm[0][j]), t2 = cm(A[i][1], Bm[1][j]); r[i][j] = ca(t1, t2);
+    terms.push({i, j, a1:A[i][0], b1:Bm[0][j], a2:A[i][1], b2:Bm[1][j], t1, t2, s:r[i][j]}); }
+  return {r, terms}; }
+function ident(M){                       /* M = s · basis element, s = ±1 */
+  for (const b of B) for (const s of [1, -1]){
+    let ok = true; for (let i = 0; i < 2 && ok; i++) for (let j = 0; j < 2 && ok; j++) ok = ceq(M[i][j], [s*b.m[i][j][0], s*b.m[i][j][1]]);
+    if (ok) return {k:b.k, s, st:b.st}; }
+  return null; }
+const mxHTML = M => '<span class="mx">' + M.flat().map(z => `<span>${fc(z)}</span>`).join('') + '</span>';
+const symHTML = (k, s) => `<span class="sym ${B[IDX[k]].st ? 'st' : 'sn'}">${s < 0 ? '−' : ''}${nm(k)}</span>`;
+const PROD = {}; B.forEach(a => B.forEach(b => { PROD[a.k + '.' + b.k] = ident(mul(a.m, b.m).r); }));
+
+let A = 'I', Bk = 'J';
+function buildTable(){
+  const t = $('tab'); let h = '<thead><tr><th class="corner" scope="col">row ·<br>column</th>' + B.map(b => `<th scope="col" class="${b.st ? 'st' : 'sn'}" data-c="${b.k}">${nm(b.k)}</th>`).join('') + '</tr></thead><tbody>';
+  B.forEach(a => { h += `<tr><th scope="row" class="${a.st ? 'st' : 'sn'}" data-r="${a.k}">${nm(a.k)}</th>`;
+    B.forEach(b => { const p = PROD[a.k + '.' + b.k];
+      h += `<td data-a="${a.k}" data-b="${b.k}"><button type="button" class="${p.st ? 'st' : 'sn'}" aria-label="${nmPlain(a.k)} times ${nmPlain(b.k)}" aria-pressed="false">${p.s < 0 ? '−' : ''}${nm(p.k)}</button></td>`; });
+    h += '</tr>'; });
+  t.innerHTML = h + '</tbody>';
+  t.querySelectorAll('td button').forEach(btn => btn.addEventListener('click', () => { const td = btn.parentElement; A = td.dataset.a; Bk = td.dataset.b; render(); }));
+}
+function fillSelects(){ ['selA','selB'].forEach(id => { $(id).innerHTML = B.map(b => `<option value="${b.k}">${nmPlain(b.k)}</option>`).join(''); }); }
+function work(a, b, full){
+  const ma = B[IDX[a]].m, mb = B[IDX[b]].m, {r, terms} = mul(ma, mb), id = ident(r);
+  let h = `<div class="eqrow"><span class="lbl">${symHTML(a, 1)}</span><span class="op">·</span><span class="lbl">${symHTML(b, 1)}</span><span class="op">=</span>${mxHTML(ma)}${mxHTML(mb)}<span class="op">=</span>${mxHTML(r)}<span class="op">=</span>${symHTML(id.k, id.s)}</div>`;
+  if (!full) return {h, id};
+  h += '<div class="steps" aria-label="Entry by entry">' + terms.map(t => `<div><span class="ix">C<sub>${t.i}${t.j}</sub></span> = A<sub>${t.i}0</sub>B<sub>0${t.j}</sub> + A<sub>${t.i}1</sub>B<sub>1${t.j}</sub> = ${par(t.a1)}${par(t.b1)} + ${par(t.a2)}${par(t.b2)} = ${fc(t.t1)} + ${fc(t.t2).replace(/^−/, '(−') + (fc(t.t2).startsWith('−') ? ')' : '')} = <span class="rs">${fc(t.s)}</span></div>`).join('') + '</div>';
+  return {h, id};
+}
+function render(){
+  $('selA').value = A; $('selB').value = Bk;
+  const {h, id} = work(A, Bk, true), key = A + '.' + Bk, paper = PAPER[A][IDX[Bk]], pk = paper.replace('-', ''), ps = paper.startsWith('-') ? -1 : 1;
+  const match = pk === id.k && ps === id.s, eq = EQ[key];
+  let v = '<div class="verdict">' + `<span class="pill ${match ? 'ok' : 'no'}">${match ? '✓ equals the paper’s table entry' : '✗ differs from the paper’s table: ' + (ps < 0 ? '−' : '') + nm(pk)}</span>`
+    + `<span class="pill ${id.st ? 'st' : 'sn'}">result in the ${id.st ? 'space-time basis (minquat)' : 'spin-norm basis (pauliquat)'}</span>`
+    + (eq ? `<span class="pill">Eq. (${eq}) · ${GROUP(eq)}</span>` : `<span class="pill">${A === '1' || Bk === '1' ? '1̂ is the identity' : ''}</span>`) + '</div>';
+  $('work').innerHTML = h + v;
+  /* reversed order */
+  const rv = work(Bk, A, false), same = rv.id.k === id.k && rv.id.s === id.s, anti = rv.id.k === id.k && rv.id.s === -id.s;
+  const rel = A === Bk ? 'The same element on both sides, so the order does not matter.' : same ? `${symHTML(A,1)} and ${symHTML(Bk,1)} <b>commute</b>: ${symHTML(A,1)}${symHTML(Bk,1)} = ${symHTML(Bk,1)}${symHTML(A,1)}.` : anti ? `${symHTML(A,1)} and ${symHTML(Bk,1)} <b>anticommute</b>: ${symHTML(A,1)}${symHTML(Bk,1)} = −${symHTML(Bk,1)}${symHTML(A,1)}.` : 'The reversed product is a different element.';
+  $('rev').innerHTML = rv.h + `<p class="note">${rel}</p>`;
+  /* table highlight */
+  document.querySelectorAll('#tab td').forEach(td => { const on = td.dataset.a === A && td.dataset.b === Bk; td.querySelector('button').setAttribute('aria-pressed', on ? 'true' : 'false'); td.classList.toggle('cross', A !== Bk && td.dataset.a === Bk && td.dataset.b === A); });
+  document.querySelectorAll('#tab th[data-r]').forEach(th => th.classList.toggle('hl', th.dataset.r === A));
+  document.querySelectorAll('#tab th[data-c]').forEach(th => th.classList.toggle('hl', th.dataset.c === Bk));
+}
+function basisCards(){ $('basis').innerHTML = B.map(b => `<div class="b">${symHTML(b.k, 1)}<span class="op">=</span>${mxHTML(b.m)}</div>`).join(''); }
+function all(){ fillSelects(); buildTable(); basisCards(); render(); }
+$('selA').addEventListener('change', e => { A = e.target.value; render(); });
+$('selB').addEventListener('change', e => { Bk = e.target.value; render(); });
+$('swap').addEventListener('click', () => { [A, Bk] = [Bk, A]; render(); });
+$('kNote').addEventListener('change', e => { kNote = e.target.checked; all(); });
+/* self-check at load: every computed product must match the paper's table */
+let bad = 0; B.forEach(a => B.forEach((b, j) => { const p = PROD[a.k + '.' + b.k], q = PAPER[a.k][j]; if (!p || (q.startsWith('-') ? -1 : 1) !== p.s || q.replace('-', '') !== p.k) bad++; }));
+if (bad) console.warn('BQ-Pauli table: ' + bad + ' entries differ from the paper');
+all();
+})();
+</script>
+</body></html>

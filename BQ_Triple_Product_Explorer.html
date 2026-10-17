@@ -1,0 +1,433 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BQ Triple Product Explorer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Choose three physical BQ four-vectors D, A and B and see the triple product D(A^T B) in its four channels 1, T, K and sigma, with the named bilinear channels from the BQ papers and a check by explicit 2×2 matrix multiplication.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&display=swap" rel="stylesheet">
+<style>
+/* Layout: chooser on the left, channel readout on the right (stacked on phones); numerical matrix check and notes below. Same family as the BQ-Pauli table page. */
+:root{
+  --bg:#f5f6fa;--surface:#ffffff;--edge:#d6dce8;--ink:#141a28;--soft:#55607a;
+  --st:#b8620f;--st-bg:rgba(184,98,15,.09);      /* space-time basis T̂, K̂ */
+  --sn:#0f7fb0;--sn-bg:rgba(15,127,176,.09);     /* spin-norm basis 1̂, σ̂ */
+  --sel:#5b4fd6;--good:#2f8a4f;--bad:#b23a3a;
+  --serif:"Source Serif 4",Georgia,serif;--sans:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.11);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.09);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.11);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.09);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans)}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font:600 clamp(24px,3.4vw,34px)/1.15 var(--serif);margin:0 0 6px;text-wrap:balance}
+h2{font:600 18px/1.3 var(--serif);margin:0 0 10px;text-wrap:balance}
+h3{font:600 12px/1.3 var(--sans);margin:0 0 8px;color:var(--soft);letter-spacing:.06em;text-transform:uppercase}
+.lede{color:var(--soft);max-width:82ch;margin:0 0 20px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:start}
+@media (max-width:960px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--edge);border-radius:12px;padding:16px;min-width:0}
+select,button,input{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:5px 8px}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--sel);outline-offset:2px}
+.pick{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 12px;align-items:center}
+.pick label{font:600 20px var(--serif)}
+.pick select{width:100%}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.qs{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.qs button{font-size:12.5px;padding:4px 9px}
+.math{font:500 16.5px/1.9 var(--serif);overflow-x:auto}
+.math b{font-weight:700}
+.vec{border:1px solid var(--edge);border-radius:10px;padding:10px 12px;margin-top:12px;background:var(--bg)}
+.vec .what{font-size:12.5px;color:var(--soft);margin-bottom:2px}
+.ts{color:var(--st)}.ns{color:var(--sn)}
+.formula{font:500 16px/1.8 var(--serif);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:8px 12px;overflow-x:auto;white-space:nowrap}
+.fwith{font:13px var(--sans);color:var(--soft);white-space:normal}
+.ch{display:grid;grid-template-columns:minmax(0,10.5em) minmax(0,1fr);gap:4px 14px;padding:12px 0;border-bottom:1px solid var(--edge)}
+.ch:last-of-type{border-bottom:none}
+.ch .nm{font:600 14px var(--sans)}
+.ch .nm small{display:block;font:400 12px var(--sans);color:var(--soft)}
+.ch .ex{font:500 16.5px/1.75 var(--serif);overflow-x:auto;min-width:0}
+.ch .ex .gen{color:var(--soft);font-size:14.5px}
+.ch .ex .res{font-weight:600}
+.ch.n .nm{color:var(--sn)}.ch.k .nm{color:var(--st)}.ch.s .nm{color:var(--sn)}
+@media (max-width:560px){.ch{grid-template-columns:minmax(0,1fr)}}
+.total{font:600 17px/1.8 var(--serif);border:1.5px solid var(--sel);border-radius:10px;padding:10px 12px;margin-top:10px;overflow-x:auto}
+.interp{margin-top:12px;font-size:14.5px;color:var(--ink);background:var(--bg);border:1px dashed var(--edge);border-radius:10px;padding:10px 12px}
+.interp .src{display:block;font-size:12.5px;color:var(--soft);margin-top:4px}
+.note{font-size:14px;color:var(--soft);max-width:74ch;margin:8px 0 0}
+.note b{color:var(--ink)}
+/* numeric check */
+.numgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:900px){.numgrid{grid-template-columns:minmax(0,1fr)}}
+.inrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.inrow label{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--soft);min-width:0}
+.inrow input{width:100%;font:13.5px var(--mono)}
+.mxrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font:500 17px var(--serif);margin:10px 0;overflow-x:auto}
+.mx{display:inline-grid;grid-template-columns:auto auto;gap:2px 14px;padding:5px 11px;position:relative;font:13.5px var(--mono);font-variant-numeric:tabular-nums}
+.mx::before,.mx::after{content:"";position:absolute;top:0;bottom:0;width:7px;border:1.5px solid var(--ink)}
+.mx::before{left:0;border-right:none}.mx::after{right:0;border-left:none}
+.mx span{text-align:right;white-space:nowrap}
+.tscroll{overflow-x:auto}
+table.dc{border-collapse:collapse;font:13.5px var(--mono);font-variant-numeric:tabular-nums;width:100%}
+table.dc th,table.dc td{padding:4px 10px;border-bottom:1px solid var(--edge);text-align:right;white-space:nowrap}
+table.dc th{font:600 12px var(--sans);color:var(--soft);text-align:right}
+table.dc td:first-child,table.dc th:first-child{text-align:left;font-family:var(--serif);font-size:15px}
+.pill{display:inline-block;font:500 12.5px var(--sans);border:1px solid var(--edge);border-radius:99px;padding:2px 10px;color:var(--soft);margin-top:10px}
+.pill.ok{border-color:var(--good);color:var(--good)}.pill.no{border-color:var(--bad);color:var(--bad)}
+.notes{margin-top:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:900px){.notes{grid-template-columns:minmax(0,1fr)}}
+.notes li{font-size:14px;max-width:70ch;margin-bottom:6px}
+.notes ul{padding-left:18px;margin:6px 0}
+.cap{font-size:12.5px;color:var(--soft);margin:10px 0 0}
+a{color:var(--sn)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.chk{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--soft);cursor:pointer}
+.split{margin-top:8px}
+.pill.st{border-color:var(--st);color:var(--st)}.pill.sn{border-color:var(--sn);color:var(--sn)}
+.numgrid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:900px){.numgrid.three{grid-template-columns:minmax(0,1fr)}}
+.vec .math .what{margin:0 0 4px 0}
+</style>
+
+</head><body>
+<div class="wrap">
+<header>
+  <h1>BQ Triple Product Explorer</h1>
+  <p class="lede">The bilinear C = A<sup>T</sup>B of two minquats has three channels, c<sub>1</sub>1̂ + <b>c</b><sub>K</sub>·K̂ + <b>c</b><sub>σ</sub>·σ̂. Multiplying it from the left by a third minquat D = d<sub>0</sub>T̂ + <b>d</b>·K̂ gives the triple product E = D(A<sup>T</sup>B), which fills all four BQ channels 1̂, T̂, K̂ and σ̂. Choose D, A and B from the four-vectors used in the BQ papers.</p>
+</header>
+
+<div class="grid">
+  <section class="card" aria-labelledby="h-pick">
+    <h2 id="h-pick">Choose the three four-vectors</h2>
+    <div class="pick">
+      <label for="selD">D</label><select id="selD"></select>
+      <label for="selA">A</label><select id="selA"></select>
+      <label for="selB">B</label><select id="selB"></select>
+    </div>
+    <div class="row"><button id="swap" type="button">Swap A and B</button>
+      <label class="chk"><input type="checkbox" id="c1zero"> <span>Set the norm channel c<sub>1</sub> = 0</span></label>
+      <label class="chk"><input type="checkbox" id="expand"> <span>Write C’s channels out in full</span></label></div>
+    <h3 style="margin-top:12px">Triple products from the papers</h3>
+    <div class="qs" id="qs" role="group" aria-label="Example triple products"></div>
+    <div class="vec" id="vD"></div>
+    <div class="vec" id="vC"></div>
+    <p class="note">The superscript T is the BQ time-reversal operation, A<sup>T</sup> = −a<sub>0</sub>T̂ + <b>a</b>·K̂. D stands to the left of C throughout, so when D = ∂ its derivatives act on the channels of C.</p>
+  </section>
+
+  <section class="card" aria-labelledby="h-ch" aria-live="polite">
+    <h2 id="h-ch">Channels of E = D(A<sup>T</sup>B)</h2>
+    <div class="formula">E = −(<b>d</b>·<b>c</b><sub>K</sub>) <span class="ns">1̂</span> + (d<sub>0</sub>c<sub>1</sub> + <b>d</b>·<b>c</b><sub>σ</sub>) <span class="ts">T̂</span> + (<b>d</b>c<sub>1</sub> + d<sub>0</sub><b>c</b><sub>σ</sub> + <b>d</b>×<b>c</b><sub>K</sub>)·<span class="ts">K̂</span> + (<b>d</b>×<b>c</b><sub>σ</sub> − d<sub>0</sub><b>c</b><sub>K</sub>)·<span class="ns">σ̂</span></div>
+    <div id="chans"></div>
+    <div class="total" id="total"></div>
+    <div class="split" id="split"></div>
+    <div class="interp" id="interp"></div>
+  </section>
+</div>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-num">
+  <h2 id="h-num">Check by explicit matrix multiplication</h2>
+  <div id="numwrap"></div>
+</section>
+
+<div class="notes">
+  <section class="card"><h2>How the channels arise</h2>
+    <ul>
+      <li><b>From the multiplication table.</b> (<b>d</b>·K̂)(<b>c</b><sub>K</sub>·K̂) = −<b>d</b>·<b>c</b><sub>K</sub> 1̂ + (<b>d</b>×<b>c</b><sub>K</sub>)·K̂ and (<b>d</b>·K̂)(<b>c</b><sub>σ</sub>·σ̂) = (<b>d</b>·<b>c</b><sub>σ</sub>)T̂ + (<b>d</b>×<b>c</b><sub>σ</sub>)·σ̂; the time part gives d<sub>0</sub>T̂(<b>c</b><sub>K</sub>·K̂) = −d<sub>0</sub><b>c</b><sub>K</sub>·σ̂ and d<sub>0</sub>T̂(<b>c</b><sub>σ</sub>·σ̂) = d<sub>0</sub><b>c</b><sub>σ</sub>·K̂.</li>
+      <li><b>Selective coupling.</b> The 1̂ output sees only <b>c</b><sub>K</sub>; the T̂ output sees only c<sub>1</sub> and <b>c</b><sub>σ</sub>; the K̂ and σ̂ outputs mix all three.</li>
+      <li><b>Closure.</b> E stays inside the eight-element BQ-Pauli basis, 1 + 3 + 3 + 1: no new algebraic element appears.</li>
+      <li><b>Minquat and pauliquat sectors.</b> The T̂ + K̂ part of E is a minquat (a space-time four-vector such as a four-force); the 1̂ + σ̂ part is a pauliquat in the spin-norm sector.</li>
+    </ul>
+  </section>
+  <section class="card"><h2>Named channels and the full form</h2>
+    <p class="note">Where the papers name the channels of C, the page uses those names: <b>B</b> and <b>E</b>/c for ∂<sup>T</sup>A, L, <b>T</b> and <b>S</b> for J<sup>T</sup>A, −S, <b>L</b> and <b>M</b> for R<sup>T</sup>P, 𝓛, <b>T</b><sub>K</sub> and <b>T</b><sub>σ</sub> for U<sup>T</sup>G, and −σ<sub>E</sub>, <b>Ω</b> and −<b>Π</b>/c for ∂<sup>T</sup>G. Otherwise it writes c<sub>1</sub>, <b>c</b><sub>K</sub> and <b>c</b><sub>σ</sub> and lists their values. “Write C’s channels out in full” replaces every name by its expression in brackets; vector identities such as ∇·(∇×<b>X</b>) = 0 are then left for the reader.</p>
+    <p class="cap">Triple rule and Maxwell and Lorentz examples from the BQ-Pauli slides on the triple product; ∂(J<sup>T</sup>A), ∂(U<sup>T</sup>G) and UH from de Haas (2026), BQ electromagnetism and fluid dynamics. Channels are derived symbolically in the page and checked numerically from the explicit matrices. Part of <a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>; back to the <a href="../models.html">models</a>.</p>
+  </section>
+</div>
+</div>
+
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+/* ---------- symbols ---------- */
+const CONST = new Set(['c']);                     // constants pulled out of derivatives
+const ORDER = ['γ','c','m','E','ε','𝒫','ρ','φ','a0','b0','t','dt'];
+const SYMH = {a0:'a<sub>0</sub>', b0:'b<sub>0</sub>', dt:'dt'};
+const VECH = {r:'<b>r</b>', dr:'d<b>r</b>', v:'<b>v</b>', p:'<b>p</b>', A:'<b>A</b>', J:'<b>J</b>', g:'<b>g</b>', F:'<b>F</b>', a:'<b>a</b>', b:'<b>b</b>', N:'∇'};
+const sh = s => SYMH[s] || s;
+const sup = n => n === 1 ? '' : '<sup>' + n + '</sup>';
+function fmul(a, b){ const o = Object.assign({}, a); for (const k in b){ o[k] = (o[k] || 0) + b[k]; if (o[k] === 0) delete o[k]; } return o; }
+const fconst = f => Object.fromEntries(Object.entries(f).filter(([k]) => CONST.has(k)));
+const fvar = f => Object.fromEntries(Object.entries(f).filter(([k]) => !CONST.has(k)));
+const fempty = f => Object.keys(f).length === 0;
+const isT = f => Object.keys(f).length === 1 && f.t === 1;
+const okeys = f => Object.keys(f).sort((x, y) => (ORDER.indexOf(x) + 99*(ORDER.indexOf(x) < 0)) - (ORDER.indexOf(y) + 99*(ORDER.indexOf(y) < 0)));
+function fhtml(f){ return okeys(f).filter(k => f[k] > 0).map(k => sh(k) + sup(f[k])).join(''); }
+function fden(f){ return okeys(f).filter(k => f[k] < 0).map(k => sh(k) + sup(-f[k])).join(''); }
+function wrapVar(f){ const ks = Object.keys(f); const s = fhtml(f); return ks.length === 1 && f[ks[0]] === 1 ? s : '(' + s + ')'; }
+
+/* ---------- the four-vectors of the BQ papers ---------- */
+/* s0: time coordinate {k, f, op}; vv: spatial part {k, f, v, op} */
+const V = [
+  {id:'R',  nm:'R',  what:'space-time position', s0:{k:1,f:{c:1,t:1}}, vv:{k:1,f:{},v:'r'}, comp:['ct','r<sub>1</sub>','r<sub>2</sub>','r<sub>3</sub>'], def:[2,1,0.5,-0.3]},
+  {id:'dR', nm:'dR', what:'space-time displacement', s0:{k:1,f:{c:1,dt:1}}, vv:{k:1,f:{},v:'dr'}, comp:['c dt','dr<sub>1</sub>','dr<sub>2</sub>','dr<sub>3</sub>'], def:[1,0.3,-0.2,0.1]},
+  {id:'V',  nm:'V',  what:'coordinate velocity, dR/dt', s0:{k:1,f:{c:1}}, vv:{k:1,f:{},v:'v'}, comp:['c','v<sub>1</sub>','v<sub>2</sub>','v<sub>3</sub>'], def:[1,0.4,0.2,0]},
+  {id:'U',  nm:'U',  what:'proper velocity, dR/dτ = γV', s0:{k:1,f:{'γ':1,c:1}}, vv:{k:1,f:{'γ':1},v:'v'}, comp:['γc','γv<sub>1</sub>','γv<sub>2</sub>','γv<sub>3</sub>'], def:[1.25,0.5,0.25,0.5]},
+  {id:'P',  nm:'P',  what:'energy-momentum', s0:{k:1,f:{E:1,c:-1}}, vv:{k:1,f:{},v:'p'}, comp:['E/c','p<sub>1</sub>','p<sub>2</sub>','p<sub>3</sub>'], def:[3,0.5,1,-0.5]},
+  {id:'D',  nm:'∂',  what:'four-gradient (operator)', s0:{k:-1,f:{c:-1},op:true}, vv:{k:1,f:{},v:'N',op:true}, comp:['−(1/c)∂<sub>t</sub>','∇<sub>1</sub>','∇<sub>2</sub>','∇<sub>3</sub>'], def:null},
+  {id:'A',  nm:'A',  what:'electromagnetic four-potential', s0:{k:1,f:{'φ':1,c:-1}}, vv:{k:1,f:{},v:'A'}, comp:['φ/c','A<sub>1</sub>','A<sub>2</sub>','A<sub>3</sub>'], def:[0.8,-0.2,0.6,0.3]},
+  {id:'J',  nm:'J',  what:'electric four-current density', s0:{k:1,f:{c:1,'ρ':1}}, vv:{k:1,f:{},v:'J'}, comp:['cρ','J<sub>1</sub>','J<sub>2</sub>','J<sub>3</sub>'], def:[1.5,0.2,-0.4,0.7]},
+  {id:'G',  nm:'G',  what:'energy-momentum density of a fluid, ρ₀U', s0:{k:1,f:{'ε':1,c:-1}}, vv:{k:1,f:{},v:'g'}, comp:['ε/c','g<sub>1</sub>','g<sub>2</sub>','g<sub>3</sub>'], def:[2.5,0.6,0.1,-0.2]},
+  {id:'F',  nm:'F',  what:'force-power density', s0:{k:1,f:{'𝒫':1,c:-1}}, vv:{k:1,f:{},v:'F'}, comp:['𝒫/c','F<sub>1</sub>','F<sub>2</sub>','F<sub>3</sub>'], def:[0.4,1,0,-0.6]},
+  {id:'a',  nm:'A<sub>gen</sub>', what:'general four-vector (a₀, a)', s0:{k:1,f:{a0:1}}, vv:{k:1,f:{},v:'a'}, comp:['a<sub>0</sub>','a<sub>1</sub>','a<sub>2</sub>','a<sub>3</sub>'], def:[1,2,0,0]},
+  {id:'b',  nm:'B<sub>gen</sub>', what:'general four-vector (b₀, b)', s0:{k:1,f:{b0:1}}, vv:{k:1,f:{},v:'b'}, comp:['b<sub>0</sub>','b<sub>1</sub>','b<sub>2</sub>','b<sub>3</sub>'], def:[1,0,3,0]}
+];
+const VI = Object.fromEntries(V.map(v => [v.id, v]));
+
+/* ---------- terms: {k, f, ker, key} ---------- */
+const term = (k, f, ker) => ({k, f, ker:ker || ''});
+const ZERO = null;
+/* scalar · scalar, left acts on right */
+function sMul(a, b){
+  if (!a.op && !b.op) return term(a.k*b.k, fmul(a.f, b.f));
+  if (a.op && !b.op){ const X = fvar(b.f), C = fconst(b.f);
+    if (fempty(X)) return ZERO; if (isT(X)) return term(a.k*b.k, fmul(a.f, C));
+    return term(a.k*b.k, fmul(a.f, C), '∂<sub>t</sub>' + wrapVar(X)); }
+  if (!a.op && b.op) return term(a.k*b.k, fmul(a.f, b.f), '∂<sub>t</sub>');
+  return term(a.k*b.k, fmul(a.f, b.f), '∂<sub>t</sub><sup>2</sup>');
+}
+function vbody(f, v){ return fempty(f) ? VECH[v] : '(' + fhtml(f) + VECH[v] + ')'; }
+/* vector · vector (dot) and × (cross), left acts on right */
+function vDot(a, b){
+  if (!a.op && !b.op) return term(a.k*b.k, fmul(a.f, b.f), a.v === b.v ? VECH[a.v] + '<sup>2</sup>' : VECH[a.v] + '·' + VECH[b.v]);
+  if (a.op && !b.op){ const X = fvar(b.f), C = fconst(b.f);
+    if (fempty(X) && b.v === 'r') return term(3*a.k*b.k, fmul(a.f, C));
+    return term(a.k*b.k, fmul(a.f, C), '∇·' + vbody(X, b.v)); }
+  if (!a.op && b.op) return term(a.k*b.k, fmul(a.f, b.f), VECH[a.v] + '·∇');
+  return term(a.k*b.k, fmul(a.f, b.f), '∇<sup>2</sup>');
+}
+function vCross(a, b){
+  if (!a.op && !b.op) return a.v === b.v ? ZERO : term(a.k*b.k, fmul(a.f, b.f), VECH[a.v] + '×' + VECH[b.v]);
+  if (a.op && !b.op){ const X = fvar(b.f), C = fconst(b.f);
+    if (fempty(X) && b.v === 'r') return ZERO;
+    return term(a.k*b.k, fmul(a.f, C), '∇×' + vbody(X, b.v)); }
+  if (!a.op && b.op) return term(a.k*b.k, fmul(a.f, b.f), VECH[a.v] + '×∇');
+  return ZERO;
+}
+/* scalar (left) times vector (right): a0 b */
+function sV(s, b){
+  if (!s.op && !b.op) return term(s.k*b.k, fmul(s.f, b.f), VECH[b.v]);
+  if (s.op && !b.op){ const X = fvar(b.f), C = fconst(b.f);
+    if (fempty(X) && b.v === 'r') return ZERO;
+    return term(s.k*b.k, fmul(s.f, C), '∂<sub>t</sub>' + vbody(X, b.v)); }
+  if (!s.op && b.op) return term(s.k*b.k, fmul(s.f, b.f), '∇');
+  return term(s.k*b.k, fmul(s.f, b.f), '∂<sub>t</sub>∇');
+}
+/* vector (left) times scalar (right): the b0 a term, with a standing left of b0 */
+function vS(a, s){
+  if (!a.op && !s.op){ const t = term(a.k*s.k, fmul(a.f, s.f), VECH[a.v]); t.vf = true; return t; }
+  if (a.op && !s.op){ const X = fvar(s.f), C = fconst(s.f);
+    if (fempty(X) || isT(X)) return ZERO;
+    return term(a.k*s.k, fmul(a.f, C), '∇' + wrapVar(X)); }
+  if (!a.op && s.op) return term(a.k*s.k, fmul(a.f, s.f), VECH[a.v] + ' ∂<sub>t</sub>');
+  return term(a.k*s.k, fmul(a.f, s.f), '∂<sub>t</sub>∇');
+}
+const neg = t => t && Object.assign(term(-t.k, t.f, t.ker), t.vf ? {vf:true} : {});
+const keyOf = t => okeys(t.f).map(k => k + t.f[k]).join(',') + '|' + t.ker;
+function combine(list){ const m = new Map(); list.filter(Boolean).forEach(t => { const k = keyOf(t); if (m.has(k)) m.get(k).k += t.k; else m.set(k, Object.assign({}, t)); });
+  return [...m.values()].filter(t => Math.abs(t.k) > 1e-12); }
+function tHTML(t, first){
+  const sgn = t.k < 0 ? '−' : (first ? '' : '+'), ak = Math.abs(t.k), num = fhtml(t.f), den = fden(t.f);
+  let body;
+  const coef = ak === 1 ? '' : String(ak);
+  if (t.vf && t.ker){ const sc = (coef + num) ? (coef + num) + (den ? '/' + den : '') : (den ? '1/' + den : ''); body = t.ker + (sc ? ' ' + sc : ''); }
+  else if (den){
+    if (!t.ker && (num || coef)) body = coef + num + '/' + den;
+    else body = '(' + ((coef + num) || '1') + '/' + den + ') ' + t.ker;
+    if (!t.ker && !num && !coef) body = '1/' + den;
+  } else body = coef + num + (t.ker ? (coef || num ? ' ' : '') + t.ker : '') || '1';
+  if (!body) body = '1';
+  return (first ? (sgn ? sgn + ' ' : '') : ' ' + sgn + ' ') + body;
+}
+const tsHTML = list => list.length ? list.map((t, i) => tHTML(t, i === 0)).join('') : '0';
+const isVecChan = list => list.length > 0;
+
+function channels(A, B){
+  const norm = combine([sMul(A.s0, B.s0), neg(vDot(A.vv, B.vv))]);
+  const rot = combine([vCross(A.vv, B.vv)]);
+  const boost = combine([sV(A.s0, B.vv), neg(vS(A.vv, B.s0))]);
+  return {norm, rot, boost};
+}
+const s0HTML = v => tsHTML([term(v.s0.k, v.s0.f, v.s0.op ? '∂<sub>t</sub>' : '')]);
+const vvHTML = v => tsHTML([term(v.vv.k, v.vv.f, VECH[v.vv.v])]);
+
+
+V.push({id:'d', nm:'D<sub>gen</sub>', what:'general four-vector (d₀, d)', s0:{k:1,f:{d0:1}}, vv:{k:1,f:{},v:'d'}, comp:['d<sub>0</sub>','d<sub>1</sub>','d<sub>2</sub>','d<sub>3</sub>'], def:[0.5,1,-1,2]});
+VI.d = V[V.length-1]; SYMH.d0 = 'd<sub>0</sub>'; VECH.d = '<b>d</b>';
+/* ---------- named channels of C = AᵀB, as in the papers ---------- */
+Object.assign(SYMH, {c1g:'c<sub>1</sub>', B0:'B<sub>0</sub>', Lg:'L', Sact:'S', Lfd:'𝓛', sE:'σ<sub>E</sub>'});
+Object.assign(VECH, {cK:'<b>c</b><sub>K</sub>', cS:'<b>c</b><sub>σ</sub>', Bf:'<b>B</b>', Ef:'<b>E</b>', Tv:'<b>T</b>', Sv:'<b>S</b>', Lv:'<b>L</b>', Mv:'<b>M</b>', TK:'<b>T</b><sub>K</sub>', TS:'<b>T</b><sub>σ</sub>', Om:'<b>Ω</b>', Pi:'<b>Π</b>'});
+/* each named channel: the term that replaces it, and what the name stands for */
+const NAMED = {
+  'D.A':{lab:'B = ∂<sup>T</sup>A, the electromagnetic field bivector',
+    c1:{k:1,f:{B0:1}, def:'B<sub>0</sub> = −(1/c²)∂<sub>t</sub>φ − ∇·<b>A</b>, zero in the Lorenz gauge'},
+    cK:{k:1,f:{},v:'Bf', def:'<b>B</b> = ∇×<b>A</b>'}, cS:{k:1,f:{c:-1},v:'Ef', def:'<b>E</b> = −∂<sub>t</sub><b>A</b> − ∇φ'}},
+  'J.A':{lab:'J<sup>T</sup>A, the current–potential bilinear',
+    c1:{k:1,f:{Lg:1}, def:'L = ρφ − <b>J</b>·<b>A</b> = −L<sub>int</sub>'},
+    cK:{k:1,f:{},v:'Tv', def:'<b>T</b> = <b>J</b>×<b>A</b>'}, cS:{k:1,f:{},v:'Sv', def:'<b>S</b> = cρ<b>A</b> − (φ/c)<b>J</b>'}},
+  'R.P':{lab:'R<sup>T</sup>P, action and angular-momentum bivector',
+    c1:{k:-1,f:{Sact:1}, def:'−S = Et − <b>r</b>·<b>p</b>'},
+    cK:{k:1,f:{},v:'Lv', def:'<b>L</b> = <b>r</b>×<b>p</b>'}, cS:{k:1,f:{},v:'Mv', def:'<b>M</b> = ct<b>p</b> − <b>r</b>E/c'}},
+  'U.G':{lab:'U<sup>T</sup>G, the fluid kinematic–dynamic bilinear',
+    c1:{k:1,f:{Lfd:1}, def:'𝓛 = (u<sub>0</sub>/c)ε − <b>u</b>·<b>g</b>, with u<sub>0</sub> = γc, <b>u</b> = γ<b>v</b>'},
+    cK:{k:1,f:{},v:'TK', def:'<b>T</b><sub>K</sub> = <b>u</b>×<b>g</b>'}, cS:{k:1,f:{},v:'TS', def:'<b>T</b><sub>σ</sub> = u<sub>0</sub><b>g</b> − (ε/c)<b>u</b>'}},
+  'D.G':{lab:'H = ∂<sup>T</sup>G, the fluid field',
+    c1:{k:-1,f:{sE:1}, def:'σ<sub>E</sub> = (1/c²)∂<sub>t</sub>ε + ∇·<b>g</b>'},
+    cK:{k:1,f:{},v:'Om', def:'<b>Ω</b> = ∇×<b>g</b>'}, cS:{k:-1,f:{c:-1},v:'Pi', def:'<b>Π</b> = ∂<sub>t</sub><b>g</b> + ∇ε'}}
+};
+const TRI = {
+  'D.D.A':'∂B with B = ∂<sup>T</sup>A. In the Lorenz gauge: 1̂: −∇·<b>B</b>; T̂: (1/c)∇·<b>E</b>; K̂: ∇×<b>B</b> − (1/c²)∂<sub>t</sub><b>E</b>; σ̂: (1/c)(∇×<b>E</b> + ∂<sub>t</sub><b>B</b>). Setting ∂B = μ<sub>0</sub>J with J = cρT̂ + <b>J</b>·K̂ gives the four Maxwell equations: ∇·<b>B</b> = 0, ∇·<b>E</b> = ρ/ε<sub>0</sub>, ∇×<b>B</b> − (1/c²)∂<sub>t</sub><b>E</b> = μ<sub>0</sub><b>J</b> and ∇×<b>E</b> + ∂<sub>t</sub><b>B</b> = 0.|BQ-Pauli triple-product slides, ∂B',
+  'J.D.A':'JB = F. The minquat part (1/c)(<b>J</b>·<b>E</b>)T̂ + (ρ<b>E</b> + <b>J</b>×<b>B</b>)·K̂ is the electromagnetic four-force density: power density and Lorentz-force density. The pauliquat part −(<b>J</b>·<b>B</b>)1̂ + (1/c)(<b>J</b>×<b>E</b> − c²ρ<b>B</b>)·σ̂ is the additional spin-norm sector of the BQ product.|BQ-Pauli triple-product slides, JB = F',
+  'D.J.A':'∂(J<sup>T</sup>A). 1̂: −∇·<b>T</b>; T̂: ∇·<b>S</b> − (1/c)∂<sub>t</sub>L, the interaction-sector Poynting theorem; K̂: ∇×<b>T</b> + ∇L − (1/c)∂<sub>t</sub><b>S</b>, the spatial Euler–Lagrange equation; σ̂: ∇×<b>S</b> + (1/c)∂<sub>t</sub><b>T</b>, the interaction-sector Faraday law.|de Haas (2026) BQ EM, eq. 417–420 and Table 1',
+  'D.U.G':'∂(U<sup>T</sup>G). 1̂: −∇·<b>T</b><sub>K</sub>; T̂: ∇·<b>T</b><sub>σ</sub> − (1/c)∂<sub>t</sub>𝓛; K̂: ∇×<b>T</b><sub>K</sub> + ∇𝓛 − (1/c)∂<sub>t</sub><b>T</b><sub>σ</sub>; σ̂: ∇×<b>T</b><sub>σ</sub> + (1/c)∂<sub>t</sub><b>T</b><sub>K</sub>. For a single-component fluid <b>T</b><sub>K</sub> = <b>T</b><sub>σ</sub> = 0 and this reduces to F = ∂𝓛.|de Haas (2026) BQ EM and fluid dynamics, eq. 416–426',
+  'U.D.G':'UH = F, the fluid force equation and the only equation of the hierarchy with all four channels active. 1̂: −<b>u</b>·<b>Ω</b>, helicity; T̂: −u<sub>0</sub>σ<sub>E</sub> − (1/c)<b>u</b>·<b>Π</b>, power balance; K̂: <b>u</b>×<b>Ω</b> − (u<sub>0</sub>/c)<b>Π</b> − σ<sub>E</sub><b>u</b>, Euler–Lamb force; σ̂: −(1/c)<b>u</b>×<b>Π</b> − u<sub>0</sub><b>Ω</b>, rotational transport. Here u<sub>0</sub> = γc and <b>u</b> = γ<b>v</b>.|de Haas (2026) BQ EM and fluid dynamics, eq. 450–454',
+  'D.D.G':'∂H = F′, the fluid wave equation. The 1̂ channel −∇·<b>Ω</b> = −∇·(∇×<b>g</b>) and the σ̂ channel vanish identically (BQ Bianchi identities), leaving the wave operator on ε and <b>g</b> in T̂ and K̂.|de Haas (2026) BQ EM and fluid dynamics, eq. 455',
+  'd.a.b':'',
+};
+const QUICK3 = [['D','D','A','∂B: Maxwell'],['J','D','A','JB: Lorentz force'],['D','J','A','∂(J<sup>T</sup>A)'],['D','U','G','∂(U<sup>T</sup>G)'],['U','D','G','UH: fluid force'],['D','D','G','∂H: fluid waves'],['d','a','b','general D(A<sup>T</sup>B)']];
+
+/* ---------- the computation ---------- */
+const ZT = {k:0};
+function cChannels(A, B, c1zero, expand){
+  const bl = channels(A, B), nmd = !expand && NAMED[A.id + '.' + B.id];
+  const out = {bl, nmd};
+  const mk = (list, gen, nm, isVec) => {
+    if (!list.length) return null;
+    if (nm) return isVec ? {k:nm.k, f:nm.f, v:nm.v} : {k:nm.k, f:nm.f};
+    return isVec ? {k:1, f:{}, v:gen} : {k:1, f:{c1g:1}};
+  };
+  out.c1 = c1zero ? null : mk(bl.norm, 'c1g', nmd && nmd.c1, false);
+  out.cK = mk(bl.rot, 'cK', nmd && nmd.cK, true);
+  out.cS = mk(bl.boost, 'cS', nmd && nmd.cS, true);
+  /* expanded mode: generic names print as their bracketed expressions */
+  SYMH.c1g = expand ? '(' + tsHTML(bl.norm).trim() + ')' : 'c<sub>1</sub>';
+  VECH.cK = expand ? '(' + tsHTML(bl.rot).trim() + ')' : '<b>c</b><sub>K</sub>';
+  VECH.cS = expand ? '(' + tsHTML(bl.boost).trim() + ')' : '<b>c</b><sub>σ</sub>';
+  return out;
+}
+function triple(D, C){
+  const d0 = D.s0, d = D.vv, {c1, cK, cS} = C;
+  const e1 = combine([cK && neg(vDot(d, cK))]);
+  const eT = combine([c1 && sMul(d0, c1), cS && vDot(d, cS)]);
+  const eK = combine([c1 && vS(d, c1), cS && sV(d0, cS), cK && vCross(d, cK)]);
+  const eS = combine([cS && vCross(d, cS), cK && neg(sV(d0, cK))]);
+  return {e1, eT, eK, eS};
+}
+const cTermHTML = (t, isVec) => t ? tsHTML([term(t.k, t.f, isVec ? VECH[t.v] : '')]) : '0';
+
+/* ---------- rendering ---------- */
+let SD = 'D', SA = 'D', SB = 'A', C1Z = true;
+const pName3 = (D, A, B) => `${D.nm}(${A.nm}<sup>T</sup>${B.nm})`;
+function vecLine(v, tag){
+  const sp = s => s.trim().startsWith('−') ? ' ' + s.trim() : ' + ' + s.trim();
+  return `<div class="what">${tag}: ${v.what}</div><div class="math">${v.nm} = ${s0HTML(v)} <span class="ts">T̂</span>${sp(vvHTML(v))}·<span class="ts">K̂</span></div>`;
+}
+function render(){
+  $('selD').value = SD; $('selA').value = SA; $('selB').value = SB; $('c1zero').checked = C1Z;
+  const D = VI[SD], A = VI[SA], B = VI[SB], expand = $('expand').checked;
+  const C = cChannels(A, B, C1Z, expand), E = triple(D, C);
+  /* left panel: D and the bilinear C with its named channels */
+  const nm = C.nmd, row = (lab, list, ct, isVec, ndef) => `<div class="math">${lab} = ${tsHTML(list)}${list.length && ct ? ' = ' + cTermHTML(ct, isVec) : ''}${ndef ? `<div class="what">${ndef}</div>` : ''}</div>`;
+  $('vD').innerHTML = vecLine(D, 'D');
+  $('vC').innerHTML = `<div class="what">C = ${A.nm}<sup>T</sup>${B.nm}${nm ? ': ' + nm.lab : ''}</div>`
+    + row('c<sub>1</sub>', C.bl.norm, nm && nm.c1, false, nm && C.bl.norm.length ? nm.c1.def : '')
+    + (C1Z && C.bl.norm.length ? '<div class="what">c<sub>1</sub> is set to 0 below.</div>' : '')
+    + row('<b>c</b><sub>K</sub>', C.bl.rot, nm && nm.cK, true, nm && C.bl.rot.length ? nm.cK.def : '')
+    + row('<b>c</b><sub>σ</sub>', C.bl.boost, nm && nm.cS, true, nm && C.bl.boost.length ? nm.cS.def : '');
+  /* channels */
+  const show = (x, isVec) => x ? (isVec ? cTermHTML(x, true) : cTermHTML(x, false)) : '0';
+  const sc1 = show(C.c1, false), scK = show(C.cK, true), scS = show(C.cS, true), P = s => '(' + s.trim() + ')';
+  const d0 = s0HTML(D), dv = vvHTML(D);
+  const ch = (cls, nmH, sub, gen, list) => `<div class="ch ${cls}"><div class="nm">${nmH}<small>${sub}</small></div><div class="ex"><div class="gen">${gen}</div><div class="res">= ${tsHTML(list)}</div></div></div>`;
+  $('chans').innerHTML =
+      ch('n', 'Norm · <span class="ns">1̂</span>', 'pauliquat scalar', `−<b>d</b>·<b>c</b><sub>K</sub> = −${P(dv)}·${P(scK)}`, E.e1)
+    + ch('k', 'Time · <span class="ts">T̂</span>', 'minquat time part', `d<sub>0</sub>c<sub>1</sub> + <b>d</b>·<b>c</b><sub>σ</sub> = ${P(d0)}${P(sc1)} + ${P(dv)}·${P(scS)}`, E.eT)
+    + ch('k', 'Space · <span class="ts">K̂</span>', 'minquat space part', `<b>d</b>c<sub>1</sub> + d<sub>0</sub><b>c</b><sub>σ</sub> + <b>d</b>×<b>c</b><sub>K</sub> = ${P(dv)}${P(sc1)} + ${P(d0)}${P(scS)} + ${P(dv)}×${P(scK)}`, E.eK)
+    + ch('s', 'Spin · <span class="ns">σ̂</span>', 'pauliquat bivector', `<b>d</b>×<b>c</b><sub>σ</sub> − d<sub>0</sub><b>c</b><sub>K</sub> = ${P(dv)}×${P(scS)} − ${P(d0)}${P(scK)}`, E.eS);
+  const parts = [[E.e1, '<span class="ns">1̂</span>', false], [E.eT, '<span class="ts">T̂</span>', false], [E.eK, '<span class="ts">K̂</span>', true], [E.eS, '<span class="ns">σ̂</span>', true]].filter(p => p[0].length);
+  $('total').innerHTML = pName3(D, A, B) + ' = ' + (parts.length ? parts.map((p, i) => (i ? ' + ' : '') + '(' + tsHTML(p[0]).trim() + ')' + (p[2] ? '·' : ' ') + p[1]).join('') : '0');
+  const mq = E.eT.length + E.eK.length, pq = E.e1.length + E.eS.length;
+  $('split').innerHTML = `<span class="pill ${mq ? 'st' : ''}">minquat T̂ + K̂: ${mq ? 'present' : 'zero'}</span> <span class="pill ${pq ? 'sn' : ''}">pauliquat 1̂ + σ̂: ${pq ? 'present' : 'zero'}</span>`;
+  const it = TRI[SD + '.' + SA + '.' + SB];
+  if (it){ const [txt, src] = it.split('|'); $('interp').innerHTML = txt + (src ? `<span class="src">Source: ${src}</span>` : ''); $('interp').hidden = false; }
+  else if (it === ''){ $('interp').hidden = true; }
+  else $('interp').innerHTML = `No physical reading of ${pName3(D, A, B)} is given in the papers yet; the channels follow from the triple rule.`, $('interp').hidden = false;
+  renderNum();
+}
+
+/* ---------- numerical check ---------- */
+const cx = (re, im) => [re, im], cm = (a, b) => [a[0]*b[0]-a[1]*b[1], a[0]*b[1]+a[1]*b[0]], ca = (a, b) => [a[0]+b[0], a[1]+b[1]];
+const mat = (x0, x1, x2, x3) => [[cx(0, x0 + x1), cx(x2, x3)], [cx(-x2, x3), cx(0, x0 - x1)]];
+const mmul = (X, Y) => [[ca(cm(X[0][0],Y[0][0]),cm(X[0][1],Y[1][0])), ca(cm(X[0][0],Y[0][1]),cm(X[0][1],Y[1][1]))],[ca(cm(X[1][0],Y[0][0]),cm(X[1][1],Y[1][0])), ca(cm(X[1][0],Y[0][1]),cm(X[1][1],Y[1][1]))]];
+function decomp(M){
+  const tr = X => ca(X[0][0], X[1][1]), half = z => [z[0]/2, z[1]/2];
+  const sI = [[cx(1,0),cx(0,0)],[cx(0,0),cx(-1,0)]], sJ = [[cx(0,0),cx(0,-1)],[cx(0,1),cx(0,0)]], sK = [[cx(0,0),cx(1,0)],[cx(1,0),cx(0,0)]];
+  const z0 = half(tr(M)), zi = [sI, sJ, sK].map(S => half(tr(mmul(S, M))));
+  return {one:z0[0], T:z0[1], s:zi.map(z => z[0]), K:zi.map(z => z[1])};
+}
+const fz = z => { const r = Math.abs(z[0]) < 1e-12 ? 0 : z[0], i = Math.abs(z[1]) < 1e-12 ? 0 : z[1]; const f = x => (+x.toFixed(4)).toString().replace('-', '−');
+  if (i === 0) return f(r); if (r === 0) return f(i) + 'i'; return f(r) + (i < 0 ? ' − ' : ' + ') + f(Math.abs(i)) + 'i'; };
+const fn = x => (Math.abs(x) < 1e-12 ? 0 : +x.toFixed(4)).toString().replace('-', '−');
+const mxH = M => '<span class="mx">' + M.flat().map(z => `<span>${fz(z)}</span>`).join('') + '</span>';
+const NUM = {};
+function vals(id){ if (!NUM[id]) NUM[id] = VI[id].def.slice(); return NUM[id]; }
+function renderNum(){
+  const D = VI[SD], A = VI[SA], B = VI[SB], w = $('numwrap');
+  if (D.s0.op || A.s0.op || B.s0.op){ w.innerHTML = `<p class="note">∂ is an operator, so this triple has no numerical values to multiply. Choose three non-operator vectors, for example the general D(A<sup>T</sup>B), to see the explicit matrices. The symbolic channels above follow the same multiplication rule with the operator order kept.</p>`; return; }
+  const inputs = (v, tag) => `<div><h3>${tag} = ${v.nm}: coordinates</h3><div class="inrow">${v.comp.map((c, i) => `<label for="n${tag}${i}"><span>${c}</span><input id="n${tag}${i}" data-v="${v.id}" data-i="${i}" type="number" step="0.1" value="${vals(v.id)[i]}"></label>`).join('')}</div></div>`;
+  w.innerHTML = `<div class="numgrid three">${inputs(D, 'D')}${inputs(A, 'A')}${inputs(B, 'B')}</div><div id="numout"></div>`;
+  w.querySelectorAll('input').forEach(inp => inp.addEventListener('input', () => { const x = parseFloat(inp.value); if (isFinite(x)){ vals(inp.dataset.v)[+inp.dataset.i] = x; numOut(); renderInputsSync(inp); } }));
+  numOut();
+}
+function renderInputsSync(src){ document.querySelectorAll(`#numwrap input[data-v="${src.dataset.v}"][data-i="${src.dataset.i}"]`).forEach(x => { if (x !== src) x.value = src.value; }); }
+function numOut(){
+  const d = vals(SD), a = vals(SA), b = vals(SB);
+  const AT = mat(-a[0], a[1], a[2], a[3]), Bm = mat(b[0], b[1], b[2], b[3]), Dm = mat(d[0], d[1], d[2], d[3]), Cm = mmul(AT, Bm);
+  const cdec = decomp(Cm), z = C1Z ? 0 : cdec.one;
+  /* with c1 set to 0 the check multiplies D by C − c1·1̂ */
+  const Cuse = C1Z ? mmul(Cm, [[cx(1,0),cx(0,0)],[cx(0,0),cx(1,0)]]).map((r, i) => r.map((v, j) => i === j ? ca(v, cx(-cdec.one, 0)) : v)) : Cm;
+  const Em = mmul(Dm, Cuse), e = decomp(Em);
+  const dv = d.slice(1), cK = cdec.K, cS = cdec.s, c1 = z;
+  const dot = (x, y) => x[0]*y[0] + x[1]*y[1] + x[2]*y[2], cr = (x, y) => [x[1]*y[2]-x[2]*y[1], x[2]*y[0]-x[0]*y[2], x[0]*y[1]-x[1]*y[0]];
+  const f = {one:-dot(dv, cK), T:d[0]*c1 + dot(dv, cS), K:[0,1,2].map(i => dv[i]*c1 + d[0]*cS[i] + cr(dv, cK)[i]), s:[0,1,2].map(i => cr(dv, cS)[i] - d[0]*cK[i])};
+  const rows = [['<span class="ns">1̂</span>', e.one, f.one], ['<span class="ts">T̂</span>', e.T, f.T],
+    ['<span class="ts">Î</span> = K̂<sub>I</sub>', e.K[0], f.K[0]], ['<span class="ts">Ĵ</span> = K̂<sub>J</sub>', e.K[1], f.K[1]], ['<span class="ts">K̂</span> = K̂<sub>K</sub>', e.K[2], f.K[2]],
+    ['<span class="ns">σ̂<sub>I</sub></span>', e.s[0], f.s[0]], ['<span class="ns">σ̂<sub>J</sub></span>', e.s[1], f.s[1]], ['<span class="ns">σ̂<sub>K</sub></span>', e.s[2], f.s[2]]];
+  const res = Math.sqrt(rows.reduce((s, r) => s + (r[1]-r[2])**2, 0));
+  $('numout').innerHTML = `<div class="mxrow"><span>C = A<sup>T</sup>B =</span>${mxH(AT)}${mxH(Bm)} = ${mxH(Cm)}</div>
+    <div class="mxrow"><span>E = DC =</span>${mxH(Dm)}${mxH(Cuse)} = ${mxH(Em)}</div>
+    <p class="note">C has c<sub>1</sub> = ${fn(cdec.one)}, <b>c</b><sub>K</sub> = (${cK.map(fn).join(', ')}), <b>c</b><sub>σ</sub> = (${cS.map(fn).join(', ')})${C1Z ? '; with c<sub>1</sub> set to 0 the check multiplies D by C − c<sub>1</sub>1̂' : ''}. E is decomposed on the eight basis elements with real coefficients.</p>
+    <div class="tscroll"><table class="dc"><thead><tr><th>Channel of E</th><th>from the matrix product</th><th>from the triple rule</th></tr></thead><tbody>${rows.map(r => `<tr><td>${r[0]}</td><td>${fn(r[1])}</td><td>${fn(r[2])}</td></tr>`).join('')}</tbody></table></div>
+    <span class="pill ${res < 1e-9 ? 'ok' : 'no'}">${res < 1e-9 ? '✓ matrix product and triple rule agree' : '✗ difference ' + res.toExponential(2)}</span>`;
+}
+
+/* ---------- wiring ---------- */
+['selD','selA','selB'].forEach(id => { $(id).innerHTML = V.map(v => `<option value="${v.id}">${v.nm.replace(/<[^>]+>/g, '')}: ${v.what}</option>`).join(''); });
+$('qs').innerHTML = QUICK3.map(([d, a, b, l]) => `<button type="button" data-d="${d}" data-a="${a}" data-b="${b}">${l}</button>`).join('');
+const defaultZero = () => SA === 'D' && SB === 'A';
+$('qs').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => { SD = btn.dataset.d; SA = btn.dataset.a; SB = btn.dataset.b; C1Z = defaultZero(); render(); }));
+$('selD').addEventListener('change', e => { SD = e.target.value; render(); });
+$('selA').addEventListener('change', e => { SA = e.target.value; C1Z = defaultZero(); render(); });
+$('selB').addEventListener('change', e => { SB = e.target.value; C1Z = defaultZero(); render(); });
+$('swap').addEventListener('click', () => { [SA, SB] = [SB, SA]; C1Z = defaultZero(); render(); });
+$('c1zero').addEventListener('change', e => { C1Z = e.target.checked; render(); });
+$('expand').addEventListener('change', render);
+render();
+
+})();
+</script>
+</body></html>
