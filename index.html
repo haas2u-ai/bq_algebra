@@ -41,7 +41,7 @@ h1{font-family:var(--serif);font-weight:600;font-size:clamp(30px,4.6vw,50px);lin
 /* cards */
 h2.group{font-family:var(--serif);font-weight:600;font-size:clamp(22px,2.6vw,28px);margin:0 0 6px}
 .groupnote{color:var(--soft);max-width:72ch;margin:0 0 20px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:20px}
 .card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--edge);border-radius:12px;overflow:hidden;color:inherit;text-decoration:none;transition:border-color .2s, transform .2s}
 .card:hover{border-color:var(--soft);transform:translateY(-2px)}
 .card:focus-visible{outline:2px solid var(--sn);outline-offset:3px}
@@ -95,8 +95,8 @@ footer a{color:var(--soft)}
     </div>
   </header>
 
-  <h2 class="group" id="models">Four interactive models</h2>
-  <p class="groupnote">In teaching order: the basis products, then the bilinear of two four-vectors, then the triple product that carries Maxwell’s equations and the Lorentz force, and finally the quadratics of the fields themselves.</p>
+  <h2 class="group" id="models">Five interactive models</h2>
+  <p class="groupnote">In teaching order: the basis products, then the bilinear of two four-vectors, then the triple product that carries Maxwell’s equations and the Lorentz force, then the quadratics of the fields themselves, and the Lorentz transformations under which all of them are covariant.</p>
   <div class="grid">
 
     <a class="card" href="BQ_models/BQ_Pauli_Multiplication_Table.html">
@@ -209,6 +209,34 @@ footer a{color:var(--soft)}
       </div>
     </a>
 
+    <a class="card" href="BQ_models/BQ_Lorentz_Transformations.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="A four-vector sliding along its invariant hyperbola under a boost, between the light-cone lines">
+        <rect width="320" height="200" fill="#03050b"/>
+        <g transform="translate(110 178)">
+          <line x1="-100" y1="0" x2="100" y2="0" stroke="#222c42"/><line x1="0" y1="10" x2="0" y2="-170" stroke="#222c42"/>
+          <line x1="0" y1="0" x2="-105" y2="-170" stroke="#a29bfe" stroke-opacity=".55"/><line x1="0" y1="0" x2="105" y2="-170" stroke="#a29bfe" stroke-opacity=".55"/>
+          <path d="M-92 -150 C -50 -96, -20 -80, 0 -78 S 50 -96, 92 -150" fill="none" stroke="#97a2b9" stroke-dasharray="5 4"/>
+          <line x1="0" y1="0" x2="26" y2="-82" stroke="#e7ebf3" stroke-width="1.6"/><circle cx="26" cy="-82" r="5" fill="#e7ebf3"/>
+          <line x1="0" y1="0" x2="-14" y2="-79" stroke="#f2a24a" stroke-width="1.6"/><circle cx="-14" cy="-79" r="5" fill="#f2a24a"/>
+          <line x1="0" y1="0" x2="72" y2="-128" stroke="#48dbfb" stroke-width="1.6"/><circle cx="72" cy="-128" r="5" fill="#48dbfb"/>
+        </g>
+        <g font-family="Source Serif 4, Georgia, serif" font-size="15">
+          <text x="214" y="52" fill="#e7ebf3">A<tspan font-size="10" baseline-shift="super">L</tspan> = U<tspan font-size="10" baseline-shift="super">−1</tspan>AU<tspan font-size="10" baseline-shift="super">−1</tspan></text>
+          <text x="214" y="86" fill="#f2a24a">U = e<tspan font-size="10" baseline-shift="super">ψσ̂I/2</tspan></text>
+          <text x="214" y="120" fill="#48dbfb">A<tspan font-size="10" baseline-shift="super">L⁻¹</tspan> = UAU</text>
+        </g>
+      </svg>
+      <div class="body">
+        <span class="step">Step 5 · changing frame</span>
+        <h3>Lorentz transformations</h3>
+        <p>Boost any four-vector of the papers along Î with the rotor U = e<sup>ψσ̂<sub>I</sub>/2</sup>: A<sup>L</sup> = U<sup>−1</sup>AU<sup>−1</sup>, its inverse UAU, and the time adjoint, which transforms the other way: (A<sup>T</sup>)<sup>L</sup> = (A<sup>L<sup>−1</sup></sup>)<sup>T</sup>. A spacetime diagram shows the vector moving along its invariant hyperbola.</p>
+        <div class="rule">a<sub>0</sub>′ = γ(a<sub>0</sub> − βa<sub>1</sub>), &nbsp;a<sub>1</sub>′ = γ(a<sub>1</sub> − βa<sub>0</sub>)</div>
+        <div class="tags"><span>rapidity slider</span><span>exp-rotor</span><span>inverse and adjoint</span></div>
+        <span class="open">Open the model</span>
+      </div>
+    </a>
+
+
   </div>
 
   <section class="py" aria-labelledby="h-py">
@@ -256,6 +284,7 @@ python bq_triple.py --examples</pre>
         <li><a href="BQ_models/BQ_Bilinear_Product_Explorer.html">Bilinear product explorer</a></li>
         <li><a href="BQ_models/BQ_Triple_Product_Explorer.html">Triple product explorer</a></li>
         <li><a href="BQ_models/BQ_Field_Quadratics.html">Field quadratics</a></li>
+        <li><a href="BQ_models/BQ_Lorentz_Transformations.html">Lorentz transformations</a></li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra/tree/main/py_sources">Python sources</a>: exact SymPy reproduction</li>
         <li><a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>: galaxy, jet and SPARC models</li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra">Source on GitHub</a></li>
