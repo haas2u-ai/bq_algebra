@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The BQ Algebra — interactive models (E.P.J. de Haas)</title>
+<meta name="description" content="Interactive models of the BQ-Pauli algebra by E.P.J. de Haas: the multiplication table of the eight basis matrices, the bilinear product A^T B of physical four-vectors in its norm, rotation and boost channels, and the triple product D(A^T B) in all four BQ channels.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+/* Layout: header with the 1-3-3-1 basis as a quiet strip, three model cards in their teaching order, then conventions and links. Same family as bq-galaxy-models. */
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#05070d; --surface:#0d1220; --edge:#222c42; --ink:#e7ebf3; --soft:#97a2b9;
+  --st:#f2a24a; --sn:#48dbfb; --sel:#a29bfe;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --serif:"Source Serif 4","STIX Two Text",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){ --bg:#f5f6fa; --surface:#ffffff; --edge:#d6dce8; --ink:#141a28; --soft:#55607a; --st:#b8620f; --sn:#0f7fb0; --sel:#5b4fd6; color-scheme:light; }
+}
+:root[data-theme="dark"]{ --bg:#05070d; --surface:#0d1220; --edge:#222c42; --ink:#e7ebf3; --soft:#97a2b9; --st:#f2a24a; --sn:#48dbfb; --sel:#a29bfe; color-scheme:dark; }
+:root[data-theme="light"]{ --bg:#f5f6fa; --surface:#ffffff; --edge:#d6dce8; --ink:#141a28; --soft:#55607a; --st:#b8620f; --sn:#0f7fb0; --sel:#5b4fd6; color-scheme:light; }
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+main{max-width:1120px;margin:0 auto;padding-block:clamp(28px,6vw,72px) 48px;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+header{max-width:780px;margin-bottom:clamp(28px,4vw,44px)}
+.kicker{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);margin:0 0 14px}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(30px,4.6vw,50px);line-height:1.08;letter-spacing:-.015em;margin:0 0 18px;text-wrap:balance}
+.lede{font-size:clamp(16px,1.6vw,18.5px);color:var(--soft);margin:0}
+.lede em{font-family:var(--serif);font-style:italic;color:var(--ink)}
+.st{color:var(--st)} .sn{color:var(--sn)}
+/* basis strip */
+.basis{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:baseline;margin:22px 0 0;padding:12px 16px;border:1px solid var(--edge);border-radius:12px;background:var(--surface);font-family:var(--serif);font-size:19px}
+.basis small{font-family:var(--sans);font-size:12.5px;color:var(--soft);letter-spacing:.04em}
+.basis .grp{display:inline-flex;gap:10px;align-items:baseline}
+/* cards */
+h2.group{font-family:var(--serif);font-weight:600;font-size:clamp(22px,2.6vw,28px);margin:0 0 6px}
+.groupnote{color:var(--soft);max-width:72ch;margin:0 0 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:20px}
+.card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--edge);border-radius:12px;overflow:hidden;color:inherit;text-decoration:none;transition:border-color .2s, transform .2s}
+.card:hover{border-color:var(--soft);transform:translateY(-2px)}
+.card:focus-visible{outline:2px solid var(--sn);outline-offset:3px}
+.art{display:block;width:100%;height:auto;aspect-ratio:16/10;background:#03050b}
+.body{padding:20px 22px 22px;display:flex;flex-direction:column;gap:10px;flex:1}
+.step{font:500 12px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+.card h3{font-family:var(--serif);font-weight:600;font-size:23px;line-height:1.2;margin:0}
+.card p{margin:0;color:var(--soft);font-size:15px}
+.rule{font-family:var(--serif);font-size:15.5px;color:var(--ink);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:6px 10px;overflow-x:auto;line-height:1.7}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.tags span{font-size:12.5px;border:1px solid var(--edge);border-radius:999px;padding:2px 9px;color:var(--soft)}
+.open{margin-top:auto;padding-top:8px;font-weight:500;font-size:15px;color:var(--sn)}
+.open::after{content:" →"}
+/* about */
+section.about{margin-top:clamp(40px,6vw,64px);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);border-top:1px solid var(--edge);padding-top:32px}
+.about h3{font-family:var(--serif);font-weight:600;font-size:20px;margin:0 0 10px}
+.about p,.about li{color:var(--soft);font-size:15px}
+.about p{margin:0 0 12px}
+.about ul{margin:0;padding-left:18px}
+.about li{margin:0 0 8px}
+.about a{color:var(--sn)}
+.about b{color:var(--ink);font-weight:500}
+footer{margin-top:40px;font-size:13px;color:var(--soft)}
+footer a{color:var(--soft)}
+@media (max-width:760px){ section.about{grid-template-columns:1fr} }
+@media (prefers-reduced-motion: reduce){ .card{transition:none} .card:hover{transform:none} }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="kicker">E.P.J. de Haas · Kandinsky College, Nijmegen</p>
+    <h1>The BQ algebra, one matrix product at a time</h1>
+    <p class="lede">In the BQ-Pauli algebra a physical four-vector is four <em>real</em> coordinates on a basis of 2×2 complex matrices, A = a<sub>0</sub>T̂ + <b>a</b>·K̂. Multiplying such vectors is ordinary matrix multiplication, and the algebra sorts every product into its own channels. These three interactive models build that up step by step, and every result on them is computed live from the explicit matrices.</p>
+    <div class="basis" aria-label="The eight basis matrices, in four groups of 1, 3, 3 and 1">
+      <span class="grp"><small>space-time (minquat)</small><span class="st">T̂ &nbsp; Î &nbsp; Ĵ &nbsp; K̂</span></span>
+      <span class="grp"><small>spin-norm (pauliquat)</small><span class="sn">1̂ &nbsp; σ̂<sub>I</sub> &nbsp; σ̂<sub>J</sub> &nbsp; σ̂<sub>K</sub></span></span>
+      <span class="grp"><small>with</small><span>T̂ = i1̂, &nbsp;K̂<sub>i</sub> = T̂σ̂<sub>i</sub></span></span>
+    </div>
+  </header>
+
+  <h2 class="group" id="models">Three interactive models</h2>
+  <p class="groupnote">In teaching order: the basis products, then the bilinear of two four-vectors, then the triple product that carries Maxwell’s equations and the Lorentz force.</p>
+  <div class="grid">
+
+    <a class="card" href="BQ_models/BQ_Pauli_Multiplication_Table.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="An eight by eight multiplication table, cells coloured by whether the product lands in the space-time or the spin-norm basis, with one cell selected">
+        <rect width="320" height="200" fill="#03050b"/>
+        <g transform="translate(78 16)" id="tab1"></g>
+        <g font-family="Source Serif 4, Georgia, serif" font-size="11" fill="#c9d1e0">
+          <text x="60" y="194" text-anchor="middle" fill="#f2a24a">space-time</text>
+          <text x="262" y="194" text-anchor="middle" fill="#48dbfb">spin-norm</text>
+        </g>
+      </svg>
+      <div class="body">
+        <span class="step">Step 1 · the basis</span>
+        <h3>BQ-Pauli multiplication table</h3>
+        <p>Pick any of the 64 products of the eight basis matrices. The page multiplies the two 2×2 matrices entry by entry, identifies the outcome as a signed basis element, and checks it against the table in the paper.</p>
+        <div class="rule">σ̂<sub>I</sub>σ̂<sub>J</sub> = <span class="st">−K̂</span>, &nbsp; T̂K̂<sub>i</sub> = <span class="sn">−σ̂<sub>i</sub></span></div>
+        <div class="tags"><span>entry-by-entry working</span><span>commute or anticommute</span><span>slide equation numbers</span></div>
+        <span class="open">Open the table</span>
+      </div>
+    </a>
+
+    <a class="card" href="BQ_models/BQ_Bilinear_Product_Explorer.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="Two four-vectors A transposed and B combine into three channels: a norm, a rotation bivector and a boost bivector">
+        <rect width="320" height="200" fill="#03050b"/>
+        <g font-family="Source Serif 4, Georgia, serif" text-anchor="middle">
+          <text x="58" y="86" font-size="26" fill="#e7ebf3" font-weight="600">A<tspan font-size="15" baseline-shift="super">T</tspan>B</text>
+          <path d="M96 78 C 140 78, 150 40, 196 40" fill="none" stroke="#48dbfb" stroke-width="1.6"/>
+          <path d="M96 80 L 196 100" fill="none" stroke="#f2a24a" stroke-width="1.6"/>
+          <path d="M96 82 C 140 82, 150 160, 196 160" fill="none" stroke="#48dbfb" stroke-width="1.6"/>
+          <text x="214" y="46" font-size="20" fill="#48dbfb" text-anchor="start">1̂</text>
+          <text x="214" y="106" font-size="20" fill="#f2a24a" text-anchor="start">K̂</text>
+          <text x="214" y="166" font-size="20" fill="#48dbfb" text-anchor="start">σ̂</text>
+          <g font-family="IBM Plex Sans, system-ui, sans-serif" font-size="11" fill="#97a2b9" text-anchor="start">
+            <text x="238" y="44">norm</text><text x="238" y="104">rotation</text><text x="238" y="164">boost</text>
+          </g>
+          <g font-family="IBM Plex Sans, system-ui, sans-serif" font-size="11" fill="#97a2b9">
+            <text x="58" y="112">R, P, U, ∂,</text><text x="58" y="127">A, J, G, F …</text>
+          </g>
+        </g>
+      </svg>
+      <div class="body">
+        <span class="step">Step 2 · two four-vectors</span>
+        <h3>Bilinear product explorer</h3>
+        <p>Choose A and B from the four-vectors of the BQ papers, from position and momentum to the four-gradient, the potential and the current. The page derives the three channels of A<sup>T</sup>B symbolically and checks them by explicit matrix multiplication.</p>
+        <div class="rule">A<sup>T</sup>B = (a<sub>0</sub>b<sub>0</sub> − <b>a</b>·<b>b</b>)<span class="sn">1̂</span> + (<b>a</b>×<b>b</b>)·<span class="st">K̂</span> + (a<sub>0</sub><b>b</b> − <b>a</b>b<sub>0</sub>)·<span class="sn">σ̂</span></div>
+        <div class="tags"><span>R<sup>T</sup>P, ∂<sup>T</sup>A, J<sup>T</sup>A</span><span>invariant norms</span><span>numerical check</span></div>
+        <span class="open">Open the explorer</span>
+      </div>
+    </a>
+
+    <a class="card" href="BQ_models/BQ_Triple_Product_Explorer.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="A third four-vector D multiplies the three channels of the bilinear and spreads them over all four BQ channels">
+        <rect width="320" height="200" fill="#03050b"/>
+        <g font-family="Source Serif 4, Georgia, serif">
+          <text x="26" y="106" font-size="24" fill="#e7ebf3" font-weight="600">D</text>
+          <g font-size="17">
+            <text x="86" y="56" fill="#48dbfb">c<tspan font-size="11" baseline-shift="sub">1</tspan></text>
+            <text x="86" y="106" fill="#f2a24a">c<tspan font-size="11" baseline-shift="sub">K</tspan></text>
+            <text x="86" y="156" fill="#48dbfb">c<tspan font-size="11" baseline-shift="sub">σ</tspan></text>
+          </g>
+          <g stroke-width="1.3" fill="none" stroke-opacity=".85">
+            <path d="M112 51 L 210 85" stroke="#48dbfb"/><path d="M112 51 L 210 125" stroke="#48dbfb"/>
+            <path d="M112 101 L 210 40" stroke="#f2a24a"/><path d="M112 101 L 210 125" stroke="#f2a24a"/><path d="M112 101 L 210 168" stroke="#f2a24a"/>
+            <path d="M112 151 L 210 85" stroke="#48dbfb"/><path d="M112 151 L 210 125" stroke="#48dbfb"/><path d="M112 151 L 210 168" stroke="#48dbfb"/>
+          </g>
+          <g font-size="19">
+            <text x="218" y="46" fill="#48dbfb">1̂</text><text x="218" y="91" fill="#f2a24a">T̂</text>
+            <text x="218" y="131" fill="#f2a24a">K̂</text><text x="218" y="174" fill="#48dbfb">σ̂</text>
+          </g>
+          <g font-family="IBM Plex Sans, system-ui, sans-serif" font-size="11" fill="#97a2b9">
+            <text x="242" y="44">−∇·B</text><text x="242" y="89">∇·E / c</text><text x="242" y="129">Ampère</text><text x="242" y="172">Faraday</text>
+          </g>
+        </g>
+      </svg>
+      <div class="body">
+        <span class="step">Step 3 · three four-vectors</span>
+        <h3>Triple product explorer</h3>
+        <p>Multiply a bilinear from the left by a third four-vector. The output fills all four channels 1̂, T̂, K̂ and σ̂: with D = ∂ and C = ∂<sup>T</sup>A it gives Maxwell’s equations, with D = J the Lorentz force and its spin-norm partner.</p>
+        <div class="rule">E = −(<b>d</b>·<b>c</b><sub>K</sub>)<span class="sn">1̂</span> + (d<sub>0</sub>c<sub>1</sub> + <b>d</b>·<b>c</b><sub>σ</sub>)<span class="st">T̂</span> + …</div>
+        <div class="tags"><span>∂B: Maxwell</span><span>JB: Lorentz force</span><span>fluid UH and ∂H</span></div>
+        <span class="open">Open the explorer</span>
+      </div>
+    </a>
+  </div>
+
+  <section class="about" aria-label="About these models">
+    <div>
+      <h3>Conventions used throughout</h3>
+      <p>All coordinates are real; the imaginary unit sits in the basis element <b>T̂ = i1̂</b>, so the Lorentz signature enters through the basis and not through index lowering. The space-time basis T̂, Î, Ĵ, K̂ and the spin-norm basis 1̂, σ̂<sub>I</sub>, σ̂<sub>J</sub>, σ̂<sub>K</sub> together span the full biquaternion algebra; a product of two space-time vectors always needs both.</p>
+      <p>The superscript T is the BQ time-reversal operation, <b>A<sup>T</sup> = −a<sub>0</sub>T̂ + <b>a</b>·K̂</b>: not the matrix transpose, not conjugation and not multiplication by T̂. In every product the left factor stands to the left, so a four-gradient on the left acts on what follows it.</p>
+      <p>Each model computes its results from the explicit 2×2 matrices and shows a numerical check of the stated rule. The BQ definitions in the papers remain authoritative; the pages are a reproducibility aid.</p>
+    </div>
+    <div>
+      <h3>Links</h3>
+      <ul>
+        <li><a href="BQ_models/BQ_Pauli_Multiplication_Table.html">BQ-Pauli multiplication table</a></li>
+        <li><a href="BQ_models/BQ_Bilinear_Product_Explorer.html">Bilinear product explorer</a></li>
+        <li><a href="BQ_models/BQ_Triple_Product_Explorer.html">Triple product explorer</a></li>
+        <li><a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>: galaxy, jet and SPARC models</li>
+        <li><a href="https://github.com/haas2u-ai/bq_algebra">Source on GitHub</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>E.P.J. de Haas · BQ-Pauli algebra · interactive models</footer>
+</main>
+<script>
+/* the 8×8 table in the first card, coloured as in the model (row · column) */
+(function(){
+  const g = document.getElementById('tab1'); if (!g) return;
+  const st = [ // 1 = result in the space-time basis, 0 = spin-norm, rows/cols T I J K σI σJ σK 1
+    [0,0,0,0,1,1,1,1],[0,0,1,1,1,0,0,1],[0,1,0,1,0,1,0,1],[0,1,1,0,0,0,1,1],
+    [1,1,0,0,0,1,1,0],[1,0,1,0,1,0,1,0],[1,0,0,1,1,1,0,0],[1,1,1,1,0,0,0,0]];
+  const NS = 'http://www.w3.org/2000/svg', s = 20;
+  st.forEach((row, i) => row.forEach((v, j) => {
+    const r = document.createElementNS(NS, 'rect');
+    r.setAttribute('x', j*s); r.setAttribute('y', i*s); r.setAttribute('width', s-3); r.setAttribute('height', s-3); r.setAttribute('rx', 3);
+    r.setAttribute('fill', v ? '#f2a24a' : '#48dbfb'); r.setAttribute('fill-opacity', v ? .32 : .26);
+    if (i === 4 && j === 5){ r.setAttribute('stroke', '#a29bfe'); r.setAttribute('stroke-width', 2); r.setAttribute('fill-opacity', .55); }
+    g.appendChild(r);
+  }));
+})();
+</script>
+</body>
+</html>
