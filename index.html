@@ -247,6 +247,8 @@ footer a{color:var(--soft)}
         <li><code>bq_pauli_table.py</code> · the 64 basis products against the paper’s table</li>
         <li><code>bq_bilinear.py</code> · the channels of A<sup>T</sup>B, all 169 pairs</li>
         <li><code>bq_triple.py</code> · the four channels of D(A<sup>T</sup>B), all 2197 triples</li>
+        <li><code>bq_quadratics.py</code> · FF and F<sup>T</sup>F for the EM, fluid and other fields</li>
+        <li><code>bq_lorentz.py</code> · A<sup>L</sup> = U<sup>−1</sup>AU<sup>−1</sup>, adjoints, invariance, step 5 and the Lemma</li>
         <li><code>bq_core.py</code> · basis, four-vectors, operator order, channel rules</li>
       </ul>
       <p>Only Python 3 and SymPy are needed. A four-gradient acts on everything to its right; when it stands last, the product is evaluated on a test field ψ.</p>
@@ -267,7 +269,15 @@ python bq_bilinear.py --all
 <span class="cm"># step 3: Maxwell and the Lorentz force</span>
 python bq_triple.py D D A --c1zero
 python bq_triple.py J D A --c1zero --table
-python bq_triple.py --examples</pre>
+python bq_triple.py --examples
+
+<span class="cm"># step 4: field quadratics</span>
+python bq_quadratics.py B
+python bq_quadratics.py --all
+
+<span class="cm"># step 5: Lorentz transformations</span>
+python bq_lorentz.py --basis
+python bq_lorentz.py --all</pre>
   </section>
 
   <section class="about" aria-label="About these models">
