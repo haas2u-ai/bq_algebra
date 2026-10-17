@@ -55,6 +55,17 @@ h2.group{font-family:var(--serif);font-weight:600;font-size:clamp(22px,2.6vw,28p
 .tags span{font-size:12.5px;border:1px solid var(--edge);border-radius:999px;padding:2px 9px;color:var(--soft)}
 .open{margin-top:auto;padding-top:8px;font-weight:500;font-size:15px;color:var(--sn)}
 .open::after{content:" →"}
+/* python section */
+section.py{margin-top:clamp(36px,5vw,56px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(20px,3vw,40px);align-items:start}
+@media (max-width:860px){section.py{grid-template-columns:minmax(0,1fr)}}
+section.py p{color:var(--soft);margin:0 0 12px;max-width:62ch}
+section.py p b{color:var(--ink);font-weight:500}
+section.py a{color:var(--sn)}
+.files{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:6px}
+.files li{font-size:14.5px;color:var(--soft)}
+.files code{font:500 13.5px var(--mono);color:var(--ink)}
+pre.cmd{margin:0;background:var(--surface);border:1px solid var(--edge);border-radius:12px;padding:14px 16px;overflow-x:auto;font:13.5px/1.75 var(--mono);color:var(--ink)}
+pre.cmd .cm{color:var(--soft)}
 /* about */
 section.about{margin-top:clamp(40px,6vw,64px);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);border-top:1px solid var(--edge);padding-top:32px}
 .about h3{font-family:var(--serif);font-weight:600;font-size:20px;margin:0 0 10px}
@@ -170,12 +181,43 @@ footer a{color:var(--soft)}
     </a>
   </div>
 
+  <section class="py" aria-labelledby="h-py">
+    <div>
+      <h2 class="group" id="h-py">Reproduce in Python</h2>
+      <p>The web pages compute in JavaScript. The folder <a href="https://github.com/haas2u-ai/bq_algebra/tree/main/py_sources"><b>py_sources</b></a> holds an independent Python implementation with SymPy: it forms every product as an explicit 2×2 matrix product, decomposes it on the eight basis elements and checks the channel rule <b>exactly</b>, by simplifying the difference to zero.</p>
+      <ul class="files">
+        <li><code>bq_pauli_table.py</code> · the 64 basis products against the paper’s table</li>
+        <li><code>bq_bilinear.py</code> · the channels of A<sup>T</sup>B, all 169 pairs</li>
+        <li><code>bq_triple.py</code> · the four channels of D(A<sup>T</sup>B), all 2197 triples</li>
+        <li><code>bq_core.py</code> · basis, four-vectors, operator order, channel rules</li>
+      </ul>
+      <p>Only Python 3 and SymPy are needed. A four-gradient acts on everything to its right; when it stands last, the product is evaluated on a test field ψ.</p>
+    </div>
+<pre class="cmd" aria-label="Commands to reproduce the results"><span class="cm"># get the code and install SymPy</span>
+git clone https://github.com/haas2u-ai/bq_algebra
+cd bq_algebra/py_sources
+pip install -r requirements.txt
+
+<span class="cm"># step 1: the multiplication table</span>
+python bq_pauli_table.py
+python bq_pauli_table.py sI sJ
+
+<span class="cm"># step 2: one bilinear, then all pairs</span>
+python bq_bilinear.py R P
+python bq_bilinear.py --all
+
+<span class="cm"># step 3: Maxwell and the Lorentz force</span>
+python bq_triple.py D D A --c1zero
+python bq_triple.py J D A --c1zero
+python bq_triple.py --examples</pre>
+  </section>
+
   <section class="about" aria-label="About these models">
     <div>
       <h3>Conventions used throughout</h3>
       <p>All coordinates are real; the imaginary unit sits in the basis element <b>T̂ = i1̂</b>, so the Lorentz signature enters through the basis and not through index lowering. The space-time basis T̂, Î, Ĵ, K̂ and the spin-norm basis 1̂, σ̂<sub>I</sub>, σ̂<sub>J</sub>, σ̂<sub>K</sub> together span the full biquaternion algebra; a product of two space-time vectors always needs both.</p>
       <p>The superscript T is the BQ time-reversal operation, <b>A<sup>T</sup> = −a<sub>0</sub>T̂ + <b>a</b>·K̂</b>: not the matrix transpose, not conjugation and not multiplication by T̂. In every product the left factor stands to the left, so a four-gradient on the left acts on what follows it.</p>
-      <p>Each model computes its results from the explicit 2×2 matrices and shows a numerical check of the stated rule. The BQ definitions in the papers remain authoritative; the pages are a reproducibility aid.</p>
+      <p>Each model computes its results from the explicit 2×2 matrices and shows a numerical check of the stated rule; the Python sources repeat every product as an exact symbolic check. The BQ definitions in the papers remain authoritative; pages and scripts are a reproducibility aid.</p>
     </div>
     <div>
       <h3>Links</h3>
@@ -183,6 +225,7 @@ footer a{color:var(--soft)}
         <li><a href="BQ_models/BQ_Pauli_Multiplication_Table.html">BQ-Pauli multiplication table</a></li>
         <li><a href="BQ_models/BQ_Bilinear_Product_Explorer.html">Bilinear product explorer</a></li>
         <li><a href="BQ_models/BQ_Triple_Product_Explorer.html">Triple product explorer</a></li>
+        <li><a href="https://github.com/haas2u-ai/bq_algebra/tree/main/py_sources">Python sources</a>: exact SymPy reproduction</li>
         <li><a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>: galaxy, jet and SPARC models</li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra">Source on GitHub</a></li>
       </ul>
