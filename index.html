@@ -41,7 +41,7 @@ h1{font-family:var(--serif);font-weight:600;font-size:clamp(30px,4.6vw,50px);lin
 /* cards */
 h2.group{font-family:var(--serif);font-weight:600;font-size:clamp(22px,2.6vw,28px);margin:0 0 6px}
 .groupnote{color:var(--soft);max-width:72ch;margin:0 0 20px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:20px}
 .card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--edge);border-radius:12px;overflow:hidden;color:inherit;text-decoration:none;transition:border-color .2s, transform .2s}
 .card:hover{border-color:var(--soft);transform:translateY(-2px)}
 .card:focus-visible{outline:2px solid var(--sn);outline-offset:3px}
@@ -95,8 +95,8 @@ footer a{color:var(--soft)}
     </div>
   </header>
 
-  <h2 class="group" id="models">Three interactive models</h2>
-  <p class="groupnote">In teaching order: the basis products, then the bilinear of two four-vectors, then the triple product that carries Maxwell’s equations and the Lorentz force.</p>
+  <h2 class="group" id="models">Four interactive models</h2>
+  <p class="groupnote">In teaching order: the basis products, then the bilinear of two four-vectors, then the triple product that carries Maxwell’s equations and the Lorentz force, and finally the quadratics of the fields themselves.</p>
   <div class="grid">
 
     <a class="card" href="BQ_models/BQ_Pauli_Multiplication_Table.html">
@@ -180,6 +180,35 @@ footer a{color:var(--soft)}
         <span class="open">Open the explorer</span>
       </div>
     </a>
+
+    <a class="card" href="BQ_models/BQ_Field_Quadratics.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="A field F squared gives invariants in the norm and time channels; the time-adjoint product gives energy density and Poynting flux">
+        <rect width="320" height="200" fill="#03050b"/>
+        <g font-family="Source Serif 4, Georgia, serif">
+          <text x="30" y="70" font-size="22" fill="#e7ebf3" font-weight="600">FF</text>
+          <text x="22" y="148" font-size="22" fill="#e7ebf3" font-weight="600">F<tspan font-size="13" baseline-shift="super">T</tspan>F</text>
+          <path d="M76 63 L 150 44" stroke="#48dbfb" stroke-width="1.5" fill="none"/><path d="M76 66 L 150 86" stroke="#f2a24a" stroke-width="1.5" fill="none"/>
+          <path d="M76 141 L 150 124" stroke="#48dbfb" stroke-width="1.5" fill="none"/><path d="M76 144 L 150 166" stroke="#48dbfb" stroke-width="1.5" fill="none"/>
+          <text x="158" y="50" font-size="18" fill="#48dbfb">1̂</text><text x="158" y="92" font-size="18" fill="#f2a24a">T̂</text>
+          <text x="158" y="130" font-size="18" fill="#48dbfb">1̂</text><text x="158" y="172" font-size="18" fill="#48dbfb">σ̂</text>
+          <g font-family="IBM Plex Sans, system-ui, sans-serif" font-size="11.5" fill="#97a2b9">
+            <text x="182" y="48">B² − E²/c²</text><text x="182" y="90">E·B / c</text>
+            <text x="182" y="128">energy density</text><text x="182" y="170">Poynting E×B</text>
+          </g>
+          <text x="232" y="22" font-family="IBM Plex Sans, system-ui, sans-serif" font-size="10.5" fill="#97a2b9" text-anchor="middle">invariant</text>
+          <text x="232" y="196" font-family="IBM Plex Sans, system-ui, sans-serif" font-size="10.5" fill="#97a2b9" text-anchor="middle">observer-dependent</text>
+        </g>
+      </svg>
+      <div class="body">
+        <span class="step">Step 4 · the fields squared</span>
+        <h3>Field quadratics</h3>
+        <p>Square a field F = f1̂ + <b>k</b>·<b class="kv">K̂</b> + <b>s</b>·σ̂ in two ways. FF holds the Lorentz invariants, F<sup>T</sup>F an energy density and its flux in a chosen frame. Applied to the electromagnetic field, the relativistic fluid field and the angular-momentum bivector.</p>
+        <div class="rule">BB = −(B² − E²/c²)<span class="sn">1̂</span> + (2/c)(<b>E</b>·<b>B</b>)<span class="st">T̂</span></div>
+        <div class="tags"><span>EM invariants</span><span>energy and Poynting</span><span>fluid u<sub>H</sub> and Π×Ω</span></div>
+        <span class="open">Open the model</span>
+      </div>
+    </a>
+
   </div>
 
   <section class="py" aria-labelledby="h-py">
@@ -226,6 +255,7 @@ python bq_triple.py --examples</pre>
         <li><a href="BQ_models/BQ_Pauli_Multiplication_Table.html">BQ-Pauli multiplication table</a></li>
         <li><a href="BQ_models/BQ_Bilinear_Product_Explorer.html">Bilinear product explorer</a></li>
         <li><a href="BQ_models/BQ_Triple_Product_Explorer.html">Triple product explorer</a></li>
+        <li><a href="BQ_models/BQ_Field_Quadratics.html">Field quadratics</a></li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra/tree/main/py_sources">Python sources</a>: exact SymPy reproduction</li>
         <li><a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>: galaxy, jet and SPARC models</li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra">Source on GitHub</a></li>
