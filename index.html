@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The BQ Algebra — interactive models (E.P.J. de Haas)</title>
-<meta name="description" content="Interactive models of the BQ-Pauli algebra by E.P.J. de Haas: the multiplication table of the eight basis matrices, the bilinear product A^T B of physical four-vectors in its norm, rotation and boost channels, and the triple product D(A^T B) in all four BQ channels.">
+<meta name="description" content="Interactive models of the BQ-Pauli algebra by E.P.J. de Haas: the multiplication table of the eight basis matrices, the bilinear product A^T B of physical four-vectors in its norm, rotation and boost channels, the triple product D(A^T B) in all four BQ channels, the field quadratics, and the Lorentz transformations of four-vectors and of the bilinear.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
@@ -87,7 +87,7 @@ footer a{color:var(--soft)}
   <header>
     <p class="kicker">E.P.J. de Haas · Kandinsky College, Nijmegen</p>
     <h1>The BQ algebra, one matrix product at a time</h1>
-    <p class="lede">In the BQ-Pauli algebra a physical four-vector is four <em>real</em> coordinates on a basis of 2×2 complex matrices, A = a<sub>0</sub>T̂ + <b>a</b>·<b class="kv">K̂</b>, with <b class="kv">K̂</b> = (Î, Ĵ, K̂). Multiplying such vectors is ordinary matrix multiplication, and the algebra sorts every product into its own channels. These three interactive models build that up step by step, and every result on them is computed live from the explicit matrices.</p>
+    <p class="lede">In the BQ-Pauli algebra a physical four-vector is four <em>real</em> coordinates on a basis of 2×2 complex matrices, A = a<sub>0</sub>T̂ + <b>a</b>·<b class="kv">K̂</b>, with <b class="kv">K̂</b> = (Î, Ĵ, K̂). Multiplying such vectors is ordinary matrix multiplication, and the algebra sorts every product into its own channels. These six interactive models build that up step by step, and every result on them is computed live from the explicit matrices.</p>
     <div class="basis" aria-label="The eight basis matrices, in four groups of 1, 3, 3 and 1">
       <span class="grp"><small>space-time (minquat)</small><span class="st">T̂ &nbsp; Î &nbsp; Ĵ &nbsp; K̂</span></span>
       <span class="grp"><small>spin-norm (pauliquat)</small><span class="sn">1̂ &nbsp; σ̂<sub>I</sub> &nbsp; σ̂<sub>J</sub> &nbsp; σ̂<sub>K</sub></span></span>
@@ -95,7 +95,7 @@ footer a{color:var(--soft)}
     </div>
   </header>
 
-  <h2 class="group" id="models">Five interactive models</h2>
+  <h2 class="group" id="models">Six interactive models</h2>
   <p class="groupnote">In teaching order: the basis products, then the bilinear of two four-vectors, then the triple product that carries Maxwell’s equations and the Lorentz force, then the quadratics of the fields themselves, and the Lorentz transformations under which all of them are covariant.</p>
   <div class="grid">
 
@@ -236,6 +236,35 @@ footer a{color:var(--soft)}
       </div>
     </a>
 
+    <a class="card" href="BQ_models/BQ_Bilinear_Lorentz_Transformation.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="The bilinear C = A transposed B is boosted by a similarity U C U inverse: the space and spin channels rotate into each other on a hyperbola">
+        <rect width="320" height="200" fill="#03050b"/>
+        <g transform="translate(96 112)">
+          <line x1="-84" y1="0" x2="84" y2="0" stroke="#222c42"/><line x1="0" y1="80" x2="0" y2="-88" stroke="#222c42"/>
+          <line x1="-80" y1="80" x2="80" y2="-80" stroke="#a29bfe" stroke-opacity=".45"/><line x1="-80" y1="-80" x2="80" y2="80" stroke="#a29bfe" stroke-opacity=".45"/>
+          <path d="M-74 -82 C -40 -48, -18 -38, 0 -36 S 40 -48, 74 -82" fill="none" stroke="#97a2b9" stroke-dasharray="5 4"/>
+          <line x1="0" y1="0" x2="20" y2="-41" stroke="#e7ebf3" stroke-width="1.6"/><circle cx="20" cy="-41" r="5" fill="#e7ebf3"/>
+          <line x1="0" y1="0" x2="58" y2="-68" stroke="#f2a24a" stroke-width="1.6"/><circle cx="58" cy="-68" r="5" fill="#f2a24a"/>
+          <line x1="0" y1="0" x2="-30" y2="-47" stroke="#48dbfb" stroke-width="1.6"/><circle cx="-30" cy="-47" r="5" fill="#48dbfb"/>
+          <text x="84" y="16" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="#97a2b9" text-anchor="end">σ̂-channel</text>
+          <text x="6" y="-80" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="#97a2b9">K̂-channel</text>
+        </g>
+        <g font-family="Source Serif 4, Georgia, serif" font-size="15">
+          <text x="196" y="56" fill="#e7ebf3">C = A<tspan font-size="10" baseline-shift="super">T</tspan>B</text>
+          <text x="196" y="92" fill="#f2a24a">C<tspan font-size="10" baseline-shift="super">L</tspan> = UCU<tspan font-size="10" baseline-shift="super">−1</tspan></text>
+          <text x="196" y="128" fill="#48dbfb">C<tspan font-size="10" baseline-shift="super">L⁻¹</tspan> = U<tspan font-size="10" baseline-shift="super">−1</tspan>CU</text>
+        </g>
+      </svg>
+      <div class="body">
+        <span class="step">Step 6 · changing frame for products</span>
+        <h3>Lorentz transformation of the bilinear</h3>
+        <p>Boost both factors of C = A<sup>T</sup>B for any pair of the papers’ four-vectors. The adjoint carries the opposite rotor, so the bilinear transforms by a similarity, C<sup>L</sup> = UCU<sup>−1</sup>: the norm stays, and the <b class="kv">K̂</b> and σ̂ channels mix like <b>B</b> and <b>E</b>/c. Shown in seven forms, from the matrix and the rotor to Minkowski’s complex field transformation.</p>
+        <div class="rule">c<sub>K,J</sub>′ = γ(c<sub>K,J</sub> + βc<sub>σ,K</sub>), &nbsp;c<sub>σ,K</sub>′ = γ(c<sub>σ,K</sub> + βc<sub>K,J</sub>)</div>
+        <div class="tags"><span>all 144 pairs</span><span>EM field boost</span><span>Minkowski 1908</span></div>
+        <span class="open">Open the model</span>
+      </div>
+    </a>
+
 
   </div>
 
@@ -249,6 +278,7 @@ footer a{color:var(--soft)}
         <li><code>bq_triple.py</code> · the four channels of D(A<sup>T</sup>B), all 2197 triples</li>
         <li><code>bq_quadratics.py</code> · FF and F<sup>T</sup>F for the EM, fluid and other fields</li>
         <li><code>bq_lorentz.py</code> · A<sup>L</sup> = U<sup>−1</sup>AU<sup>−1</sup>, adjoints, invariance, step 5 and the Lemma</li>
+        <li><code>bq_bilinear_lorentz.py</code> · C<sup>L</sup> = UCU<sup>−1</sup> for all 169 pairs, basis rules and complex form</li>
         <li><code>bq_core.py</code> · basis, four-vectors, operator order, channel rules</li>
       </ul>
       <p>Only Python 3 and SymPy are needed. A four-gradient acts on everything to its right; when it stands last, the product is evaluated on a test field ψ.</p>
@@ -277,7 +307,12 @@ python bq_quadratics.py --all
 
 <span class="cm"># step 5: Lorentz transformations</span>
 python bq_lorentz.py --basis
-python bq_lorentz.py --all</pre>
+python bq_lorentz.py --all
+
+<span class="cm"># step 6: Lorentz transformation of the bilinear</span>
+python bq_bilinear_lorentz.py D A
+python bq_bilinear_lorentz.py --basis
+python bq_bilinear_lorentz.py --all</pre>
   </section>
 
   <section class="about" aria-label="About these models">
@@ -295,6 +330,7 @@ python bq_lorentz.py --all</pre>
         <li><a href="BQ_models/BQ_Triple_Product_Explorer.html">Triple product explorer</a></li>
         <li><a href="BQ_models/BQ_Field_Quadratics.html">Field quadratics</a></li>
         <li><a href="BQ_models/BQ_Lorentz_Transformations.html">Lorentz transformations</a></li>
+        <li><a href="BQ_models/BQ_Bilinear_Lorentz_Transformation.html">Lorentz transformation of the bilinear</a></li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra/tree/main/py_sources">Python sources</a>: exact SymPy reproduction</li>
         <li><a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>: galaxy, jet and SPARC models</li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra">Source on GitHub</a></li>
