@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The BQ Algebra — interactive models (E.P.J. de Haas)</title>
-<meta name="description" content="Interactive models of the BQ-Pauli algebra by E.P.J. de Haas: the multiplication table of the eight basis matrices, the bilinear product A^T B of physical four-vectors in its norm, rotation and boost channels, the triple product D(A^T B) in all four BQ channels, the field quadratics, and the Lorentz transformations of four-vectors and of the bilinear.">
+<meta name="description" content="Interactive models of the BQ-Pauli algebra by E.P.J. de Haas: the multiplication table of the eight basis matrices, the bilinear product A^T B of physical four-vectors in its norm, rotation and boost channels, the triple product D(A^T B) in all four BQ channels, the field quadratics, the Lorentz transformations of four-vectors and of the bilinear, and the Lorentz covariance of the triple-product equations.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
@@ -87,7 +87,7 @@ footer a{color:var(--soft)}
   <header>
     <p class="kicker">E.P.J. de Haas · Kandinsky College, Nijmegen</p>
     <h1>The BQ algebra, one matrix product at a time</h1>
-    <p class="lede">In the BQ-Pauli algebra a physical four-vector is four <em>real</em> coordinates on a basis of 2×2 complex matrices, A = a<sub>0</sub>T̂ + <b>a</b>·<b class="kv">K̂</b>, with <b class="kv">K̂</b> = (Î, Ĵ, K̂). Multiplying such vectors is ordinary matrix multiplication, and the algebra sorts every product into its own channels. These six interactive models build that up step by step, and every result on them is computed live from the explicit matrices.</p>
+    <p class="lede">In the BQ-Pauli algebra a physical four-vector is four <em>real</em> coordinates on a basis of 2×2 complex matrices, A = a<sub>0</sub>T̂ + <b>a</b>·<b class="kv">K̂</b>, with <b class="kv">K̂</b> = (Î, Ĵ, K̂). Multiplying such vectors is ordinary matrix multiplication, and the algebra sorts every product into its own channels. These seven interactive models build that up step by step, and every result on them is computed live from the explicit matrices.</p>
     <div class="basis" aria-label="The eight basis matrices, in four groups of 1, 3, 3 and 1">
       <span class="grp"><small>space-time (minquat)</small><span class="st">T̂ &nbsp; Î &nbsp; Ĵ &nbsp; K̂</span></span>
       <span class="grp"><small>spin-norm (pauliquat)</small><span class="sn">1̂ &nbsp; σ̂<sub>I</sub> &nbsp; σ̂<sub>J</sub> &nbsp; σ̂<sub>K</sub></span></span>
@@ -95,7 +95,7 @@ footer a{color:var(--soft)}
     </div>
   </header>
 
-  <h2 class="group" id="models">Six interactive models</h2>
+  <h2 class="group" id="models">Seven interactive models</h2>
   <p class="groupnote">In teaching order: the basis products, then the bilinear of two four-vectors, then the triple product that carries Maxwell’s equations and the Lorentz force, then the quadratics of the fields themselves, and the Lorentz transformations under which all of them are covariant.</p>
   <div class="grid">
 
@@ -265,6 +265,28 @@ footer a{color:var(--soft)}
       </div>
     </a>
 
+    <a class="card" href="BQ_models/BQ_Triple_Product_Covariance.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="The triple-product equations keep their form under a boost: dB = mu0 J becomes d'B' = mu0 J', and JB = F becomes J'B' = F'">
+        <rect width="320" height="200" fill="#03050b"/>
+        <g font-family="Source Serif 4, Georgia, serif" font-size="19">
+          <text x="34" y="58" fill="#e7ebf3">∂B = μ<tspan font-size="12" baseline-shift="sub">0</tspan>J</text>
+          <text x="34" y="128" fill="#e7ebf3">JB = F</text>
+          <text x="190" y="58" fill="#f2a24a">∂′B′ = μ<tspan font-size="12" baseline-shift="sub">0</tspan>J′</text>
+          <text x="190" y="128" fill="#f2a24a">J′B′ = F′</text>
+        </g>
+        <g stroke="#48dbfb" stroke-width="1.5" fill="none"><path d="M136 52 H 178"/><path d="M171 47 L 178 52 L 171 57"/><path d="M136 122 H 178"/><path d="M171 117 L 178 122 L 171 127"/></g>
+        <text x="160" y="176" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-size="15" fill="#48dbfb">E<tspan font-size="10" baseline-shift="super">L</tspan> = U<tspan font-size="10" baseline-shift="super">−1</tspan>(DC)U<tspan font-size="10" baseline-shift="super">−1</tspan></text>
+      </svg>
+      <div class="body">
+        <span class="step">Step 7 · equations in every frame</span>
+        <h3>Lorentz covariance of the triple product</h3>
+        <p>A triple E = D(A<sup>T</sup>B) is boosted like a four-vector again, E<sup>L</sup> = U<sup>−1</sup>EU<sup>−1</sup>, and both its minquat and its pauliquat sector are four-vectors. So ∂B = μ<sub>0</sub>J, JB = F and the fluid equations keep their form, checked with boosted vectors and with fields differentiated in the boosted coordinates.</p>
+        <div class="rule">e<sub>T</sub>′ = γ(e<sub>T</sub> − βe<sub>K,I</sub>), &nbsp;e<sub>1</sub>′ = γ(e<sub>1</sub> − βe<sub>σ,I</sub>)</div>
+        <div class="tags"><span>Maxwell</span><span>Lorentz force</span><span>fluid equations</span></div>
+        <span class="open">Open the model</span>
+      </div>
+    </a>
+
 
   </div>
 
@@ -279,6 +301,7 @@ footer a{color:var(--soft)}
         <li><code>bq_quadratics.py</code> · FF and F<sup>T</sup>F for the EM, fluid and other fields</li>
         <li><code>bq_lorentz.py</code> · A<sup>L</sup> = U<sup>−1</sup>AU<sup>−1</sup>, adjoints, invariance, step 5 and the Lemma</li>
         <li><code>bq_bilinear_lorentz.py</code> · C<sup>L</sup> = UCU<sup>−1</sup> for all 169 pairs, basis rules and complex form</li>
+        <li><code>bq_triple_lorentz.py</code> · E<sup>L</sup> = U<sup>−1</sup>EU<sup>−1</sup> for all 2197 triples, both sectors, both lemmas</li>
         <li><code>bq_core.py</code> · basis, four-vectors, operator order, channel rules</li>
       </ul>
       <p>Only Python 3 and SymPy are needed. A four-gradient acts on everything to its right; when it stands last, the product is evaluated on a test field ψ.</p>
@@ -312,7 +335,13 @@ python bq_lorentz.py --all
 <span class="cm"># step 6: Lorentz transformation of the bilinear</span>
 python bq_bilinear_lorentz.py D A
 python bq_bilinear_lorentz.py --basis
-python bq_bilinear_lorentz.py --all</pre>
+python bq_bilinear_lorentz.py --all
+
+<span class="cm"># step 7: covariance of the triple-product equations</span>
+python bq_triple_lorentz.py D D A
+python bq_triple_lorentz.py J D A
+python bq_triple_lorentz.py --maxwell
+python bq_triple_lorentz.py --all</pre>
   </section>
 
   <section class="about" aria-label="About these models">
@@ -331,6 +360,7 @@ python bq_bilinear_lorentz.py --all</pre>
         <li><a href="BQ_models/BQ_Field_Quadratics.html">Field quadratics</a></li>
         <li><a href="BQ_models/BQ_Lorentz_Transformations.html">Lorentz transformations</a></li>
         <li><a href="BQ_models/BQ_Bilinear_Lorentz_Transformation.html">Lorentz transformation of the bilinear</a></li>
+        <li><a href="BQ_models/BQ_Triple_Product_Covariance.html">Lorentz covariance of the triple product</a></li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra/tree/main/py_sources">Python sources</a>: exact SymPy reproduction</li>
         <li><a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>: galaxy, jet and SPARC models</li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra">Source on GitHub</a></li>
