@@ -1,0 +1,636 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BQ Bilinear Lorentz Transformation</title>
+<meta name="description" content="Lorentz boost of the BQ bilinear C = A^T B for every pair of the BQ four-vectors: C^L = U C U^-1 with the rotor U = exp(psi sigma_I/2), in matrix, rotor, basis, component and complex Minkowski form, with a matrix check.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&display=swap" rel="stylesheet">
+<style>
+/* Layout: chooser on the left, channel readout on the right (stacked on phones); numerical matrix check and notes below. Same family as the BQ-Pauli table page. */
+:root{
+  --bg:#f5f6fa;--surface:#ffffff;--edge:#d6dce8;--ink:#141a28;--soft:#55607a;
+  --st:#b8620f;--st-bg:rgba(184,98,15,.09);      /* space-time basis T̂, K̂ */
+  --sn:#0f7fb0;--sn-bg:rgba(15,127,176,.09);     /* spin-norm basis 1̂, σ̂ */
+  --sel:#5b4fd6;--good:#2f8a4f;--bad:#b23a3a;
+  --serif:"Source Serif 4",Georgia,serif;--sans:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.11);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.09);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.11);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.09);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans)}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font:600 clamp(24px,3.4vw,34px)/1.15 var(--serif);margin:0 0 6px;text-wrap:balance}
+h2{font:600 18px/1.3 var(--serif);margin:0 0 10px;text-wrap:balance}
+h3{font:600 12px/1.3 var(--sans);margin:0 0 8px;color:var(--soft);letter-spacing:.06em;text-transform:uppercase}
+.lede{color:var(--soft);max-width:82ch;margin:0 0 20px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:start}
+@media (max-width:960px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--edge);border-radius:12px;padding:16px;min-width:0}
+select,button,input{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:5px 8px}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--sel);outline-offset:2px}
+.pick{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 12px;align-items:center}
+.pick label{font:600 20px var(--serif)}
+.pick select{width:100%}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.qs{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.qs button{font-size:12.5px;padding:4px 9px}
+.math{font:500 16.5px/1.9 var(--serif);overflow-x:auto}
+.math b{font-weight:700}
+.vec{border:1px solid var(--edge);border-radius:10px;padding:10px 12px;margin-top:12px;background:var(--bg)}
+.vec .what{font-size:12.5px;color:var(--soft);margin-bottom:2px}
+.ts{color:var(--st)}.ns{color:var(--sn)}
+.formula{font:500 16px/1.8 var(--serif);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:8px 12px;overflow-x:auto;white-space:nowrap}
+.fwith{font:13px var(--sans);color:var(--soft);white-space:normal}
+.ch{display:grid;grid-template-columns:minmax(0,10.5em) minmax(0,1fr);gap:4px 14px;padding:12px 0;border-bottom:1px solid var(--edge)}
+.ch:last-of-type{border-bottom:none}
+.ch .nm{font:600 14px var(--sans)}
+.ch .nm small{display:block;font:400 12px var(--sans);color:var(--soft)}
+.ch .ex{font:500 16.5px/1.75 var(--serif);overflow-x:auto;min-width:0}
+.ch .ex .gen{color:var(--soft);font-size:14.5px}
+.ch .ex .res{font-weight:600}
+.ch.n .nm{color:var(--sn)}.ch.k .nm{color:var(--st)}.ch.s .nm{color:var(--sn)}
+@media (max-width:560px){.ch{grid-template-columns:minmax(0,1fr)}}
+.total{font:600 17px/1.8 var(--serif);border:1.5px solid var(--sel);border-radius:10px;padding:10px 12px;margin-top:10px;overflow-x:auto}
+.interp{margin-top:12px;font-size:14.5px;color:var(--ink);background:var(--bg);border:1px dashed var(--edge);border-radius:10px;padding:10px 12px}
+.interp .src{display:block;font-size:12.5px;color:var(--soft);margin-top:4px}
+.note{font-size:14px;color:var(--soft);max-width:74ch;margin:8px 0 0}
+.note b{color:var(--ink)}
+/* numeric check */
+.numgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:900px){.numgrid{grid-template-columns:minmax(0,1fr)}}
+.inrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.inrow label{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--soft);min-width:0}
+.inrow input{width:100%;font:13.5px var(--mono)}
+.mxrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font:500 17px var(--serif);margin:10px 0;overflow-x:auto}
+.mx{display:inline-grid;grid-template-columns:auto auto;gap:2px 14px;padding:5px 11px;position:relative;font:13.5px var(--mono);font-variant-numeric:tabular-nums}
+.mx::before,.mx::after{content:"";position:absolute;top:0;bottom:0;width:7px;border:1.5px solid var(--ink)}
+.mx::before{left:0;border-right:none}.mx::after{right:0;border-left:none}
+.mx span{text-align:right;white-space:nowrap}
+.tscroll{overflow-x:auto}
+table.dc{border-collapse:collapse;font:13.5px var(--mono);font-variant-numeric:tabular-nums;width:100%}
+table.dc th,table.dc td{padding:4px 10px;border-bottom:1px solid var(--edge);text-align:right;white-space:nowrap}
+table.dc th{font:600 12px var(--sans);color:var(--soft);text-align:right}
+table.dc td:first-child,table.dc th:first-child{text-align:left;font-family:var(--serif);font-size:15px}
+.pill{display:inline-block;font:500 12.5px var(--sans);border:1px solid var(--edge);border-radius:99px;padding:2px 10px;color:var(--soft);margin-top:10px}
+.pill.ok{border-color:var(--good);color:var(--good)}.pill.no{border-color:var(--bad);color:var(--bad)}
+.notes{margin-top:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:900px){.notes{grid-template-columns:minmax(0,1fr)}}
+.notes li{font-size:14px;max-width:70ch;margin-bottom:6px}
+.notes ul{padding-left:18px;margin:6px 0}
+.cap{font-size:12.5px;color:var(--soft);margin:10px 0 0}
+a{color:var(--sn)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.chk{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--soft);cursor:pointer}
+.split{margin-top:8px}
+.pill.st{border-color:var(--st);color:var(--st)}.pill.sn{border-color:var(--sn);color:var(--sn)}
+.sstep{margin:14px 0 0}
+.sstep h3{margin:0 0 6px}
+.sline{font:500 15px/1.9 var(--serif);overflow-x:auto;white-space:nowrap;padding:1px 0}
+.sline .lab{display:inline-block;min-width:5.6em;color:var(--soft)}
+.sbox{background:var(--bg);border:1px solid var(--edge);border-radius:10px;padding:8px 12px}
+.sgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:900px){.sgrid{grid-template-columns:minmax(0,1fr)}}
+.sgrid .sline{font-size:14.5px}
+.sres{font-weight:600}
+.ctlline{margin:0 0 8px}
+.numdet{margin-top:16px;border-top:1px solid var(--edge);padding-top:10px}
+.numdet summary{cursor:pointer;font:500 14px var(--sans);color:var(--soft)}
+.numgrid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:900px){.numgrid.three{grid-template-columns:minmax(0,1fr)}}
+.vec .math .what{margin:0 0 4px 0}
+.kv{font-weight:700}
+.slider{margin-top:14px;display:grid;gap:6px}
+.slider label{font-size:13.5px;color:var(--soft)}.slider label b{color:var(--ink);font:500 14px var(--mono)}
+.slider input{width:100%;accent-color:var(--st)}
+.kp{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+@media (max-width:560px){.kp{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.kp div{border:1px solid var(--edge);border-radius:8px;padding:5px 7px;min-width:0}
+.kp span{display:block;font-size:11.5px;color:var(--soft)}.kp b{font:500 14px var(--mono)}
+.trc{border:1px solid var(--edge);border-left-width:3px;border-radius:10px;padding:8px 12px;margin-bottom:10px}
+.trc.st{border-left-color:var(--st)}.trc.sn{border-left-color:var(--sn)}
+.trc h3{margin:0 0 4px}.trc .ops{font:500 15px/1.8 var(--serif);overflow-x:auto}
+.numv{font:13px var(--mono);color:var(--soft)}
+.leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--soft);margin-top:6px}
+.leg>span{display:inline-flex;align-items:center;gap:6px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%}
+.sw{display:inline-block;width:18px;height:0;border-top:2px solid}
+svg{display:block;width:100%;height:auto;max-width:100%}
+svg text{font:12px var(--mono);fill:var(--soft)}
+svg .ax{stroke:var(--edge);fill:none}
+svg .ttl{font:13px var(--sans);fill:var(--soft)}
+.dsteps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:10px}
+@media (max-width:960px){.dsteps{grid-template-columns:minmax(0,1fr)}}
+.dstep{border:1px solid var(--edge);border-radius:10px;padding:10px 14px;background:var(--bg);min-width:0}
+.dstep h3{margin:0 0 6px;color:var(--ink);font:600 15.5px var(--serif);letter-spacing:0;text-transform:none}
+.dstep h3 .n{display:inline-block;min-width:1.6em;color:var(--st)}
+.dl{font:500 15px/1.85 var(--serif);overflow-x:auto;white-space:nowrap}
+.dl.dwrap{white-space:normal}
+.dnum{font:13px/1.7 var(--mono);color:var(--soft);overflow-x:auto;white-space:nowrap}
+.dk{font-size:13.5px;color:var(--soft);margin:6px 0 0}
+.mxs{display:inline-grid;gap:2px 14px;padding:3px 10px;position:relative;vertical-align:middle;font:500 14px var(--serif)}
+.mxs::before,.mxs::after{content:"";position:absolute;top:0;bottom:0;width:6px;border:1.4px solid var(--ink)}
+.mxs::before{left:0;border-right:none}.mxs::after{right:0;border-left:none}
+.mxs span{text-align:center;white-space:nowrap}
+table.lm{border-collapse:collapse;font:13px var(--mono);width:100%}
+table.lm th,table.lm td{padding:3px 8px;border-bottom:1px solid var(--edge);text-align:right;white-space:nowrap}
+table.lm th{font:600 12px var(--sans);color:var(--soft)}
+table.lm td:first-child,table.lm th:first-child{text-align:left;font-family:var(--serif)}
+
+.planes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:560px){.planes{grid-template-columns:minmax(0,1fr)}}
+.dl .lab2{display:inline-block;min-width:6.5em}
+.numv{margin-top:2px}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <h1>BQ Lorentz Transformation of the Bilinear</h1>
+  <p class="lede">The bilinear C = A<sup>T</sup>B = c<sub>1</sub>1̂ + <b>c</b><sub>K</sub>·<b class="kv">K̂</b> + <b>c</b><sub>σ</sub>·σ̂ of two four-vectors is boosted along Î by boosting both factors. The time adjoint A<sup>T</sup> transforms as UA<sup>T</sup>U and B as U<sup>−1</sup>BU<sup>−1</sup>, so the inner pair cancels and C transforms by a similarity, C<sup>L</sup> = UCU<sup>−1</sup>, with the rotor U = e<sup>ψσ̂<sub>I</sub>/2</sup>. Choose two four-vectors and a velocity.</p>
+</header>
+
+<div class="grid">
+  <section class="card" aria-labelledby="h-pick">
+    <h2 id="h-pick">Vectors and boost</h2>
+    <div class="pick">
+      <label for="selA">A</label><select id="selA"></select>
+      <label for="selB">B</label><select id="selB"></select>
+    </div>
+    <div class="row"><button id="swap" type="button">Swap A and B</button></div>
+    <div class="qs" id="qs" role="group" aria-label="Example products"></div>
+    <div class="vec" id="vA"></div>
+    <div class="vec" id="vB"></div>
+    <div class="vec" id="vC"></div>
+    <div class="slider">
+      <label for="beta">Velocity β = v/c along Î <b id="betaLab"></b></label>
+      <input id="beta" type="range" min="-0.95" max="0.95" step="0.01" value="0.6">
+      <div class="kp" id="kp"></div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="h-tr" aria-live="polite">
+    <h2 id="h-tr">The transformations of C = A<sup>T</sup>B</h2>
+    <div id="tr"></div>
+  </section>
+</div>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-der">
+  <h2 id="h-der">The boost of the bilinear in seven representations</h2>
+  <p class="note">The steps follow the BQ-Pauli slides on the Lorentz transformation of the bilinear and use the vectors and velocity chosen above. In this section ch = cosh(ψ/2) and sh = sinh(ψ/2), the C and S of the slides, so that C keeps its meaning as the bilinear.</p>
+  <div class="dsteps" id="deriv"></div>
+</section>
+
+<div class="grid" style="margin-top:18px">
+  <section class="card" aria-labelledby="h-diag">
+    <h2 id="h-diag">The two transverse planes</h2>
+    <div class="planes"><svg id="diag1" viewBox="0 0 300 300" role="img" aria-label="The plane of c_K,J against c_sigma,K, with the bilinear, its boost and its inverse boost on the invariant hyperbola"></svg><svg id="diag2" viewBox="0 0 300 300" role="img" aria-label="The plane of c_K,K against c_sigma,J, with the bilinear, its boost and its inverse boost on the invariant hyperbola"></svg></div>
+    <div class="leg"><span><i class="dot" style="background:var(--ink)"></i><span>C</span></span><span><i class="dot" style="background:var(--st)"></i><span>C<sup>L</sup> = UCU<sup>−1</sup></span></span><span><i class="dot" style="background:var(--sn)"></i><span>C<sup>L<sup>−1</sup></sup> = U<sup>−1</sup>CU</span></span><span><i class="sw" style="border-color:var(--soft);border-top-style:dashed"></i><span>invariant hyperbola</span></span></div>
+    <p class="cap">The boost leaves c<sub>1</sub>, c<sub>K,I</sub> and c<sub>σ,I</sub> alone and turns each transverse pair (c<sub>K,J</sub>, c<sub>σ,K</sub>) and (c<sub>K,K</sub>, c<sub>σ,J</sub>) through the rapidity ψ, in opposite senses. The point slides along its hyperbola c<sub>K,J</sub>² − c<sub>σ,K</sub>² = const (left) or c<sub>K,K</sub>² − c<sub>σ,J</sub>² = const (right).</p>
+  </section>
+  <section class="card" aria-labelledby="h-num">
+    <h2 id="h-num">Check by explicit matrix multiplication</h2>
+    <div id="numwrap"></div>
+  </section>
+</div>
+
+<div class="notes">
+  <section class="card"><h2>Why a similarity, and what stays invariant</h2>
+    <ul>
+      <li><b>Vectors and bilinears transform differently.</b> A four-vector is boosted from both sides with the same factor, A<sup>L</sup> = U<sup>−1</sup>AU<sup>−1</sup>. In the bilinear the adjoint brings the opposite factor, (A<sup>L</sup>)<sup>T</sup> = UA<sup>T</sup>U, so (A<sup>L</sup>)<sup>T</sup>B<sup>L</sup> = UA<sup>T</sup>(UU<sup>−1</sup>)BU<sup>−1</sup> = UCU<sup>−1</sup>.</li>
+      <li><b>Invariant channels.</b> 1̂, T̂, Î and σ̂<sub>I</sub> commute with σ̂<sub>I</sub>, so c<sub>1</sub>, the T̂ channel and the longitudinal components c<sub>K,I</sub>, c<sub>σ,I</sub> are unchanged. Ĵ, K̂, σ̂<sub>J</sub>, σ̂<sub>K</sub> anticommute with σ̂<sub>I</sub> and mix in the pairs (Ĵ, σ̂<sub>K</sub>) and (K̂, σ̂<sub>J</sub>).</li>
+      <li><b>Invariant combinations.</b> The complex three-vector 𝒞 = <b>c</b><sub>σ</sub> + i<b>c</b><sub>K</sub> is rotated by a complex orthogonal matrix, so 𝒞·𝒞 = (<b>c</b><sub>σ</sub>² − <b>c</b><sub>K</sub>²) + 2i <b>c</b><sub>K</sub>·<b>c</b><sub>σ</sub> is invariant. For the EM field these are B² − E²/c² and E·B/c. For two plain four-vectors <b>c</b><sub>K</sub>·<b>c</b><sub>σ</sub> = (<b>a</b>×<b>b</b>)·(a<sub>0</sub><b>b</b> − <b>a</b>b<sub>0</sub>) = 0.</li>
+      <li><b>The time adjoint.</b> With C<sup>T</sup> = c<sub>1</sub>1̂ + <b>c</b><sub>K</sub>·<b class="kv">K̂</b> − <b>c</b><sub>σ</sub>·σ̂ (as on the field-quadratics page), (C<sup>L</sup>)<sup>T</sup> = U<sup>−1</sup>C<sup>T</sup>U = (C<sup>T</sup>)<sup>L<sup>−1</sup></sup>, the same reversal as for vectors.</li>
+    </ul>
+  </section>
+  <section class="card"><h2>Direction of the boost</h2>
+    <p class="note">As for the vectors, the rule UCU<sup>−1</sup> with a diagonal U holds for boosts along Î. A boost in another direction is first rotated into Î; a rotation R acts on the bilinear as RCR<sup>−1</sup> as well, so every bilinear transforms by a similarity under the full Lorentz group.</p>
+    <p class="cap">Definitions as in de Haas, BQ-Pauli slides (Lorentz transformation of the EM field B = ∂<sup>T</sup>A, the direct BQ derivation with U = C1̂ + Sσ̂<sub>I</sub>, and the connection with Minkowski’s 1908 complex field transformation). Part of <a href="../index.html">the BQ algebra models</a>.</p>
+  </section>
+</div>
+</div>
+
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+/* ---------- symbols ---------- */
+const CONST = new Set(['c']);                     // constants pulled out of derivatives
+const ORDER = ['γ','c','m','E','ε','𝒫','ρ','φ','a0','b0','t','dt'];
+const SYMH = {a0:'a<sub>0</sub>', b0:'b<sub>0</sub>', dt:'dt'};
+const VECH = {r:'<b>r</b>', dr:'d<b>r</b>', v:'<b>v</b>', p:'<b>p</b>', A:'<b>A</b>', J:'<b>J</b>', g:'<b>g</b>', F:'<b>F</b>', a:'<b>a</b>', b:'<b>b</b>', N:'∇'};
+const sh = s => SYMH[s] || s;
+const sup = n => n === 1 ? '' : '<sup>' + n + '</sup>';
+function fmul(a, b){ const o = Object.assign({}, a); for (const k in b){ o[k] = (o[k] || 0) + b[k]; if (o[k] === 0) delete o[k]; } return o; }
+const fconst = f => Object.fromEntries(Object.entries(f).filter(([k]) => CONST.has(k)));
+const fvar = f => Object.fromEntries(Object.entries(f).filter(([k]) => !CONST.has(k)));
+const fempty = f => Object.keys(f).length === 0;
+const isT = f => Object.keys(f).length === 1 && f.t === 1;
+const okeys = f => Object.keys(f).sort((x, y) => (ORDER.indexOf(x) + 99*(ORDER.indexOf(x) < 0)) - (ORDER.indexOf(y) + 99*(ORDER.indexOf(y) < 0)));
+function fhtml(f){ return okeys(f).filter(k => f[k] > 0).map(k => sh(k) + sup(f[k])).join(''); }
+function fden(f){ return okeys(f).filter(k => f[k] < 0).map(k => sh(k) + sup(-f[k])).join(''); }
+function wrapVar(f){ const ks = Object.keys(f); const s = fhtml(f); return ks.length === 1 && f[ks[0]] === 1 ? s : '(' + s + ')'; }
+
+/* ---------- the four-vectors of the BQ papers ---------- */
+/* s0: time coordinate {k, f, op}; vv: spatial part {k, f, v, op} */
+const V = [
+  {id:'R',  nm:'R',  what:'space-time position', s0:{k:1,f:{c:1,t:1}}, vv:{k:1,f:{},v:'r'}, comp:['ct','r<sub>1</sub>','r<sub>2</sub>','r<sub>3</sub>'], def:[2,1,0.5,-0.3]},
+  {id:'dR', nm:'dR', what:'space-time displacement', s0:{k:1,f:{c:1,dt:1}}, vv:{k:1,f:{},v:'dr'}, comp:['c dt','dr<sub>1</sub>','dr<sub>2</sub>','dr<sub>3</sub>'], def:[1,0.3,-0.2,0.1]},
+  {id:'V',  nm:'V',  what:'coordinate velocity, dR/dt', s0:{k:1,f:{c:1}}, vv:{k:1,f:{},v:'v'}, comp:['c','v<sub>1</sub>','v<sub>2</sub>','v<sub>3</sub>'], def:[1,0.4,0.2,0]},
+  {id:'U',  nm:'U',  what:'proper velocity, dR/dτ = γV', s0:{k:1,f:{'γ':1,c:1}}, vv:{k:1,f:{'γ':1},v:'v'}, comp:['γc','γv<sub>1</sub>','γv<sub>2</sub>','γv<sub>3</sub>'], def:[1.25,0.5,0.25,0.5]},
+  {id:'P',  nm:'P',  what:'energy-momentum', s0:{k:1,f:{E:1,c:-1}}, vv:{k:1,f:{},v:'p'}, comp:['E/c','p<sub>1</sub>','p<sub>2</sub>','p<sub>3</sub>'], def:[3,0.5,1,-0.5]},
+  {id:'D',  nm:'∂',  what:'four-gradient (operator)', s0:{k:-1,f:{c:-1},op:true}, vv:{k:1,f:{},v:'N',op:true}, comp:['−(1/c)∂<sub>t</sub>','∇<sub>1</sub>','∇<sub>2</sub>','∇<sub>3</sub>'], def:null},
+  {id:'A',  nm:'A',  what:'electromagnetic four-potential', s0:{k:1,f:{'φ':1,c:-1}}, vv:{k:1,f:{},v:'A'}, comp:['φ/c','A<sub>1</sub>','A<sub>2</sub>','A<sub>3</sub>'], def:[0.8,-0.2,0.6,0.3]},
+  {id:'J',  nm:'J',  what:'electric four-current density', s0:{k:1,f:{c:1,'ρ':1}}, vv:{k:1,f:{},v:'J'}, comp:['cρ','J<sub>1</sub>','J<sub>2</sub>','J<sub>3</sub>'], def:[1.5,0.2,-0.4,0.7]},
+  {id:'G',  nm:'G',  what:'energy-momentum density of a fluid, ρ₀U', s0:{k:1,f:{'ε':1,c:-1}}, vv:{k:1,f:{},v:'g'}, comp:['ε/c','g<sub>1</sub>','g<sub>2</sub>','g<sub>3</sub>'], def:[2.5,0.6,0.1,-0.2]},
+  {id:'F',  nm:'F',  what:'force-power density', s0:{k:1,f:{'𝒫':1,c:-1}}, vv:{k:1,f:{},v:'F'}, comp:['𝒫/c','F<sub>1</sub>','F<sub>2</sub>','F<sub>3</sub>'], def:[0.4,1,0,-0.6]},
+  {id:'a',  nm:'A<sub>gen</sub>', what:'general four-vector (a₀, a)', s0:{k:1,f:{a0:1}}, vv:{k:1,f:{},v:'a'}, comp:['a<sub>0</sub>','a<sub>1</sub>','a<sub>2</sub>','a<sub>3</sub>'], def:[1,2,0,0]},
+  {id:'b',  nm:'B<sub>gen</sub>', what:'general four-vector (b₀, b)', s0:{k:1,f:{b0:1}}, vv:{k:1,f:{},v:'b'}, comp:['b<sub>0</sub>','b<sub>1</sub>','b<sub>2</sub>','b<sub>3</sub>'], def:[1,0,3,0]}
+];
+const VI = Object.fromEntries(V.map(v => [v.id, v]));
+
+/* ---------- terms: {k, f, ker, key} ---------- */
+const term = (k, f, ker) => ({k, f, ker:ker || ''});
+const ZERO = null;
+/* scalar · scalar, left acts on right */
+function sMul(a, b){
+  if (!a.op && !b.op) return term(a.k*b.k, fmul(a.f, b.f));
+  if (a.op && !b.op){ const X = fvar(b.f), C = fconst(b.f);
+    if (fempty(X)) return ZERO; if (isT(X)) return term(a.k*b.k, fmul(a.f, C));
+    return term(a.k*b.k, fmul(a.f, C), '∂<sub>t</sub>' + wrapVar(X)); }
+  if (!a.op && b.op) return term(a.k*b.k, fmul(a.f, b.f), '∂<sub>t</sub>');
+  return term(a.k*b.k, fmul(a.f, b.f), '∂<sub>t</sub><sup>2</sup>');
+}
+function vbody(f, v){ return fempty(f) ? VECH[v] : '(' + fhtml(f) + VECH[v] + ')'; }
+/* vector · vector (dot) and × (cross), left acts on right */
+function vDot(a, b){
+  if (!a.op && !b.op) return term(a.k*b.k, fmul(a.f, b.f), a.v === b.v ? VECH[a.v] + '<sup>2</sup>' : VECH[a.v] + '·' + VECH[b.v]);
+  if (a.op && !b.op){ const X = fvar(b.f), C = fconst(b.f);
+    if (fempty(X) && b.v === 'r') return term(3*a.k*b.k, fmul(a.f, C));
+    return term(a.k*b.k, fmul(a.f, C), '∇·' + vbody(X, b.v)); }
+  if (!a.op && b.op) return term(a.k*b.k, fmul(a.f, b.f), VECH[a.v] + '·∇');
+  return term(a.k*b.k, fmul(a.f, b.f), '∇<sup>2</sup>');
+}
+function vCross(a, b){
+  if (!a.op && !b.op) return a.v === b.v ? ZERO : term(a.k*b.k, fmul(a.f, b.f), VECH[a.v] + '×' + VECH[b.v]);
+  if (a.op && !b.op){ const X = fvar(b.f), C = fconst(b.f);
+    if (fempty(X) && b.v === 'r') return ZERO;
+    return term(a.k*b.k, fmul(a.f, C), '∇×' + vbody(X, b.v)); }
+  if (!a.op && b.op) return term(a.k*b.k, fmul(a.f, b.f), VECH[a.v] + '×∇');
+  return ZERO;
+}
+/* scalar (left) times vector (right): a0 b */
+function sV(s, b){
+  if (!s.op && !b.op) return term(s.k*b.k, fmul(s.f, b.f), VECH[b.v]);
+  if (s.op && !b.op){ const X = fvar(b.f), C = fconst(b.f);
+    if (fempty(X) && b.v === 'r') return ZERO;
+    return term(s.k*b.k, fmul(s.f, C), '∂<sub>t</sub>' + vbody(X, b.v)); }
+  if (!s.op && b.op) return term(s.k*b.k, fmul(s.f, b.f), '∇');
+  return term(s.k*b.k, fmul(s.f, b.f), '∂<sub>t</sub>∇');
+}
+/* vector (left) times scalar (right): the b0 a term, with a standing left of b0 */
+function vS(a, s){
+  if (!a.op && !s.op){ const t = term(a.k*s.k, fmul(a.f, s.f), VECH[a.v]); t.vf = true; return t; }
+  if (a.op && !s.op){ const X = fvar(s.f), C = fconst(s.f);
+    if (fempty(X) || isT(X)) return ZERO;
+    return term(a.k*s.k, fmul(a.f, C), '∇' + wrapVar(X)); }
+  if (!a.op && s.op) return term(a.k*s.k, fmul(a.f, s.f), VECH[a.v] + ' ∂<sub>t</sub>');
+  return term(a.k*s.k, fmul(a.f, s.f), '∂<sub>t</sub>∇');
+}
+const neg = t => t && Object.assign(term(-t.k, t.f, t.ker), t.vf ? {vf:true} : {});
+const keyOf = t => okeys(t.f).map(k => k + t.f[k]).join(',') + '|' + t.ker;
+function combine(list){ const m = new Map(); list.filter(Boolean).forEach(t => { const k = keyOf(t); if (m.has(k)) m.get(k).k += t.k; else m.set(k, Object.assign({}, t)); });
+  return [...m.values()].filter(t => Math.abs(t.k) > 1e-12); }
+function tHTML(t, first){
+  const sgn = t.k < 0 ? '−' : (first ? '' : '+'), ak = Math.abs(t.k), num = fhtml(t.f), den = fden(t.f);
+  let body;
+  const coef = ak === 1 ? '' : String(ak);
+  if (t.vf && t.ker){ const sc = (coef + num) ? (coef + num) + (den ? '/' + den : '') : (den ? '1/' + den : ''); body = t.ker + (sc ? ' ' + sc : ''); }
+  else if (den){
+    if (!t.ker && (num || coef)) body = coef + num + '/' + den;
+    else body = '(' + ((coef + num) || '1') + '/' + den + ') ' + t.ker;
+    if (!t.ker && !num && !coef) body = '1/' + den;
+  } else body = coef + num + (t.ker ? (coef || num ? ' ' : '') + t.ker : '') || '1';
+  if (!body) body = '1';
+  return (first ? (sgn ? sgn + ' ' : '') : ' ' + sgn + ' ') + body;
+}
+const tsHTML = list => list.length ? list.map((t, i) => tHTML(t, i === 0)).join('') : '0';
+const isVecChan = list => list.length > 0;
+function channels(A, B){
+  const norm = combine([sMul(A.s0, B.s0), neg(vDot(A.vv, B.vv))]);
+  const rot = combine([vCross(A.vv, B.vv)]);
+  const boost = combine([sV(A.s0, B.vv), neg(vS(A.vv, B.s0))]);
+  return {norm, rot, boost};
+}
+const s0HTML = v => tsHTML([term(v.s0.k, v.s0.f, v.s0.op ? '∂<sub>t</sub>' : '')]);
+const vvHTML = v => tsHTML([term(v.vv.k, v.vv.f, VECH[v.vv.v])]);
+function vecCard(v, role){
+  const tC = s0HTML(v), sC = vvHTML(v), tCT = tsHTML([term(-v.s0.k, v.s0.f, v.s0.op ? '∂<sub>t</sub>' : '')]);
+  const sp = s => s.trim().startsWith('−') ? ' ' + s.trim() : ' + ' + s.trim();
+  return `<div class="what">${role}: ${v.what}</div><div class="math">${v.nm} = ${v.nm}<sub>μ</sub>K̂<sup>μ</sup> = [${v.comp.join(', ')}]·[<span class="ts">T̂, Î, Ĵ, K̂</span>]<sup>t</sup> = ${tC} <span class="ts">T̂</span>${sp(sC)}·<span class="ts"><b class="kv">K̂</b></span></div>`
+    + (role === 'A' ? `<div class="math">${v.nm}<sup>T</sup> = ${tCT} <span class="ts">T̂</span>${sp(sC)}·<span class="ts"><b class="kv">K̂</b></span></div>` : '');
+}
+
+/* ================= Lorentz transformation of the bilinear ================= */
+VI.U.nm = 'U<sub>v</sub>'; VI.U.what = 'proper velocity, dR/dτ = γ<sub>v</sub>V (U<sub>v</sub>, γ<sub>v</sub> here, to keep U and γ for the boost)';
+VI.U.comp = ['γ<sub>v</sub>c','γ<sub>v</sub>v<sub>1</sub>','γ<sub>v</sub>v<sub>2</sub>','γ<sub>v</sub>v<sub>3</sub>'];
+SYMH['γ'] = 'γ<sub>v</sub>';
+
+const IJK = ['I', 'J', 'K'];
+const BK = '<b class="kv">K̂</b>';
+/* physical names of the channel vectors, where the papers give them: [symbol, suffix, prefix] */
+const NAMED = {
+  'R.P': {k:['L'], s:['M'], txt:'<b>L</b> = <b>r</b>×<b>p</b> (orbital angular momentum), <b>M</b> = ct<b>p</b> − <b>r</b>E/c (mass moment)'},
+  'D.A': {k:['B'], s:['E', '/c'], txt:'The electromagnetic field (written B = ∂<sup>T</sup>A in the papers): <b>B</b> = ∇×<b>A</b>, <b>E</b>/c = −(1/c)(∂<sub>t</sub><b>A</b> + ∇φ)'},
+  'J.A': {k:['T'], s:['S'], txt:'<b>T</b> = <b>J</b>×<b>A</b>, <b>S</b> = cρ<b>A</b> − (φ/c)<b>J</b>'},
+  'D.G': {k:['Ω'], s:['Π', '/c', '−'], txt:'The fluid field H = ∂<sup>T</sup>G: Ω = ∇×<b>g</b> (vorticity), −Π/c = −(1/c)(∂<sub>t</sub><b>g</b> + ∇ε)'}
+};
+const QUICK = [['R','P'],['D','A'],['J','A'],['D','G'],['U','G'],['R','R'],['P','P'],['a','b']];
+let SA = 'R', SB = 'P';
+const key = () => SA + '.' + SB;
+const beta = () => +$('beta').value;
+const fx = x => (Math.abs(x) < 5e-13 ? 0 : +x.toFixed(4)).toString().replace('-', '−');
+const strip = s => s.replace(/<[^>]+>/g, '');
+
+/* ---------- channel component labels ---------- */
+function chanInfo(){
+  const A = VI[SA], B = VI[SB], ch = channels(A, B), nmd = NAMED[key()];
+  const rot = tsHTML(ch.rot).trim(), bst = tsHTML(ch.boost).trim(), nrm = tsHTML(ch.norm).trim();
+  const comp = (which, i) => {
+    const list = which === 'k' ? ch.rot : ch.boost, ex = which === 'k' ? rot : bst;
+    if (!list.length) return '0';
+    if (nmd){ const [s, suf, pre] = nmd[which]; return (pre || '') + s + '<sub>' + i + '</sub>' + (suf || ''); }
+    if (!A.s0.op && !B.s0.op) return coordComp(A, B, which, i);
+    return '(' + ex + ')<sub>' + i + '</sub>';
+  };
+  const compL = (which, i) => {      /* the boosted component, with the L before a suffix such as /c */
+    const list = which === 'k' ? ch.rot : ch.boost;
+    if (nmd && list.length){ const [s, suf, pre] = nmd[which]; return (pre || '') + s + '<sub>' + i + '</sub><sup>L</sup>' + (suf || ''); }
+    return 'c<sub>' + (which === 'k' ? 'K' : 'σ') + ',' + i + '</sub><sup>L</sup>';
+  };
+  return {A, B, ch, nmd, rot, bst, nrm, comp, compL,
+    kName: nmd ? '<b>' + nmd.k[0] + '</b>' : (ch.rot.length ? '(' + rot + ')' : '0'),
+    sName: nmd ? (nmd.s[2] || '') + '<b>' + nmd.s[0] + '</b>' + (nmd.s[1] || '') : (ch.boost.length ? '(' + bst + ')' : '0')};
+}
+/* a channel component written out in the coordinates of A and B (a first, b second) */
+function coordComp(A, B, which, i){
+  const n = {I:1, J:2, K:3}[i], a = A.comp, b = B.comp;
+  const pr = (x, y) => x + ' ' + y;
+  let t1, t2;
+  if (which === 'k'){ const j = n % 3 + 1, k = (n + 1) % 3 + 1; t1 = pr(a[j], b[k]); t2 = pr(a[k], b[j]); }   /* (a×b)_n = a_j b_k − a_k b_j */
+  else { t1 = pr(a[0], b[n]); t2 = pr(a[n], b[0]); }                                                     /* a_0 b_n − a_n b_0 */
+  if (strip(t1) === strip(t2)) return '0';
+  return '(' + t1 + ' − ' + t2 + ')';
+}
+/* γ(x ± βy) with signs and zeros handled */
+function gcomb(x, sgn, y, g, bg){
+  g = g || 'γ'; bg = bg || 'β';
+  let s = sgn; if (y.startsWith('−')){ y = y.slice(1); s = s === '+' ? '−' : '+'; }
+  const sym = s === '+' ? ' + ' : ' − ';
+  if (x === '0' && y === '0') return '0';
+  if (y === '0') return g === 'γ' ? 'γ' + (/^[\w(]/.test(strip(x)) && !/[ +−]/.test(strip(x).slice(1)) ? x : '(' + x + ')') : g + ' ' + x;
+  if (x === '0') return (s === '−' ? '−' : '') + (g === 'γ' ? 'βγ ' : bg + ' ') + y;
+  return g === 'γ' ? `γ(${x}${sym}β${/^[\w]/.test(strip(y)) && strip(y).length <= 4 ? y : ' ' + y})` : `${g} ${x}${sym}${bg} ${y}`;
+}
+/* the boosted channels: the rule C^L = UCU^-1 read on the components (sgn = +1 boost, -1 inverse) */
+function boostChannels(c, sgn, b){
+  const g = 1/Math.sqrt(1 - b*b), bg = sgn*b*g;
+  const [kI, kJ, kK] = c.k, [sI, sJ, sK] = c.s;
+  return {f:c.f, t:c.t, k:[kI, g*kJ + bg*sK, g*kK - bg*sJ], s:[sI, g*sJ - bg*kK, g*sK + bg*kJ]};
+}
+function chanLines(ci, sgn, adj){
+  /* symbolic component lines for C^L (sgn=+1), C^{L^-1} (sgn=-1); adj flips the sign of c_sigma */
+  const k = i => ci.comp('k', i), s0 = i => ci.comp('s', i);
+  const s = i => adj ? neg1(s0(i)) : s0(i);
+  const p = sgn > 0 ? ['+', '−'] : ['−', '+'];
+  const kL = [k('I'), gcomb(k('J'), p[0], s('K')), gcomb(k('K'), p[1], s('J'))];
+  const sL = [s('I'), gcomb(s('J'), p[1], k('K')), gcomb(s('K'), p[0], k('J'))];
+  return {kL, sL};
+}
+const neg1 = x => x === '0' ? '0' : (x.startsWith('−') ? x.slice(1) : '−' + x);
+
+/* ---------- top: vectors, bilinear, boost parameters ---------- */
+function renderTop(){
+  const ci = chanInfo(), {A, B, ch} = ci, b = beta(), psi = Math.atanh(b), g = 1/Math.sqrt(1 - b*b);
+  $('selA').value = SA; $('selB').value = SB;
+  $('vA').innerHTML = vecCard(A, 'A'); $('vB').innerHTML = vecCard(B, 'B');
+  const parts = [];
+  if (ch.norm.length) parts.push(`(${ci.nrm}) <span class="ns">1̂</span>`);
+  if (ch.rot.length) parts.push(`${ci.kName}·<span class="ts">${BK}</span>`);
+  if (ch.boost.length) parts.push(`${ci.sName}·<span class="ns">σ̂</span>`);
+  const nm = `${A.nm}<sup>T</sup>${B.nm}`;
+  $('vC').innerHTML = `<div class="what">The bilinear C = ${nm} (channels as on the bilinear page)</div><div class="math">C = ${parts.length ? parts.join(' + ').replace(/\+ −/g, '− ') : '0'}</div>`
+    + (ci.nmd ? `<div class="what" style="margin-top:4px">${ci.nmd.txt}</div>` : '')
+    + (ch.rot.length || ch.boost.length ? '' : `<div class="what" style="margin-top:4px">Both bivector channels vanish: C is a pure norm and is invariant under every boost.</div>`);
+  $('betaLab').textContent = (b >= 0 ? '' : '−') + Math.abs(b).toFixed(2);
+  $('kp').innerHTML = [['rapidity ψ', fx(psi)], ['γ = cosh ψ', fx(g)], ['βγ = sinh ψ', fx(b*g)], ['e<sup>ψ</sup>', fx(Math.exp(psi))], ['e<sup>−ψ</sup>', fx(Math.exp(-psi))]]
+    .map(k => `<div><span>${k[0]}</span><b>${k[1]}</b></div>`).join('');
+
+  /* the transformation cards */
+  const cl = (L, title, ops, cls, extra) => {
+    const f = ci.ch.norm.length ? `(${ci.nrm}) <span class="ns">1̂</span>` : '';
+    const vk = `(${L.kL.join(', ')})·<span class="ts">${BK}</span>`, vs = `(${L.sL.join(', ')})·<span class="ns">σ̂</span>`;
+    return `<div class="trc ${cls}"><h3>${title}</h3><div class="ops">${ops}</div><div class="math">= ${[f, vk, vs].filter(Boolean).join(' + ')}</div>${extra || ''}</div>`;
+  };
+  const N = strip(nm);
+  const n = numState(), nb = n && boostChannels(n, 1, b), nib = n && boostChannels(n, -1, b);
+  const numl = c => c ? `<div class="numv">numbers below: c<sub>1</sub> = ${fx(c.f)}, <b>c</b><sub>K</sub> = (${c.k.map(fx).join(', ')}), <b>c</b><sub>σ</sub> = (${c.s.map(fx).join(', ')})</div>` : '';
+  $('tr').innerHTML =
+    cl(chanLines(ci, 1), `Boost: C<sup>L</sup>`, `C<sup>L</sup> = (${A.nm}<sup>L</sup>)<sup>T</sup>${B.nm}<sup>L</sup> = (U${A.nm}<sup>T</sup>U)(U<sup>−1</sup>${B.nm}U<sup>−1</sup>) = UCU<sup>−1</sup> = e<sup>ψσ̂<sub>I</sub>/2</sup> C e<sup>−ψσ̂<sub>I</sub>/2</sup>`, 'st', numl(nb))
+  + cl(chanLines(ci, -1), `Inverse boost: C<sup>L<sup>−1</sup></sup>`, `C<sup>L<sup>−1</sup></sup> = (${A.nm}<sup>L<sup>−1</sup></sup>)<sup>T</sup>${B.nm}<sup>L<sup>−1</sup></sup> = U<sup>−1</sup>CU, &nbsp;and U<sup>−1</sup>C<sup>L</sup>U = C`, 'sn', numl(nib))
+  + cl((() => { const L = chanLines(ci, -1, true); return {kL:L.kL, sL:L.sL}; })(), `Time adjoint of the boost: (C<sup>L</sup>)<sup>T</sup>`, `(C<sup>L</sup>)<sup>T</sup> = U<sup>−1</sup>C<sup>T</sup>U = (C<sup>T</sup>)<sup>L<sup>−1</sup></sup>, &nbsp;with C<sup>T</sup> = c<sub>1</sub>1̂ + <b>c</b><sub>K</sub>·${BK} − <b>c</b><sub>σ</sub>·σ̂`, 'st',
+      n ? numl({f:nb.f, k:nb.k, s:nb.s.map(v => -v)}) : '')
+  + cl((() => { const L = chanLines(ci, 1); return {kL:L.kL.map(neg1g), sL:L.sL.map(neg1g)}; })(), `Reversed order: (${B.nm}<sup>L</sup>)<sup>T</sup>${A.nm}<sup>L</sup>`, `${B.nm}<sup>T</sup>${A.nm} = c<sub>1</sub>1̂ − <b>c</b><sub>K</sub>·${BK} − <b>c</b><sub>σ</sub>·σ̂ transforms by the same similarity: (${B.nm}<sup>L</sup>)<sup>T</sup>${A.nm}<sup>L</sup> = U(${B.nm}<sup>T</sup>${A.nm})U<sup>−1</sup>`, 'sn', '')
+  + `<p class="note">Here γ = cosh ψ, βγ = sinh ψ. The norm c<sub>1</sub> and the longitudinal components c<sub>K,I</sub>, c<sub>σ,I</sub> are unchanged; each transverse ${BK}-component mixes with one transverse σ̂-component.</p>`;
+}
+const neg1g = x => x === '0' ? '0' : (x.startsWith('−') ? x.slice(1) : (/^[γβ]/.test(x) || /[ +−]/.test(strip(x)) ? '−(' + x + ')' : '−' + x));
+
+/* ---------- the seven representations ---------- */
+const mxs = rows => `<span class="mxs" style="grid-template-columns:repeat(${rows[0].length},auto)">${rows.flat().map(x => `<span>${x}</span>`).join('')}</span>`;
+function deriv(){
+  const ci = chanInfo(), {A, B} = ci, b = beta(), psi = Math.atanh(b), g = 1/Math.sqrt(1 - b*b);
+  const ch = Math.cosh(psi/2), sh = Math.sinh(psi/2);
+  const nA = A.nm, nB = B.nm, k = i => ci.comp('k', i), s = i => ci.comp('s', i);
+  const L = chanLines(ci, 1);
+  let h = '';
+  /* 1 */
+  h += `<div class="dstep"><h3><span class="n">1</span>From the boosted vectors to the boosted bilinear</h3>
+    <div class="dl">${nA}<sup>L</sup> = U<sup>−1</sup>${nA}U<sup>−1</sup>, &nbsp; ${nB}<sup>L</sup> = U<sup>−1</sup>${nB}U<sup>−1</sup>, &nbsp; (${nA}<sup>L</sup>)<sup>T</sup> = U${nA}<sup>T</sup>U</div>
+    <div class="dl">C<sup>L</sup> ≡ (${nA}<sup>L</sup>)<sup>T</sup>${nB}<sup>L</sup> = (U${nA}<sup>T</sup>U)(U<sup>−1</sup>${nB}U<sup>−1</sup>) = U(${nA}<sup>T</sup>${nB})U<sup>−1</sup></div>
+    <div class="formula" style="margin:8px 0">C<sup>L</sup> = UCU<sup>−1</sup> = e<sup>ψσ̂<sub>I</sub>/2</sup> C e<sup>−ψσ̂<sub>I</sub>/2</sup></div>
+    <p class="dk">The adjoint carries the opposite rotor, so the two inner factors cancel: the bilinear transforms by a BQ similarity, whatever A and B are. For B = A the quadratic A<sup>T</sup>A ∝ 1̂ commutes with U and is invariant.</p></div>`;
+  /* 2 */
+  h += `<div class="dstep"><h3><span class="n">2</span>The boost inside the bilinear matrix</h3>
+    <div class="dl dwrap">With 𝒞<sub>i</sub> = c<sub>σ,i</sub> + i c<sub>K,i</sub> (from ${BK}<sub>i</sub> = T̂σ̂<sub>i</sub> = iσ̂<sub>i</sub>) and c<sub>1</sub> 1̂ + c<sub>T</sub> T̂ = (c<sub>1</sub> + ic<sub>T</sub>)1̂:</div>
+    <div class="dl">C = ${mxs([['c<sub>1</sub> + 𝒞<sub>I</sub>', '𝒞<sub>K</sub> − i𝒞<sub>J</sub>'], ['𝒞<sub>K</sub> + i𝒞<sub>J</sub>', 'c<sub>1</sub> − 𝒞<sub>I</sub>']])} = ${mxs([['C<sub>00</sub>', 'C<sub>01</sub>'], ['C<sub>10</sub>', 'C<sub>11</sub>']])}</div>
+    <div class="dl">C<sup>L</sup> = UCU<sup>−1</sup> = ${mxs([['e<sup>ψ/2</sup>', '0'], ['0', 'e<sup>−ψ/2</sup>']])} C ${mxs([['e<sup>−ψ/2</sup>', '0'], ['0', 'e<sup>ψ/2</sup>']])} = ${mxs([['C<sub>00</sub>', 'e<sup>ψ</sup>C<sub>01</sub>'], ['e<sup>−ψ</sup>C<sub>10</sub>', 'C<sub>11</sub>']])}</div>
+    <div class="dnum">e<sup>ψ</sup> = ${fx(Math.exp(psi))}, e<sup>−ψ</sup> = ${fx(Math.exp(-psi))}</div>
+    <p class="dk">Unlike a vector, whose diagonal is rescaled, the bilinear keeps its diagonal (c<sub>1</sub> and the longitudinal 𝒞<sub>I</sub>) and rescales its off-diagonal entries by e<sup>±ψ</sup>, the relativistic Doppler factors.</p></div>`;
+  /* 3 */
+  h += `<div class="dstep"><h3><span class="n">3</span>The rotor in BQ form</h3>
+    <div class="dl">U = e<sup>(ψ/2)σ̂<sub>I</sub></sup> = ch 1̂ + sh σ̂<sub>I</sub>, &nbsp; U<sup>−1</sup> = ch 1̂ − sh σ̂<sub>I</sub>, &nbsp; σ̂<sub>I</sub>² = 1̂</div>
+    <div class="dl">C<sup>L</sup> = (ch 1̂ + sh σ̂<sub>I</sub>) C (ch 1̂ − sh σ̂<sub>I</sub>)</div>
+    <div class="dl">&nbsp; = ch² 1̂C1̂ − ch sh 1̂Cσ̂<sub>I</sub> + ch sh σ̂<sub>I</sub>C1̂ − sh² σ̂<sub>I</sub>Cσ̂<sub>I</sub></div>
+    <div class="dl">&nbsp; = <b>ch² C + ch sh (σ̂<sub>I</sub>C − Cσ̂<sub>I</sub>) − sh² σ̂<sub>I</sub>Cσ̂<sub>I</sub></b></div>
+    <div class="dnum">ch = ${fx(ch)}, sh = ${fx(sh)}; ch² + sh² = ${fx(ch*ch + sh*sh)} = cosh ψ = γ, 2 ch sh = ${fx(2*ch*sh)} = sinh ψ = βγ, ch² − sh² = ${fx(ch*ch - sh*sh)}</div>
+    <p class="dk">Only the commutator with σ̂<sub>I</sub> and the sandwich σ̂<sub>I</sub>Cσ̂<sub>I</sub> are needed: the Lorentz transformation follows from BQ multiplication alone.</p></div>`;
+  /* 4 */
+  const comm = (X, P) => `<div class="dl dwrap">U${X}U<sup>−1</sup> = ch² ${X} − ch sh ${X}σ̂<sub>I</sub> + ch sh σ̂<sub>I</sub>${X} − sh² σ̂<sub>I</sub>${X}σ̂<sub>I</sub> = ch² ${X} − ch sh ${P} + ch sh ${P} − sh² ${X} = (ch² − sh²) ${X} = <b>${X}</b></div>`;
+  h += `<div class="dstep"><h3><span class="n">4</span>Longitudinal elements are invariant</h3>
+    <div class="dl dwrap">Table products: 1̂σ̂<sub>I</sub> = σ̂<sub>I</sub>1̂ = σ̂<sub>I</sub>, T̂σ̂<sub>I</sub> = σ̂<sub>I</sub>T̂ = Î, Îσ̂<sub>I</sub> = σ̂<sub>I</sub>Î = T̂, σ̂<sub>I</sub>² = 1̂. These four commute with σ̂<sub>I</sub>, so the commutator vanishes and σ̂<sub>I</sub>Xσ̂<sub>I</sub> = X:</div>
+    ${comm('Î', 'T̂')}${comm('σ̂<sub>I</sub>', '1̂')}
+    <div class="dl">and likewise U1̂U<sup>−1</sup> = 1̂, UT̂U<sup>−1</sup> = T̂.</div>
+    <div class="dl dwrap">c<sub>1</sub><sup>L</sup> = c<sub>1</sub> = ${ci.ch.norm.length ? ci.nrm : '0'}, &nbsp; c<sub>K,I</sub><sup>L</sup> = ${k('I')}, &nbsp; c<sub>σ,I</sub><sup>L</sup> = ${s('I')}</div>
+    <p class="dk">The norm and the components along the boost are Lorentz invariant (for the EM field: B<sub>I</sub><sup>L</sup> = B<sub>I</sub>, E<sub>I</sub><sup>L</sup> = E<sub>I</sub>).</p></div>`;
+  /* 5 */
+  h += `<div class="dstep" style="grid-column:1/-1"><h3><span class="n">5</span>Transverse mixing from BQ multiplication</h3>
+    <div class="dl dwrap">Table products: σ̂<sub>I</sub>Ĵ = σ̂<sub>K</sub>, Ĵσ̂<sub>I</sub> = −σ̂<sub>K</sub>; &nbsp; σ̂<sub>I</sub>K̂ = −σ̂<sub>J</sub>, K̂σ̂<sub>I</sub> = σ̂<sub>J</sub>; &nbsp; σ̂<sub>I</sub>σ̂<sub>J</sub> = −K̂, σ̂<sub>J</sub>σ̂<sub>I</sub> = K̂; &nbsp; σ̂<sub>I</sub>σ̂<sub>K</sub> = Ĵ, σ̂<sub>K</sub>σ̂<sub>I</sub> = −Ĵ. These anticommute with σ̂<sub>I</sub>, so σ̂<sub>I</sub>Xσ̂<sub>I</sub> = −X:</div>
+    <div class="sgrid">
+    <div class="dl">UĴU<sup>−1</sup> = ch² Ĵ − ch sh Ĵσ̂<sub>I</sub> + ch sh σ̂<sub>I</sub>Ĵ − sh² σ̂<sub>I</sub>Ĵσ̂<sub>I</sub><br>&nbsp; = ch² Ĵ + ch sh σ̂<sub>K</sub> + ch sh σ̂<sub>K</sub> + sh² Ĵ = <b>cosh ψ Ĵ + sinh ψ σ̂<sub>K</sub></b></div>
+    <div class="dl">Uσ̂<sub>K</sub>U<sup>−1</sup> = ch² σ̂<sub>K</sub> − ch sh σ̂<sub>K</sub>σ̂<sub>I</sub> + ch sh σ̂<sub>I</sub>σ̂<sub>K</sub> − sh² σ̂<sub>I</sub>σ̂<sub>K</sub>σ̂<sub>I</sub><br>&nbsp; = ch² σ̂<sub>K</sub> + ch sh Ĵ + ch sh Ĵ + sh² σ̂<sub>K</sub> = <b>cosh ψ σ̂<sub>K</sub> + sinh ψ Ĵ</b></div>
+    <div class="dl">UK̂U<sup>−1</sup> = ch² K̂ − ch sh K̂σ̂<sub>I</sub> + ch sh σ̂<sub>I</sub>K̂ − sh² σ̂<sub>I</sub>K̂σ̂<sub>I</sub><br>&nbsp; = ch² K̂ − ch sh σ̂<sub>J</sub> − ch sh σ̂<sub>J</sub> + sh² K̂ = <b>cosh ψ K̂ − sinh ψ σ̂<sub>J</sub></b></div>
+    <div class="dl">Uσ̂<sub>J</sub>U<sup>−1</sup> = ch² σ̂<sub>J</sub> − ch sh σ̂<sub>J</sub>σ̂<sub>I</sub> + ch sh σ̂<sub>I</sub>σ̂<sub>J</sub> − sh² σ̂<sub>I</sub>σ̂<sub>J</sub>σ̂<sub>I</sub><br>&nbsp; = ch² σ̂<sub>J</sub> − ch sh K̂ − ch sh K̂ + sh² σ̂<sub>J</sub> = <b>cosh ψ σ̂<sub>J</sub> − sinh ψ K̂</b></div>
+    </div>
+    <p class="dk">A space-time element Ĵ, K̂ and a spin-norm element σ̂<sub>K</sub>, σ̂<sub>J</sub> rotate into each other hyperbolically: the boost mixes the ${BK} and σ̂ channels of the bilinear, never the norm.</p></div>`;
+  /* 6 */
+  const gl = (lab, v) => `<div class="dl"><span class="lab2">${lab}</span> = ${v}</div>`;
+  h += `<div class="dstep"><h3><span class="n">6</span>Two readings: components or basis</h3>
+    <div class="dl dwrap"><b>Unchanged components, transformed basis</b> (X̂<sup>L</sup> = UX̂U<sup>−1</sup>):<br>C<sup>L</sup> = c<sub>1</sub>1̂ + c<sub>K,I</sub> Î + c<sub>K,J</sub> Ĵ<sup>L</sup> + c<sub>K,K</sub> K̂<sup>L</sup> + c<sub>σ,I</sub> σ̂<sub>I</sub> + c<sub>σ,J</sub> σ̂<sub>J</sub><sup>L</sup> + c<sub>σ,K</sub> σ̂<sub>K</sub><sup>L</sup></div>
+    <div class="dl dwrap" style="margin-top:6px"><b>Transformed components, unchanged basis</b>, collecting the coefficients of Ĵ, K̂, σ̂<sub>J</sub>, σ̂<sub>K</sub>:</div>
+    ${gl('c<sub>K,J</sub><sup>L</sup>', 'γ(c<sub>K,J</sub> + β c<sub>σ,K</sub>)')}${gl('c<sub>K,K</sub><sup>L</sup>', 'γ(c<sub>K,K</sub> − β c<sub>σ,J</sub>)')}${gl('c<sub>σ,J</sub><sup>L</sup>', 'γ(c<sub>σ,J</sub> − β c<sub>K,K</sub>)')}${gl('c<sub>σ,K</sub><sup>L</sup>', 'γ(c<sub>σ,K</sub> + β c<sub>K,J</sub>)')}
+    <div class="dl dwrap" style="margin-top:6px"><b>For ${strip(nA)}<sup>T</sup>${strip(nB)}:</b></div>
+    ${gl(ci.compL('k', 'J'), L.kL[1])}${gl(ci.compL('k', 'K'), L.kL[2])}${gl(ci.compL('s', 'J'), L.sL[1])}${gl(ci.compL('s', 'K'), L.sL[2])}
+    <p class="dk">${key() === 'D.A' ? 'With β = v/c this is the textbook field transformation: E<sub>J</sub><sup>L</sup> = γ(E<sub>J</sub> − vB<sub>K</sub>), E<sub>K</sub><sup>L</sup> = γ(E<sub>K</sub> + vB<sub>J</sub>), B<sub>J</sub><sup>L</sup> = γ(B<sub>J</sub> + vE<sub>K</sub>/c²), B<sub>K</sub><sup>L</sup> = γ(B<sub>K</sub> − vE<sub>J</sub>/c²), i.e. <b>E</b><sub>⊥</sub><sup>L</sup> = γ(<b>E</b><sub>⊥</sub> + <b>v</b>×<b>B</b>), <b>B</b><sub>⊥</sub><sup>L</sup> = γ(<b>B</b><sub>⊥</sub> − <b>v</b>×<b>E</b>/c²).' : 'The same rule holds for every bilinear: the ' + BK + ' and σ̂ channels form one six-component object, like <b>B</b> and <b>E</b>/c of the electromagnetic field.'}</p></div>`;
+  /* 7 */
+  const zc = i => { const a = s(i), bb = k(i); if (a === '0' && bb === '0') return '0'; if (bb === '0') return a; if (a === '0') return 'i' + bb; return a + ' + i' + bb; };
+  h += `<div class="dstep"><h3><span class="n">7</span>The complex form: Minkowski 1908</h3>
+    <div class="dl dwrap">With 𝒞 = <b>c</b><sub>σ</sub> + i<b>c</b><sub>K</sub>, the vector part is <b>c</b><sub>K</sub>·${BK} + <b>c</b><sub>σ</sub>·σ̂ = 𝒞<sub>I</sub>σ̂<sub>I</sub> + 𝒞<sub>J</sub>σ̂<sub>J</sub> + 𝒞<sub>K</sub>σ̂<sub>K</sub>, and for an Î-boost</div>
+    <div class="dl">${mxs([['𝒞<sub>I</sub><sup>L</sup>'], ['𝒞<sub>J</sub><sup>L</sup>'], ['𝒞<sub>K</sub><sup>L</sup>']])} = ${mxs([['1', '0', '0'], ['0', 'γ', 'iβγ'], ['0', '−iβγ', 'γ']])} ${mxs([['𝒞<sub>I</sub>'], ['𝒞<sub>J</sub>'], ['𝒞<sub>K</sub>']])} ≡ (Λ<sub>ℂ</sub>)<sub>a</sub><sup>b</sup>𝒞<sup>a</sup></div>
+    <div class="dl">σ̂<sub>b</sub>(Λ<sub>ℂ</sub>)<sub>a</sub><sup>b</sup> = Uσ̂<sub>a</sub>U<sup>−1</sup> &nbsp;⇒&nbsp; C<sup>L</sup> = U(σ̂<sub>a</sub>𝒞<sup>a</sup>)U<sup>−1</sup></div>
+    <div class="dl dwrap">Here 𝒞<sub>J</sub> = ${zc('J')}, 𝒞<sub>K</sub> = ${zc('K')}${key() === 'D.A' ? '; for F = cB this is Minkowski’s 𝓔 = <b>E</b> + ic<b>B</b>' : ''}.</div>
+    <div class="dl dwrap">Invariant: 𝒞·𝒞 = (<b>c</b><sub>σ</sub>² − <b>c</b><sub>K</sub>²) + 2i <b>c</b><sub>K</sub>·<b>c</b><sub>σ</sub>, together with c<sub>1</sub>.</div>
+    <p class="dk">Minkowski’s complex orthogonal field transformation is the same boost, read on the complex three-vector instead of the BQ basis.</p></div>`;
+  $('deriv').innerHTML = h;
+}
+
+/* ---------- numbers: vector coordinates, or channel values for operator pairs ---------- */
+const NUMV = {}, NUMC = {};
+const valsV = id => { if (!NUMV[id]) NUMV[id] = VI[id].def ? VI[id].def.slice() : null; return NUMV[id]; };
+const valsC = k => { if (!NUMC[k]) NUMC[k] = {f:0.3, k:[0.4, 1, -0.5], s:[0.7, -0.2, 0.9]}; if (k === 'D.A' || k === 'D.R' || k === 'D.D') NUMC[k].f = NUMC[k].f; return NUMC[k]; };
+const isOp = () => VI[SA].s0.op || VI[SB].s0.op;
+const cx = (re, im) => [re, im], cm = (p, q) => [p[0]*q[0]-p[1]*q[1], p[0]*q[1]+p[1]*q[0]], ca = (p, q) => [p[0]+q[0], p[1]+q[1]];
+const mat = (x0, x1, x2, x3) => [[cx(0, x0 + x1), cx(x2, x3)], [cx(-x2, x3), cx(0, x0 - x1)]];
+const mm = (X, Y) => [[ca(cm(X[0][0],Y[0][0]),cm(X[0][1],Y[1][0])), ca(cm(X[0][0],Y[0][1]),cm(X[0][1],Y[1][1]))],[ca(cm(X[1][0],Y[0][0]),cm(X[1][1],Y[1][0])), ca(cm(X[1][0],Y[0][1]),cm(X[1][1],Y[1][1]))]];
+/* C = f 1 + t T + k.K + s.sigma  as a 2x2 matrix, and its decomposition */
+function cmat(c){ const [kI, kJ, kK] = c.k, [sI, sJ, sK] = c.s, t = c.t || 0;
+  return [[cx(c.f + sI, t + kI), cx(kJ + sK, kK - sJ)], [cx(-kJ + sK, kK + sJ), cx(c.f - sI, t - kI)]]; }
+function cdec(M){ const z0 = ca(M[0][0], M[1][1]).map(v => v/2), zI = [(M[0][0][0] - M[1][1][0])/2, (M[0][0][1] - M[1][1][1])/2];
+  const d = [M[0][1][0] - M[1][0][0], M[0][1][1] - M[1][0][1]], zJ = [-d[1]/2, d[0]/2];            /* i(M01 - M10)/2 */
+  const zK = [(M[0][1][0] + M[1][0][0])/2, (M[0][1][1] + M[1][0][1])/2];
+  return {f:z0[0], t:z0[1], k:[zI[1], zJ[1], zK[1]], s:[zI[0], zJ[0], zK[0]]}; }
+function numState(){
+  if (isOp()) return valsC(key());
+  const a = valsV(SA), bb = valsV(SB);
+  return cdec(mm(mat(-a[0], a[1], a[2], a[3]), mat(...bb)));
+}
+const fz = z => { const r = Math.abs(z[0]) < 5e-13 ? 0 : z[0], i = Math.abs(z[1]) < 5e-13 ? 0 : z[1]; const f = v => (+v.toFixed(4)).toString().replace('-', '−');
+  if (i === 0) return f(r); if (r === 0) return f(i) + 'i'; return f(r) + (i < 0 ? ' − ' : ' + ') + f(Math.abs(i)) + 'i'; };
+const mxH = M => '<span class="mx">' + M.flat().map(z => `<span>${fz(z)}</span>`).join('') + '</span>';
+function renderNum(){
+  const w = $('numwrap'), ci = chanInfo();
+  if (isOp()){
+    const c = valsC(key()), labs = [['c<sub>1</sub>', 'f', -1]].concat(IJK.map((i, n) => [ci.comp('k', i) === '0' ? 'c<sub>K,' + i + '</sub>' : ci.comp('k', i), 'k', n]), IJK.map((i, n) => [ci.comp('s', i) === '0' ? 'c<sub>σ,' + i + '</sub>' : ci.comp('s', i), 's', n]));
+    w.innerHTML = `<p class="note">${VI[SA].s0.op ? VI[SA].nm : VI[SB].nm} is an operator, so enter values of the channels of C = ${VI[SA].nm}<sup>T</sup>${VI[SB].nm} at one event.</p>
+      <div class="inrow">${labs.slice(0, 4).map(inp).join('')}</div><div class="inrow" style="margin-top:6px"><span></span>${labs.slice(4).map(inp).join('')}</div><div id="numout"></div>`;
+    w.querySelectorAll('input').forEach(el => el.addEventListener('input', () => { const x = parseFloat(el.value); if (!isFinite(x)) return; const c = valsC(key());
+      if (el.dataset.w === 'f') c.f = x; else c[el.dataset.w][+el.dataset.i] = x; renderTop(); diagram(); numOut(); }));
+  } else {
+    const ins = (v, tag) => `<div><h3>${tag} = ${v.nm}: coordinates</h3><div class="inrow">${v.comp.map((c, i) => `<label for="n${tag}${i}"><span>${c}</span><input id="n${tag}${i}" data-v="${v.id}" data-i="${i}" type="number" step="0.1" value="${valsV(v.id)[i]}"></label>`).join('')}</div></div>`;
+    w.innerHTML = `<div class="numgrid">${ins(VI[SA], 'A')}${ins(VI[SB], 'B')}</div><div id="numout"></div>`;
+    w.querySelectorAll('input').forEach(el => el.addEventListener('input', () => { const x = parseFloat(el.value); if (!isFinite(x)) return; valsV(el.dataset.v)[+el.dataset.i] = x;
+      if (SA === SB) w.querySelectorAll(`input[data-i="${el.dataset.i}"]`).forEach(o => { if (o !== el) o.value = el.value; });
+      renderTop(); diagram(); numOut(); }));
+  }
+  numOut();
+  function inp(l){ const c = valsC(key()), v = l[1] === 'f' ? c.f : c[l[1]][l[2]];
+    return `<label for="c${l[1]}${l[2]}"><span>${l[0]}</span><input id="c${l[1]}${l[2]}" data-w="${l[1]}" data-i="${l[2]}" type="number" step="0.1" value="${v}"></label>`; }
+}
+function numOut(){
+  const b = beta(), psi = Math.atanh(b), e = Math.exp(psi/2), g = 1/Math.sqrt(1 - b*b);
+  const U = [[cx(e,0),cx(0,0)],[cx(0,0),cx(1/e,0)]], Ui = [[cx(1/e,0),cx(0,0)],[cx(0,0),cx(e,0)]];
+  const c = numState(), M = cmat(c), ML = mm(mm(U, M), Ui), MiL = mm(mm(Ui, M), U);
+  const cL = cdec(ML), ciL = cdec(MiL), gL = boostChannels(c, 1, b);
+  const rows = [['C', c], ['UCU<sup>−1</sup>', cL], ['γ-formulas (step 6)', gL]];
+  let viaV = null;
+  if (!isOp()){
+    const bv = (a, sgn) => [g*(a[0] - sgn*b*a[1]), g*(a[1] - sgn*b*a[0]), a[2], a[3]];
+    const aL = bv(valsV(SA), 1), bL = bv(valsV(SB), 1);
+    viaV = cdec(mm(mat(-aL[0], aL[1], aL[2], aL[3]), mat(...bL)));
+    rows.push(['(A<sup>L</sup>)<sup>T</sup>B<sup>L</sup>, boosted vectors', viaV]);
+  }
+  rows.push(['U<sup>−1</sup>CU (inverse)', ciL]);
+  const inv1 = x => x.s.reduce((p, v) => p + v*v, 0) - x.k.reduce((p, v) => p + v*v, 0), inv2 = x => x.k.reduce((p, v, i) => p + v*x.s[i], 0);
+  const diff = (x, y) => Math.max(Math.abs(x.f - y.f), Math.abs((x.t || 0) - (y.t || 0)), ...x.k.map((v, i) => Math.abs(v - y.k[i])), ...x.s.map((v, i) => Math.abs(v - y.s[i])));
+  const back = cdec(mm(mm(Ui, ML), U));
+  /* time adjoint: (C^L)^T = U^-1 C^T U */
+  const ct = {f:c.f, t:c.t, k:c.k, s:c.s.map(v => -v)}, cLt = {f:cL.f, t:cL.t, k:cL.k, s:cL.s.map(v => -v)}, adj = cdec(mm(mm(Ui, cmat(ct)), U));
+  const err = Math.max(diff(cL, gL), viaV ? diff(cL, viaV) : 0, diff(back, c), diff(cLt, adj));
+  const ierr = Math.max(Math.abs(inv1(cL) - inv1(c)), Math.abs(inv2(cL) - inv2(c)));
+  const td = x => `<td>${fx(x.f)}</td>${x.k.map(v => `<td>${fx(v)}</td>`).join('')}${x.s.map(v => `<td>${fx(v)}</td>`).join('')}<td>${fx(inv1(x))}</td><td>${fx(inv2(x))}</td>`;
+  const ok = err < 1e-9 && ierr < 1e-9;
+  $('numout').innerHTML = `<div class="mxrow"><span>C<sup>L</sup> = UCU<sup>−1</sup> =</span>${mxH(U)}${mxH(M)}${mxH(Ui)} = ${mxH(ML)}</div>
+    <p class="note">The diagonal entries are unchanged; C<sub>01</sub> is multiplied by e<sup>ψ</sup> = ${fx(Math.exp(psi))} and C<sub>10</sub> by e<sup>−ψ</sup> = ${fx(Math.exp(-psi))}.</p>
+    <div class="tscroll"><table class="dc"><thead><tr><th></th><th>c<sub>1</sub></th><th>c<sub>K,I</sub></th><th>c<sub>K,J</sub></th><th>c<sub>K,K</sub></th><th>c<sub>σ,I</sub></th><th>c<sub>σ,J</sub></th><th>c<sub>σ,K</sub></th><th><b>c</b><sub>σ</sub>² − <b>c</b><sub>K</sub>²</th><th><b>c</b><sub>K</sub>·<b>c</b><sub>σ</sub></th></tr></thead><tbody>
+    ${rows.map(r => `<tr><td>${r[0]}</td>${td(r[1])}</tr>`).join('')}</tbody></table></div>
+    <span class="pill ${ok ? 'ok' : 'no'}">${ok ? '✓ UCU<sup>−1</sup> agrees with the γ-formulas' + (viaV ? ' and with the product of the boosted vectors' : '') + '; U<sup>−1</sup>C<sup>L</sup>U = C; (C<sup>L</sup>)<sup>T</sup> = U<sup>−1</sup>C<sup>T</sup>U; c<sub>1</sub> and 𝒞·𝒞 unchanged' : '✗ difference ' + Math.max(err, ierr).toExponential(2)}</span>`;
+}
+
+/* ---------- the two transverse planes ---------- */
+const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, at, p) => { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); if (p) p.appendChild(e); return e; };
+function plane(id, pts, xl, yl){
+  const s = $(id); while (s.firstChild) s.removeChild(s.firstChild);
+  const W = 300, C = 150;
+  const R = 1.25*Math.max(1e-6, ...pts.flatMap(p => [Math.abs(p[0]), Math.abs(p[1])]));
+  const X = v => C + v/R*(C - 20), Y = v => C - v/R*(C - 20);
+  el('line', {x1:X(-R), x2:X(R), y1:Y(0), y2:Y(0), class:'ax'}, s); el('line', {x1:X(0), x2:X(0), y1:Y(-R), y2:Y(R), class:'ax'}, s);
+  [1, -1].forEach(q => el('line', {x1:X(-R), y1:Y(-R*q), x2:X(R), y2:Y(R*q), stroke:'var(--sel)', 'stroke-opacity':.35, 'stroke-width':1}, s));
+  const tx = (x, y, str, at) => { const t = el('text', Object.assign({x, y}, at || {}), s); t.innerHTML = str; return t; };
+  tx(W - 6, Y(0) - 6, xl, {'text-anchor':'end'}); tx(X(0) + 6, 14, yl, {});
+  const [x0, y0] = pts[0], inv = y0*y0 - x0*x0;              /* y² − x² = const */
+  let d = '';
+  for (let n = 0; n <= 200; n++){
+    const u = -3 + 6*n/200; let x, y;
+    if (Math.abs(inv) < 1e-12){ x = u*R/3; y = Math.abs(x)*(Math.sign(x0*y0) || 1)*Math.sign(y0 || 1); }
+    else if (inv > 0){ const r = Math.sqrt(inv); x = r*Math.sinh(u); y = Math.sign(y0)*r*Math.cosh(u); }
+    else { const r = Math.sqrt(-inv); y = r*Math.sinh(u); x = Math.sign(x0)*r*Math.cosh(u); }
+    if (Math.abs(x) > R || Math.abs(y) > R){ d += ' '; continue; }
+    d += (d.endsWith(' ') || !d ? 'M' : 'L') + X(x).toFixed(1) + ',' + Y(y).toFixed(1);
+  }
+  if (Math.abs(x0) + Math.abs(y0) > 1e-12) el('path', {d:d.replace(/ +/g, ' ').replace(/ M/g, 'M').replace(/^ /, ''), fill:'none', stroke:'var(--soft)', 'stroke-dasharray':'5 4', 'stroke-width':1.3}, s);
+  [[pts[0], 'var(--ink)', 'C'], [pts[1], 'var(--st)', 'Cᴸ'], [pts[2], 'var(--sn)', 'Cᴸ⁻¹']].forEach(([p, col, lab]) => {
+    el('line', {x1:X(0), y1:Y(0), x2:X(p[0]), y2:Y(p[1]), stroke:col, 'stroke-width':1.5, 'stroke-opacity':.7}, s);
+    el('circle', {cx:X(p[0]), cy:Y(p[1]), r:5, fill:col}, s); tx(X(p[0]) + 7, Y(p[1]) - 7, lab, {style:`fill:${col};font-weight:600`}); });
+}
+function diagram(){
+  const c = numState(), b = beta(), L = boostChannels(c, 1, b), iL = boostChannels(c, -1, b);
+  plane('diag1', [[c.s[2], c.k[1]], [L.s[2], L.k[1]], [iL.s[2], iL.k[1]]], 'c<tspan baseline-shift="sub" font-size="9">σ,K</tspan>', 'c<tspan baseline-shift="sub" font-size="9">K,J</tspan>');
+  plane('diag2', [[c.s[1], c.k[2]], [L.s[1], L.k[2]], [iL.s[1], iL.k[2]]], 'c<tspan baseline-shift="sub" font-size="9">σ,J</tspan>', 'c<tspan baseline-shift="sub" font-size="9">K,K</tspan>');
+}
+
+/* ---------- wiring ---------- */
+function render(){ renderTop(); deriv(); renderNum(); diagram(); }
+const opts = V.map(v => `<option value="${v.id}">${strip(v.nm)}: ${v.what.replace(/<[^>]+>/g, '')}</option>`).join('');
+$('selA').innerHTML = opts; $('selB').innerHTML = opts;
+$('selA').addEventListener('change', e => { SA = e.target.value; render(); });
+$('selB').addEventListener('change', e => { SB = e.target.value; render(); });
+$('swap').addEventListener('click', () => { [SA, SB] = [SB, SA]; render(); });
+$('qs').innerHTML = QUICK.map(([a, b]) => `<button type="button" data-a="${a}" data-b="${b}">${VI[a].nm}<sup>T</sup>${VI[b].nm}</button>`).join('');
+$('qs').addEventListener('click', e => { const t = e.target.closest('button'); if (!t) return; SA = t.dataset.a; SB = t.dataset.b; render(); });
+$('beta').addEventListener('input', () => { renderTop(); deriv(); diagram(); if ($('numout')) numOut(); });
+render();
+})();
+</script>
+</body></html>
