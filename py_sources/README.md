@@ -12,18 +12,45 @@ repository (the web pages run their own JavaScript). Every channel rule is check
 
 `bq_pauli_table.py` closes the loop by checking the table itself against the matrices.
 
+The scripts follow the four themes of the models.
+
+### 1 · Algebra only
+
+The basis and its 64 products.
+
 | Script | Reproduces | Example |
 |---|---|---|
+| `bq_core.py` | basis, multiplication table, four-vectors, both routes and the channel rules | (imported) |
 | `bq_pauli_table.py` | the 8×8 multiplication table, checked against the paper | `python bq_pauli_table.py sI sJ` |
+
+### 2 · Vectors and their multiplication
+
+Four-vectors on the space-time basis and their products.
+
+| Script | Reproduces | Example |
+|---|---|---|
 | `bq_bilinear.py` | the channels of AᵀB, both routes | `python bq_bilinear.py R P --table` |
 | `bq_triple.py` | the four channels of D(AᵀB), both routes | `python bq_triple.py J D A --c1zero --table` |
 | `bq_quadratics.py` | FF and FᵀF of a field F = f1̂ + k·**K̂** + s·σ̂ (EM, fluid, RᵀP, JᵀA, UᵀG, general): rule, table and matrix routes, and the paper's BB, BᵀB, HᵀH | `python bq_quadratics.py B` |
+
+### 3 · Lorentz transformations: a global rapidity
+
+One constant rapidity ψ between two inertial frames.
+
+| Script | Reproduces | Example |
+|---|---|---|
 | `bq_lorentz.py` | A^L = U⁻¹AU⁻¹ with U = e^{ψσ̂_I/2}: coordinates, inverse, time adjoints, invariance, covariance, light cone; step 5 and the Lemma by table and matrices | `python bq_lorentz.py R` |
 | `bq_bilinear_lorentz.py` | C^L = (A^L)ᵀB^L = UCU⁻¹ for all 169 pairs: matrix and rule routes, γ-formulas for the channels, inverse, time adjoint, invariants, Minkowski's complex form; UX̂U⁻¹ for the eight basis elements by table and matrices | `python bq_bilinear_lorentz.py D A` |
 | `bq_triple_lorentz.py` | E^L = D^L(A^L)ᵀB^L = U⁻¹EU⁻¹ for all 2197 triples: γ-formulas on the minquat and the pauliquat sector, inverse, invariants; U⁻¹X̂U⁻¹ for the eight basis elements (the LT lemma for both bases); the homogeneous Maxwell equations vanish identically | `python bq_triple_lorentz.py J D A` |
+
+### 4 · Gravity: a local rapidity
+
+A rapidity field χ(r, t) feeding a local rotor.
+
+| Script | Reproduces | Example |
+|---|---|---|
 | `bq_gravity_rotor.py` | the gravity rotor G = e^{χσ̂/2} fed by ψ_N, ψ_H, χ_φ: dR^G = G⁻¹dRG⁻¹ (nested for two boosts), the flat exact quadratic (and flat consistent truncation), the Galilean (PG) coframe and the term it drops, g_μν, Schwarzschild, de Sitter/FLRW, Schwarzschild–de Sitter and rigid-rotation comparisons in both time orientations, and the Einstein tensor for general u(r), Ω(r) | `python bq_gravity_rotor.py` |
 | `bq_cl_killing.py` | CL in the Galilean-coframe metric: river observers geodesic for any shift, Killing energy E = c², γ_rs = −u·u_s/c² = c/√(−g_tt) (= rotor Γ = cosh χ_r cosh χ_φ + O(χ⁴)), CL ⇔ ∂_r g_tt = 0 ⇔ v_r² + v_φ² = K where v_r ≠ 0, the closures K = 3GM/R and (3/2)v_r(R)², quasi-stationary H (adiabatic parameter, both evolution prescriptions, the Ḣ shift-rate residual), and G_n̂n̂ = −r²Ω′²/(4c²) < 0 for the CL disk at H = 0 | `python bq_cl_killing.py` |
-| `bq_core.py` | basis, multiplication table, four-vectors, both routes and the channel rules | (imported) |
 
 ## Install and run
 
@@ -31,7 +58,11 @@ repository (the web pages run their own JavaScript). Every channel rule is check
 git clone https://github.com/haas2u-ai/bq_algebra
 cd bq_algebra/py_sources
 pip install -r requirements.txt        # SymPy only
+
+# 1 · algebra only
 python bq_pauli_table.py               # 64 products, all checked against the paper
+
+# 2 · vectors and their multiplication
 python bq_bilinear.py R P              # one bilinear, both routes checked exactly
 python bq_bilinear.py R P --table      # the same, with the 16 table products printed
 python bq_bilinear.py --all            # all 169 pairs (a few seconds)
@@ -41,6 +72,8 @@ python bq_triple.py --all              # all 2197 triples (about 6 minutes)
 python bq_quadratics.py B              # BB and BᵀB in the Lorenz gauge, against the paper
 python bq_quadratics.py H              # fluid field HᵀH
 python bq_quadratics.py --all          # all fields, with and without the 1̂ channel
+
+# 3 · global rapidity: Lorentz transformations
 python bq_lorentz.py --basis           # rotor, step 5 with U⁻¹ = C1̂ − Sσ̂_I, and the Lemma
 python bq_lorentz.py R                 # all boost checks for R
 python bq_lorentz.py --all             # every vector (a few seconds)
@@ -53,8 +86,10 @@ python bq_triple_lorentz.py --basis    # U⁻¹X̂U⁻¹ for all eight basis ele
 python bq_triple_lorentz.py --maxwell  # pauliquat sector of ∂(∂ᵀA) vanishes identically
 python bq_triple_lorentz.py --all      # proof for all 2197 triples via the 8 general triples (30 s)
 python bq_triple_lorentz.py --every    # each of the 2197 triples separately (over an hour)
-python bq_cl_killing.py                # CL as an equi-redshift flow (a few seconds)
+
+# 4 · local rapidity: gravity
 python bq_gravity_rotor.py             # gravity rotor: rapidity -> dR^G -> Galilean coframe -> g_μν -> G_μν (about 20 s)
+python bq_cl_killing.py                # CL as an equi-redshift flow (a few seconds)
 ```
 
 Four-vectors (`python bq_bilinear.py --list`): `R` position (ct, r), `dR` displacement,
