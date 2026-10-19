@@ -153,12 +153,13 @@ svg .gr{stroke:var(--edge);stroke-opacity:.6;fill:none}
 .trc h3{text-transform:none;letter-spacing:0;font:600 14px var(--sans);color:var(--ink)}
 .mxrow{flex-wrap:wrap}
 [hidden]{display:none!important}
+.keybox{border:1.6px solid var(--sel);font-size:17px;white-space:normal;margin:8px 0;padding:10px 14px}
 </style>
 </head><body>
 <div class="wrap">
 <header>
   <h1>BQ Gravity Rotor: from Rapidity to Metric</h1>
-  <p class="lede">Gravity enters the BQ-Pauli algebra as a <em>local</em> Lorentz rotor field. Rapidity potentials feed the rotor G(r, t) = e<sup>χσ̂/2</sup>: at every point it boosts the coordinate line element, dR<sup>G</sup> = G<sup>−1</sup>dR G<sup>−1</sup>, where a Lorentz transformation would use one global rapidity. The exact image has a flat quadratic: a local Lorentz transformation alone gives back Minkowski space. The metric appears only after a further, physical step, the Painlevé–Gullstrand prescription for the coframe, and its Einstein tensor shows what source it needs. Choose the rapidities that feed the rotor.</p>
+  <p class="lede">Gravity enters the BQ-Pauli algebra as a <em>local</em> Lorentz rotor field. Rapidity potentials feed the rotor G(r, t) = e<sup>χσ̂/2</sup>: at every point it boosts the coordinate line element, dR<sup>G</sup> = G<sup>−1</sup>dR G<sup>−1</sup>, where a Lorentz transformation would use one global rapidity. The exact image has a flat quadratic: a local Lorentz transformation alone gives back Minkowski space, and so does every consistent slow-flow truncation of it. <b>The gravitational content is in the choice of a Galilean coframe with a Lorentzian quadratic</b>: the slow-flow coframe θ<sup>0</sup> = c dt, θ<sup>r</sup> = dr − v dt, squared with the Minkowski signature, gives curved Einsteinian metrics, exactly Schwarzschild with its horizon for v = √(2GM/r). The Einstein tensor then shows which riverbeds are vacuum. Choose the rapidities that feed the rotor.</p>
 </header>
 
 <div class="grid">
@@ -223,7 +224,7 @@ svg .gr{stroke:var(--edge);stroke-opacity:.6;fill:none}
     <ul>
       <li><b>Global versus local.</b> A Lorentz transformation relates two inertial frames with one constant rapidity. Here χ(r, t) is a spacetime field, so G(r, t) assigns a boost to every point. A constant χ gives back the global boost of the Lorentz pages.</li>
       <li><b>Two exact projections.</b> On the reference vector cT̂ the rotor gives the gravitational four-velocity U<sub>g</sub> = G<sup>−1</sup>(cT̂)G<sup>−1</sup> = c cosh χ T̂ − c sinh χ Î, with γ = cosh χ and v<sup>FR</sup> = c tanh χ &lt; c. On dR it gives the exact image dR<sup>G</sup>.</li>
-      <li><b>Where the gravity enters.</b> The exact quadratic (dR<sup>G</sup>)<sup>T</sup>dR<sup>G</sup> = dR<sup>T</sup>dR is flat, and so is every consistent truncation of dR<sup>G</sup>. The metric needs (1) the PG prescription, which keeps the boosted spatial legs with v = cχ and takes the clock form θ<sup>0</sup> = c dt, and (2) the quadratic of that coframe. Step (1) is the physical postulate of the construction, motivated by the weak flow and adopted as an exact ansatz.</li>
+      <li><b>Where the gravity enters.</b> The exact quadratic (dR<sup>G</sup>)<sup>T</sup>dR<sup>G</sup> = dR<sup>T</sup>dR is flat, and so is every consistent truncation of dR<sup>G</sup>. The metric comes from a Galilean coframe with a Lorentzian quadratic: (1) the slow-flow, Galilean limit of the rotor action, θ<sup>0</sup> = c dt and θ<sup>r</sup> = dr − v dt with v = cχ, and (2) the Minkowski-signature quadratic of that coframe. The coframe carries the physics; its Lorentzian quadratic gives the Einsteinian metric.</li>
       <li><b>Sign of the flow.</b> With G = e<sup>χσ̂<sub>r</sub>/2</sup> and dR<sup>G</sup> = G<sup>−1</sup>dRG<sup>−1</sup>, the matrices give θ<sup>r</sup> = dr − cχ<sub>r</sub>dt and g<sub>tr</sub> = −v<sub>r</sub>, as in the paper’s coframe and metric (eqs. 46, 51). For v<sub>r</sub> &gt; 0 this is the outgoing PG chart, and for the Hubble term a contracting one: the time reverse of infall plus expansion. The time-orientation toggle flips the rotor rapidity to −χ and gives the ingoing, expanding chart, g<sub>tr</sub> = +v<sub>r</sub>. Both charts describe the same geometry.</li>
     </ul>
   </section>
@@ -382,7 +383,9 @@ function deriv(){
     <div class="sgrid">
       <div class="dl dwrap">T̂: &nbsp;${rdtT}</div><div class="dl dwrap">Î${sub('r')}: &nbsp;${rdtI}</div>
       <div class="dl dwrap">Ĵ${sub('θ')}: &nbsp;r dθ</div><div class="dl dwrap">K̂${sub('φ')}: &nbsp;${rdtK}</div></div>
-    ${s.rad && !s.az ? `<div class="dl dwrap">With γ = cosh χ${sub('r')}, v<sup>FR</sup> = c tanh χ${sub('r')}: &nbsp;dR<sup>G</sup> = γ(c dt ${m} v<sup>FR</sup>dr/c) T̂ + γ(dr ${m} v<sup>FR</sup>dt) Î${sub('r')} + r dθ Ĵ${sub('θ')} + r s${sub('θ')} dφ K̂${sub('φ')}</div>` : ''}
+    ${s.rad && !s.az ? `<div class="dl dwrap">With γ = cosh χ${sub('r')} and v<sup>FR</sup> = c tanh χ${sub('r')}, the exact image is</div>
+    <div class="formula keybox">dR<sup>G</sup> = γ(c dt ${m} v<sup>FR</sup>dr/c) T̂ + γ(dr ${m} v<sup>FR</sup>dt) Î${sub('r')} + r dθ Ĵ${sub('θ')} + r s${sub('θ')} dφ K̂${sub('φ')}</div>`
+    : (s.rad || s.az) ? `<div class="dl dwrap">The exact image:</div><div class="formula keybox">dR<sup>G</sup> = (${rdtT}) T̂ + (${rdtI}) Î${sub('r')} + r dθ Ĵ${sub('θ')} + (${rdtK}) K̂${sub('φ')}</div>` : ''}
     <p class="dk">Exact and Lorentz covariant: the full hyperbolic information (γ, v<sup>FR</sup> &lt; c) is still present. The image is a minquat again; no spin-norm channel appears.</p></div>`;
   /* 4 */
   h += `<div class="dstep"><h3><span class="n">4</span>The exact quadratic is flat</h3>
@@ -390,13 +393,14 @@ function deriv(){
     <div class="dl">= (c²dt² − dr² − r²dθ² − r²s${sub('θ')}²dφ²) 1̂</div>
     <p class="dk">dR<sup>T</sup>dR lies in the 1̂ channel, which commutes with every rotor, so the rapidity cancels exactly. The exact image returns the Minkowski metric: a local Lorentz transformation, even with a position-dependent rapidity, does not by itself produce a new, curved metric.</p></div>`;
   /* 5 */
-  const lo0 = s.rad || s.az ? `c dt${s.rad ? ` ${m} χ${sub('r')} dr` : ''}${s.az ? ` ${m} χ${sub('φ')} r s${sub('θ')} dφ` : ''}` : 'c dt';
-  h += `<div class="dstep" style="grid-column:1/-1"><h3><span class="n">5</span>The PG prescription: the physical step</h3>
-    <div class="dl dwrap"><b>Consistent truncation stays flat.</b> To first order in χ the exact image is θ<sup>0</sup> = ${lo0}, θ<sup>r</sup> = ${th.r.replace('v' + sub('r'), 'cχ' + sub('r'))}${s.az ? `, θ<sup>φ</sup> = ${th.p.replace('v' + sub('φ'), 'cχ' + sub('φ'))}` : ''}. In −(θ<sup>0</sup>)² + (θ<sup>r</sup>)² the cross terms ±2cχ${sub('r')} dt dr cancel, leaving −c²(1 − χ²)dt² + (1 − χ²)dr²: to O(χ²) this is the flat quadratic of step 4 (γ² = 1 + O(χ²)). Every consistent truncation of the exact image is flat.</div>
-    <div class="dl dwrap"><b>The prescription.</b> Keep the boosted spatial legs, θ<sup>r</sup> = ${th.r}${s.az ? `, θ<sup>φ</sup> = ${th.p}` : ''} with v = cχ, and take the clock form θ<sup>0</sup> = c dt: unit lapse, coordinate time = proper time of the river observers.${s.rad || s.az ? ` Dropping ${s.rad ? `${m} χ${sub('r')} dr` : ''}${s.rad && s.az ? ' and ' : ''}${s.az ? `${m} χ${sub('φ')} r s${sub('θ')} dφ` : ''} from θ<sup>0</sup> is what breaks the cancellation: it leaves the cross term${s.rad && s.az ? 's' : ''} ${s.rad ? `${m}2v${sub('r')} dr dt` : ''}${s.rad && s.az ? ', ' : ''}${s.az ? `${m}2v${sub('φ')} r s${sub('θ')} dφ dt` : ''} and the v² in g<sub>tt</sub>.` : ''}</div>
-    <div class="dl dwrap">dR<sup>G</sup>|<sub>PG</sub> = c dt T̂ + (${th.r}) Î${sub('r')} + r dθ Ĵ${sub('θ')} + (${th.p}) K̂${sub('φ')}</div>
-    <div class="dnum" style="white-space:normal">at r = ${fg(x)} r<sub>s</sub>: χ<sub>r</sub> = ${fg(cr)}${s.az ? `, χ<sub>φ</sub> = ${fg(cp)}` : ''}; γ − 1 = ${fg(Math.cosh(cr) - 1)}</div>
-    <p class="dk">This is not a truncation of the Lorentz transformation but an additional physical construction: the gravitational content of the model enters here, and nowhere else. It is motivated by the weak flow (χ ≪ 1) and then adopted as an exact ansatz for the coframe; only as an exact ansatz does it reproduce Schwarzschild, also at r = r<sub>s</sub> where χ = 1.</p></div>`;
+  const lo0 = s.rad || s.az ? `c dt${s.rad ? ` ${m} v${sub('r')}dr/c` : ''}${s.az ? ` ${m} v${sub('φ')}r s${sub('θ')}dφ/c` : ''}` : 'c dt';
+  const vr5 = cr, keptP = -vr5*vr5, dropP = 2*vr5*vr5 - Math.pow(vr5, 4);
+  h += `<div class="dstep" style="grid-column:1/-1"><h3><span class="n">5</span>The Galilean coframe: where gravity enters</h3>
+    <div class="dl dwrap"><b>Slow-flow power counting of the one-forms.</b> With γ → 1 and cχ = v, the exact image gives θ<sup>0</sup> = ${lo0} = c(dt ${s.rad || s.az ? m + ' v dr/c²' : ''}) ≈ c dt, because v dr/c² is small next to dt, while θ<sup>r</sup> = ${th.r}${s.az ? ` and θ<sup>φ</sup> = ${th.p}` : ''} keep two comparable terms. This is the Galilean limit of the boost: t′ = γ(t − vx/c²) → t, x′ = γ(x − vt) → x − vt.</div>
+    <div class="formula keybox">dR<sup>G</sup>|<sub>PG</sub> = c dt T̂ + (${th.r}) Î${sub('r')} + r dθ Ĵ${sub('θ')} + (${th.p}) K̂${sub('φ')}</div>
+    <div class="dl dwrap"><b>In the quadratic.</b> The term dropped from θ<sup>0</sup> is small inside θ<sup>0</sup>, but in −(θ<sup>0</sup>)² it is multiplied by c dt and becomes ${s.rad ? `${m === '−' ? '+' : '−'}2v${sub('r')} dr dt` : 'a cross term'}: the same size as the kept ${s.rad ? `${m}2v${sub('r')} dr dt + v${sub('r')}²dt²` : 'gravitational terms'} from (θ<sup>r</sup>)². Kept together, the cross terms cancel and the result is the flat quadratic of step 4: every consistent slow-flow truncation of the exact image is flat. The metric therefore comes from the combination itself: <b>a Galilean coframe with a Lorentzian quadratic</b>. A position-dependent Galilean shift is not an isometry of Minkowski space, so its Lorentzian quadratic is curved.</div>
+    ${s.rad ? `<div class="dnum" style="white-space:normal">at r = ${fg(x)} r<sub>s</sub>, along the river (θ<sup>r</sup> = 0, dt = 1): kept −v<sub>r</sub>²dt² = ${fg(keptP)}, dropped +2v<sub>r</sub>²dt² − v<sub>r</sub>⁴dt²/c² = ${fg(dropP)}: the same order</div>` : ''}
+    <p class="dk">θ<sup>0</sup> = c dt says that the proper time of the river observers is coordinate time (unit lapse), the defining property of PG coordinates and exact in Schwarzschild. The Galilean river velocity v = cχ is unbounded, so the horizon v = c lives in this coframe, while the exact Lorentz image (v<sup>FR</sup> = c tanh χ &lt; c) is flat and has none. The same structure, a Galilean flow with a Lorentzian wave quadratic, is the acoustic metric of analogue gravity (Unruh 1981; Visser 1998) and the river model of Hamilton and Lisle (2008); the BQ rotor derives the Galilean coframe as the slow-flow limit of a local Lorentz rotor. It is motivated by the weak flow and used as an exact ansatz, which reproduces Schwarzschild also at r = r<sub>s</sub>, where χ = 1.</p></div>`;
   /* 6 */
   h += `<div class="dstep"><h3><span class="n">6</span>Read off the PG coframe</h3>
     <div class="dl">θ<sup>0</sup> = c dt, &nbsp;θ<sup>r</sup> = ${th.r}, &nbsp;θ<sup>θ</sup> = r dθ, &nbsp;θ<sup>φ</sup> = ${th.p}</div>
@@ -507,6 +511,7 @@ function curvature(){
     <div class="tscroll"><table class="dc"><thead><tr><th>component</th><th>value at r = ${fg(x)} r<sub>s</sub> [r<sub>s</sub><sup>−2</sup>]</th><th>reading as a source, 8πG T<sub>ab</sub>/c⁴</th></tr></thead><tbody>
       ${rows.map(r => `<tr><td>${r[0]}</td><td>${fg(r[1])}</td><td style="font-family:var(--sans);font-size:12.5px">${r[2]}</td></tr>`).join('')}</tbody></table></div>
     <span class="pill ${vac ? 'ok' : ''}">${vac ? (pure ? '✓ vacuum: G<sub>μν</sub> = 0' : '✓ vacuum with a cosmological constant: G<sub>ab</sub> = −Λη<sub>ab</sub>') : (L ? 'not a vacuum + Λ metric: G<sub>ab</sub> + Λη<sub>ab</sub> ≠ 0' : 'not a vacuum metric: G<sub>μν</sub> ≠ 0')}</span>
+    <div class="dl dwrap" style="margin-top:8px"><b>What Einstein’s equations select.</b> For the radial river, G<sub>00</sub> = 8πGρ/c² reads (r v<sub>r</sub>²)′ = 8πG r²ρ, i.e. <b>v<sub>r</sub>² = 2G m(r)/r</b> with m(r) = ∫4πr²ρ dr, plus H²r² for a cosmological constant Λ = 3H²/c². Vacuum needs v<sub>r</sub>² ∝ 1/r, and Λ adds the squared Hubble velocity. Adding rapidities, v<sub>r</sub> = c(ψ<sub>N</sub> − ψ<sub>H</sub>), instead of squared velocities gives the cross term −2c²ψ<sub>N</sub>ψ<sub>H</sub>, which needs a source of its own.</div>
     <p class="note">${ref}</p>
     <p class="cap">Formulas derived exactly with SymPy from the prescribed coframe (bq_gravity_rotor.py); here they are evaluated with numerical r-derivatives of the selected u(r) and Ω(r). The checks above establish algebraic consistency; this panel is the first test of physical content.</p>`;
 }
