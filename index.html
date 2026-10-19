@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The BQ Algebra — interactive models (E.P.J. de Haas)</title>
-<meta name="description" content="Interactive models of the BQ-Pauli algebra by E.P.J. de Haas: the multiplication table of the eight basis matrices, the bilinear product A^T B of physical four-vectors in its norm, rotation and boost channels, the triple product D(A^T B) in all four BQ channels, the field quadratics, the Lorentz transformations of four-vectors and of the bilinear, the Lorentz covariance of the triple-product equations, the gravity rotor from local rapidity fields to the metric, the constant-Lagrangian condition as an equi-redshift flow, and its Maurer–Cartan derivation.">
+<meta name="description" content="Interactive models of the BQ-Pauli algebra by E.P.J. de Haas: the multiplication table of the eight basis matrices, the bilinear product A^T B of physical four-vectors in its norm, rotation and boost channels, the triple product D(A^T B) in all four BQ channels, the field quadratics, the Lorentz transformations of four-vectors and of the bilinear, the Lorentz covariance of the triple-product equations, the gravity rotor from local rapidity fields to the metric, the constant-Lagrangian condition as an equi-redshift flow, and its Maurer–Cartan and kinematic derivations.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
 <style>
-/* Layout: header with the 1-3-3-1 basis as a quiet strip, ten model cards in four themes, Python sources in the same themes, then conventions and links. Same family as bq-galaxy-models. */
+/* Layout: header with the 1-3-3-1 basis as a quiet strip, eleven model cards in four themes, Python sources in the same themes, then conventions and links. Same family as bq-galaxy-models. */
 :root{
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
@@ -94,7 +94,7 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
   <header>
     <p class="kicker">E.P.J. de Haas · Kandinsky College, Nijmegen</p>
     <h1>The BQ algebra, one matrix product at a time</h1>
-    <p class="lede">In the BQ-Pauli algebra a physical four-vector is four <em>real</em> coordinates on a basis of 2×2 complex matrices, A = a<sub>0</sub>T̂ + <b>a</b>·<b class="kv">K̂</b>, with <b class="kv">K̂</b> = (Î, Ĵ, K̂). Multiplying such vectors is ordinary matrix multiplication, and the algebra sorts every product into its own channels. These ten interactive models build that up in four themes, from the bare algebra to gravity, and every result on them is computed live from the explicit matrices.</p>
+    <p class="lede">In the BQ-Pauli algebra a physical four-vector is four <em>real</em> coordinates on a basis of 2×2 complex matrices, A = a<sub>0</sub>T̂ + <b>a</b>·<b class="kv">K̂</b>, with <b class="kv">K̂</b> = (Î, Ĵ, K̂). Multiplying such vectors is ordinary matrix multiplication, and the algebra sorts every product into its own channels. These eleven interactive models build that up in four themes, from the bare algebra to gravity, and every result on them is computed live from the explicit matrices.</p>
     <div class="basis" aria-label="The eight basis matrices, in four groups of 1, 3, 3 and 1">
       <span class="grp"><small>space-time (minquat)</small><span class="st">T̂ &nbsp; Î &nbsp; Ĵ &nbsp; K̂</span></span>
       <span class="grp"><small>spin-norm (pauliquat)</small><span class="sn">1̂ &nbsp; σ̂<sub>I</sub> &nbsp; σ̂<sub>J</sub> &nbsp; σ̂<sub>K</sub></span></span>
@@ -102,7 +102,7 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
     </div>
   </header>
 
-  <h2 class="group" id="models">Ten interactive models in four themes</h2>
+  <h2 class="group" id="models">Eleven interactive models in four themes</h2>
   <p class="groupnote">Each theme adds one ingredient to the previous one: the bare algebra, then four-vectors and their products, then a global rapidity that changes the frame, then a local rapidity field that brings in gravity.</p>
 
   <section class="theme" aria-labelledby="t1">
@@ -319,7 +319,7 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
 
   <section class="theme" aria-labelledby="t4">
     <h3 class="tname" id="t4"><span class="tnum">4</span>Gravity: a local rapidity</h3>
-    <p class="groupnote">The rapidity becomes a field χ(r, t) feeding a local rotor; a Galilean coframe with a Lorentzian quadratic gives the metric; the constant-Lagrangian disk is read in that metric and derived from the rotor’s own Maurer–Cartan connection.</p>
+    <p class="groupnote">The rapidity becomes a field χ(r, t) feeding a local rotor; a Galilean coframe with a Lorentzian quadratic gives the metric; the constant-Lagrangian disk is read in that metric and derived along two routes, the rotor’s own Maurer–Cartan connection and the convective acceleration of the flow.</p>
     <div class="grid">
 
     <a class="card" href="BQ_models/BQ_Gravity_Rotor.html">
@@ -391,6 +391,31 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
         <span class="open">Open the model</span>
       </div>
     </a>
+    <a class="card" href="BQ_models/BQ_Kinematic_Route.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="Velocity and acceleration arrows: for an isorapid flow the acceleration is perpendicular to the velocity">
+        <rect width="320" height="200" fill="#03050b"/>
+        <defs><marker id="k1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#48dbfb"/></marker>
+        <marker id="k2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a29bfe"/></marker></defs>
+        <line x1="40" y1="140" x2="290" y2="140" stroke="#222c42"/><line x1="120" y1="20" x2="120" y2="170" stroke="#222c42"/>
+        <line x1="120" y1="140" x2="170" y2="50" stroke="#48dbfb" stroke-width="2.6" marker-end="url(#k1)"/>
+        <line x1="120" y1="140" x2="40" y2="96" stroke="#a29bfe" stroke-width="2.6" marker-end="url(#k2)"/>
+        <path d="M128 126 L141 133 L134 146" fill="none" stroke="#e7ebf3" stroke-width="1"/>
+        <g font-family="Source Serif 4, Georgia, serif" font-size="14">
+          <text x="176" y="52" fill="#48dbfb">u</text>
+          <text x="40" y="88" fill="#a29bfe">a ⊥ u</text>
+          <text x="196" y="110" fill="#f2a24a">a<tspan font-size="9" baseline-shift="sub">0</tspan> = c DΓ/Dτ = 0</text>
+          <text x="40" y="188" fill="#e7ebf3">A<tspan font-size="9" baseline-shift="sub">g</tspan> = Ω<tspan font-size="9" baseline-shift="sub">τ</tspan>U<tspan font-size="9" baseline-shift="sub">g</tspan> + U<tspan font-size="9" baseline-shift="sub">g</tspan>Ω<tspan font-size="9" baseline-shift="sub">τ</tspan><tspan font-size="9" baseline-shift="super">†</tspan></text>
+        </g>
+      </svg>
+      <div class="body">
+        <span class="step">Step 11 · the four-velocity’s own rate</span>
+        <h3>The kinematic route to isorapidity</h3>
+        <p>The convective four-acceleration A<sub>g</sub> = DU<sub>g</sub>/Dτ of the rotor-boosted four-velocity. Its time channel is c DΓ/Dτ, the power per unit mass along the flow, and U<sub>g</sub><sup>T</sup>A<sub>g</sub> has no norm channel. Isorapidity is the branch with purely transverse acceleration, and A<sub>g</sub> = Ω<sub>τ</sub>U<sub>g</sub> + U<sub>g</sub>Ω<sub>τ</sub><sup>†</sup> makes it one statement with the Maurer–Cartan route.</p>
+        <div class="rule">a<sub>0</sub> = c DΓ/Dτ = 2e<sub>T</sub>, &nbsp;u<sup>0</sup>a<sub>0</sub> = <b>u</b>·<b>a</b></div>
+        <div class="tags"><span>convective acceleration</span><span>orthogonality</span><span>power</span></div>
+        <span class="open">Open the model</span>
+      </div>
+    </a>
 
     </div>
   </section>
@@ -415,6 +440,7 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
         <li><code>bq_gravity_rotor.py</code> · the gravity rotor: dR<sup>G</sup>, flat quadratic, Galilean coframe, g<sub>μν</sub>, known metrics, Einstein tensor</li>
         <li><code>bq_cl_killing.py</code> · γ<sub>rs</sub> as the river–static Lorentz factor, CL as an equi-redshift flow, the closures for K, quasi-stationary H, G<sub>n̂n̂</sub> &lt; 0</li>
         <li><code>bq_mc_connection.py</code> · Ω<sub>τ</sub> = (DG/Dτ)G<sup>−1</sup>, the channels of U<sub>g</sub>Ω<sub>τ</sub>, e<sub>T</sub> = (c/2)DΓ/Dτ exactly, isorapidity and the rotation law</li>
+        <li><code>bq_kinematic_route.py</code> · A<sub>g</sub> = DU<sub>g</sub>/Dτ, a<sub>0</sub> = c DΓ/Dτ, orthogonality, the two branches, A<sub>g</sub> = Ω<sub>τ</sub>U<sub>g</sub> + U<sub>g</sub>Ω<sub>τ</sub><sup>†</sup></li>
       </ul>
       <p>Only Python 3 and SymPy are needed. A four-gradient acts on everything to its right; when it stands last, the product is evaluated on a test field ψ.</p>
     </div>
@@ -443,7 +469,8 @@ python bq_triple_lorentz.py --all
 <span class="cm"># 4 · local rapidity: gravity</span>
 python bq_gravity_rotor.py
 python bq_cl_killing.py
-python bq_mc_connection.py</pre>
+python bq_mc_connection.py
+python bq_kinematic_route.py</pre>
   </section>
 
   <section class="about" aria-label="About these models">
@@ -459,7 +486,7 @@ python bq_mc_connection.py</pre>
         <li><b>1. Algebra only</b>: <a href="BQ_models/BQ_Pauli_Multiplication_Table.html">BQ-Pauli multiplication table</a></li>
         <li><b>2. Vectors and multiplication</b>: <a href="BQ_models/BQ_Bilinear_Product_Explorer.html">Bilinear product explorer</a>, <a href="BQ_models/BQ_Triple_Product_Explorer.html">Triple product explorer</a>, <a href="BQ_models/BQ_Field_Quadratics.html">Field quadratics</a></li>
         <li><b>3. Global rapidity</b>: <a href="BQ_models/BQ_Lorentz_Transformations.html">Lorentz transformations</a>, <a href="BQ_models/BQ_Bilinear_Lorentz_Transformation.html">Lorentz transformation of the bilinear</a>, <a href="BQ_models/BQ_Triple_Product_Covariance.html">Lorentz covariance of the triple product</a></li>
-        <li><b>4. Local rapidity: gravity</b>: <a href="BQ_models/BQ_Gravity_Rotor.html">The gravity rotor: from rapidity to metric</a>, <a href="BQ_models/BQ_CL_Killing.html">CL as an equi-redshift flow</a>, <a href="BQ_models/BQ_MC_Connection.html">the Maurer–Cartan route to isorapidity</a></li>
+        <li><b>4. Local rapidity: gravity</b>: <a href="BQ_models/BQ_Gravity_Rotor.html">The gravity rotor: from rapidity to metric</a>, <a href="BQ_models/BQ_CL_Killing.html">CL as an equi-redshift flow</a>, <a href="BQ_models/BQ_MC_Connection.html">the Maurer–Cartan route to isorapidity</a>, <a href="BQ_models/BQ_Kinematic_Route.html">the kinematic route to isorapidity</a></li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra/tree/main/py_sources">Python sources</a>: exact SymPy reproduction</li>
         <li><a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>: galaxy, jet and SPARC models</li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra">Source on GitHub</a></li>
