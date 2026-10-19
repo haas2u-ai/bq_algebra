@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The BQ Algebra — interactive models (E.P.J. de Haas)</title>
-<meta name="description" content="Interactive models of the BQ-Pauli algebra by E.P.J. de Haas: the multiplication table of the eight basis matrices, the bilinear product A^T B of physical four-vectors in its norm, rotation and boost channels, the triple product D(A^T B) in all four BQ channels, the field quadratics, the Lorentz transformations of four-vectors and of the bilinear, the Lorentz covariance of the triple-product equations, and the gravity rotor from rapidity fields to the metric.">
+<meta name="description" content="Interactive models of the BQ-Pauli algebra by E.P.J. de Haas: the multiplication table of the eight basis matrices, the bilinear product A^T B of physical four-vectors in its norm, rotation and boost channels, the triple product D(A^T B) in all four BQ channels, the field quadratics, the Lorentz transformations of four-vectors and of the bilinear, the Lorentz covariance of the triple-product equations, the gravity rotor from rapidity fields to the metric, and the constant-Lagrangian condition as an equi-redshift flow.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
@@ -87,7 +87,7 @@ footer a{color:var(--soft)}
   <header>
     <p class="kicker">E.P.J. de Haas · Kandinsky College, Nijmegen</p>
     <h1>The BQ algebra, one matrix product at a time</h1>
-    <p class="lede">In the BQ-Pauli algebra a physical four-vector is four <em>real</em> coordinates on a basis of 2×2 complex matrices, A = a<sub>0</sub>T̂ + <b>a</b>·<b class="kv">K̂</b>, with <b class="kv">K̂</b> = (Î, Ĵ, K̂). Multiplying such vectors is ordinary matrix multiplication, and the algebra sorts every product into its own channels. These eight interactive models build that up step by step, and every result on them is computed live from the explicit matrices.</p>
+    <p class="lede">In the BQ-Pauli algebra a physical four-vector is four <em>real</em> coordinates on a basis of 2×2 complex matrices, A = a<sub>0</sub>T̂ + <b>a</b>·<b class="kv">K̂</b>, with <b class="kv">K̂</b> = (Î, Ĵ, K̂). Multiplying such vectors is ordinary matrix multiplication, and the algebra sorts every product into its own channels. These nine interactive models build that up step by step, and every result on them is computed live from the explicit matrices.</p>
     <div class="basis" aria-label="The eight basis matrices, in four groups of 1, 3, 3 and 1">
       <span class="grp"><small>space-time (minquat)</small><span class="st">T̂ &nbsp; Î &nbsp; Ĵ &nbsp; K̂</span></span>
       <span class="grp"><small>spin-norm (pauliquat)</small><span class="sn">1̂ &nbsp; σ̂<sub>I</sub> &nbsp; σ̂<sub>J</sub> &nbsp; σ̂<sub>K</sub></span></span>
@@ -95,7 +95,7 @@ footer a{color:var(--soft)}
     </div>
   </header>
 
-  <h2 class="group" id="models">Eight interactive models</h2>
+  <h2 class="group" id="models">Nine interactive models</h2>
   <p class="groupnote">In teaching order: the basis products, then the bilinear of two four-vectors, then the triple product that carries Maxwell’s equations and the Lorentz force, then the quadratics of the fields themselves, and the Lorentz transformations under which all of them are covariant.</p>
   <div class="grid">
 
@@ -310,6 +310,30 @@ footer a{color:var(--soft)}
       </div>
     </a>
 
+    <a class="card" href="BQ_models/BQ_CL_Killing.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="Gamma minus one against radius: the Keplerian curve keeps falling while the CL curve turns flat beyond R">
+        <rect width="320" height="200" fill="#03050b"/>
+        <line x1="30" y1="170" x2="300" y2="170" stroke="#222c42"/><line x1="30" y1="20" x2="30" y2="170" stroke="#222c42"/>
+        <path d="M34 30 C 80 60, 120 85, 150 98 S 230 140, 296 166" fill="none" stroke="#48dbfb" stroke-width="2.2"/>
+        <path d="M34 40 C 80 66, 118 88, 150 99 L 296 99" fill="none" stroke="#f2a24a" stroke-width="2.2"/>
+        <line x1="150" y1="20" x2="150" y2="170" stroke="#5fd38a" stroke-dasharray="4 3"/>
+        <text x="154" y="32" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="#5fd38a">R</text>
+        <g font-family="Source Serif 4, Georgia, serif" font-size="14">
+          <text x="176" y="88" fill="#f2a24a">CL: γ<tspan font-size="9" baseline-shift="sub">rs</tspan> constant</text>
+          <text x="190" y="150" fill="#48dbfb">Kepler</text>
+          <text x="40" y="190" fill="#e7ebf3">γ<tspan font-size="9" baseline-shift="sub">rs</tspan> = −u·u<tspan font-size="9" baseline-shift="sub">s</tspan>/c² = c/√(−g<tspan font-size="9" baseline-shift="sub">tt</tspan>)</text>
+        </g>
+      </svg>
+      <div class="body">
+        <span class="step">Step 9 · CL in the metric</span>
+        <h3>CL as an equi-redshift flow</h3>
+        <p>In the Galilean-coframe metric with a radial and an azimuthal river, γ<sub>rs</sub> is the river’s Lorentz factor relative to the static Killing observers, equal to the rotor’s Γ at slow-flow order. The river is geodesic with conserved Killing energy, so wherever the radial flow is nonzero the constant-Lagrangian condition means flow along levels of the redshift factor. The constant is a closure; a slowly changing H leaves the analysis intact, and the normal-frame energy density of the CL disk comes out negative under ordinary GR.</p>
+        <div class="rule">Dγ<sub>rs</sub>/Dτ = 0 ⇔ ∂<sub>r</sub>g<sub>tt</sub> = 0 ⇔ v<sub>r</sub>² + v<sub>φ</sub>² = K &nbsp;(v<sub>r</sub> ≠ 0)</div>
+        <div class="tags"><span>Killing energy</span><span>redshift levels</span><span>quasi-stationary H</span></div>
+        <span class="open">Open the model</span>
+      </div>
+    </a>
+
 
   </div>
 
@@ -326,6 +350,7 @@ footer a{color:var(--soft)}
         <li><code>bq_bilinear_lorentz.py</code> · C<sup>L</sup> = UCU<sup>−1</sup> for all 169 pairs, basis rules and complex form</li>
         <li><code>bq_triple_lorentz.py</code> · E<sup>L</sup> = U<sup>−1</sup>EU<sup>−1</sup> for all 2197 triples, both sectors, both lemmas</li>
         <li><code>bq_gravity_rotor.py</code> · the gravity rotor: dR<sup>G</sup>, flat quadratic, Galilean coframe, g<sub>μν</sub>, known metrics, Einstein tensor</li>
+        <li><code>bq_cl_killing.py</code> · γ<sub>rs</sub> as the river–static Lorentz factor, CL as an equi-redshift flow, the closures for K, quasi-stationary H, G<sub>n̂n̂</sub> &lt; 0</li>
         <li><code>bq_core.py</code> · basis, four-vectors, operator order, channel rules</li>
       </ul>
       <p>Only Python 3 and SymPy are needed. A four-gradient acts on everything to its right; when it stands last, the product is evaluated on a test field ψ.</p>
@@ -368,7 +393,10 @@ python bq_triple_lorentz.py --maxwell
 python bq_triple_lorentz.py --all
 
 <span class="cm"># step 8: the gravity rotor, from rapidity to metric</span>
-python bq_gravity_rotor.py</pre>
+python bq_gravity_rotor.py
+
+<span class="cm"># step 9: CL as an equi-redshift flow</span>
+python bq_cl_killing.py</pre>
   </section>
 
   <section class="about" aria-label="About these models">
@@ -389,6 +417,7 @@ python bq_gravity_rotor.py</pre>
         <li><a href="BQ_models/BQ_Bilinear_Lorentz_Transformation.html">Lorentz transformation of the bilinear</a></li>
         <li><a href="BQ_models/BQ_Triple_Product_Covariance.html">Lorentz covariance of the triple product</a></li>
         <li><a href="BQ_models/BQ_Gravity_Rotor.html">The gravity rotor: from rapidity to metric</a></li>
+        <li><a href="BQ_models/BQ_CL_Killing.html">CL as an equi-redshift flow</a></li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra/tree/main/py_sources">Python sources</a>: exact SymPy reproduction</li>
         <li><a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>: galaxy, jet and SPARC models</li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra">Source on GitHub</a></li>
