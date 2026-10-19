@@ -1,0 +1,410 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>CL Equi-Redshift Flow</title>
+<meta name="description" content="The constant-Lagrangian condition in the Galilean-coframe (PG) metric: Gamma is the river's Lorentz factor relative to the static Killing observers, Gamma = c/sqrt(-g_tt); CL means flow along levels of the redshift factor, v_r^2 + v_phi^2 = 3GM/R, with the Hdot residual when H depends on time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&display=swap" rel="stylesheet">
+<style>
+/* Layout: chooser on the left, channel readout on the right (stacked on phones); numerical matrix check and notes below. Same family as the BQ-Pauli table page. */
+:root{
+  --bg:#f5f6fa;--surface:#ffffff;--edge:#d6dce8;--ink:#141a28;--soft:#55607a;
+  --st:#b8620f;--st-bg:rgba(184,98,15,.09);      /* space-time basis T̂, K̂ */
+  --sn:#0f7fb0;--sn-bg:rgba(15,127,176,.09);     /* spin-norm basis 1̂, σ̂ */
+  --sel:#5b4fd6;--good:#2f8a4f;--bad:#b23a3a;
+  --serif:"Source Serif 4",Georgia,serif;--sans:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.11);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.09);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.11);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.09);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans)}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font:600 clamp(24px,3.4vw,34px)/1.15 var(--serif);margin:0 0 6px;text-wrap:balance}
+h2{font:600 18px/1.3 var(--serif);margin:0 0 10px;text-wrap:balance}
+h3{font:600 12px/1.3 var(--sans);margin:0 0 8px;color:var(--soft);letter-spacing:.06em;text-transform:uppercase}
+.lede{color:var(--soft);max-width:82ch;margin:0 0 20px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:start}
+@media (max-width:960px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--edge);border-radius:12px;padding:16px;min-width:0}
+select,button,input{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:5px 8px}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--sel);outline-offset:2px}
+.pick{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 12px;align-items:center}
+.pick label{font:600 20px var(--serif)}
+.pick select{width:100%}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.qs{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.qs button{font-size:12.5px;padding:4px 9px}
+.math{font:500 16.5px/1.9 var(--serif);overflow-x:auto}
+.math b{font-weight:700}
+.vec{border:1px solid var(--edge);border-radius:10px;padding:10px 12px;margin-top:12px;background:var(--bg)}
+.vec .what{font-size:12.5px;color:var(--soft);margin-bottom:2px}
+.ts{color:var(--st)}.ns{color:var(--sn)}
+.formula{font:500 16px/1.8 var(--serif);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:8px 12px;overflow-x:auto;white-space:nowrap}
+.fwith{font:13px var(--sans);color:var(--soft);white-space:normal}
+.ch{display:grid;grid-template-columns:minmax(0,10.5em) minmax(0,1fr);gap:4px 14px;padding:12px 0;border-bottom:1px solid var(--edge)}
+.ch:last-of-type{border-bottom:none}
+.ch .nm{font:600 14px var(--sans)}
+.ch .nm small{display:block;font:400 12px var(--sans);color:var(--soft)}
+.ch .ex{font:500 16.5px/1.75 var(--serif);overflow-x:auto;min-width:0}
+.ch .ex .gen{color:var(--soft);font-size:14.5px}
+.ch .ex .res{font-weight:600}
+.ch.n .nm{color:var(--sn)}.ch.k .nm{color:var(--st)}.ch.s .nm{color:var(--sn)}
+@media (max-width:560px){.ch{grid-template-columns:minmax(0,1fr)}}
+.total{font:600 17px/1.8 var(--serif);border:1.5px solid var(--sel);border-radius:10px;padding:10px 12px;margin-top:10px;overflow-x:auto}
+.interp{margin-top:12px;font-size:14.5px;color:var(--ink);background:var(--bg);border:1px dashed var(--edge);border-radius:10px;padding:10px 12px}
+.interp .src{display:block;font-size:12.5px;color:var(--soft);margin-top:4px}
+.note{font-size:14px;color:var(--soft);max-width:74ch;margin:8px 0 0}
+.note b{color:var(--ink)}
+/* numeric check */
+.numgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:900px){.numgrid{grid-template-columns:minmax(0,1fr)}}
+.inrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.inrow label{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--soft);min-width:0}
+.inrow input{width:100%;font:13.5px var(--mono)}
+.mxrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font:500 17px var(--serif);margin:10px 0;overflow-x:auto}
+.mx{display:inline-grid;grid-template-columns:auto auto;gap:2px 14px;padding:5px 11px;position:relative;font:13.5px var(--mono);font-variant-numeric:tabular-nums}
+.mx::before,.mx::after{content:"";position:absolute;top:0;bottom:0;width:7px;border:1.5px solid var(--ink)}
+.mx::before{left:0;border-right:none}.mx::after{right:0;border-left:none}
+.mx span{text-align:right;white-space:nowrap}
+.tscroll{overflow-x:auto}
+table.dc{border-collapse:collapse;font:13.5px var(--mono);font-variant-numeric:tabular-nums;width:100%}
+table.dc th,table.dc td{padding:4px 10px;border-bottom:1px solid var(--edge);text-align:right;white-space:nowrap}
+table.dc th{font:600 12px var(--sans);color:var(--soft);text-align:right}
+table.dc td:first-child,table.dc th:first-child{text-align:left;font-family:var(--serif);font-size:15px}
+.pill{display:inline-block;font:500 12.5px var(--sans);border:1px solid var(--edge);border-radius:99px;padding:2px 10px;color:var(--soft);margin-top:10px}
+.pill.ok{border-color:var(--good);color:var(--good)}.pill.no{border-color:var(--bad);color:var(--bad)}
+.notes{margin-top:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:900px){.notes{grid-template-columns:minmax(0,1fr)}}
+.notes li{font-size:14px;max-width:70ch;margin-bottom:6px}
+.notes ul{padding-left:18px;margin:6px 0}
+.cap{font-size:12.5px;color:var(--soft);margin:10px 0 0}
+a{color:var(--sn)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.chk{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--soft);cursor:pointer}
+.split{margin-top:8px}
+.pill.st{border-color:var(--st);color:var(--st)}.pill.sn{border-color:var(--sn);color:var(--sn)}
+.sstep{margin:14px 0 0}
+.sstep h3{margin:0 0 6px}
+.sline{font:500 15px/1.9 var(--serif);overflow-x:auto;white-space:nowrap;padding:1px 0}
+.sline .lab{display:inline-block;min-width:5.6em;color:var(--soft)}
+.sbox{background:var(--bg);border:1px solid var(--edge);border-radius:10px;padding:8px 12px}
+.sgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:900px){.sgrid{grid-template-columns:minmax(0,1fr)}}
+.sgrid .sline{font-size:14.5px}
+.sres{font-weight:600}
+.ctlline{margin:0 0 8px}
+.numdet{margin-top:16px;border-top:1px solid var(--edge);padding-top:10px}
+.numdet summary{cursor:pointer;font:500 14px var(--sans);color:var(--soft)}
+.numgrid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:900px){.numgrid.three{grid-template-columns:minmax(0,1fr)}}
+.vec .math .what{margin:0 0 4px 0}
+.kv{font-weight:700}
+.slider{margin-top:14px;display:grid;gap:6px}
+.slider label{font-size:13.5px;color:var(--soft)}.slider label b{color:var(--ink);font:500 14px var(--mono)}
+.slider input{width:100%;accent-color:var(--st)}
+.kp{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+@media (max-width:560px){.kp{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.kp div{border:1px solid var(--edge);border-radius:8px;padding:5px 7px;min-width:0}
+.kp span{display:block;font-size:11.5px;color:var(--soft)}.kp b{font:500 14px var(--mono)}
+.trc{border:1px solid var(--edge);border-left-width:3px;border-radius:10px;padding:8px 12px;margin-bottom:10px}
+.trc.st{border-left-color:var(--st)}.trc.sn{border-left-color:var(--sn)}
+.trc h3{margin:0 0 4px}.trc .ops{font:500 15px/1.8 var(--serif);overflow-x:auto}
+.numv{font:13px var(--mono);color:var(--soft)}
+.leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--soft);margin-top:6px}
+.leg>span{display:inline-flex;align-items:center;gap:6px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%}
+.sw{display:inline-block;width:18px;height:0;border-top:2px solid}
+svg{display:block;width:100%;height:auto;max-width:100%}
+svg text{font:12px var(--mono);fill:var(--soft)}
+svg .ax{stroke:var(--edge);fill:none}
+svg .ttl{font:13px var(--sans);fill:var(--soft)}
+.dsteps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:10px}
+@media (max-width:960px){.dsteps{grid-template-columns:minmax(0,1fr)}}
+.dstep{border:1px solid var(--edge);border-radius:10px;padding:10px 14px;background:var(--bg);min-width:0}
+.dstep h3{margin:0 0 6px;color:var(--ink);font:600 15.5px var(--serif);letter-spacing:0;text-transform:none}
+.dstep h3 .n{display:inline-block;min-width:1.6em;color:var(--st)}
+.dl{font:500 15px/1.85 var(--serif);overflow-x:auto;white-space:nowrap}
+.dl.dwrap{white-space:normal}
+.dnum{font:13px/1.7 var(--mono);color:var(--soft);overflow-x:auto;white-space:nowrap}
+.dk{font-size:13.5px;color:var(--soft);margin:6px 0 0}
+.mxs{display:inline-grid;gap:2px 14px;padding:3px 10px;position:relative;vertical-align:middle;font:500 14px var(--serif)}
+.mxs::before,.mxs::after{content:"";position:absolute;top:0;bottom:0;width:6px;border:1.4px solid var(--ink)}
+.mxs::before{left:0;border-right:none}.mxs::after{right:0;border-left:none}
+.mxs span{text-align:center;white-space:nowrap}
+table.lm{border-collapse:collapse;font:13px var(--mono);width:100%}
+table.lm th,table.lm td{padding:3px 8px;border-bottom:1px solid var(--edge);text-align:right;white-space:nowrap}
+table.lm th{font:600 12px var(--sans);color:var(--soft)}
+table.lm td:first-child,table.lm th:first-child{text-align:left;font-family:var(--serif)}
+
+.tog{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 12px}
+.tog button{padding:7px 12px;border-radius:99px;font-size:13.5px}
+.tog button b{font:600 15px var(--serif);margin-right:4px}
+.tog button[aria-pressed="true"]{background:var(--st-bg);border-color:var(--st);color:var(--ink)}
+.row button[aria-pressed="true"]{background:var(--st-bg);border-color:var(--st)}
+.sliders{display:grid;gap:4px;margin-top:6px}
+svg .gr{stroke:var(--edge);stroke-opacity:.6;fill:none}
+[hidden]{display:none!important}
+.keybox{border:1.6px solid var(--sel);font-size:17px;white-space:normal;margin:8px 0;padding:10px 14px}
+.core{font-size:18.5px;max-width:82ch}
+#lim ul{padding-left:18px;margin:4px 0}#lim li{font-size:14px;margin-bottom:6px}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <h1>CL as an Equi-Redshift Flow</h1>
+  <p class="lede">The constant-Lagrangian (CL) condition DΓ/Dt = 0 is stated at the rapidity level, with Γ<sub>rotor</sub> = cosh χ<sub>r</sub> cosh χ<sub>φ</sub>. In the Galilean-coframe metric with a radial and an azimuthal river its slow-flow counterpart has a coordinate-free meaning:</p>
+  <div class="formula keybox core">γ<sub>rs</sub>, the river’s Lorentz factor relative to the static Killing observers: &nbsp;γ<sub>rs</sub> = −u·u<sub>s</sub>/c² = c/√(−g<sub>tt</sub>) = Γ<sub>rotor</sub> + O(χ⁴)</div>
+  <p class="lede">The river observers are geodesics with conserved Killing energy, so CL means, wherever the radial flow is nonzero, that the river flows along level surfaces of the redshift factor √(−g<sub>tt</sub>): v<sub>r</sub>² + v<sub>φ</sub>² = K. This is exact within the metric; the constant K is a closure. A slowly changing H leaves the analysis intact. Choose the parameters.</p>
+</header>
+
+<div class="grid">
+  <section class="card" aria-labelledby="h-par">
+    <h2 id="h-par">Rivers and disk</h2>
+    <div class="tog" role="group" aria-label="Fields">
+      <button type="button" aria-pressed="true" disabled><b>ψ<sub>N</sub></b> Newtonian radial</button>
+      <button type="button" id="bH" aria-pressed="false"><b>ψ<sub>H</sub></b> Hubble radial</button>
+    </div>
+    <div class="sliders">
+      <div class="slider"><label for="RS">Matching radius R/r<sub>s</sub> <b id="RLab"></b></label><input id="RS" type="range" min="0.6" max="4" step="0.02" value="2"></div>
+      <div class="row" role="group" aria-label="Closure for K" style="margin:2px 0 8px"><button type="button" id="cS" aria-pressed="true">K = 3GM/R (Schwarzschild clock at R)</button><button type="button" id="cF" aria-pressed="false">K = (3/2)v<sub>r</sub>(R)² (earlier fit)</button></div>
+      <div class="slider" id="sH" hidden><label for="hS">Hubble rate h = Hr<sub>s</sub>/c <b id="hLab"></b></label><input id="hS" type="range" min="-7" max="-1" step="0.05" value="-4"></div>
+      <div class="slider" id="sQ" hidden><label for="qS">Deceleration q, Ḣ = −(1 + q)H² <b id="qLab"></b></label><input id="qS" type="range" min="-1" max="1" step="0.01" value="-0.55"></div>
+      <div class="slider"><label for="xS">Evaluation radius r/r<sub>s</sub> <b id="xLab"></b></label><input id="xS" type="range" min="0.6" max="5" step="0.01" value="2.6"></div>
+    </div>
+    <div class="vec" id="defs"></div>
+    <p class="cap">Units: c = 1, r<sub>s</sub> = 2GM/c² = 1. Radial river v<sub>r</sub> = √(2GM/r) − Hr (paper chart, Hubble term only when switched on); Keplerian azimuthal river v<sub>φ</sub> = √(GM/r); CL river v<sub>φ</sub> = √(K − v<sub>r</sub>²) for r ≥ R, rigid inside R.</p>
+  </section>
+
+  <section class="card" aria-labelledby="h-gam">
+    <h2 id="h-gam">γ<sub>rs</sub> along the disk</h2>
+    <svg id="gplot" viewBox="0 0 560 330" role="img" aria-label="Gamma minus one against radius for the Keplerian and the CL disk"></svg>
+    <div class="leg" id="leg"></div>
+    <p class="cap">γ<sub>rs</sub> − 1 is the fractional clock slowing of the river relative to the static observers. With the Keplerian azimuthal river it falls as r grows; the CL river keeps it constant beyond R: the river flows along an equi-redshift level.</p>
+  </section>
+</div>
+
+<div class="grid" style="margin-top:18px">
+  <section class="card" aria-labelledby="h-map">
+    <h2 id="h-map">Streamlines over the redshift levels</h2>
+    <div class="row" role="group" aria-label="Disk"><button type="button" id="mCL" aria-pressed="true">CL disk</button><button type="button" id="mKep" aria-pressed="false">Keplerian disk</button></div>
+    <svg id="map" viewBox="0 0 420 420" role="img" aria-label="Top view of the disk: rings coloured by Gamma, with river streamlines"></svg>
+    <p class="cap" id="mapcap"></p>
+  </section>
+  <section class="card" aria-labelledby="h-three">
+    <h2 id="h-three">Rotor Γ and metric γ<sub>rs</sub> at the evaluation radius</h2>
+    <div id="three"></div>
+  </section>
+</div>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-der">
+  <h2 id="h-der">From the Killing vector to CL in seven steps</h2>
+  <p class="note">Metric of the gravity-rotor page, paper chart: ds² = −(c² − v<sub>r</sub>² − v<sub>φ</sub>²)dt² − 2v<sub>r</sub>dr dt − 2v<sub>φ</sub>r s<sub>θ</sub>dφ dt + dr² + r²dθ² + r²s<sub>θ</sub>²dφ², with Ω = v<sub>φ</sub>/(r s<sub>θ</sub>).</p>
+  <div class="dsteps" id="deriv"></div>
+</section>
+
+<div class="grid" style="margin-top:18px">
+  <section class="card" aria-labelledby="h-num">
+    <h2 id="h-num">Check with numbers</h2>
+    <div id="num"></div>
+  </section>
+  <section class="card" aria-labelledby="h-lim">
+    <h2 id="h-lim">What this does and does not show</h2>
+    <div id="lim"></div>
+  </section>
+</div>
+<p class="cap" style="margin-top:14px">CL condition, isorapidity Γ = cosh χ<sub>r</sub> cosh χ<sub>φ</sub>, the 3GM/R profile and the residual Π = Γ<sub>0</sub>Ḣr from de Haas (2026), The Gravitational Rapidity Potential and Relativistic Gravitational Fluid Dynamics. Part of <a href="../index.html">the BQ algebra models</a>.</p>
+</div>
+
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+const fx = (x, d) => (Math.abs(x) < 5e-13 ? 0 : +x.toFixed(d == null ? 4 : d)).toString().replace('-', '−');
+const fg = x => { if (!isFinite(x)) return '—'; if (x === 0) return '0'; const a = Math.abs(x); if (a >= 1e-3 && a < 1e5) return fx(x, 4); const [m, e] = x.toExponential(3).split('e'); return m.replace('-', '−') + '×10<sup>' + (+e).toString().replace('-', '−') + '</sup>'; };
+const S = {H:false, map:'cl', clos:'sch'};
+const val = id => +$(id).value;
+const R = () => Math.pow(10, val('RS')), h = () => S.H ? Math.pow(10, val('hS')) : 0, q = () => val('qS'), X = () => Math.pow(10, val('xS'));
+const sub = s => `<sub>${s}</sub>`;
+
+/* ---------- fields (c = 1, r_s = 1, GM = 1/2) ---------- */
+const vr = r => Math.sqrt(1/r) - h()*r;                          /* paper chart: chi_r = psi_N - psi_H */
+const vKep = r => Math.sqrt(1/(2*r));
+/* closure for the constant K: Schwarzschild clock rate at R (3GM/R), or the earlier fitted closure (3/2) v_r(R)^2 */
+const K = () => S.clos === 'sch' ? 1.5/R() : 1.5*vr(R())*vr(R());
+function vCL(r){ const Rr = R(), q2 = y => K() - vr(y)*vr(y);
+  if (r >= Rr) return q2(r) >= 0 ? Math.sqrt(q2(r)) : NaN;
+  return q2(Rr) >= 0 ? Math.sqrt(q2(Rr))*r/Rr : NaN; }
+const vphi = (r, which) => which === 'kep' ? vKep(r) : vCL(r);
+const gtt = (r, which) => -(1 - vr(r)**2 - vphi(r, which)**2);
+const GamMetric = (r, which) => 1/Math.sqrt(-gtt(r, which));
+const GamRotor = (r, which) => Math.cosh(vr(r))*Math.cosh(vphi(r, which));
+const GamTanh = (r, which) => 1/Math.sqrt(1 - Math.tanh(vr(r))**2 - Math.tanh(vphi(r, which))**2);
+const dGdr = (r, which) => { const e = 1e-5*r; return (GamMetric(r + e, which) - GamMetric(r - e, which))/(2*e); };
+
+/* ---------- top ---------- */
+function renderTop(){
+  $('bH').setAttribute('aria-pressed', S.H ? 'true' : 'false');
+  $('sH').hidden = !S.H; $('sQ').hidden = !S.H;
+  $('RLab').innerHTML = fg(R()); $('cS').setAttribute('aria-pressed', S.clos === 'sch' ? 'true' : 'false'); $('cF').setAttribute('aria-pressed', S.clos === 'fit' ? 'true' : 'false'); $('hLab').innerHTML = fg(Math.pow(10, val('hS'))); $('qLab').textContent = fx(q(), 2); $('xLab').innerHTML = fg(X());
+  const x = X(), ok = isFinite(vCL(x));
+  $('defs').innerHTML = `<div class="what">At r = ${fg(x)} r<sub>s</sub></div>
+    <div class="math">v<sub>r</sub> = ${fg(vr(x))}, &nbsp;v<sub>φ</sub>(Kepler) = ${fg(vKep(x))}, &nbsp;v<sub>φ</sub>(CL) = ${ok ? fg(vCL(x)) : '— (no CL solution: v<sub>r</sub>² &gt; 3GM/R)'}</div>
+    <div class="math">K = ${S.clos === 'sch' ? '3GM/R' : '(3/2)v<sub>r</sub>(R)²'} = ${fg(K())} c²${S.H ? ` &nbsp;(the other closure gives ${fg(S.clos === 'sch' ? 1.5*vr(R())**2 : 1.5/R())})` : ' &nbsp;(both closures agree for H = 0)'}</div>`;
+}
+
+/* ---------- Γ − 1 plot ---------- */
+const NS = 'http://www.w3.org/2000/svg';
+const sv = (tag, at, p) => { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); if (p) p.appendChild(e); return e; };
+function gplot(){
+  const s = $('gplot'); while (s.firstChild) s.removeChild(s.firstChild);
+  const W = 560, Hh = 330, L = 58, Rm = 14, T = 14, B = 40;
+  const lx0 = 0.4, lx1 = Math.max(Math.log10(R()) + 1.6, 3);
+  const fns = [[r => GamMetric(r, 'kep') - 1, 'var(--sn)', '', 'Keplerian azimuthal river'], [r => GamMetric(r, 'cl') - 1, 'var(--st)', '', 'CL azimuthal river'], [r => 1/Math.sqrt(1 - vr(r)**2) - 1, 'var(--soft)', '5 4', 'radial river only']];
+  let ys = [];
+  for (let n = 0; n <= 300; n++){ const r = Math.pow(10, lx0 + (lx1 - lx0)*n/300); fns.forEach(f => { const y = f[0](r); if (isFinite(y) && y > 0) ys.push(Math.log10(y)); }); }
+  const ly1 = Math.ceil(Math.max(...ys) + 0.1), ly0 = Math.max(Math.floor(Math.min(...ys)), ly1 - 7);
+  const PX = lx => L + (lx - lx0)/(lx1 - lx0)*(W - L - Rm), PY = ly => T + (ly1 - Math.max(ly0, Math.min(ly1, ly)))/(ly1 - ly0)*(Hh - T - B);
+  const sup = n => (n < 0 ? '⁻' : '') + String(Math.abs(n)).split('').map(d => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+  for (let e = Math.ceil(lx0); e <= Math.floor(lx1); e++){ sv('line', {x1:PX(e), x2:PX(e), y1:T, y2:Hh - B, class:'gr'}, s); const t = sv('text', {x:PX(e), y:Hh - B + 16, 'text-anchor':'middle'}, s); t.textContent = '10' + sup(e); }
+  for (let e = ly0; e <= ly1; e++){ sv('line', {x1:L, x2:W - Rm, y1:PY(e), y2:PY(e), class:'gr'}, s); const t = sv('text', {x:L - 6, y:PY(e) + 4, 'text-anchor':'end'}, s); t.textContent = '10' + sup(e); }
+  const tl = sv('text', {x:(L + W - Rm)/2, y:Hh - 6, 'text-anchor':'middle', class:'ttl'}, s); tl.textContent = 'r / rₛ (log scale)';
+  const tv = sv('text', {x:14, y:(T + Hh - B)/2, 'text-anchor':'middle', class:'ttl', transform:`rotate(-90 14 ${(T + Hh - B)/2})`}, s); tv.textContent = 'γ_rs − 1 (log scale)';
+  fns.forEach(([f, col, dash]) => { let d = '', pen = false; for (let n = 0; n <= 400; n++){ const lx = lx0 + (lx1 - lx0)*n/400, y = f(Math.pow(10, lx));
+      if (!(isFinite(y) && y > 0)){ pen = false; continue; } d += (pen ? 'L' : 'M') + PX(lx).toFixed(1) + ',' + PY(Math.log10(y)).toFixed(1); pen = true; }
+    sv('path', Object.assign({d, fill:'none', stroke:col, 'stroke-width':2}, dash ? {'stroke-dasharray':dash} : {}), s); });
+  const lR = Math.log10(R()); sv('line', {x1:PX(lR), x2:PX(lR), y1:T, y2:Hh - B, stroke:'var(--good)', 'stroke-dasharray':'4 3'}, s); const tR = sv('text', {x:PX(lR) + 4, y:T + 12}, s); tR.textContent = 'R'; tR.setAttribute('style', 'fill:var(--good)');
+  const lx = Math.log10(X()); if (lx >= lx0 && lx <= lx1) sv('line', {x1:PX(lx), x2:PX(lx), y1:T, y2:Hh - B, stroke:'var(--ink)', 'stroke-opacity':.5}, s);
+  $('leg').innerHTML = fns.map(([, col, dash, t]) => `<span><i class="sw" style="border-color:${col};${dash ? 'border-top-style:dashed' : ''}"></i><span>${t}</span></span>`).join('') + '<span><i class="sw" style="border-color:var(--good);border-top-style:dashed"></i><span>matching radius R</span></span>';
+}
+
+/* ---------- disk map ---------- */
+function map(){
+  const s = $('map'); while (s.firstChild) s.removeChild(s.firstChild);
+  const which = S.map, Cc = 210, rmax = R()*6, rmin = Math.max(0.6, R()/20);
+  const P = r => (Math.log10(r) - Math.log10(rmin))/(Math.log10(rmax) - Math.log10(rmin))*(Cc - 14);   /* log radial scale */
+  const gam = r => GamMetric(r, which) - 1;
+  const gR = gam(R()), gs = []; for (let n = 0; n <= 60; n++){ const r = rmin*Math.pow(rmax/rmin, n/60); gs.push(gam(r)); }
+  const gmin = Math.min(...gs.filter(isFinite)), gmax = Math.max(...gs.filter(isFinite));
+  const col = g => { const tt = isFinite(g) ? (Math.log10(g) - Math.log10(gmin))/(Math.log10(gmax) - Math.log10(gmin) || 1) : 0; return `hsl(${210 - 180*tt},70%,${18 + 30*tt}%)`; };
+  for (let n = 60; n >= 0; n--){ const r = rmin*Math.pow(rmax/rmin, n/60); sv('circle', {cx:Cc, cy:Cc, r:Math.max(0.5, P(r)), fill:col(gam(r))}, s); }
+  sv('circle', {cx:Cc, cy:Cc, r:P(R()), fill:'none', stroke:'var(--good)', 'stroke-dasharray':'4 3', 'stroke-width':1.5}, s);
+  /* streamlines: steps of d ln r = -0.01 inward; dphi = (v_phi / |v_r|) d ln r, i.e. dr/dt = -|v_r|, dphi/dt = v_phi/r */
+  for (let k = 0; k < 6; k++){
+    let r = rmax*0.98, ph = 2*Math.PI*k/6, d = '';
+    while (r > rmin*1.05){
+      const vp = vphi(r, which), v = Math.abs(vr(r));
+      if (!isFinite(vp) || v < 1e-9) break;
+      ph += 0.01*vp/v; r *= 0.99;
+      const pr = P(r); d += (d ? 'L' : 'M') + (Cc + pr*Math.cos(ph)).toFixed(1) + ',' + (Cc - pr*Math.sin(ph)).toFixed(1);
+    }
+    sv('path', {d, fill:'none', stroke:'#fff', 'stroke-opacity':.85, 'stroke-width':1.3}, s);
+  }
+  const t = sv('text', {x:Cc, y:Cc - P(R()) - 4, 'text-anchor':'middle'}, s); t.textContent = 'R'; t.setAttribute('style', 'fill:#5fd38a');
+  $('mapcap').innerHTML = `Rings coloured by γ<sub>rs</sub> − 1 on a log radial scale from ${fg(rmin)} to ${fg(rmax)} r<sub>s</sub> (dark blue: small, bright: large); white lines are river streamlines, drawn inward with dφ/dt = v<sub>φ</sub>/r. ${which === 'cl' ? 'Outside R every ring has the same γ<sub>rs</sub>: the streamlines cross circles of equal redshift, so γ<sub>rs</sub> is constant along them.' : 'γ<sub>rs</sub> changes from ring to ring, so it changes along every streamline: the Keplerian azimuthal river is not a CL flow.'}${S.H ? ' With the Hubble river the CL disk ends where v<sub>r</sub>² reaches 3GM/R.' : ''}`;
+  $('mCL').setAttribute('aria-pressed', which === 'cl' ? 'true' : 'false'); $('mKep').setAttribute('aria-pressed', which === 'kep' ? 'true' : 'false');
+}
+
+/* ---------- Γ three ways ---------- */
+function three(){
+  const x = X();
+  const row = w => { const a = GamRotor(x, w), b = GamMetric(x, w), c3 = GamTanh(x, w); return `<td>${fg(a - 1)}</td><td>${fg(b - 1)}</td><td>${fg(c3 - 1)}</td><td>${fg(b - a)}</td>`; };
+  const cr = vr(x), cpc = vCL(x), cpk = vKep(x);
+  const o4 = (a, b) => (2*a**4 + 3*a*a*b*b + 2*b**4)/6;
+  $('three').innerHTML = `<div class="tscroll"><table class="dc"><thead><tr><th></th><th>Γ<sub>rotor</sub> − 1</th><th>γ<sub>rs</sub> − 1 (metric)</th><th>tanh form − 1</th><th>γ<sub>rs</sub> − Γ<sub>rotor</sub></th></tr></thead><tbody>
+    <tr><td>Keplerian disk</td>${row('kep')}</tr><tr><td>CL disk</td>${isFinite(cpc) ? row('cl') : '<td colspan="4">no CL solution here</td>'}</tr></tbody></table></div>
+    <p class="note">Γ<sub>rotor</sub> = cosh χ<sub>r</sub> cosh χ<sub>φ</sub>; &nbsp;γ<sub>rs</sub> = c/√(−g<sub>tt</sub>) = 1/√(1 − χ<sub>r</sub>² − χ<sub>φ</sub>²); &nbsp;tanh form: 1/√(1 − tanh²χ<sub>r</sub> − tanh²χ<sub>φ</sub>). The three agree to O(χ²). The metric and rotor values differ first at O(χ⁴): (2χ<sub>r</sub>⁴ + 3χ<sub>r</sub>²χ<sub>φ</sub>² + 2χ<sub>φ</sub>⁴)/6 = ${fg(o4(cr, cpk))} (Kepler)${isFinite(cpc) ? `, ${fg(o4(cr, cpc))} (CL)` : ''}, which the table reproduces. The metric carries the Galilean velocity v = cχ; the exact composition lives at the rotor level. The third column uses the bounded velocities c tanh χ in one frame and is neither of the two.</p>`;
+}
+
+/* ---------- the seven steps ---------- */
+const mxs = rows => `<span class="mxs" style="grid-template-columns:repeat(${rows[0].length},auto)">${rows.flat().map(x => `<span>${x}</span>`).join('')}</span>`;
+function deriv(){
+  let d = '';
+  d += `<div class="dstep"><h3><span class="n">1</span>The Killing vector and the static observers</h3>
+    <div class="dl dwrap">For a stationary, axisymmetric river (v<sub>r</sub>(r), Ω(r)) the metric does not depend on t: ξ = ∂<sub>t</sub> is a Killing vector.</div>
+    <div class="dl">ξ·ξ = g<sub>tt</sub> = −(c² − v<sub>r</sub>² − v<sub>φ</sub>²), &nbsp;|ξ| = √(−g<sub>tt</sub>)</div>
+    <div class="dl">static observers (fixed r, θ, φ): u<sub>s</sub> = cξ/|ξ|, &nbsp;u<sub>s</sub>·u<sub>s</sub> = −c²</div>
+    <p class="dk">Their clocks run at dτ/dt = |ξ|/c: √(−g<sub>tt</sub>) is the redshift factor of the static frame.</p></div>`;
+  d += `<div class="dstep"><h3><span class="n">2</span>The river observers are geodesics</h3>
+    <div class="dl">u = (1, v<sub>r</sub>, 0, Ω), &nbsp;the observers with θ<sup>r</sup> = θ<sup>φ</sup> = 0</div>
+    <div class="dl">u·u = −c²: &nbsp;dτ = dt (unit lapse)</div>
+    <div class="dl">u·∇u = 0 for every v<sub>r</sub>(t, r, θ), Ω(t, r, θ)</div>
+    <p class="dk">With unit lapse the river observers are the normal (Eulerian) observers, whose acceleration is ∇ ln N = 0. Geodesic motion places no condition on the river: CL has to be imposed, not derived from geodesics.</p></div>`;
+  d += `<div class="dstep"><h3><span class="n">3</span>Killing energy of the river</h3>
+    <div class="dl dwrap">E = −g<sub>tμ</sub>u<sup>μ</sup> = −g<sub>tt</sub> − g<sub>tr</sub>v<sub>r</sub> − g<sub>tφ</sub>Ω</div>
+    <div class="dl dwrap">&nbsp; = (c² − v<sub>r</sub>² − v<sub>φ</sub>²) + v<sub>r</sub>² + v<sub>φ</sub>² = <b>c²</b></div>
+    <p class="dk">Conserved along each streamline (geodesic + Killing), and here even identically c²: every river element falls “from rest at infinity”.</p></div>`;
+  d += `<div class="dstep"><h3><span class="n">4</span>γ<sub>rs</sub>: the river–static Lorentz factor</h3>
+    <div class="formula keybox">γ<sub>rs</sub> = −u·u<sub>s</sub>/c² = E/(c|ξ|) = c/√(−g<sub>tt</sub>) = 1/√(1 − (v<sub>r</sub>² + v<sub>φ</sub>²)/c²)</div>
+    <div class="dl">γ<sub>rs</sub> = Γ<sub>rotor</sub> + O(χ⁴), &nbsp;Γ<sub>rotor</sub> = cosh χ<sub>r</sub> cosh χ<sub>φ</sub></div>
+    <p class="dk">A scalar, defined without reference to a chart, and exact within the Galilean-coframe metric. It is a different construction from the rotor’s Γ; the two agree at slow-flow order.</p></div>`;
+  d += `<div class="dstep"><h3><span class="n">5</span>CL is an equi-redshift flow</h3>
+    <div class="dl">Dγ<sub>rs</sub>/Dτ = u·∇γ<sub>rs</sub> = (E/c) u·∇(1/|ξ|), since E is conserved</div>
+    <div class="dl">stationary, axisymmetric: u·∇ = v<sub>r</sub>∂<sub>r</sub> &nbsp;⇒&nbsp; Dγ<sub>rs</sub>/Dτ = v<sub>r</sub>(γ<sub>rs</sub>³/c²) ∂<sub>r</sub>(v<sub>r</sub>² + v<sub>φ</sub>²)/2</div>
+    <div class="formula keybox">where v<sub>r</sub> ≠ 0: &nbsp;Dγ<sub>rs</sub>/Dτ = 0 &nbsp;⇔&nbsp; ∂<sub>r</sub>g<sub>tt</sub> = 0 &nbsp;⇔&nbsp; v<sub>r</sub>² + v<sub>φ</sub>² = K</div>
+    <p class="dk">On a connected region with nonzero radial flow the river crosses the disk along a level surface of the redshift factor: static clocks along a streamline stay syntonized. At a stagnation radius (with the Hubble river, the balance radius r<sub>c</sub>, where v<sub>r</sub> = 0) or on purely circular streamlines, Dγ<sub>rs</sub>/Dτ = 0 holds without forcing ∂<sub>r</sub>g<sub>tt</sub> = 0.</p></div>`;
+  d += `<div class="dstep"><h3><span class="n">6</span>The constant: a closure</h3>
+    <div class="dl dwrap">Motivation: in the radial Schwarzschild metric (no azimuthal river), a circular geodesic has Ω² = GM/r³ and the clock rate dτ/dt = √(1 − 3GM/(rc²)).</div>
+    <div class="formula keybox">${S.clos === 'sch' ? 'K = 3GM/R: every streamline keeps the clock rate of that orbit at R' : 'K = (3/2)v<sub>r</sub>(R)²: the earlier fitted closure'}, &nbsp;v<sub>φ</sub> = √(K − v<sub>r</sub>²)</div>
+    <div class="dl dwrap">For H = 0 both closures give K = 3GM/R and v<sub>φ</sub> = √(3GM/R − 2GM/r); with the Hubble river they differ, and the choice is part of the model.</div>
+    <p class="dk">Imposing this clock rate on the two-river metric is a matching prescription, not a consequence. Likewise the “Keplerian azimuthal river” plotted here is an azimuthal shift with v<sub>φ</sub> = √(GM/r) in the metric: its river worldlines are not the circular geodesics of the radial metric, although its γ<sub>rs</sub> equals the same 1/√(1 − 3GM/(rc²)).</p></div>`;
+  const x = X(), hh = h(), Hd = -(1 + q())*hh*hh, v = vr(x), pk = vKep(x);
+  const pv = vCL(x), vt = Math.sqrt(v*v + (isFinite(pv) ? pv*pv : 0)), eps = 2*Math.abs(v*Hd)*x*x/(vt*(1 - vt*vt));
+  d += `<div class="dstep" style="grid-column:1/-1"><h3><span class="n">7</span>A slowly changing H: quasi-stationary Killing analysis</h3>
+    <div class="dl dwrap">With v<sub>r</sub> = √(2GM/r) − H(t)r the metric depends on t only through H, which changes on the cosmic time scale 1/H, far slower than the flow time r/v of the galaxy (v² = v<sub>r</sub>² + v<sub>φ</sub>²). The fractional change of the redshift factor during one flow time is</div>
+    <div class="formula keybox">ε = |∂<sub>t</sub>g<sub>tt</sub>| (r/v)/|g<sub>tt</sub>| = 2|v<sub>r</sub>Ḣ|r²/(v(c² − v²)) &nbsp;≤ &nbsp;2(1 + q)(Hr/c)² γ<sub>rs</sub>² &nbsp;≪ 1</div>
+    <div class="dl dwrap">since Hr ≪ c on galactic scales, so ∂<sub>t</sub> is a Killing vector to O(ε) and steps 1–5 hold adiabatically, without setting H = 0.${S.H ? ` At r = ${fg(x)} r<sub>s</sub>: ε = ${fg(eps)}.` : ' (Switch on the Hubble river to see ε.)'}</div>
+    <div class="dl dwrap"><b>Two evolution prescriptions.</b> If the CL profile readjusts, v<sub>φ</sub>² = K − v<sub>r</sub>²(r, t), then v<sub>r</sub>² + v<sub>φ</sub>² = K at all times and ∂<sub>t</sub>γ<sub>rs</sub> = 0 exactly. If v<sub>φ</sub> is held fixed, ∂<sub>t</sub>γ<sub>rs</sub> = −γ<sub>rs</sub>³v<sub>r</sub>Ḣr/c², of relative size ε per flow time. In neither case does the loss of exact Killing symmetry matter for the equi-redshift reading.</div>
+    <div class="dl dwrap"><b>Where Ḣ does appear.</b> The Eulerian rate of the radial river, γ<sub>rs</sub>∂<sub>t</sub>v<sub>r</sub> = −γ<sub>rs</sub>Ḣr, has magnitude Γ<sub>0</sub>Ḣr: the σ-channel residual Π<sub>g,r</sub> = Γ<sub>0</sub>Ḣr of de Haas (2026, eq. 63; sign by its channel convention). It is a rate of the shift, not a change of γ<sub>rs</sub> and not a proper acceleration: the river stays geodesic.</div></div>`;
+  $('deriv').innerHTML = d;
+}
+
+/* ---------- numbers ---------- */
+function num(){
+  const x = X(), hh = h(), Hd = -(1 + q())*hh*hh;
+  const rows = ['kep', 'cl'].map(w => {
+    const v = vr(x), p = vphi(x, w); if (!isFinite(p)) return null;
+    const g = [[-(1 - v*v - p*p), -v, 0, -p], [-v, 1, 0, 0], [0, 0, 1, 0], [-p, 0, 0, 1]];   /* orthonormal angular legs, theta = pi/2, c = 1 */
+    const u = [1, v, 0, p];
+    const E = -(g[0][0]*u[0] + g[0][1]*u[1] + g[0][3]*u[3]);
+    let uu = 0; for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) uu += g[i][j]*u[i]*u[j];
+    const xi = Math.sqrt(-g[0][0]), us = [1/xi, 0, 0, 0];
+    let uus = 0; for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) uus += g[i][j]*u[i]*us[j];
+    const Gm = -uus, DG = v*dGdr(x, w);
+    const dtFix = -(Gm**3)*v*Hd*x, dtCL = w === 'cl' ? 0 : dtFix, mom = -Gm*Hd*x;
+    return {w, E, uu, Gm, DG, dtFix, dtCL, mom};
+  }).filter(Boolean);
+  $('num').innerHTML = `<div class="tscroll"><table class="dc"><thead><tr><th></th><th>u·u</th><th>E</th><th>γ<sub>rs</sub> = −u·u<sub>s</sub></th><th>v<sub>r</sub>∂<sub>r</sub>γ<sub>rs</sub></th>${S.H ? '<th>∂<sub>t</sub>γ<sub>rs</sub> (CL readjusts)</th><th>∂<sub>t</sub>γ<sub>rs</sub> (v<sub>φ</sub> fixed)</th><th>γ<sub>rs</sub>∂<sub>t</sub>v<sub>r</sub></th>' : ''}</tr></thead><tbody>
+    ${rows.map(o => `<tr><td>${o.w === 'kep' ? 'Keplerian river' : 'CL river'}</td><td>${fg(o.uu)}</td><td>${fg(o.E)}</td><td>${fg(o.Gm)}</td><td>${fg(Math.abs(o.DG) < 1e-11 ? 0 : o.DG)}</td>${S.H ? `<td>${o.w === 'cl' ? '0' : '—'}</td><td>${fg(o.dtFix)}</td><td>${fg(o.mom)}</td>` : ''}</tr>`).join('')}</tbody></table></div>
+    <p class="note">At r = ${fg(x)} r<sub>s</sub>, θ = π/2, c = 1; u<sub>s</sub> = cξ/|ξ|. E = c² and u·u = −c² for both. v<sub>r</sub>∂<sub>r</sub>γ<sub>rs</sub> vanishes for the CL river beyond R and not for the Keplerian river.${S.H ? ` H = ${fg(hh)}, Ḣ = −(1 + q)H² = ${fg(Hd)}: ε (CL river) = ${fg(2*Math.abs(vr(x)*Hd)*x*x/(Math.sqrt(vr(x)**2+vCL(x)**2)*(1-vr(x)**2-vCL(x)**2)))}.` : ''}</p>`;
+}
+
+/* ---------- limits ---------- */
+function limits(){
+  const x = X(), e = 1e-4*x;
+  const F = y => y*vr(y)**2, Om = y => vCL(y)/y;
+  const Fp = (F(x + e) - F(x - e))/(2*e), Omp = (Om(x + e) - Om(x - e))/(2*e);
+  const rad = Fp/(x*x), rot = -x*x*Omp*Omp/4, Gnn = isFinite(Omp) ? rad + rot : NaN;
+  $('lim').innerHTML = `<ul>
+    <li><b>It shows</b> what the CL condition means in the metric: the Lorentz factor γ<sub>rs</sub> between the free-falling river and the static Killing observers is constant along the flow, so the river moves along levels of the redshift factor √(−g<sub>tt</sub>). It shows where 3GM/R comes from, as a closure, and where Ḣ enters.</li>
+    <li><b>CL is imposed, not forced.</b> The river is geodesic for any v<sub>r</sub>, v<sub>φ</sub> (step 2), so the metric allows CL but does not select it.</li>
+    <li><b>The source is exotic under ordinary GR.</b> The energy density measured by the river (normal) observers is G<sub>n̂n̂</sub>c⁴/(8πG) with c²G<sub>n̂n̂</sub> = (r v<sub>r</sub>²)′/r² − r²Ω′²/4. For H = 0, r v<sub>r</sub>² = 2GM is constant, the radial term vanishes and <b>G<sub>n̂n̂</sub> = −r²Ω′²/(4c²) &lt; 0</b> wherever the rotation is differential; for the CL river beyond R in closed form, G<sub>n̂n̂</sub> = −9GM(r − R)²/(4Rc²r³(3r − 2R)). For the CL river at r = ${fg(x)} r<sub>s</sub>: radial term ${fg(rad)}, rotation term ${fg(rot)}, G<sub>n̂n̂</sub> = ${fg(Gnn)} r<sub>s</sub><sup>−2</sup>. Read with the ordinary Einstein equation, a CL disk needs negative energy density, the opposite of a galaxy’s matter. Either the theory does not identify this tensor with matter stress-energy (in the rapidity ontology the metric is a derived projection, not the primary field), or this is a constraint the CL flow must answer.</li>
+    <li><b>Slow flow.</b> γ<sub>rs</sub> equals Γ<sub>rotor</sub> = cosh χ<sub>r</sub> cosh χ<sub>φ</sub> only to O(χ²); the exact statement with the full composition belongs to the rotor level.</li>
+  </ul>`;
+}
+
+/* ---------- wiring ---------- */
+function render(){ renderTop(); gplot(); map(); three(); deriv(); num(); limits(); }
+$('bH').addEventListener('click', () => { S.H = !S.H; render(); });
+$('mCL').addEventListener('click', () => { S.map = 'cl'; map(); });
+$('mKep').addEventListener('click', () => { S.map = 'kep'; map(); });
+$('cS').addEventListener('click', () => { S.clos = 'sch'; render(); });
+$('cF').addEventListener('click', () => { S.clos = 'fit'; render(); });
+['RS', 'hS', 'qS', 'xS'].forEach(id => $(id).addEventListener('input', render));
+render();
+})();
+</script>
+</body></html>
