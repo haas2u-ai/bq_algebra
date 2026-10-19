@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The BQ algebra at the Dirac level — interactive models (E.P.J. de Haas)</title>
+<meta name="description" content="Interactive models of the BQ algebra at the Dirac level by E.P.J. de Haas: the sixteen 4x4 basis matrices of the Weyl representation as 2x2 blocks of BQ-Pauli elements, and their multiplication table, with exact Python reproduction.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+/* Dirac-level index: same family as the BQ-Pauli index. Header with the sixteen basis elements by grade, model cards, Python sources, conventions and links. */
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#05070d; --surface:#0d1220; --edge:#222c42; --ink:#e7ebf3; --soft:#97a2b9;
+  --st:#f2a24a; --sn:#48dbfb; --sel:#a29bfe;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --serif:"Source Serif 4","STIX Two Text",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){ --bg:#f5f6fa; --surface:#ffffff; --edge:#d6dce8; --ink:#141a28; --soft:#55607a; --st:#b8620f; --sn:#0f7fb0; --sel:#5b4fd6; color-scheme:light; }
+}
+:root[data-theme="dark"]{ --bg:#05070d; --surface:#0d1220; --edge:#222c42; --ink:#e7ebf3; --soft:#97a2b9; --st:#f2a24a; --sn:#48dbfb; --sel:#a29bfe; color-scheme:dark; }
+:root[data-theme="light"]{ --bg:#f5f6fa; --surface:#ffffff; --edge:#d6dce8; --ink:#141a28; --soft:#55607a; --st:#b8620f; --sn:#0f7fb0; --sel:#5b4fd6; color-scheme:light; }
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+main{max-width:1120px;margin:0 auto;padding-block:clamp(28px,6vw,72px) 48px;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+header{max-width:780px;margin-bottom:clamp(28px,4vw,44px)}
+.kicker{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);margin:0 0 14px}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(30px,4.6vw,50px);line-height:1.08;letter-spacing:-.015em;margin:0 0 18px;text-wrap:balance}
+.lede{font-size:clamp(16px,1.6vw,18.5px);color:var(--soft);margin:0}
+.lede em{font-family:var(--serif);font-style:italic;color:var(--ink)}
+.st{color:var(--st)} .sn{color:var(--sn)}
+/* basis strip */
+.basis{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:baseline;margin:22px 0 0;padding:12px 16px;border:1px solid var(--edge);border-radius:12px;background:var(--surface);font-family:var(--serif);font-size:19px}
+.basis small{font-family:var(--sans);font-size:12.5px;color:var(--soft);letter-spacing:.04em}
+.basis .grp{display:inline-flex;gap:10px;align-items:baseline}
+/* cards */
+h2.group{font-family:var(--serif);font-weight:600;font-size:clamp(22px,2.6vw,28px);margin:0 0 6px}
+.groupnote{color:var(--soft);max-width:72ch;margin:0 0 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:20px}
+.card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--edge);border-radius:12px;overflow:hidden;color:inherit;text-decoration:none;transition:border-color .2s, transform .2s}
+.card:hover{border-color:var(--soft);transform:translateY(-2px)}
+.card:focus-visible{outline:2px solid var(--sn);outline-offset:3px}
+.art{display:block;width:100%;height:auto;aspect-ratio:16/10;background:#03050b}
+.body{padding:20px 22px 22px;display:flex;flex-direction:column;gap:10px;flex:1}
+.step{font:500 12px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+.card h3{font-family:var(--serif);font-weight:600;font-size:23px;line-height:1.2;margin:0}
+.card p{margin:0;color:var(--soft);font-size:15px}
+.rule{font-family:var(--serif);font-size:15.5px;color:var(--ink);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:6px 10px;overflow-x:auto;line-height:1.7}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.tags span{font-size:12.5px;border:1px solid var(--edge);border-radius:999px;padding:2px 9px;color:var(--soft)}
+.open{margin-top:auto;padding-top:8px;font-weight:500;font-size:15px;color:var(--sn)}
+.open::after{content:" →"}
+/* python section */
+section.py{margin-top:clamp(36px,5vw,56px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(20px,3vw,40px);align-items:start}
+@media (max-width:860px){section.py{grid-template-columns:minmax(0,1fr)}}
+section.py p{color:var(--soft);margin:0 0 12px;max-width:62ch}
+section.py p b{color:var(--ink);font-weight:500}
+section.py a{color:var(--sn)}
+.files{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:6px}
+.files li{font-size:14.5px;color:var(--soft)}
+.files code{font:500 13.5px var(--mono);color:var(--ink)}
+pre.cmd{margin:0;background:var(--surface);border:1px solid var(--edge);border-radius:12px;padding:14px 16px;overflow-x:auto;font:13.5px/1.75 var(--mono);color:var(--ink)}
+pre.cmd .cm{color:var(--soft)}
+/* about */
+section.about{margin-top:clamp(40px,6vw,64px);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);border-top:1px solid var(--edge);padding-top:32px}
+.about h3{font-family:var(--serif);font-weight:600;font-size:20px;margin:0 0 10px}
+.about p,.about li{color:var(--soft);font-size:15px}
+.about p{margin:0 0 12px}
+.about ul{margin:0;padding-left:18px}
+.about li{margin:0 0 8px}
+.about a{color:var(--sn)}
+.about b{color:var(--ink);font-weight:500}
+footer{margin-top:40px;font-size:13px;color:var(--soft)}
+footer a{color:var(--soft)}
+@media (max-width:760px){ section.about{grid-template-columns:1fr} }
+@media (prefers-reduced-motion: reduce){ .card{transition:none} .card:hover{transform:none} }
+.kv{font-weight:700}
+section.theme{margin-top:clamp(26px,4vw,40px)}
+section.theme .grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr))}
+section.theme:first-of-type{margin-top:14px}
+h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-weight:600;font-size:clamp(19px,2.1vw,23px);margin:0 0 6px}
+.tnum{display:inline-grid;place-items:center;flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--edge);background:var(--surface);font:600 14px var(--sans);color:var(--sel)}
+.files li.fh{margin-top:8px;font:500 12px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+.files li.fh:first-child{margin-top:0}
+.g1{color:var(--st)} .g2b{color:var(--sel)} .g2s{color:var(--sn)} .g3{color:#5fd38a} .g4{color:#ff7fb5}
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]) .g3{color:#2f8a4f} :root:not([data-theme="dark"]) .g4{color:#c2417a} }
+.back{display:inline-block;margin:0 0 18px;font-size:14.5px;color:var(--sn);text-decoration:none}.back:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <a class="back" href="../index.html">← The BQ-Pauli models</a>
+    <p class="kicker">E.P.J. de Haas · Kandinsky College, Nijmegen</p>
+    <h1>The BQ algebra at the Dirac level</h1>
+    <p class="lede">At the Dirac level the BQ algebra lives in 4×4 complex matrices, in the <em>Weyl representation</em>. Each of its sixteen basis elements is a 2×2 block matrix whose blocks are BQ-Pauli elements, so every Dirac-level product is a block product of BQ-Pauli products. Only the four vectors β<sub>μ</sub> are defined by hand; the other twelve elements are their products. All coordinates stay real.</p>
+    <div class="basis" aria-label="The sixteen basis elements by grade: 1, 4, 6, 4 and 1">
+      <span class="grp"><small>grade 0</small><span>𝟙</span></span>
+      <span class="grp"><small>vector</small><span class="g1">β<sub>0</sub> &nbsp;β<sub>I</sub> &nbsp;β<sub>J</sub> &nbsp;β<sub>K</sub></span></span>
+      <span class="grp"><small>boost</small><span class="g2b">α<sub>I</sub> &nbsp;α<sub>J</sub> &nbsp;α<sub>K</sub></span></span>
+      <span class="grp"><small>spin</small><span class="g2s">Σ<sub>I</sub> &nbsp;Σ<sub>J</sub> &nbsp;Σ<sub>K</sub></span></span>
+      <span class="grp"><small>pseudovector</small><span class="g3">β̃<sub>0</sub> &nbsp;β̃<sub>I</sub> &nbsp;β̃<sub>J</sub> &nbsp;β̃<sub>K</sub></span></span>
+      <span class="grp"><small>pseudoscalar</small><span class="g4">χ</span></span>
+    </div>
+  </header>
+
+  <h2 class="group" id="models">Models</h2>
+  <p class="groupnote">The Dirac-level models will follow the same order as the BQ-Pauli site: first the basis and its products, then vectors, fields and Lorentz transformations, then gravity.</p>
+
+  <section class="theme" aria-labelledby="d1">
+    <h3 class="tname" id="d1"><span class="tnum">1</span>The basis</h3>
+    <p class="groupnote">The sixteen basis matrices in their Pauli content, and all 256 products.</p>
+    <div class="grid">
+
+    <a class="card" href="models/BQ_Dirac_Multiplication_Table.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="The 16 by 16 BQ-Dirac multiplication table, cells coloured by the grade of the product">
+        <rect width="320" height="200" fill="#03050b"/>
+        <rect x="96" y="14" width="7" height="7" rx="1.2" fill="#9aa6bf" fill-opacity="0.75"/><rect x="104" y="14" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="112" y="14" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="120" y="14" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="128" y="14" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="136" y="14" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="144" y="14" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="152" y="14" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="160" y="14" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="168" y="14" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="176" y="14" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="184" y="14" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="192" y="14" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="200" y="14" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="208" y="14" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="216" y="14" width="7" height="7" rx="1.2" fill="#ff7fb5" fill-opacity="0.75"/><rect x="96" y="22" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="104" y="22" width="7" height="7" rx="1.2" fill="#9aa6bf" fill-opacity="0.35"/><rect x="112" y="22" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="120" y="22" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="128" y="22" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="136" y="22" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="144" y="22" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="152" y="22" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="160" y="22" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="168" y="22" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="176" y="22" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="184" y="22" width="7" height="7" rx="1.2" fill="#ff7fb5" fill-opacity="0.75"/><rect x="192" y="22" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="200" y="22" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="208" y="22" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="216" y="22" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="96" y="30" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="104" y="30" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.35"/><rect x="112" y="30" width="7" height="7" rx="1.2" fill="#9aa6bf" fill-opacity="0.75"/><rect x="120" y="30" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="128" y="30" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="136" y="30" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="144" y="30" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="152" y="30" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="160" y="30" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="168" y="30" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="176" y="30" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="184" y="30" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="192" y="30" width="7" height="7" rx="1.2" fill="#ff7fb5" fill-opacity="0.35"/><rect x="200" y="30" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.35"/><rect x="208" y="30" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="216" y="30" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="96" y="38" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="104" y="38" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.35"/><rect x="112" y="38" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="120" y="38" width="7" height="7" rx="1.2" fill="#9aa6bf" fill-opacity="0.75"/><rect x="128" y="38" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="136" y="38" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="144" y="38" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="152" y="38" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="160" y="38" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="168" y="38" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="176" y="38" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="184" y="38" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="192" y="38" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="200" y="38" width="7" height="7" rx="1.2" fill="#ff7fb5" fill-opacity="0.35"/><rect x="208" y="38" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.35"/><rect x="216" y="38" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="96" y="46" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="104" y="46" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.35"/><rect x="112" y="46" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="120" y="46" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="128" y="46" width="7" height="7" rx="1.2" fill="#9aa6bf" fill-opacity="0.75"/><rect x="136" y="46" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="144" y="46" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="152" y="46" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="160" y="46" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="168" y="46" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="176" y="46" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="184" y="46" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="192" y="46" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.35"/><rect x="200" y="46" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="208" y="46" width="7" height="7" rx="1.2" fill="#ff7fb5" fill-opacity="0.35"/><rect x="216" y="46" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="96" y="54" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="104" y="54" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="112" y="54" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="120" y="54" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="128" y="54" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="136" y="54" width="7" height="7" rx="1.2" fill="#9aa6bf" fill-opacity="0.75"/><rect x="144" y="54" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="152" y="54" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="160" y="54" width="7" height="7" rx="1.2" fill="#ff7fb5" fill-opacity="0.35"/><rect x="168" y="54" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.35"/><rect x="176" y="54" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="184" y="54" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="192" y="54" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="200" y="54" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="208" y="54" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="216" y="54" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="96" y="62" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="104" y="62" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="112" y="62" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="120" y="62" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="128" y="62" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="136" y="62" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="144" y="62" width="7" height="7" rx="1.2" fill="#9aa6bf" fill-opacity="0.75"/><rect x="152" y="62" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="160" y="62" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="168" y="62" width="7" height="7" rx="1.2" fill="#ff7fb5" fill-opacity="0.35"/><rect x="176" y="62" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.35"/><rect x="184" y="62" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="192" y="62" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="200" y="62" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="208" y="62" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="216" y="62" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="96" y="70" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="104" y="70" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="112" y="70" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="120" y="70" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="128" y="70" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="136" y="70" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="144" y="70" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="152" y="70" width="7" height="7" rx="1.2" fill="#9aa6bf" fill-opacity="0.75"/><rect x="160" y="70" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.35"/><rect x="168" y="70" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="176" y="70" width="7" height="7" rx="1.2" fill="#ff7fb5" fill-opacity="0.35"/><rect x="184" y="70" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="192" y="70" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="200" y="70" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="208" y="70" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="216" y="70" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="96" y="78" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="104" y="78" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="112" y="78" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="120" y="78" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="128" y="78" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="136" y="78" width="7" height="7" rx="1.2" fill="#ff7fb5" fill-opacity="0.35"/><rect x="144" y="78" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.35"/><rect x="152" y="78" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="160" y="78" width="7" height="7" rx="1.2" fill="#9aa6bf" fill-opacity="0.35"/><rect x="168" y="78" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="176" y="78" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="184" y="78" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="192" y="78" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="200" y="78" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="208" y="78" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="216" y="78" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="96" y="86" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="104" y="86" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="112" y="86" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="120" y="86" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="128" y="86" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="136" y="86" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="144" y="86" width="7" height="7" rx="1.2" fill="#ff7fb5" fill-opacity="0.35"/><rect x="152" y="86" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.35"/><rect x="160" y="86" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="168" y="86" width="7" height="7" rx="1.2" fill="#9aa6bf" fill-opacity="0.35"/><rect x="176" y="86" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="184" y="86" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="192" y="86" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="200" y="86" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="208" y="86" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="216" y="86" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="96" y="94" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="104" y="94" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="112" y="94" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="120" y="94" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="128" y="94" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="136" y="94" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.35"/><rect x="144" y="94" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="152" y="94" width="7" height="7" rx="1.2" fill="#ff7fb5" fill-opacity="0.35"/><rect x="160" y="94" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="168" y="94" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="176" y="94" width="7" height="7" rx="1.2" fill="#9aa6bf" fill-opacity="0.35"/><rect x="184" y="94" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="192" y="94" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="200" y="94" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="208" y="94" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="216" y="94" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="96" y="102" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="104" y="102" width="7" height="7" rx="1.2" fill="#ff7fb5" fill-opacity="0.35"/><rect x="112" y="102" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="120" y="102" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="128" y="102" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="136" y="102" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="144" y="102" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="152" y="102" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="160" y="102" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="168" y="102" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="176" y="102" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="184" y="102" width="7" height="7" rx="1.2" fill="#9aa6bf" fill-opacity="0.35"/><rect x="192" y="102" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="200" y="102" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="208" y="102" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="216" y="102" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="96" y="110" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="104" y="110" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="112" y="110" width="7" height="7" rx="1.2" fill="#ff7fb5" fill-opacity="0.75"/><rect x="120" y="110" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="128" y="110" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.35"/><rect x="136" y="110" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="144" y="110" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="152" y="110" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="160" y="110" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="168" y="110" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="176" y="110" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="184" y="110" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.35"/><rect x="192" y="110" width="7" height="7" rx="1.2" fill="#9aa6bf" fill-opacity="0.75"/><rect x="200" y="110" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="208" y="110" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="216" y="110" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="96" y="118" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="104" y="118" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="112" y="118" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.35"/><rect x="120" y="118" width="7" height="7" rx="1.2" fill="#ff7fb5" fill-opacity="0.75"/><rect x="128" y="118" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="136" y="118" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="144" y="118" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="152" y="118" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="160" y="118" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="168" y="118" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="176" y="118" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="184" y="118" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.35"/><rect x="192" y="118" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="200" y="118" width="7" height="7" rx="1.2" fill="#9aa6bf" fill-opacity="0.75"/><rect x="208" y="118" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="216" y="118" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="96" y="126" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="104" y="126" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="112" y="126" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="120" y="126" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.35"/><rect x="128" y="126" width="7" height="7" rx="1.2" fill="#ff7fb5" fill-opacity="0.75"/><rect x="136" y="126" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="144" y="126" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="152" y="126" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="160" y="126" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.35"/><rect x="168" y="126" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="176" y="126" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="184" y="126" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.35"/><rect x="192" y="126" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.75"/><rect x="200" y="126" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="208" y="126" width="7" height="7" rx="1.2" fill="#9aa6bf" fill-opacity="0.75"/><rect x="216" y="126" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.75"/><rect x="96" y="134" width="7" height="7" rx="1.2" fill="#ff7fb5" fill-opacity="0.75"/><rect x="104" y="134" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="112" y="134" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="120" y="134" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="128" y="134" width="7" height="7" rx="1.2" fill="#5fd38a" fill-opacity="0.75"/><rect x="136" y="134" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="144" y="134" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="152" y="134" width="7" height="7" rx="1.2" fill="#48dbfb" fill-opacity="0.35"/><rect x="160" y="134" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="168" y="134" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="176" y="134" width="7" height="7" rx="1.2" fill="#a29bfe" fill-opacity="0.75"/><rect x="184" y="134" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="192" y="134" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="200" y="134" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="208" y="134" width="7" height="7" rx="1.2" fill="#f2a24a" fill-opacity="0.35"/><rect x="216" y="134" width="7" height="7" rx="1.2" fill="#9aa6bf" fill-opacity="0.35"/>
+        <g font-family="Source Serif 4, Georgia, serif" font-size="13">
+          <text x="20" y="40" fill="#f2a24a">β<tspan font-size="9" baseline-shift="sub">μ</tspan></text>
+          <text x="20" y="62" fill="#a29bfe">α<tspan font-size="9" baseline-shift="sub">i</tspan></text>
+          <text x="20" y="84" fill="#48dbfb">Σ<tspan font-size="9" baseline-shift="sub">i</tspan></text>
+          <text x="20" y="106" fill="#5fd38a">β̃<tspan font-size="9" baseline-shift="sub">μ</tspan></text>
+          <text x="20" y="128" fill="#ff7fb5">χ</text>
+          <text x="40" y="168" fill="#e7ebf3">β<tspan font-size="9" baseline-shift="sub">K</tspan> = [[0, K̂], [−K̂, 0]]</text>
+          <text x="40" y="188" fill="#97a2b9" font-size="12">16 × 16 products, blocks of BQ-Pauli elements</text>
+        </g>
+      </svg>
+      <div class="body">
+        <span class="step">Dirac step 1 · the basis</span>
+        <h3>BQ-Dirac multiplication table</h3>
+        <p>The sixteen 4×4 basis matrices of the Weyl representation, each shown as a 2×2 block matrix of BQ-Pauli elements. Pick any of the 256 products to see it computed by blocks through the BQ-Pauli table and as an ordinary 4×4 complex matrix product.</p>
+        <div class="rule">β<sub>0</sub>² = −𝟙, &nbsp;β<sub>i</sub>² = +𝟙, &nbsp;χ = −β<sub>0</sub>β<sub>I</sub>β<sub>J</sub>β<sub>K</sub>, &nbsp;χ² = −𝟙</div>
+        <div class="tags"><span>Weyl representation</span><span>Pauli blocks</span><span>grades 0–4</span></div>
+        <span class="open">Open the table</span>
+      </div>
+    </a>
+
+    </div>
+  </section>
+
+  <section class="py" aria-labelledby="h-py">
+    <div>
+      <h2 class="group" id="h-py">Reproduce in Python</h2>
+      <p>The folder <a href="https://github.com/haas2u-ai/bq_algebra/tree/main/dirac/py_sources"><b>dirac/py_sources</b></a> holds an independent SymPy implementation. Each script builds the 4×4 basis from the BQ-Pauli blocks and checks every product <b>exactly</b> along two routes: as a block product through the BQ-Pauli table, and as an ordinary 4×4 complex matrix product.</p>
+      <ul class="files">
+        <li class="fh">1 · The basis</li>
+        <li><code>bq_dirac_table.py</code> · the 16 × 16 table, Pauli block content, Clifford relations, χ, trace orthogonality, block route = 4×4 route</li>
+      </ul>
+      <p>Only Python 3 and SymPy are needed.</p>
+    </div>
+<pre class="cmd" aria-label="Commands to reproduce the results"><span class="cm"># get the code and install SymPy</span>
+git clone https://github.com/haas2u-ai/bq_algebra
+cd bq_algebra/dirac/py_sources
+pip install -r requirements.txt
+
+<span class="cm"># 1 · the basis: all checks and the table</span>
+python bq_dirac_table.py
+
+<span class="cm"># one product in detail</span>
+python bq_dirac_table.py bI bJ</pre>
+  </section>
+
+  <section class="about" aria-label="About these models">
+    <div>
+      <h3>Conventions used throughout</h3>
+      <p>The Dirac level is the <b>BQ algebra in the Weyl representation</b>, built from the BQ-Pauli blocks 1̂, T̂ = i1̂, Î, Ĵ, K̂ and σ̂<sub>I</sub>, σ̂<sub>J</sub>, σ̂<sub>K</sub>: β<sub>0</sub> = [[0, T̂], [T̂, 0]] and β<sub>i</sub> = [[0, K̂<sub>i</sub>], [−K̂<sub>i</sub>, 0]], so that β<sub>0</sub>² = −𝟙 and β<sub>i</sub>² = +𝟙.</p>
+      <p>The other elements are products: α<sub>i</sub> = β<sub>0</sub>β<sub>i</sub>, Σ<sub>I</sub> = β<sub>J</sub>β<sub>K</sub> (cyclic), the pseudoscalar <b>χ = −β<sub>0</sub>β<sub>I</sub>β<sub>J</sub>β<sub>K</sub></b> and the pseudovectors β̃<sub>μ</sub> = χβ<sub>μ</sub>. Standard-Model gamma-matrix conventions and General-Relativity index raising are not used.</p>
+      <p>Each model computes its results from the explicit matrices and shows a numerical check; the Python sources repeat every product as an exact symbolic check. The BQ definitions in the papers remain authoritative.</p>
+    </div>
+    <div>
+      <h3>Links</h3>
+      <ul>
+        <li><b>1. The basis</b>: <a href="models/BQ_Dirac_Multiplication_Table.html">BQ-Dirac multiplication table</a></li>
+        <li><a href="../index.html">The BQ-Pauli models</a>: the algebra, vectors, Lorentz transformations and gravity</li>
+        <li><a href="https://github.com/haas2u-ai/bq_algebra/tree/main/dirac/py_sources">Python sources</a>: exact SymPy reproduction</li>
+        <li><a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>: galaxy, jet and SPARC models</li>
+        <li><a href="https://github.com/haas2u-ai/bq_algebra">Source on GitHub</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>E.P.J. de Haas · BQ algebra at the Dirac level · interactive models</footer>
+</main>
+</body>
+</html>
