@@ -1,0 +1,634 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BQ-Dirac Field Quadratics</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="The quadratic products of a Dirac-level field in the BQ-Weyl algebra: the field square, which holds the Lorentz invariants in the scalar and pseudoscalar channels, and the sandwich F-slash a-slash F-slash, the stress-energy map; for the electromagnetic, fluid and bilinear fields of the BQ papers, with the Pauli quadratics inside as blocks and a numerical Lorentz check.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&display=swap" rel="stylesheet">
+<style>
+
+/* Layout: chooser on the left, channel readout on the right (stacked on phones); numerical matrix check and notes below. Same family as the BQ-Pauli table page. */
+:root{
+  --bg:#f5f6fa;--surface:#ffffff;--edge:#d6dce8;--ink:#141a28;--soft:#55607a;
+  --st:#b8620f;--st-bg:rgba(184,98,15,.09);      /* space-time basis T̂, K̂ */
+  --sn:#0f7fb0;--sn-bg:rgba(15,127,176,.09);     /* spin-norm basis 1̂, σ̂ */
+  --sel:#5b4fd6;--good:#2f8a4f;--bad:#b23a3a;
+  --serif:"Source Serif 4",Georgia,serif;--sans:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.11);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.09);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.11);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.09);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans)}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font:600 clamp(24px,3.4vw,34px)/1.15 var(--serif);margin:0 0 6px;text-wrap:balance}
+h2{font:600 18px/1.3 var(--serif);margin:0 0 10px;text-wrap:balance}
+h3{font:600 12px/1.3 var(--sans);margin:0 0 8px;color:var(--soft);letter-spacing:.06em;text-transform:uppercase}
+.lede{color:var(--soft);max-width:82ch;margin:0 0 20px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:start}
+@media (max-width:960px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--edge);border-radius:12px;padding:16px;min-width:0}
+select,button,input{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:5px 8px}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--sel);outline-offset:2px}
+.pick{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 12px;align-items:center}
+.pick label{font:600 20px var(--serif)}
+.pick select{width:100%}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.qs{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.qs button{font-size:12.5px;padding:4px 9px}
+.math{font:500 16.5px/1.9 var(--serif);overflow-x:auto}
+.math b{font-weight:700}
+.vec{border:1px solid var(--edge);border-radius:10px;padding:10px 12px;margin-top:12px;background:var(--bg)}
+.vec .what{font-size:12.5px;color:var(--soft);margin-bottom:2px}
+.ts{color:var(--st)}.ns{color:var(--sn)}
+.formula{font:500 16px/1.8 var(--serif);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:8px 12px;overflow-x:auto;white-space:nowrap}
+.fwith{font:13px var(--sans);color:var(--soft);white-space:normal}
+.ch{display:grid;grid-template-columns:minmax(0,10.5em) minmax(0,1fr);gap:4px 14px;padding:12px 0;border-bottom:1px solid var(--edge)}
+.ch:last-of-type{border-bottom:none}
+.ch .nm{font:600 14px var(--sans)}
+.ch .nm small{display:block;font:400 12px var(--sans);color:var(--soft)}
+.ch .ex{font:500 16.5px/1.75 var(--serif);overflow-x:auto;min-width:0}
+.ch .ex .gen{color:var(--soft);font-size:14.5px}
+.ch .ex .res{font-weight:600}
+.ch.n .nm{color:var(--sn)}.ch.k .nm{color:var(--st)}.ch.s .nm{color:var(--sn)}
+@media (max-width:560px){.ch{grid-template-columns:minmax(0,1fr)}}
+.total{font:600 17px/1.8 var(--serif);border:1.5px solid var(--sel);border-radius:10px;padding:10px 12px;margin-top:10px;overflow-x:auto}
+.interp{margin-top:12px;font-size:14.5px;color:var(--ink);background:var(--bg);border:1px dashed var(--edge);border-radius:10px;padding:10px 12px}
+.interp .src{display:block;font-size:12.5px;color:var(--soft);margin-top:4px}
+.note{font-size:14px;color:var(--soft);max-width:74ch;margin:8px 0 0}
+.note b{color:var(--ink)}
+/* numeric check */
+.numgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:900px){.numgrid{grid-template-columns:minmax(0,1fr)}}
+.inrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.inrow label{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--soft);min-width:0}
+.inrow input{width:100%;font:13.5px var(--mono)}
+.mxrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font:500 17px var(--serif);margin:10px 0;overflow-x:auto}
+.mx{display:inline-grid;grid-template-columns:auto auto;gap:2px 14px;padding:5px 11px;position:relative;font:13.5px var(--mono);font-variant-numeric:tabular-nums}
+.mx::before,.mx::after{content:"";position:absolute;top:0;bottom:0;width:7px;border:1.5px solid var(--ink)}
+.mx::before{left:0;border-right:none}.mx::after{right:0;border-left:none}
+.mx span{text-align:right;white-space:nowrap}
+.tscroll{overflow-x:auto}
+table.dc{border-collapse:collapse;font:13.5px var(--mono);font-variant-numeric:tabular-nums;width:100%}
+table.dc th,table.dc td{padding:4px 10px;border-bottom:1px solid var(--edge);text-align:right;white-space:nowrap}
+table.dc th{font:600 12px var(--sans);color:var(--soft);text-align:right}
+table.dc td:first-child,table.dc th:first-child{text-align:left;font-family:var(--serif);font-size:15px}
+.pill{display:inline-block;font:500 12.5px var(--sans);border:1px solid var(--edge);border-radius:99px;padding:2px 10px;color:var(--soft);margin-top:10px}
+.pill.ok{border-color:var(--good);color:var(--good)}.pill.no{border-color:var(--bad);color:var(--bad)}
+.notes{margin-top:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:900px){.notes{grid-template-columns:minmax(0,1fr)}}
+.notes li{font-size:14px;max-width:70ch;margin-bottom:6px}
+.notes ul{padding-left:18px;margin:6px 0}
+.cap{font-size:12.5px;color:var(--soft);margin:10px 0 0}
+a{color:var(--sn)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.chk{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--soft);cursor:pointer}
+.split{margin-top:8px}
+.pill.st{border-color:var(--st);color:var(--st)}.pill.sn{border-color:var(--sn);color:var(--sn)}
+.sstep{margin:14px 0 0}
+.sstep h3{margin:0 0 6px}
+.sline{font:500 15px/1.9 var(--serif);overflow-x:auto;white-space:nowrap;padding:1px 0}
+.sline .lab{display:inline-block;min-width:5.6em;color:var(--soft)}
+.sbox{background:var(--bg);border:1px solid var(--edge);border-radius:10px;padding:8px 12px}
+.sgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:900px){.sgrid{grid-template-columns:minmax(0,1fr)}}
+.sgrid .sline{font-size:14.5px}
+.sres{font-weight:600}
+.ctlline{margin:0 0 8px}
+.numdet{margin-top:16px;border-top:1px solid var(--edge);padding-top:10px}
+.numdet summary{cursor:pointer;font:500 14px var(--sans);color:var(--soft)}
+.numgrid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:900px){.numgrid.three{grid-template-columns:minmax(0,1fr)}}
+.vec .math .what{margin:0 0 4px 0}
+.kv{font-weight:700}
+
+:root{--g0:#6b7488;--g1:var(--st);--g2b:#7a5fd0;--g2s:var(--sn);--g3:#2f8a4f;--g4:#c2417a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--g0:#a3acc0;--g2b:#a29bfe;--g3:#5fd38a;--g4:#ff7fb5}}
+:root[data-theme="dark"]{--g0:#a3acc0;--g2b:#a29bfe;--g3:#5fd38a;--g4:#ff7fb5}
+.g1{color:var(--g1)}.g2b{color:var(--g2b)}.g2s{color:var(--g2s)}
+.ch.c0 .nm{color:var(--g0)}.ch.c2b .nm{color:var(--g2b)}.ch.c2s .nm{color:var(--g2s)}
+.sl{position:relative;display:inline-block}
+.sl::after{content:"";position:absolute;left:50%;top:6%;height:88%;border-left:1.3px solid currentColor;transform:translateX(-50%) rotate(26deg);pointer-events:none}
+.keybox{border:1.6px solid var(--sel);font-size:17px;white-space:normal;margin:10px 0 0;padding:10px 14px}
+.vec .math.blk{font-size:14.5px;color:var(--soft)}
+.back{display:inline-block;margin:0 0 10px;font-size:14.5px;color:var(--sn);text-decoration:none}.back:hover{text-decoration:underline}
+.mxs{display:inline-grid;gap:2px 14px;padding:3px 10px;position:relative;vertical-align:middle;font:500 14px var(--serif)}
+.mxs::before,.mxs::after{content:"";position:absolute;top:0;bottom:0;width:6px;border:1.4px solid var(--ink)}
+.mxs::before{left:0;border-right:none}.mxs::after{right:0;border-left:none}
+.mxs span{text-align:center;white-space:nowrap}
+.selrow{font-size:19px;margin:6px 0 4px}.selrow.fx .mxs{font-size:17px;gap:5px 15px;padding:5px 12px}
+
+.g3{color:var(--g3)}
+.ch.c1 .nm{color:var(--g1)}.ch.c3 .nm{color:var(--g3)}
+.pill.v1{border-color:var(--g1);color:var(--g1)}.pill.v3{border-color:var(--g3);color:var(--g3)}
+
+.g4{color:var(--g4)}.ch.c4 .nm{color:var(--g4)}.g0{color:var(--g0)}
+.pill.v0{border-color:var(--g0);color:var(--g0)}.pill.v2{border-color:var(--g2b);color:var(--g2b)}.pill.v4{border-color:var(--g4);color:var(--g4)}
+.qblock{padding-bottom:6px}.qblock + .qblock{margin-top:18px;padding-top:14px;border-top:2px solid var(--edge)}
+.qhead{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-bottom:2px}.qhead h3{margin:0}
+.qhead select{max-width:100%}
+table.arr{border-collapse:collapse;font:500 15px/1.6 var(--serif);min-width:100%}
+table.arr th,table.arr td{border:1px solid var(--edge);padding:6px 10px;text-align:left;vertical-align:top}
+table.arr thead th{font:600 13px var(--sans);color:var(--soft);background:var(--bg);white-space:nowrap}
+table.arr th[scope=row]{font:600 15px var(--serif);white-space:nowrap;background:var(--bg)}
+table.arr tr.ps th[scope=row]{color:var(--g3)}table.arr tr.vv th[scope=row]{color:var(--g1)}
+table.arr tr.sep td,table.arr tr.sep th{border-top:2px solid var(--soft)}
+table.arr td.z{color:var(--soft)}
+.arrnote{font-size:13.5px;color:var(--soft);margin:8px 0 0;max-width:80ch}
+.lrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin:8px 0}
+.lrow input[type=number]{width:6.5em}
+.one{position:relative;display:inline-block}
+.one::after{content:"";position:absolute;left:50%;top:-.12em;width:.42em;height:.42em;border-left:.075em solid currentColor;border-top:.075em solid currentColor;transform:translateX(-50%) rotate(45deg) scale(.7,.55);transform-origin:center}
+.hs{position:relative;display:inline-block}
+.hs::after{content:"";position:absolute;left:50%;top:.08em;width:.42em;height:.42em;border-left:.075em solid currentColor;border-top:.075em solid currentColor;transform:translateX(-50%) rotate(45deg) scale(.7,.55);transform-origin:center}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <a class="back" href="../index.html">← The BQ algebra at the Dirac level</a>
+  <h1>BQ-Dirac Field Quadratics</h1>
+  <p class="lede">A field at the Dirac level is an even element, <span class="sl">F</span> = f𝟙 + <b>p</b>·<span class="g2b"><b>α</b></span> + <b>q</b>·<span class="g2s"><b>Σ</b></span>: a scalar, a boost bivector and a spin bivector, such as the electromagnetic field <span class="sl">B</span> = <span class="sl">∂</span><span class="sl">A</span>. Two quadratic products follow. The field square <span class="sl">F</span><span class="sl">F</span> holds the Lorentz invariants. The sandwich <span class="sl">F</span><span class="sl">a</span><span class="sl">F</span> takes a four-vector <span class="sl">a</span> to a four-vector: with a = β<sub>μ</sub> it gives the energy density, the energy flux and the stress. No time adjoint is needed at this level. Choose a field from the BQ papers.</p>
+  <div class="formula keybox"><span class="sl">F</span><span class="sl">F</span> = (f² + p² − q²) <span class="g0">𝟙</span> + 2f<b>p</b>·<span class="g2b"><b>α</b></span> + 2f<b>q</b>·<span class="g2s"><b>Σ</b></span> − 2(<b>p</b>·<b>q</b>) <span class="g4">χ</span><br>
+  <span class="sl">F</span><span class="sl">a</span><span class="sl">F</span> = [(f² − p² − q²)a<sub>0</sub> + 2<b>a</b>·(<b>p</b>×<b>q</b>)] <span class="g1">β<sub>0</sub></span> + [(f² + p² + q²)<b>a</b> − 2(<b>a</b>·<b>p</b>)<b>p</b> − 2(<b>a</b>·<b>q</b>)<b>q</b> − 2a<sub>0</sub>(<b>p</b>×<b>q</b>)]·<span class="g1"><b>β</b></span> − 2f(<b>a</b>·<b>q</b>) <span class="g3">β̃<sub>0</sub></span> + 2f(<b>a</b>×<b>p</b> − a<sub>0</sub><b>q</b>)·<span class="g3"><b>β̃</b></span></div>
+</header>
+<div class="grid">
+  <section class="card" aria-labelledby="h-pick">
+    <h2 id="h-pick">Choose the field</h2>
+    <div class="pick"><label for="selF"><span class="sl">F</span></label><select id="selF"></select></div>
+    <div class="row"><label class="chk"><input type="checkbox" id="fzero"> <span id="fzeroLab">Set the scalar channel f = 0</span></label></div>
+    <div class="vec" id="vF"></div>
+    <div class="vec" id="vP"></div>
+    <p class="note">Two fields <span class="sl">F</span> and <span class="sl">G</span> = g𝟙 + <b>m</b>·<b>α</b> + <b>n</b>·<b>Σ</b> multiply by the <a href="BQ_Dirac_Multiplication_Table.html">BQ-Dirac table</a> into the even algebra, including the pseudoscalar χ:</p>
+    <div class="formula" style="white-space:normal;line-height:1.9"><span class="sl">F</span><span class="sl">G</span> = (fg + <b>p</b>·<b>m</b> − <b>q</b>·<b>n</b>) <span class="g0">𝟙</span> + (f<b>m</b> + g<b>p</b> − <b>p</b>×<b>n</b> − <b>q</b>×<b>m</b>)·<span class="g2b"><b>α</b></span><br>+ (f<b>n</b> + g<b>q</b> + <b>p</b>×<b>m</b> − <b>q</b>×<b>n</b>)·<span class="g2s"><b>Σ</b></span> − (<b>p</b>·<b>n</b> + <b>q</b>·<b>m</b>) <span class="g4">χ</span></div>
+    <p class="note">For <span class="sl">F</span><span class="sl">F</span> take <span class="sl">G</span> = <span class="sl">F</span>: the cross products cancel. The sandwich is <span class="sl">F</span>(<span class="sl">a</span><span class="sl">F</span>), a vector times an even element (the <a href="BQ_Dirac_Triple_Product_Explorer.html">triple rule</a>) followed by one more even factor.</p>
+  </section>
+  <section class="card" aria-labelledby="h-q" aria-live="polite">
+    <h2 id="h-q">The two quadratic products</h2>
+    <div class="qblock" id="qSq"></div>
+    <div class="qblock" id="qSw"></div>
+    <div class="interp" id="interp"></div>
+  </section>
+</div>
+<section class="card" style="margin-top:18px" aria-labelledby="h-arr">
+  <h2 id="h-arr">The four basis insertions <span class="sl">F</span>β<sub>μ</sub><span class="sl">F</span></h2>
+  <p class="note" style="margin-top:0">Column μ holds the channels of <span class="sl">F</span>β<sub>μ</sub><span class="sl">F</span>. Because the sandwich is linear in <span class="sl">a</span>, these four columns fix it for every four-vector: <span class="sl">F</span><span class="sl">a</span><span class="sl">F</span> = a<sup>μ</sup> <span class="sl">F</span>β<sub>μ</sub><span class="sl">F</span>.</p>
+  <div class="tscroll" id="arrwrap"></div>
+  <div id="arrphys"></div>
+</section>
+<section class="card" style="margin-top:18px" aria-labelledby="h-tt">
+  <h2 id="h-tt">The field square, term by term</h2>
+  <div id="symwrap"></div>
+  <details class="numdet" open><summary>Check with numbers, by explicit 4×4 matrix multiplication and a Lorentz boost</summary><div id="numwrap"></div></details>
+</section>
+<div class="notes">
+  <section class="card"><h2>Invariant, covariant and frame-resolved</h2>
+    <ul>
+      <li><b>The square is invariant.</b> A boost along I is <span class="sl">X</span> → Λ<span class="sl">X</span>Λ<sup>−1</sup> with Λ = diag(U<sup>−1</sup>, U), U = diag(e<sup>ψ/2</sup>, e<sup>−ψ/2</sup>). Then <span class="sl">F</span><sup>2</sup> → Λ<span class="sl">F</span><sup>2</sup>Λ<sup>−1</sup>, and 𝟙 and χ commute with Λ: for a pure bivector field the square is a pair of Lorentz scalars.</li>
+      <li><b>The sandwich is covariant.</b> With <span class="sl">a</span> transformed as well, <span class="sl">F</span><sup>L</sup><span class="sl">a</span><sup>L</sup><span class="sl">F</span><sup>L</sup> = Λ(<span class="sl">F</span><span class="sl">a</span><span class="sl">F</span>)Λ<sup>−1</sup>: a vector-valued map, whose coefficients form a mixed rank-two tensor.</li>
+      <li><b>A fixed β<sub>0</sub> is frame-resolved.</b> <span class="sl">F</span><sup>L</sup>β<sub>0</sub><span class="sl">F</span><sup>L</sup> is the energy and flux for the new observer, not the transformed old ones. The observer dependence that the Pauli product F<sup>T</sup>F carried is now an explicit vector argument.</li>
+      <li><b>Grades.</b> For f = 0 the square lies in Λ<sup>0</sup> ⊕ Λ<sup>4</sup> and the sandwich in Λ<sup>1</sup>. A scalar channel f adds bivectors to the square and a pseudovector Λ<sup>3</sup> part to the sandwich.</li>
+    </ul>
+  </section>
+  <section class="card"><h2>The Pauli quadratics inside</h2>
+    <p class="note">With the BQ-Pauli field F = −f<span class="one">1</span> + <b>q</b>·<b class="kv">K̂</b> + <b>p</b>·<span class="hs">σ</span> and its time adjoint F<sup>T</sup> = −f<span class="one">1</span> + <b>q</b>·<b class="kv">K̂</b> − <b>p</b>·<span class="hs">σ</span> (the T̂ and <span class="hs">σ</span> channels change sign), the Dirac field is block diagonal, and so are its products:</p>
+    <div class="formula" style="white-space:normal"><span class="sl">F</span> = diag(−F<sup>T</sup>, −F), &nbsp; <span class="sl">F</span><span class="sl">F</span> = diag(F<sup>T</sup>F<sup>T</sup>, FF), &nbsp; <span class="sl">F</span><span class="sl">a</span><span class="sl">F</span> = [[0, F<sup>T</sup>AF], [−FA<sup>T</sup>F<sup>T</sup>, 0]]</div>
+    <p class="note">The lower block of the square is the Pauli field square: [<span class="sl">F</span><span class="sl">F</span>]<sub>𝟙</sub> = [FF]<sub><span class="one">1</span></sub>, [<span class="sl">F</span><span class="sl">F</span>]<sub>χ</sub> = −[FF]<sub>T̂</sub>, [<span class="sl">F</span><span class="sl">F</span>]<sub>α</sub> = −[FF]<sub><span class="hs">σ</span></sub>, [<span class="sl">F</span><span class="sl">F</span>]<sub>Σ</sub> = −[FF]<sub><b class="kv">K̂</b></sub>. With a = β<sub>0</sub> (A = T̂) the upper block of the sandwich is T̂F<sup>T</sup>F, the Pauli energy–flux product moved into the space-time channels: [<span class="sl">F</span>β<sub>0</sub><span class="sl">F</span>]<sub>β0</sub> = [T̂F<sup>T</sup>F]<sub>T̂</sub>, <sub><b>β</b></sub> = <sub><b class="kv">K̂</b></sub>, <sub>β̃0</sub> = −<sub><span class="one">1</span></sub>, <sub><b>β̃</b></sub> = −<sub><span class="hs">σ</span></sub>.</p>
+    <p class="cap">Electromagnetic products from de Haas (2026), <i>BQ-Weyl electromagnetism</i>, eqs. 118–133 and 145–222; fluid products from eqs. 286–321 of the same paper. The bilinear fields <span class="sl">R</span><span class="sl">P</span>, <span class="sl">J</span><span class="sl">A</span> and <span class="sl">U</span><span class="sl">G</span> have the same 1 + 3 + 3 form; their quadratics follow the same rules and their readings are marked as extensions. The paper writes the boost rotor as U = exp((ψ/2)Î) in eq. 161, which is a phase diag(e<sup>iψ/2</sup>, e<sup>−iψ/2</sup>); the matrix Λ of eq. 163 needs U = exp((ψ/2)<span class="hs">σ</span><sub>I</sub>), which is what this page uses. Part of <a href="../index.html">the BQ algebra at the Dirac level</a>; the Pauli version is <a href="../../BQ_models/BQ_Field_Quadratics.html">BQ field quadratics</a>.</p>
+  </section>
+</div>
+</div>
+
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+const BK = '<b class="kv">K̂</b>';
+const IJK = ['I', 'J', 'K'];
+/* ---------- symbols ---------- */
+const SYM = {f:'f', b1:'b<sub>1</sub>', sE:'σ<sub>E</sub>', Sa:'S', Lg:'L', Lf:'𝓛', a0:'a<sub>0</sub>', u0:'u<sub>0</sub>', c:'c', rho:'ρ'};
+const ORDER = ['f','b1','sE','Sa','Lg','Lf','a0','u0','c','rho'];
+const VEC = {p:'p', q:'q', E:'E', B:'B', Pi:'Π', Om:'Ω', M:'M', L:'L', S:'S', T:'T', TS:'T<sub>σ</sub>', TK:'T<sub>K</sub>', a:'a', u:'u', J:'J'};
+const VORD = ['p','q','E','B','Pi','Om','M','L','S','T','TS','TK','a','u','J'];
+const vbold = v => { const s = VEC[v]; return s.includes('<sub>') ? '<b>' + s.replace('<sub>', '</b><sub>') : '<b>' + s + '</b>'; };
+const vsq = v => { const s = VEC[v]; return s.includes('<sub>') ? s.replace(/<sub>(.*)<\/sub>/, '<sub>$1</sub><sup>2</sup>') : s + '<sup>2</sup>'; };
+const fmul = (a, b) => { const o = Object.assign({}, a); for (const k in b){ o[k] = (o[k] || 0) + b[k]; if (!o[k]) delete o[k]; } return o; };
+const okeys = f => Object.keys(f).sort((x, y) => ORDER.indexOf(x) - ORDER.indexOf(y));
+const sup = n => n === 1 ? '' : '<sup>' + n + '</sup>';
+const fnum = f => okeys(f).filter(k => f[k] > 0).map(k => SYM[k] + sup(f[k])).join('');
+const fden = f => okeys(f).filter(k => f[k] < 0).map(k => SYM[k] + sup(-f[k])).join('');
+const SL = s => `<span class="sl">${s}</span>`;
+const SLn = nm => { const m = nm.match(/^([^<]*)(.*)$/); return SL(m[1]) + m[2]; };
+
+/* ---------- the fields of the BQ papers at the Dirac level: F/ = f 1 + p.alpha + q.Sigma ---------- */
+const FIELDS = [
+  {id:'B', nm:'B', lab:SL('B') + ' = ' + SL('∂') + SL('A'), what:'electromagnetic field', f:{k:1,f:{b1:1}}, p:{k:1,f:{c:-1},v:'E'}, q:{k:1,f:{},v:'B'},
+   zlab:'Lorenz gauge: b<sub>1</sub> = 0', zdef:true, defs:'b<sub>1</sub> = (1/c²)∂<sub>t</sub>φ + ∇·<b>A</b>, <b>E</b> = −∂<sub>t</sub><b>A</b> − ∇φ, <b>B</b> = ∇×<b>A</b>',
+   pauli:'B = −b<sub>1</sub> <span class="one">1</span> + <b>B</b>·' + BK + ' + (<b>E</b>/c)·<span class="hs">σ</span>, the Pauli field ∂<sup>T</sup>A with B<sub>0</sub> = −b<sub>1</sub>',
+   num:[0.3, 0.6, 0.2, -0.4, 0.1, 0.8, 0.5]},
+  {id:'H', nm:'H', lab:SL('H') + ' = ' + SL('∂') + SL('G'), what:'relativistic fluid field', f:{k:1,f:{sE:1}}, p:{k:-1,f:{c:-1},v:'Pi'}, q:{k:1,f:{},v:'Om'},
+   zlab:'locally conserved fluid: σ<sub>E</sub> = 0', zdef:false, defs:'σ<sub>E</sub> = (1/c²)∂<sub>t</sub>ε + ∇·<b>g</b>, <b>Π</b> = ∂<sub>t</sub><b>g</b> + ∇ε, <b>Ω</b> = ∇×<b>g</b>',
+   pauli:'H = −σ<sub>E</sub> <span class="one">1</span> + <b>Ω</b>·' + BK + ' − (<b>Π</b>/c)·<span class="hs">σ</span>, the Pauli field ∂<sup>T</sup>G',
+   num:[0.4, -0.5, 0.3, 0.2, 0.7, -0.1, 0.6]},
+  {id:'RP', nm:'C<sub>RP</sub>', lab:SL('R') + SL('P'), what:'action and angular-momentum bivector', f:{k:1,f:{Sa:1}}, p:{k:1,f:{},v:'M'}, q:{k:1,f:{},v:'L'},
+   zlab:'drop the action: S = 0', zdef:false, defs:'S = −(Et − <b>r</b>·<b>p</b>), <b>M</b> = ct<b>p</b> − <b>r</b>E/c, <b>L</b> = <b>r</b>×<b>p</b>',
+   pauli:'R<sup>T</sup>P = −S <span class="one">1</span> + <b>L</b>·' + BK + ' + <b>M</b>·<span class="hs">σ</span>', num:[0.5, 0.3, -0.6, 0.2, 0.4, 0.1, -0.3]},
+  {id:'JA', nm:'C<sub>JA</sub>', lab:SL('J') + SL('A'), what:'current–potential bilinear', f:{k:-1,f:{Lg:1}}, p:{k:1,f:{},v:'S'}, q:{k:1,f:{},v:'T'},
+   zlab:'set L = 0', zdef:false, defs:'L = ρφ − <b>J</b>·<b>A</b>, <b>S</b> = cρ<b>A</b> − (φ/c)<b>J</b>, <b>T</b> = <b>J</b>×<b>A</b>',
+   pauli:'J<sup>T</sup>A = L <span class="one">1</span> + <b>T</b>·' + BK + ' + <b>S</b>·<span class="hs">σ</span>', num:[-0.2, 0.4, 0.4, -0.1, 0.3, -0.5, 0.2]},
+  {id:'UG', nm:'T', lab:SL('T') + ' = ' + SL('U') + SL('G'), what:'fluid kinematic–dynamic bilinear', f:{k:-1,f:{Lf:1}}, p:{k:1,f:{},v:'TS'}, q:{k:1,f:{},v:'TK'},
+   zlab:'set 𝓛 = 0', zdef:false, defs:'𝓛 = (u<sub>0</sub>/c)ε − <b>u</b>·<b>g</b>, <b>T</b><sub>σ</sub> = u<sub>0</sub><b>g</b> − (ε/c)<b>u</b>, <b>T</b><sub>K</sub> = <b>u</b>×<b>g</b>',
+   pauli:'U<sup>T</sup>G = 𝓛 <span class="one">1</span> + <b>T</b><sub>K</sub>·' + BK + ' + <b>T</b><sub>σ</sub>·<span class="hs">σ</span>', num:[-1.2, 0.2, 0.1, -0.3, 0.1, 0.2, 0.05]},
+  {id:'gen', nm:'F', lab:SL('F'), what:'general field (f, p, q)', f:{k:1,f:{f:1}}, p:{k:1,f:{},v:'p'}, q:{k:1,f:{},v:'q'},
+   zlab:'set f = 0 (a pure bivector field)', zdef:false, defs:'',
+   pauli:'F = −f <span class="one">1</span> + <b>q</b>·' + BK + ' + <b>p</b>·<span class="hs">σ</span>', num:[0.5, 1, 0, 0.5, 0, 2, -1]}
+];
+const FI = Object.fromEntries(FIELDS.map(x => [x.id, x]));
+
+/* readings: square, then sandwich by insertion kind (b0, bi, U, J, a) */
+const READ = {
+  B:{sq:'With b<sub>1</sub> = 0, ' + SL('B') + SL('B') + ' = (E²/c² − B²) 𝟙 − (2/c)(<b>E</b>·<b>B</b>) χ = −I<sub>1</sub>𝟙 − 2I<sub>2</sub>χ, with I<sub>1</sub> = B² − E²/c² and I<sub>2</sub> = <b>E</b>·<b>B</b>/c: the two Lorentz invariants of the field, one in the scalar and one in the pseudoscalar channel. Both vanish for a plane wave. A nonzero b<sub>1</sub> adds b<sub>1</sub>² to 𝟙 and 2b<sub>1</sub> times the field to the bivector channels.|eqs. 118–127',
+     b0:'T(β<sub>0</sub>) = −' + SL('B') + 'β<sub>0</sub>' + SL('B') + '/(2μ<sub>0</sub>) = u<sub>EM</sub> β<sub>0</sub> + (<b>S</b>/c)·<b>β</b>, with u<sub>EM</sub> = (E²/c² + B²)/(2μ<sub>0</sub>) and <b>S</b> = <b>E</b>×<b>B</b>/μ<sub>0</sub>: the energy density and Poynting flux for the time direction β<sub>0</sub>. It is the Pauli product −T̂B<sup>T</sup>B/(2μ<sub>0</sub>) of eq. 133, now one Weyl four-vector.|eqs. 145–151',
+     bi:'T(β<sub>i</sub>) = −' + SL('B') + 'β<sub>i</sub>' + SL('B') + '/(2μ<sub>0</sub>) = −(S<sub>i</sub>/c) β<sub>0</sub> + σ<sub>ji</sub> β<sub>j</sub>, with the Maxwell stress σ<sub>ij</sub> = [E<sub>i</sub>E<sub>j</sub>/c² + B<sub>i</sub>B<sub>j</sub> − ½δ<sub>ij</sub>(E²/c² + B²)]/μ<sub>0</sub>: momentum density and stress.|eqs. 152–157',
+     U:'P<sub>EM</sub>(' + SL('U') + ') = −' + SL('B') + SL('U') + SL('B') + '/(2μ<sub>0</sub>c): the electromagnetic energy–momentum for an observer with four-velocity ' + SL('U') + '. For ' + SL('U') + ' = cβ<sub>0</sub> it is the β<sub>0</sub> column.|eqs. 201–211',
+     J:'T(' + SL('J') + ') = −' + SL('B') + SL('J') + SL('B') + '/(2μ<sub>0</sub>), the current-resolved product. For a convective current ' + SL('J') + ' = ρ<sub>0</sub>' + SL('U') + ' it is ρ<sub>0</sub>T(' + SL('U') + '), by linearity.|eqs. 218–224',
+     a:'T(' + SL('a') + ') = −' + SL('B') + SL('a') + SL('B') + '/(2μ<sub>0</sub>) is the complete electromagnetic stress–energy map: linear in ' + SL('a') + ', with the four basis insertions as its columns.|eqs. 146–149, 199',
+     f:'With b<sub>1</sub> ≠ 0 the sandwich gains a pseudovector part 2b<sub>1</sub>(…)·β̃; the paper works in the Lorenz gauge.'},
+  H:{sq:'For σ<sub>E</sub> = 0, ' + SL('H') + '<sub>0</sub>² = (Π²/c² − Ω²) 𝟙 + (2/c)(<b>Ω</b>·<b>Π</b>) χ, the fluid analogue of the field invariants through <b>E</b>/c ↔ −<b>Π</b>/c and <b>B</b> ↔ <b>Ω</b>. With σ<sub>E</sub> ≠ 0 the square gains σ<sub>E</sub>² and the bivector channels 2σ<sub>E</sub><b>Ω</b>·Σ − (2σ<sub>E</sub>/c)<b>Π</b>·α.|eqs. 291–300 and 316',
+     b0:SL('H') + 'β<sub>0</sub>' + SL('H') + ' = (σ<sub>E</sub>² − Ω² − Π²/c²) β<sub>0</sub> + (2/c)(<b>Π</b>×<b>Ω</b>)·<b>β</b> − 2σ<sub>E</sub><b>Ω</b>·<b>β̃</b>: the fluid-field energy u<sub>H</sub> and transport <b>S</b><sub>H</sub> = <b>Π</b>×<b>Ω</b> for the time direction β<sub>0</sub>. For σ<sub>E</sub> = 0 it is a pure vector; σ<sub>E</sub> ≠ 0 adds the pseudovector channel, which the Pauli product H<sup>T</sup>H keeps in its <b class="kv">K̂</b> channel.|eqs. 304–321',
+     bi:'The spatial insertions give the fluid-field stress, the counterpart of the Maxwell stress through <b>E</b>/c ↔ −<b>Π</b>/c, <b>B</b> ↔ <b>Ω</b>. The paper names this the field-stress completion of the β<sub>0</sub> product; the individual entries are computed here.|eq. 523 and the rules above',
+     U:'The fluid-field energy and transport for an observer with four-velocity ' + SL('U') + ', by the same linear map. An extension, computed with the sandwich rule.|',
+     J:'An extension: the map evaluated on a four-current.|', a:'The fluid-field stress–energy map, linear in ' + SL('a') + '.|eq. 523', f:''},
+  RP:{sq:'Extension. For S = 0 the square gives (M² − L²) 𝟙 − 2(<b>M</b>·<b>L</b>) χ: the two Lorentz invariants of the angular-momentum bivector, built like the field invariants. A nonzero action adds S² and the bivector channels 2S<b>M</b>, 2S<b>L</b>.|',
+      b0:'Extension; no physical reading is given in the papers yet.|', bi:'Extension; no physical reading is given in the papers yet.|', U:'Extension.|', J:'Extension.|', a:'Extension.|', f:''},
+  JA:{sq:'Extension: the square of the interaction bilinear, computed with the same rule. No reading is given in the papers yet.|', b0:'Extension.|', bi:'Extension.|', U:'Extension.|', J:'Extension.|', a:'Extension.|', f:''},
+  UG:{sq:'Extension. For a single-component fluid (<b>g</b> = ρ<sub>0</sub><b>u</b>) <b>T</b><sub>K</sub> = <b>T</b><sub>σ</sub> = 0, so ' + SL('T') + ' = −𝓛𝟙 and the square is 𝓛² 𝟙.|eq. 392',
+      b0:'Extension. For a single-component fluid the sandwich is 𝓛² β<sub>0</sub>, and in general 𝓛² ' + SL('a') + '.|', bi:'Extension.|', U:'Extension.|', J:'Extension.|', a:'Extension.|', f:''},
+  gen:{sq:'|', b0:'|', bi:'|', U:'|', J:'|', a:'|', f:''}
+};
+
+/* ---------- insertions a/ ---------- */
+const INS = [
+  {id:'b0', lab:'β<sub>0</sub>', what:'the time basis vector', a0:{k:1,f:{}}, av:null, basis:0},
+  {id:'bI', lab:'β<sub>I</sub>', what:'a space basis vector', basis:1},
+  {id:'bJ', lab:'β<sub>J</sub>', what:'a space basis vector', basis:2},
+  {id:'bK', lab:'β<sub>K</sub>', what:'a space basis vector', basis:3},
+  {id:'U', lab:SL('U'), what:'four-velocity, u<sub>0</sub> = γc, <b>u</b> = γ<b>v</b>', a0:{k:1,f:{u0:1}}, av:{k:1,f:{},v:'u'}, comp:['u<sub>0</sub>','u<sub>I</sub>','u<sub>J</sub>','u<sub>K</sub>'], num:[1.25, 0.5, 0.25, 0.5]},
+  {id:'J', lab:SL('J'), what:'four-current, (cρ, <b>J</b>)', a0:{k:1,f:{c:1,rho:1}}, av:{k:1,f:{},v:'J'}, comp:['cρ','J<sub>I</sub>','J<sub>J</sub>','J<sub>K</sub>'], num:[1.5, 0.2, -0.4, 0.7]},
+  {id:'a', lab:SL('a'), what:'general four-vector (a<sub>0</sub>, <b>a</b>)', a0:{k:1,f:{a0:1}}, av:{k:1,f:{},v:'a'}, comp:['a<sub>0</sub>','a<sub>I</sub>','a<sub>J</sub>','a<sub>K</sub>'], num:[1, 2, 0, 0]}
+];
+const II = Object.fromEntries(INS.map(x => [x.id, x]));
+const kindOf = x => x.basis === 0 ? 'b0' : (x.basis ? 'bi' : x.id);
+
+/* ---------- vector-form terms {k, f, ker, key} ---------- */
+const T_ = (k, f, ker, key) => ({k, f, ker:ker || '', key:key || ker || ''});
+const neg = t => t && Object.assign({}, t, {k:-t.k});
+const sc = (n, t) => t && Object.assign({}, t, {k:n*t.k});
+const S_ = d => d ? T_(d.k, d.f) : null;
+const V_ = d => d ? T_(d.k, d.f, vbold(d.v), d.v) : null;
+function mul(x, y){ if (!x || !y) return null; return T_(x.k*y.k, fmul(x.f, y.f), [x.ker, y.ker].filter(Boolean).join(''), [x.key, y.key].filter(Boolean).join('*')); }
+const vi = v => VORD.indexOf(v);
+function dot(a, b, par){ if (!a || !b) return null; const f = fmul(a.f, b.f);
+  if (a.v === b.v) return T_(a.k*b.k, f, vsq(a.v), a.v + '2');
+  const [x, y] = vi(a.v) < vi(b.v) ? [a.v, b.v] : [b.v, a.v];
+  const s = vbold(x) + '·' + vbold(y); return T_(a.k*b.k, f, par ? '(' + s + ')' : s, x + '.' + y); }
+function cross(a, b){ if (!a || !b || a.v === b.v) return null; const f = fmul(a.f, b.f);
+  return T_(a.k*b.k, f, '(' + vbold(a.v) + '×' + vbold(b.v) + ')', a.v + 'x' + b.v); }
+function trip(a, p, q){ if (!a || !p || !q || a.v === p.v || a.v === q.v || p.v === q.v) return null;
+  return T_(a.k*p.k*q.k, fmul(a.f, fmul(p.f, q.f)), vbold(a.v) + '·(' + vbold(p.v) + '×' + vbold(q.v) + ')', a.v + '.' + p.v + 'x' + q.v); }
+function combine(list){ const m = new Map(); list.filter(Boolean).forEach(t => { const key = okeys(t.f).map(k => k + t.f[k]).join(',') + '|' + t.key;
+  if (m.has(key)) m.get(key).k += t.k; else m.set(key, Object.assign({}, t)); }); return [...m.values()].filter(t => Math.abs(t.k) > 1e-12); }
+function tHTML(t, first){
+  const sg = t.k < 0 ? '−' : (first ? '' : '+'), ak = Math.abs(t.k), num = fnum(t.f), den = fden(t.f), coef = ak === 1 ? '' : String(ak);
+  let body;
+  if (den) body = t.ker ? '(' + ((coef + num) || '1') + '/' + den + ')' + t.ker : (coef + num || '1') + '/' + den;
+  else body = (coef + num + t.ker) || '1';
+  return (first ? (sg ? sg : '') : ' ' + sg + ' ') + body;
+}
+const tsHTML = l => l.length ? l.map((t, i) => tHTML(t, i === 0)).join('') : '0';
+
+/* the two rules in vector form */
+function square(F){
+  const [f, p, q] = F, fs = S_(f);
+  return {one:combine([mul(fs, fs), dot(p, p), neg(dot(q, q))]), al:combine([sc(2, mul(fs, V_(p)))]), sg:combine([sc(2, mul(fs, V_(q)))]), chi:combine([sc(-2, dot(p, q))])};
+}
+function sandwich(F, a0d, avd){
+  const [f, p, q] = F, fs = S_(f), F2 = mul(fs, fs), pp = dot(p, p), qq = dot(q, q), A0 = S_(a0d), AV = V_(avd);
+  return {
+    b0:combine([mul(F2, A0), neg(mul(pp, A0)), neg(mul(qq, A0)), sc(2, trip(avd, p, q))]),
+    bv:combine([mul(F2, AV), mul(pp, AV), mul(qq, AV), sc(-2, mul(dot(avd, p, true), V_(p))), sc(-2, mul(dot(avd, q, true), V_(q))), sc(-2, mul(A0, cross(p, q)))]),
+    p0:combine([sc(-2, mul(fs, dot(avd, q, true)))]),
+    pv:combine([sc(2, mul(fs, cross(avd, p))), sc(-2, mul(mul(fs, A0), V_(q)))])
+  };
+}
+
+/* ---------- component polynomials {c, m} for the basis insertions ---------- */
+const compH = (v, i) => { const b = VEC[v]; return b.includes('</sub>') ? b.replace('</sub>', ',' + IJK[i] + '</sub>') : b + '<sub>' + IJK[i] + '</sub>'; };
+const atomH = a => a.includes(':') ? (([v, i]) => compH(v, +i))(a.split(':')) : SYM[a];
+const atomRank = a => a.includes(':') ? 100 + 10*vi(a.split(':')[0]) + +a.split(':')[1] : ORDER.indexOf(a);
+const mkey = m => Object.keys(m).sort((x, y) => atomRank(x) - atomRank(y)).map(k => k + '^' + m[k]).join(' ');
+function padd(...ps){ const m = new Map(); ps.flat().forEach(t => { const k = mkey(t.m); if (m.has(k)) m.get(k).c += t.c; else m.set(k, {c:t.c, m:Object.assign({}, t.m)}); });
+  return [...m.values()].filter(t => Math.abs(t.c) > 1e-12); }
+function pmul(a, b){ const out = []; a.forEach(x => b.forEach(y => out.push({c:x.c*y.c, m:fmul(x.m, y.m)}))); return padd(out); }
+const psc = (n, a) => a.map(t => ({c:n*t.c, m:t.m}));
+const pS = d => d ? [{c:d.k, m:Object.assign({}, d.f)}] : [];
+const pC = (d, i) => d ? [{c:d.k, m:fmul(d.f, {[d.v + ':' + i]:1})}] : [];
+function pHTML(p){
+  if (!p.length) return '0';
+  const ts = p.slice().sort((x, y) => { const ax = Object.keys(x.m).map(atomRank).sort((u, v) => u - v), ay = Object.keys(y.m).map(atomRank).sort((u, v) => u - v);
+    for (let i = 0; i < Math.max(ax.length, ay.length); i++){ const d = (ax[i] ?? -1) - (ay[i] ?? -1); if (d) return d; } return 0; });
+  return ts.map((t, i) => { const ks = Object.keys(t.m).sort((x, y) => atomRank(x) - atomRank(y));
+    const num = ks.filter(k => t.m[k] > 0).map(k => atomH(k) + sup(t.m[k])).join(''), den = ks.filter(k => t.m[k] < 0).map(k => atomH(k) + sup(-t.m[k])).join('');
+    const ac = Math.abs(t.c), co = ac === 1 ? '' : String(+ac.toFixed(4));
+    const body = (co + num || '1') + (den ? '/' + den : '');
+    return (t.c < 0 ? (i ? ' − ' : '−') : (i ? ' + ' : '')) + body; }).join('');
+}
+/* sandwich columns for a = beta_mu, by components */
+function column(F, mu){
+  const [f, p, q] = F, F2 = pmul(pS(f), pS(f));
+  const P = [0, 1, 2].map(i => pC(p, i)), Q = [0, 1, 2].map(i => pC(q, i));
+  const p2 = padd(...P.map(x => pmul(x, x))), q2 = padd(...Q.map(x => pmul(x, x)));
+  const a0 = mu === 0 ? 1 : 0, a = [0, 1, 2].map(i => mu === i + 1 ? 1 : 0);
+  const crs = (X, Y) => [0, 1, 2].map(i => { const j = (i + 1) % 3, k = (i + 2) % 3; return padd(pmul(X[j], Y[k]), psc(-1, pmul(X[k], Y[j]))); });
+  const pq = crs(P, Q), adot = X => padd(...X.map((x, i) => psc(a[i], x)));
+  const out = {b0:padd(psc(a0, padd(F2, psc(-1, p2), psc(-1, q2))), psc(2, adot(pq))), bv:[], p0:psc(-2, pmul(pS(f), adot(Q))), pv:[]};
+  const ap = adot(P), aq = adot(Q);
+  for (let j = 0; j < 3; j++){
+    out.bv.push(padd(psc(a[j], padd(F2, p2, q2)), psc(-2, pmul(ap, P[j])), psc(-2, pmul(aq, Q[j])), psc(-2*a0, pq[j])));
+    const axp = padd(pmul([{c:a[(j + 1) % 3], m:{}}], P[(j + 2) % 3]), psc(-1, pmul([{c:a[(j + 2) % 3], m:{}}], P[(j + 1) % 3])));
+    out.pv.push(padd(psc(2, pmul(pS(f), axp)), psc(-2*a0, pmul(pS(f), Q[j]))));
+  }
+  return out;
+}
+
+/* ---------- rendering ---------- */
+let SF = 'B', FZ = true, SA = 'b0', GEN = false;
+const fieldOf = () => { const x = FI[SF]; return [FZ ? null : x.f, x.p, x.q]; };
+const A1 = '<span class="g0">𝟙</span>', AL = '<span class="g2b"><b>α</b></span>', SG = '<span class="g2s"><b>Σ</b></span>', CH = '<span class="g4">χ</span>';
+const BT0 = '<span class="g1">β<sub>0</sub></span>', BTV = '<span class="g1"><b>β</b></span>', PT0 = '<span class="g3">β̃<sub>0</sub></span>', PTV = '<span class="g3"><b>β̃</b></span>';
+function fieldHTML(F, name){
+  const parts = [];
+  if (F[0]) parts.push(tsHTML([T_(F[0].k, F[0].f)]) + ' ' + A1);
+  parts.push(tsHTML([V_(F[1])]) + '·' + AL);
+  parts.push(tsHTML([V_(F[2])]) + '·' + SG);
+  return name + ' = ' + parts.map((s, i) => { s = s.trim(); return i ? (s.startsWith('−') ? ' − ' + s.slice(1) : ' + ' + s) : s; }).join('');
+}
+const chRow = (cls, nmH, sub, gen, res) => `<div class="ch ${cls}"><div class="nm">${nmH}<small>${sub}</small></div><div class="ex"><div class="gen">${gen}</div><div class="res">= ${res}</div></div></div>`;
+function total(name, parts){
+  const ps = parts.filter(p => p[0] && p[0] !== '0');
+  const one = s => !/ [+−] /.test(s.replace(/\([^()]*\)/g, '')) && !s.startsWith('(');
+  const txt = ps.map((p, i) => { const s = p[0].trim(), neg = s.startsWith('−'), body = neg ? s.slice(1) : s;
+    if (one(s)) return (neg ? (i ? ' − ' : '−') : (i ? ' + ' : '')) + body + p[1];
+    if (p[2]) return (i ? ' + ' : '') + s + p[1];
+    return (i ? ' + ' : '') + '(' + s + ')' + p[1]; }).join('');
+  return `<div class="total">${name} = ${ps.length ? txt : '0'}</div>`;
+}
+const triple3 = arr => '(' + arr.map(pHTML).join(', ') + ')';
+function render(){
+  const x = FI[SF], F = fieldOf(), nm = SLn(x.nm), ins = II[SA];
+  $('selF').value = SF; $('fzero').checked = FZ; $('fzeroLab').innerHTML = x.zlab;
+  $('vF').innerHTML = `<div class="what">${x.lab}: ${x.what}${x.defs ? ', with ' + x.defs : ''}</div><div class="math">${fieldHTML(F, nm)}</div>`;
+  $('vP').innerHTML = `<div class="what">the Pauli field inside: ${nm} = diag(−F<sup>T</sup>, −F) with</div><div class="math blk">${x.pauli}${FZ ? ' (scalar channel set to 0)' : ''}</div>`;
+  /* the square */
+  const Q = square(F);
+  $('qSq').innerHTML = `<h3>${nm}${nm} · the field square</h3>`
+    + chRow('c0', 'Scalar · ' + A1, 'grade 0', 'f² + p² − q²', tsHTML(Q.one))
+    + chRow('c2b', 'Boost bivector · ' + AL, 'grade 2', '2f<b>p</b> &nbsp;(−<b>p</b>×<b>q</b> − <b>q</b>×<b>p</b> = 0)', tsHTML(Q.al))
+    + chRow('c2s', 'Spin bivector · ' + SG, 'grade 2', '2f<b>q</b> &nbsp;(<b>p</b>×<b>p</b> − <b>q</b>×<b>q</b> = 0)', tsHTML(Q.sg))
+    + chRow('c4', 'Pseudoscalar · ' + CH, 'grade 4', '−2 <b>p</b>·<b>q</b>', tsHTML(Q.chi))
+    + total(nm + nm, [[tsHTML(Q.one), ' ' + A1], [tsHTML(Q.al), '·' + AL], [tsHTML(Q.sg), '·' + SG], [tsHTML(Q.chi), ' ' + CH]])
+    + `<div class="split"><span class="pill v0">scalar 𝟙: ${Q.one.length ? 'present' : 'zero'}</span> <span class="pill v4">pseudoscalar χ: ${Q.chi.length ? 'present' : 'zero'}</span> <span class="pill ${Q.al.length + Q.sg.length ? 'v2' : ''}">bivectors α, Σ: ${Q.al.length + Q.sg.length ? 'present' : 'zero'}</span></div>`;
+  /* the sandwich */
+  const aH = ins.basis !== undefined ? ins.lab : ins.lab, name = nm + aH + nm;
+  let rows, tot, vq, pq;
+  if (ins.basis !== undefined && ins.basis > 0){
+    const col = column(F, ins.basis);
+    rows = chRow('c1', 'Time · ' + BT0, 'vector, grade 1', `2<b>a</b>·(<b>p</b>×<b>q</b>) with <b>a</b> = <b>e</b><sub>${IJK[ins.basis - 1]}</sub>`, pHTML(col.b0))
+      + chRow('c1', 'Space · ' + BTV, 'vector, grade 1', `(f² + p² + q²)<b>a</b> − 2(<b>a</b>·<b>p</b>)<b>p</b> − 2(<b>a</b>·<b>q</b>)<b>q</b>`, triple3(col.bv))
+      + chRow('c3', 'Pseudo-time · ' + PT0, 'pseudovector, grade 3', '−2f(<b>a</b>·<b>q</b>)', pHTML(col.p0))
+      + chRow('c3', 'Pseudo-space · ' + PTV, 'pseudovector, grade 3', '2f(<b>a</b>×<b>p</b>)', triple3(col.pv));
+    tot = total(name, [[pHTML(col.b0), ' ' + BT0], [col.bv.some(c => c.length) ? triple3(col.bv) : '0', '·' + BTV, true], [pHTML(col.p0), ' ' + PT0], [col.pv.some(c => c.length) ? triple3(col.pv) : '0', '·' + PTV, true]]);
+    vq = col.b0.length || col.bv.some(c => c.length); pq = col.p0.length || col.pv.some(c => c.length);
+  } else {
+    const W = sandwich(F, ins.a0, ins.av), a0g = ins.basis === 0 ? '' : 'a<sub>0</sub>';
+    rows = chRow('c1', 'Time · ' + BT0, 'vector, grade 1', ins.basis === 0 ? 'f² − p² − q² &nbsp;(a<sub>0</sub> = 1, <b>a</b> = 0)' : '(f² − p² − q²)a<sub>0</sub> + 2<b>a</b>·(<b>p</b>×<b>q</b>)', tsHTML(W.b0))
+      + chRow('c1', 'Space · ' + BTV, 'vector, grade 1', ins.basis === 0 ? '−2(<b>p</b>×<b>q</b>)' : '(f² + p² + q²)<b>a</b> − 2(<b>a</b>·<b>p</b>)<b>p</b> − 2(<b>a</b>·<b>q</b>)<b>q</b> − 2a<sub>0</sub>(<b>p</b>×<b>q</b>)', tsHTML(W.bv))
+      + chRow('c3', 'Pseudo-time · ' + PT0, 'pseudovector, grade 3', ins.basis === 0 ? '0 &nbsp;(<b>a</b> = 0)' : '−2f(<b>a</b>·<b>q</b>)', tsHTML(W.p0))
+      + chRow('c3', 'Pseudo-space · ' + PTV, 'pseudovector, grade 3', ins.basis === 0 ? '−2f<b>q</b>' : '2f(<b>a</b>×<b>p</b> − ' + a0g + '<b>q</b>)', tsHTML(W.pv));
+    tot = total(name, [[tsHTML(W.b0), ' ' + BT0], [tsHTML(W.bv), '·' + BTV], [tsHTML(W.p0), ' ' + PT0], [tsHTML(W.pv), '·' + PTV]]);
+    vq = W.b0.length + W.bv.length; pq = W.p0.length + W.pv.length;
+  }
+  $('qSw').innerHTML = `<div class="qhead"><h3>${nm}<span class="sl">a</span>${nm} · the sandwich</h3><label class="chk" for="selA"><span class="sl">a</span> =</label><select id="selA" aria-label="The four-vector inserted between the two fields">${INS.map(a => `<option value="${a.id}"${a.id === SA ? ' selected' : ''}>${({U:'U/', J:'J/', a:'a/'})[a.id] || a.lab.replace(/<[^>]+>/g, '')}: ${a.what.replace(/<[^>]+>/g, '')}</option>`).join('')}</select></div>`
+    + (ins.av ? `<p class="note" style="margin-top:4px">${ins.lab} = ${tsHTML([S_(ins.a0)])} β<sub>0</sub> + ${tsHTML([V_(ins.av)])}·<b>β</b>: ${ins.what}.</p>` : '')
+    + rows + tot
+    + `<div class="split"><span class="pill ${vq ? 'v1' : ''}">vector β<sub>μ</sub>: ${vq ? 'present' : 'zero'}</span> <span class="pill ${pq ? 'v3' : ''}">pseudovector β̃<sub>μ</sub>: ${pq ? 'present' : 'zero'}</span></div>`;
+  $('selA').addEventListener('change', e => { SA = e.target.value; render(); });
+  /* readings */
+  const R = READ[SF], sp = s => { const [t, src] = (s || '|').split('|'); return t ? t + (src ? ` <span class="src" style="display:inline">(${src})</span>` : '') : ''; };
+  const rq = sp(R.sq), rw = sp(R[kindOf(ins)]);
+  const extra = !FZ && R.f ? ' ' + R.f : '';
+  $('interp').innerHTML = (rq ? `<b>${nm}${nm}:</b> ${rq}<br>` : '') + (rw ? `<b>${name}:</b> ${rw}${extra}` : '') + (rq || rw ? `<span class="src">Source: de Haas (2026), <i>BQ-Weyl electromagnetism</i>; equation numbers in brackets.</span>` : 'A general field: the channels above follow from the two rules.');
+  renderArray(F, nm); renderSym(F, nm); renderNum();
+}
+
+/* ---------- the array of basis insertions ---------- */
+function renderArray(F, nm){
+  const cols = [0, 1, 2, 3].map(mu => column(F, mu)), hasP = cols.some(c => c.p0.length || c.pv.some(x => x.length));
+  const cell = p => p.length ? `<td>${pHTML(p)}</td>` : '<td class="z">0</td>';
+  let h = `<table class="arr"><thead><tr><th scope="col">channel</th>${['β<sub>0</sub>','β<sub>I</sub>','β<sub>J</sub>','β<sub>K</sub>'].map(b => `<th scope="col">${nm}${b}${nm}</th>`).join('')}</tr></thead><tbody>`;
+  h += `<tr class="vv"><th scope="row">β<sub>0</sub></th>${cols.map(c => cell(c.b0)).join('')}</tr>`;
+  for (let j = 0; j < 3; j++) h += `<tr class="vv"><th scope="row">β<sub>${IJK[j]}</sub></th>${cols.map(c => cell(c.bv[j])).join('')}</tr>`;
+  if (hasP){
+    h += `<tr class="ps sep"><th scope="row">β̃<sub>0</sub></th>${cols.map(c => cell(c.p0)).join('')}</tr>`;
+    for (let j = 0; j < 3; j++) h += `<tr class="ps"><th scope="row">β̃<sub>${IJK[j]}</sub></th>${cols.map(c => cell(c.pv[j])).join('')}</tr>`;
+  }
+  $('arrwrap').innerHTML = h + '</tbody></table>';
+  let ph = `<p class="arrnote">${hasP ? 'The scalar channel adds the four pseudovector rows. ' : 'With no scalar channel the array is purely vector. '}The diagonal sums to ${pHTML(padd(cols[0].b0, cols[1].bv[0], cols[2].bv[1], cols[3].bv[2]))}${F[0] ? '' : ' (traceless)'}.</p>`;
+  if (SF === 'B' && !F[0]) ph += `<p class="arrnote">Multiplied by −1/(2μ<sub>0</sub>) this is the electromagnetic stress–energy array of eq. 157: first column (u<sub>EM</sub>, S<sub>I</sub>/c, S<sub>J</sub>/c, S<sub>K</sub>/c), first row (u<sub>EM</sub>, −S<sub>I</sub>/c, −S<sub>J</sub>/c, −S<sub>K</sub>/c), and the Maxwell stress σ<sub>ji</sub> in the spatial block. The sign difference between the first row and column comes from β<sub>0</sub>² = −𝟙 against β<sub>i</sub>² = +𝟙.</p>`;
+  $('arrphys').innerHTML = ph;
+}
+
+/* ---------- the field square, term by term with the even-by-even table ---------- */
+const TAB2 = [
+  [['one',1], ['aI',1], ['aJ',1], ['aK',1], ['SI',1], ['SJ',1], ['SK',1]],
+  [['aI',1], ['one',1], ['SK',1], ['SJ',-1], ['chi',-1], ['aK',-1], ['aJ',1]],
+  [['aJ',1], ['SK',-1], ['one',1], ['SI',1], ['aK',1], ['chi',-1], ['aI',-1]],
+  [['aK',1], ['SJ',1], ['SI',-1], ['one',1], ['aJ',-1], ['aI',1], ['chi',-1]],
+  [['SI',1], ['chi',-1], ['aK',-1], ['aJ',1], ['one',-1], ['SK',-1], ['SJ',1]],
+  [['SJ',1], ['aK',1], ['chi',-1], ['aI',-1], ['SK',1], ['one',-1], ['SI',-1]],
+  [['SK',1], ['aJ',-1], ['aI',1], ['chi',-1], ['SJ',-1], ['SI',1], ['one',-1]] ];
+const CBH = ['𝟙', 'α<sub>I</sub>', 'α<sub>J</sub>', 'α<sub>K</sub>', 'Σ<sub>I</sub>', 'Σ<sub>J</sub>', 'Σ<sub>K</sub>'];
+const ELH = {one:'<span class="g0">𝟙</span>', aI:'<span class="g2b">α<sub>I</sub></span>', aJ:'<span class="g2b">α<sub>J</sub></span>', aK:'<span class="g2b">α<sub>K</sub></span>',
+             SI:'<span class="g2s">Σ<sub>I</sub></span>', SJ:'<span class="g2s">Σ<sub>J</sub></span>', SK:'<span class="g2s">Σ<sub>K</sub></span>', chi:'<span class="g4">χ</span>'};
+function labels(F){
+  if (GEN) return [F[0] ? 'f' : null, 'p<sub>I</sub>', 'p<sub>J</sub>', 'p<sub>K</sub>', 'q<sub>I</sub>', 'q<sub>J</sub>', 'q<sub>K</sub>'];
+  const lab = d => { const n = fnum(d.f), dn = fden(d.f); return (d.k < 0 ? '−' : '') + (Math.abs(d.k) === 1 ? '' : Math.abs(d.k)) + n + (dn ? '/' + dn : ''); };
+  const comp = (d, i) => { const n = fnum(d.f), dn = fden(d.f); return (d.k < 0 ? '−' : '') + n + compH(d.v, i) + (dn ? '/' + dn : ''); };
+  return [F[0] ? lab(F[0]) : null].concat([0, 1, 2].map(i => comp(F[1], i)), [0, 1, 2].map(i => comp(F[2], i)));
+}
+function factor(lbl){ let ng = false, body = String(lbl).trim(); if (body.startsWith('−')){ ng = true; body = body.slice(1).trim(); }
+  const len = body.replace(/<sub>.*?<\/sub>/g, '').replace(/<[^>]+>/g, '').length; return {neg:ng, body:(len <= 1 || body.startsWith('(')) ? body : '(' + body + ')'}; }
+function row7(l){ return l.map((x, i) => x === null ? '' : (() => { const f = factor(x); return (f.neg ? ' − ' : ' + ') + f.body + CBH[i]; })()).join('').replace(/^ \+ /, '').replace(/^ − /, '−'); }
+function renderSym(F, nm){
+  const ll = labels(F), coll = {one:[], aI:[], aJ:[], aK:[], SI:[], SJ:[], SK:[], chi:[]};
+  let h = `<div class="ctlline"><label class="chk"><input type="checkbox" id="gen"${GEN ? ' checked' : ''}> <span>Show with general coordinates f, p<sub>i</sub>, q<sub>i</sub></span></label></div>
+    <div class="formula">${nm}${nm} = (${row7(ll)})(${row7(ll)})</div>
+    <p class="note">Every term of the left factor multiplies every term of the right factor; each basis product is read from the <a href="BQ_Dirac_Multiplication_Table.html">BQ-Dirac multiplication table</a>. Even times even stays even: the products land on 𝟙, α, Σ and χ only.</p><div class="sgrid">`;
+  let n = 0;
+  for (let a = 0; a < 7; a++){
+    if (ll[a] === null) continue;
+    const L = factor(ll[a]); h += '<div class="sbox">';
+    for (let b = 0; b < 7; b++){
+      if (ll[b] === null) continue;
+      const R = factor(ll[b]), [el, ts] = TAB2[a][b], pre = L.neg !== R.neg, fin = (pre !== (ts < 0)) ? -1 : 1, coef = L.body + R.body;
+      coll[el].push({v:fin, coef}); n++;
+      h += `<div class="sline">(${L.neg ? '−' : ''}${L.body} ${CBH[a]})(${R.neg ? '−' : ''}${R.body} ${CBH[b]}) = ${pre ? '−' : ''}${coef}(${ts < 0 ? '−' : ''}${ELH[el]}) = <span class="sres">${fin < 0 ? '−' : ''}${coef} ${ELH[el]}</span></div>`;
+    }
+    h += '</div>';
+  }
+  const sumH = l => l.length ? l.slice().sort((p, q) => q.v - p.v).map((t, k) => (t.v < 0 ? (k ? ' − ' : '−') : (k ? ' + ' : '')) + t.coef).join('') : '0';
+  h += `</div><h3 style="margin-top:14px">Collect the ${n} terms by basis element</h3><div class="sbox">` +
+    ['one','aI','aJ','aK','SI','SJ','SK','chi'].map(el => `<div class="sline"><span class="lab">${ELH[el]}</span>: <span class="sres">${sumH(coll[el])}</span></div>`).join('') + '</div>';
+  /* structural check of the 49 table products against the general rule F/G/ (index 0: f or g, 1-3: p or m, 4-6: q or n) */
+  const want = {one:{}, aI:{}, aJ:{}, aK:{}, SI:{}, SJ:{}, SK:{}, chi:{}}, put = (el, a, b, v) => { want[el][a + ',' + b] = (want[el][a + ',' + b] || 0) + v; };
+  const AE = ['aI','aJ','aK'], SE = ['SI','SJ','SK'], eps = (i, j) => (j - i + 3) % 3 === 1 ? 1 : -1;
+  put('one', 0, 0, 1);
+  for (let i = 1; i <= 3; i++){ put('one', i, i, 1); put('one', i + 3, i + 3, -1); put('chi', i, i + 3, -1); put('chi', i + 3, i, -1);
+    put(AE[i-1], 0, i, 1); put(AE[i-1], i, 0, 1); put(SE[i-1], 0, i + 3, 1); put(SE[i-1], i + 3, 0, 1); }
+  for (let i = 1; i <= 3; i++) for (let j = 1; j <= 3; j++) if (i !== j){ const k = 6 - i - j - 1, e = eps(i - 1, j - 1);
+    put(AE[k], i, j + 3, -e); put(AE[k], i + 3, j, -e); put(SE[k], i, j, e); put(SE[k], i + 3, j + 3, -e); }
+  const got = {one:{}, aI:{}, aJ:{}, aK:{}, SI:{}, SJ:{}, SK:{}, chi:{}};
+  for (let a = 0; a < 7; a++) for (let b = 0; b < 7; b++){ const [el, ts] = TAB2[a][b]; got[el][a + ',' + b] = ts; }
+  const ok = Object.keys(want).every(el => { const ks = new Set(Object.keys(got[el]).concat(Object.keys(want[el]))); return [...ks].every(k => (got[el][k] || 0) === (want[el][k] || 0)); });
+  h += `<span class="pill ${ok ? 'ok' : 'no'}">${ok ? '✓ the 49 table products of two general fields give exactly the rule for ' + SL('F') + SL('G') : '✗ the table products differ from the rule'}</span>`;
+  $('symwrap').innerHTML = h;
+  $('gen').addEventListener('change', e => { GEN = e.target.checked; render(); });
+}
+
+/* ---------- numerical check by explicit 4x4 matrices ---------- */
+const cx = (re, im) => [re, im || 0], cm = (a, b) => [a[0]*b[0]-a[1]*b[1], a[0]*b[1]+a[1]*b[0]], ca = (a, b) => [a[0]+b[0], a[1]+b[1]];
+function mmul(X, Y){ const n = X.length, R = []; for (let i = 0; i < n; i++){ R.push([]); for (let k = 0; k < n; k++){ let s = cx(0); for (let j = 0; j < n; j++) s = ca(s, cm(X[i][j], Y[j][k])); R[i].push(s); } } return R; }
+const madd = (X, Y) => X.map((r, i) => r.map((z, j) => ca(z, Y[i][j])));
+const msc = (X, s) => X.map(r => r.map(z => [z[0]*s, z[1]*s]));
+const mdiff = (X, Y) => Math.max(...X.flatMap((r, i) => r.map((z, j) => Math.hypot(z[0] - Y[i][j][0], z[1] - Y[i][j][1]))));
+const Z2 = [[cx(0),cx(0)],[cx(0),cx(0)]];
+const PM = {one:[[cx(1),cx(0)],[cx(0),cx(1)]], T:[[cx(0,1),cx(0)],[cx(0),cx(0,1)]], I:[[cx(0,1),cx(0)],[cx(0),cx(0,-1)]], J:[[cx(0),cx(1)],[cx(-1),cx(0)]], K:[[cx(0),cx(0,1)],[cx(0,1),cx(0)]],
+            sI:[[cx(1),cx(0)],[cx(0),cx(-1)]], sJ:[[cx(0),cx(0,-1)],[cx(0,1),cx(0)]], sK:[[cx(0),cx(1)],[cx(1),cx(0)]]};
+const blk = (a, b, c, d) => [0,1,2,3].map(i => [0,1,2,3].map(j => { const B = i < 2 ? (j < 2 ? a : b) : (j < 2 ? c : d); return B[i & 1][j & 1]; }));
+const B4 = [blk(Z2, PM.T, PM.T, Z2), blk(Z2, PM.I, msc(PM.I, -1), Z2), blk(Z2, PM.J, msc(PM.J, -1), Z2), blk(Z2, PM.K, msc(PM.K, -1), Z2)];
+const BAS = {one:blk(PM.one, Z2, Z2, PM.one), b0:B4[0], bI:B4[1], bJ:B4[2], bK:B4[3], aI:mmul(B4[0], B4[1]), aJ:mmul(B4[0], B4[2]), aK:mmul(B4[0], B4[3]),
+             SI:mmul(B4[2], B4[3]), SJ:mmul(B4[3], B4[1]), SK:mmul(B4[1], B4[2])};
+BAS.chi = msc(mmul(mmul(mmul(B4[0], B4[1]), B4[2]), B4[3]), -1);
+['0','I','J','K'].forEach((k, i) => { BAS['bt' + k] = mmul(BAS.chi, B4[i]); });
+const tr = M => M.reduce((s, r, i) => ca(s, r[i]), cx(0));
+const coef = (X, M) => tr(mmul(X, M))[0] / tr(mmul(X, X))[0];
+const lin = (cs, ks) => cs.reduce((S, c, i) => madd(S, msc(BAS[ks[i]], c)), blk(Z2, Z2, Z2, Z2));
+const evenM = v => lin(v, ['one','aI','aJ','aK','SI','SJ','SK']);
+const vecM = a => lin(a, ['b0','bI','bJ','bK']);
+const plin = (cs, ks) => cs.reduce((S, c, i) => madd(S, msc(PM[ks[i]], c)), Z2);
+const fz = z => { const r = Math.abs(z[0]) < 1e-12 ? 0 : z[0], i = Math.abs(z[1]) < 1e-12 ? 0 : z[1]; const f = x => (+x.toFixed(3)).toString().replace('-', '−');
+  if (i === 0) return f(r); if (r === 0) return (Math.abs(i) === 1 ? (i < 0 ? '−' : '') : f(i)) + 'i'; return f(r) + (i < 0 ? '−' : '+') + f(Math.abs(i)) + 'i'; };
+const fn = x => (Math.abs(x) < 1e-12 ? 0 : +x.toFixed(4)).toString().replace('-', '−');
+const mxs = M => `<span class="mxs" style="grid-template-columns:repeat(${M[0].length},auto)">${M.flat().map(z => `<span>${fz(z)}</span>`).join('')}</span>`;
+const sub2 = (M, r, c) => [[M[r][c], M[r][c + 1]], [M[r + 1][c], M[r + 1][c + 1]]];
+const dot3 = (x, y) => x[0]*y[0] + x[1]*y[1] + x[2]*y[2], cr3 = (x, y) => [x[1]*y[2]-x[2]*y[1], x[2]*y[0]-x[0]*y[2], x[0]*y[1]-x[1]*y[0]];
+const NUMF = {}, NUMA = {}; let PSI = 0.6;
+const nf = () => NUMF[SF] || (NUMF[SF] = FI[SF].num.slice());
+const na = () => { const x = II[SA]; if (x.basis !== undefined) return [0, 1, 2, 3].map(m => m === x.basis ? 1 : 0); return NUMA[SA] || (NUMA[SA] = x.num.slice()); };
+function compLabels(){
+  const x = FI[SF], lab = d => { const n = fnum(d.f), dn = fden(d.f); return (d.k < 0 ? '−' : '') + n + (dn ? '/' + dn : ''); };
+  const comp = (d, i) => { const n = fnum(d.f), dn = fden(d.f); return (d.k < 0 ? '−' : '') + n + compH(d.v, i) + (dn ? '/' + dn : ''); };
+  return [lab(x.f)].concat([0, 1, 2].map(i => comp(x.p, i)), [0, 1, 2].map(i => comp(x.q, i)));
+}
+function renderNum(){
+  const w = $('numwrap'), x = II[SA], cl = compLabels(), v = nf();
+  const fin = cl.map((c, i) => (i === 0 && FZ) ? '' : `<label for="nf${i}"><span>${c}</span><input id="nf${i}" data-k="f" data-i="${i}" type="number" step="0.1" value="${v[i]}"></label>`).join('');
+  const ain = x.basis !== undefined ? `<p class="note">${x.lab} has the coordinates (${na().join(', ')}).</p>`
+    : `<div class="inrow">${x.comp.map((c, i) => `<label for="na${i}"><span>${c}</span><input id="na${i}" data-k="a" data-i="${i}" type="number" step="0.1" value="${na()[i]}"></label>`).join('')}</div>`;
+  w.innerHTML = `<p class="note">The field coordinates are entered as the channel values: p<sub>i</sub> is the α coefficient (for the EM field E<sub>i</sub>/c) and q<sub>i</sub> the Σ coefficient.</p>
+    <div class="numgrid"><div><h3>${SLn(FI[SF].nm)}: channels</h3><div class="inrow">${fin}</div></div><div><h3>${x.lab}: coordinates</h3>${ain}</div></div>
+    <div class="lrow"><label for="npsi">Boost rapidity ψ along I</label><input id="npsi" type="number" step="0.1" value="${PSI}"><span class="note" style="margin:0">v/c = tanh ψ</span></div><div id="numout"></div>`;
+  w.querySelectorAll('input[data-k]').forEach(inp => inp.addEventListener('input', () => { const y = parseFloat(inp.value); if (!isFinite(y)) return;
+    if (inp.dataset.k === 'f') nf()[+inp.dataset.i] = y; else na()[+inp.dataset.i] = y; numOut(); }));
+  $('npsi').addEventListener('input', e => { const y = parseFloat(e.target.value); if (isFinite(y)){ PSI = y; numOut(); } });
+  numOut();
+}
+function numOut(){
+  const nm = SLn(FI[SF].nm), ins = II[SA], raw = nf(), f = FZ ? 0 : raw[0], p = raw.slice(1, 4), q = raw.slice(4, 7), a = na(), a0 = a[0], av = a.slice(1);
+  const Fm = evenM([f].concat(p, q)), Am = vecM(a), F2 = mmul(Fm, Fm), W = mmul(mmul(Fm, Am), Fm);
+  /* the square */
+  const sqR = {one:f*f + dot3(p, p) - dot3(q, q), aI:2*f*p[0], aJ:2*f*p[1], aK:2*f*p[2], SI:2*f*q[0], SJ:2*f*q[1], SK:2*f*q[2], chi:-2*dot3(p, q)};
+  const ELn = {one:'𝟙', aI:'α<sub>I</sub>', aJ:'α<sub>J</sub>', aK:'α<sub>K</sub>', SI:'Σ<sub>I</sub>', SJ:'Σ<sub>J</sub>', SK:'Σ<sub>K</sub>', chi:'χ',
+    b0:'β<sub>0</sub>', bI:'β<sub>I</sub>', bJ:'β<sub>J</sub>', bK:'β<sub>K</sub>', bt0:'β̃<sub>0</sub>', btI:'β̃<sub>I</sub>', btJ:'β̃<sub>J</sub>', btK:'β̃<sub>K</sub>'};
+  const ODD = ['b0','bI','bJ','bK','bt0','btI','btJ','btK'], EVEN = ['one','aI','aJ','aK','SI','SJ','SK','chi'];
+  const sqRows = EVEN.map(k => [ELn[k], coef(BAS[k], F2), sqR[k]]), sqOdd = Math.max(...ODD.map(k => Math.abs(coef(BAS[k], F2))));
+  const r1 = Math.max(...sqRows.map(r => Math.abs(r[1] - r[2])));
+  /* the sandwich */
+  const pq = cr3(p, q), axp = cr3(av, p), F2s = f*f, pp = dot3(p, p), qq = dot3(q, q);
+  const swR = {b0:(F2s - pp - qq)*a0 + 2*dot3(av, pq), bt0:-2*f*dot3(av, q)};
+  ['bI','bJ','bK'].forEach((k, j) => { swR[k] = (F2s + pp + qq)*av[j] - 2*dot3(av, p)*p[j] - 2*dot3(av, q)*q[j] - 2*a0*pq[j]; });
+  ['btI','btJ','btK'].forEach((k, j) => { swR[k] = 2*f*(axp[j] - a0*q[j]); });
+  const swRows = ODD.map(k => [ELn[k], coef(BAS[k], W), swR[k]]), swEven = Math.max(...EVEN.map(k => Math.abs(coef(BAS[k], W))));
+  const r2 = Math.max(...swRows.map(r => Math.abs(r[1] - r[2])));
+  /* the Pauli blocks */
+  const Fp = plin([-f, q[0], q[1], q[2], p[0], p[1], p[2]], ['one','I','J','K','sI','sJ','sK']), FpT = plin([-f, q[0], q[1], q[2], -p[0], -p[1], -p[2]], ['one','I','J','K','sI','sJ','sK']);
+  const Ap = plin(a, ['T','I','J','K']);
+  const FFp = mmul(Fp, Fp), lowSq = sub2(F2, 2, 2), FAF = mmul(mmul(FpT, Ap), Fp), upW = sub2(W, 0, 2);
+  const rb1 = mdiff(lowSq, FFp), rb2 = mdiff(upW, FAF), rb0 = mdiff(Fm, blk(msc(FpT, -1), Z2, Z2, msc(Fp, -1)));
+  /* the boost */
+  const e = Math.exp(PSI/2), L = blk([[cx(1/e),cx(0)],[cx(0),cx(e)]], Z2, Z2, [[cx(e),cx(0)],[cx(0),cx(1/e)]]), Li = blk([[cx(e),cx(0)],[cx(0),cx(1/e)]], Z2, Z2, [[cx(1/e),cx(0)],[cx(0),cx(e)]]);
+  const conj = M => mmul(mmul(L, M), Li), FL = conj(Fm), AL_ = conj(Am);
+  const chF = M => ['one','aI','aJ','aK','SI','SJ','SK'].map(k => coef(BAS[k], M));
+  const fL = chF(FL), g = Math.cosh(PSI), gb = Math.sinh(PSI);
+  const std = [f, p[0], g*p[1] - gb*q[2], g*p[2] + gb*q[1], q[0], g*q[1] + gb*p[2], g*q[2] - gb*p[1]];
+  const rStd = Math.max(...fL.map((y, i) => Math.abs(y - std[i])));
+  const F2L = mmul(FL, FL), inv = [['𝟙', coef(BAS.one, F2), coef(BAS.one, F2L)], ['χ', coef(BAS.chi, F2), coef(BAS.chi, F2L)]];
+  const rInv = Math.max(...inv.map(r => Math.abs(r[1] - r[2])));
+  const rCov = mdiff(mmul(mmul(FL, AL_), FL), conj(W));
+  const S0 = mmul(mmul(Fm, BAS.b0), Fm), S0L = mmul(mmul(FL, BAS.b0), FL), S0c = conj(S0);
+  const vec = M => ['b0','bI','bJ','bK','bt0','btI','btJ','btK'].map(k => coef(BAS[k], M));
+  const v0 = vec(S0), v1 = vec(S0L), v2 = vec(S0c), d12 = Math.max(...v1.map((y, i) => Math.abs(y - v2[i])));
+  const vline = vv => '(' + vv.slice(0, 4).map(fn).join(', ') + (vv.slice(4).some(y => Math.abs(y) > 1e-12) ? ' | β̃: ' + vv.slice(4).map(fn).join(', ') : '') + ')';
+  const tab = (head, rows, extra) => `<div class="tscroll"><table class="dc"><thead><tr>${head.map(t => `<th>${t}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr><td>${r[0]}</td><td>${fn(r[1])}</td><td>${fn(r[2])}</td></tr>`).join('')}${extra || ''}</tbody></table></div>`;
+  const pill = (ok, yes, no) => `<span class="pill ${ok ? 'ok' : 'no'}">${ok ? '✓ ' + yes : '✗ ' + no}</span>`;
+  const isEM = SF === 'B';
+  $('numout').innerHTML = `<h3 style="margin-top:14px">1 · The field square</h3>
+    <div class="mxrow selrow fx"><span>${nm}${nm} =</span> ${mxs(Fm)} ${mxs(Fm)} <span>=</span> ${mxs(F2)}</div>
+    ${tab(['Channel of ' + nm + nm, 'from the 4×4 product', 'from the rule'], sqRows, `<tr><td>β, β̃ (8 channels)</td><td>${fn(sqOdd)}</td><td>0</td></tr>`)}
+    ${pill(r1 < 1e-9 && sqOdd < 1e-9, '4×4 product and square rule agree; no odd channels', 'difference ' + r1.toExponential(2))}
+    <h3 style="margin-top:16px">2 · The sandwich, with ${ins.lab}</h3>
+    <div class="mxrow selrow fx"><span>${nm}${ins.lab}${nm} =</span> ${mxs(Fm)} ${mxs(Am)} ${mxs(Fm)} <span>=</span> ${mxs(W)}</div>
+    ${tab(['Channel of ' + nm + ins.lab + nm, 'from the 4×4 product', 'from the rule'], swRows, `<tr><td>𝟙, α, Σ, χ (8 channels)</td><td>${fn(swEven)}</td><td>0</td></tr>`)}
+    ${pill(r2 < 1e-9 && swEven < 1e-9, '4×4 product and sandwich rule agree; no even channels', 'difference ' + r2.toExponential(2))}
+    <h3 style="margin-top:16px">3 · The Pauli products inside</h3>
+    <div class="mxrow selrow fx"><span>F =</span> ${mxs(Fp)} <span>, F<sup>T</sup> =</span> ${mxs(FpT)} <span>, A =</span> ${mxs(Ap)}</div>
+    ${pill(rb0 < 1e-9, nm + ' = diag(−F<sup>T</sup>, −F)', 'block form differs')}
+    <div class="mxrow selrow fx" style="margin-top:10px"><span>lower block of ${nm}${nm} =</span> ${mxs(lowSq)} <span>= FF =</span> ${mxs(FFp)}</div>
+    ${pill(rb1 < 1e-9, 'the lower block of the square is the Pauli field square', 'block differs')}
+    <div class="mxrow selrow fx" style="margin-top:10px"><span>upper block of ${nm}${ins.lab}${nm} =</span> ${mxs(upW)} <span>= F<sup>T</sup>AF =</span> ${mxs(FAF)}</div>
+    ${pill(rb2 < 1e-9, 'the upper block of the sandwich is F<sup>T</sup>AF' + (ins.basis === 0 ? ' = T̂F<sup>T</sup>F' : ''), 'block differs')}
+    <h3 style="margin-top:16px">4 · A boost along I, ψ = ${fn(PSI)}</h3>
+    <div class="mxrow selrow fx"><span>Λ = diag(U<sup>−1</sup>, U) =</span> ${mxs(L)}</div>
+    <div class="tscroll"><table class="dc"><thead><tr><th>Channel of ${nm}</th><th>before</th><th>after, Λ${nm}Λ<sup>−1</sup></th><th>${isEM ? 'standard E′/c, B′' : 'standard boost'}</th></tr></thead><tbody>
+      ${['𝟙','α<sub>I</sub>','α<sub>J</sub>','α<sub>K</sub>','Σ<sub>I</sub>','Σ<sub>J</sub>','Σ<sub>K</sub>'].map((k, i) => `<tr><td>${k}</td><td>${fn([f].concat(p, q)[i])}</td><td>${fn(fL[i])}</td><td>${fn(std[i])}</td></tr>`).join('')}</tbody></table></div>
+    <p class="note">The standard column is p′<sub>J</sub> = γ(p<sub>J</sub> − βq<sub>K</sub>), p′<sub>K</sub> = γ(p<sub>K</sub> + βq<sub>J</sub>), q′<sub>J</sub> = γ(q<sub>J</sub> + βp<sub>K</sub>), q′<sub>K</sub> = γ(q<sub>K</sub> − βp<sub>J</sub>) with γ = cosh ψ and β = tanh ψ${isEM ? ': for the EM field E′<sub>J</sub> = γ(E<sub>J</sub> − vB<sub>K</sub>), B′<sub>K</sub> = γ(B<sub>K</sub> − vE<sub>J</sub>/c²) and so on, a frame moving with v along I' : ''}.</p>
+    ${pill(rStd < 1e-9, 'Λ' + nm + 'Λ<sup>−1</sup> is the standard field transformation', 'differs from the standard boost by ' + rStd.toExponential(2))}
+    ${tab(['Channel of the square', nm + nm, '(Λ' + nm + 'Λ<sup>−1</sup>)²'], inv)}
+    ${pill(rInv < 1e-9, 'the 𝟙 and χ channels of the square are invariant', 'not invariant: ' + rInv.toExponential(2))}
+    <p class="note" style="margin-top:12px"><b>Covariance.</b> ‖${nm}<sup>L</sup>${ins.lab}<sup>L</sup>${nm}<sup>L</sup> − Λ(${nm}${ins.lab}${nm})Λ<sup>−1</sup>‖ = ${(rCov).toExponential(1)}.</p>
+    ${pill(rCov < 1e-9, 'the sandwich is a covariant map', 'not covariant')}
+    <p class="note" style="margin-top:12px"><b>A fixed β<sub>0</sub>.</b> ${nm}β<sub>0</sub>${nm} = ${vline(v0)} in the old frame. The new observer measures ${nm}<sup>L</sup>β<sub>0</sub>${nm}<sup>L</sup> = ${vline(v1)}; the old observer’s vector in the new components is Λ(${nm}β<sub>0</sub>${nm})Λ<sup>−1</sup> = ${vline(v2)}. ${isEM ? 'Multiplied by −1/(2μ<sub>0</sub>), the β<sub>0</sub> entries are the energy densities.' : ''}</p>
+    ${pill(d12 > 1e-9 || Math.abs(PSI) < 1e-12, Math.abs(PSI) < 1e-12 ? 'ψ = 0: both agree' : 'the two differ: energy and flux belong to an observer (eq. 194)', 'the two coincide for these values')}`;
+}
+
+/* ---------- wiring ---------- */
+$('selF').innerHTML = FIELDS.map(x => `<option value="${x.id}">${x.lab.replace(/<[^>]+>/g, '').replace(/([A-Z∂])(?=[A-Z∂ ]|$)/g, '$1/')}: ${x.what}</option>`).join('');
+$('selF').addEventListener('change', e => { SF = e.target.value; FZ = FI[SF].zdef; render(); });
+$('fzero').addEventListener('change', e => { FZ = e.target.checked; render(); });
+render();
+})();
+</script>
+</body></html>

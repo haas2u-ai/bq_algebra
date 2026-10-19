@@ -23,6 +23,7 @@ The scripts are self-contained and do not import the BQ-Pauli scripts in `../../
 |---|---|---|
 | `bq_dirac_bilinear.py` | the bilinear A/B/ of two Dirac-level four-vectors A/ = A_μβ^μ: the channel rule −(a₀b₀ − a·b)𝟙 + (a₀b − ab₀)·α + (a×b)·Σ with no odd or χ channels; the block form A/ = [[0,A],[−Aᵀ,0]] and A/B/ = [[−ABᵀ,0],[0,−AᵀB]] (Pauli correspondence 1̂ → −𝟙, K̂ → Σ, σ̂ → α); all 144 pairs of named vectors with the operator order kept; ∂/A/, ∂/G/, U/U/, ∂/R/ and ∂/∂/ as in the papers | `python bq_dirac_bilinear.py` |
 | `bq_dirac_triple.py` | the triple product D/(A/B/): the rule (d₀s − d·c_α)β₀ + (ds − d₀c_α − d×c_Σ)·β − (d·c_Σ)β̃₀ + (d×c_α − d₀c_Σ)·β̃ with only odd channels; the four-gradient on a general even field; the block form [[0, −D(AᵀB)], [DᵀABᵀ, 0]] (Pauli correspondence [E/]_β₀ = −e_T, [E/]_β = −e_K, [E/]_β̃₀ = e₁, [E/]_β̃ = e_σ); Maxwell ∂/B/ by grade and the Lorentz force J/B/ = −F/_L + pseudovector part, as in the Weyl-level EM paper | `python bq_dirac_triple.py` |
+| `bq_dirac_quadratics.py` | the quadratics of a field F/ = f1 + p·α + q·Σ: the even product rule and the square (f² + p² − q²)1 + 2fp·α + 2fq·Σ − 2(p·q)χ; the sandwich F/a/F/ (vector, plus a pseudovector part when f ≠ 0); the blocks F/ = diag(−Fᵀ, −F), F/F/ = diag(FᵀFᵀ, FF), F/a/F/ = [[0, FᵀAF], [−FAᵀFᵀ, 0]]; the EM invariants (eq. 124), energy–Poynting (eq. 150) and Maxwell stress (eqs. 153–154); the fluid eqs. 296, 316 and 318; a boost Λ = diag(U⁻¹, U): invariant square, covariant map, frame-resolved β₀ | `python bq_dirac_quadratics.py` |
 
 ## Install and run
 
@@ -38,6 +39,7 @@ python bq_dirac_table.py bI bJ         # one product: Pauli blocks, block terms,
 # 2 · vectors and their products
 python bq_dirac_bilinear.py            # channel rule, Pauli block form, 144 pairs, paper results (about a minute)
 python bq_dirac_triple.py              # triple rule, operator triples, Pauli block form, Maxwell, Lorentz force (seconds)
+python bq_dirac_quadratics.py          # field square, sandwich, Pauli blocks, EM and fluid quadratics, boost (seconds)
 ```
 
 Element names: `one b0 bI bJ bK aI aJ aK SI SJ SK bt0 btI btJ btK chi`.

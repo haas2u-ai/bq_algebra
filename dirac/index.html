@@ -148,7 +148,7 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
 
   <section class="theme" aria-labelledby="d2">
     <h3 class="tname" id="d2"><span class="tnum">2</span>Vectors and their products</h3>
-    <p class="groupnote">Physical four-vectors on the Weyl vector basis, and the products of two and of three of them.</p>
+    <p class="groupnote">Physical four-vectors on the Weyl vector basis, the products of two and of three of them, and the quadratics of a field.</p>
     <div class="grid">
 
     <a class="card" href="models/BQ_Dirac_Bilinear_Product_Explorer.html">
@@ -172,7 +172,7 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
         <h3>Bilinear product explorer</h3>
         <p>Choose two four-vectors from the BQ papers, <span class="sl">A</span> = A<sub>μ</sub>β<sup>μ</sup>, and see their product split into a scalar, a boost bivector and a spin bivector. No time adjoint is needed. The product is worked out term by term with the BQ-Dirac table, checked by 4×4 matrices, and its lower block is minus the Pauli bilinear A<sup>T</sup>B.</p>
         <div class="rule"><span class="sl">A</span><span class="sl">B</span> = −(a<sub>0</sub>b<sub>0</sub> − <b>a</b>·<b>b</b>)𝟙 + (a<sub>0</sub><b>b</b> − <b>a</b>b<sub>0</sub>)·α + (<b>a</b>×<b>b</b>)·Σ</div>
-        <div class="tags"><span>R̸P̸, ∂̸A̸, U̸G̸, ∂̸G̸</span><span>Pauli correspondence</span></div>
+        <div class="tags"><span><span class="sl">R</span><span class="sl">P</span>, <span class="sl">∂</span><span class="sl">A</span>, <span class="sl">U</span><span class="sl">G</span>, <span class="sl">∂</span><span class="sl">G</span></span><span>Pauli correspondence</span></div>
         <span class="open">Open the explorer</span>
       </div>
     </a>
@@ -204,6 +204,34 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
         <span class="open">Open the explorer</span>
       </div>
     </a>
+    <a class="card" href="models/BQ_Dirac_Field_Quadratics.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="A field squared lands on scalar and pseudoscalar; a field sandwich around a vector gives a vector">
+        <rect width="320" height="200" fill="#03050b"/>
+        <defs><marker id="dq1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#97a2b9"/></marker></defs>
+        <g font-family="Source Serif 4, Georgia, serif">
+          <text x="22" y="62" fill="#e7ebf3" font-size="26">F</text><line x1="27" y1="66" x2="39" y2="40" stroke="#e7ebf3" stroke-width="1.5"/>
+          <text x="44" y="62" fill="#e7ebf3" font-size="26">F</text><line x1="49" y1="66" x2="61" y2="40" stroke="#e7ebf3" stroke-width="1.5"/>
+          <path d="M76 54 L118 54" stroke="#97a2b9" marker-end="url(#dq1)"/>
+          <text x="128" y="50" fill="#a3acc0" font-size="18">𝟙</text><text x="150" y="50" fill="#97a2b9" font-size="12" font-family="IBM Plex Sans, sans-serif">E²/c² − B²</text>
+          <text x="128" y="74" fill="#ff7fb5" font-size="18">χ</text><text x="150" y="74" fill="#97a2b9" font-size="12" font-family="IBM Plex Sans, sans-serif">−(2/c) E·B &nbsp;· invariants</text>
+          <text x="22" y="142" fill="#e7ebf3" font-size="26">F</text><line x1="27" y1="146" x2="39" y2="120" stroke="#e7ebf3" stroke-width="1.5"/>
+          <text x="44" y="142" fill="#f2a24a" font-size="22">β</text><text x="57" y="147" fill="#f2a24a" font-size="13">μ</text>
+          <text x="68" y="142" fill="#e7ebf3" font-size="26">F</text><line x1="73" y1="146" x2="85" y2="120" stroke="#e7ebf3" stroke-width="1.5"/>
+          <path d="M98 134 L134 134" stroke="#97a2b9" marker-end="url(#dq1)"/>
+          <text x="144" y="130" fill="#f2a24a" font-size="13" font-family="IBM Plex Sans, sans-serif">u, S/c · energy, flux</text>
+          <text x="144" y="150" fill="#f2a24a" font-size="13" font-family="IBM Plex Sans, sans-serif">S/c, σ<tspan font-size="9" baseline-shift="sub">ij</tspan> · momentum, stress</text>
+          <text x="22" y="188" fill="#97a2b9" font-size="12" font-family="IBM Plex Sans, sans-serif">lower block FF, upper block FᵀAF: the Pauli quadratics</text>
+        </g>
+      </svg>
+      <div class="body">
+        <span class="step">Dirac step 4 · quadratics of a field</span>
+        <h3>Field quadratics</h3>
+        <p>A field is an even element f𝟙 + <b>p</b>·<b>α</b> + <b>q</b>·<b>Σ</b>. Its square lands on the scalar and the pseudoscalar χ: for the electromagnetic field these are the two Lorentz invariants. The sandwich <span class="sl">F</span><span class="sl">a</span><span class="sl">F</span> is the stress–energy map: with a = β<sub>μ</sub> it gives energy density, Poynting flux and Maxwell stress. Includes a numerical boost check for invariance and covariance, and the Pauli products FF and FᵀAF as blocks.</p>
+        <div class="rule"><span class="sl">B</span><span class="sl">B</span> = (E²/c² − B²)𝟙 − (2/c)(<b>E</b>·<b>B</b>)χ, &nbsp; −<span class="sl">B</span>β<sub>0</sub><span class="sl">B</span>/(2μ<sub>0</sub>) = u<sub>EM</sub>β<sub>0</sub> + (<b>S</b>/c)·<b>β</b></div>
+        <div class="tags"><span>invariants</span><span>stress–energy map</span><span>fluid <span class="sl">H</span></span></div>
+        <span class="open">Open the model</span>
+      </div>
+    </a>
 
     </div>
   </section>
@@ -216,8 +244,9 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
         <li class="fh">1 · The basis</li>
         <li><code>bq_dirac_table.py</code> · the 16 × 16 table, Pauli block content, Clifford relations, χ, trace orthogonality, block route = 4×4 route</li>
         <li class="fh">2 · Vectors and their products</li>
-        <li><code>bq_dirac_bilinear.py</code> · the channels of <span class="sl">A</span><span class="sl">B</span>, the block form with −A<sup>T</sup>B, all 144 pairs, and ∂̸A̸, ∂̸G̸, U̸U̸, ∂̸R̸, ∂̸∂̸ from the papers</li>
-        <li><code>bq_dirac_triple.py</code> · the triple rule, ∂̸ on a general even field, the block form with −D(A<sup>T</sup>B), Maxwell and the Lorentz force</li>
+        <li><code>bq_dirac_bilinear.py</code> · the channels of <span class="sl">A</span><span class="sl">B</span>, the block form with −A<sup>T</sup>B, all 144 pairs, and <span class="sl">∂</span><span class="sl">A</span>, <span class="sl">∂</span><span class="sl">G</span>, <span class="sl">U</span><span class="sl">U</span>, <span class="sl">∂</span><span class="sl">R</span>, <span class="sl">∂</span><span class="sl">∂</span> from the papers</li>
+        <li><code>bq_dirac_triple.py</code> · the triple rule, <span class="sl">∂</span> on a general even field, the block form with −D(A<sup>T</sup>B), Maxwell and the Lorentz force</li>
+        <li><code>bq_dirac_quadratics.py</code> · the field square and the sandwich, the Pauli blocks FF and F<sup>T</sup>AF, the EM invariants and stress–energy array, the fluid products, and a boost along I</li>
       </ul>
       <p>Only Python 3 and SymPy are needed.</p>
     </div>
@@ -234,7 +263,8 @@ python bq_dirac_table.py bI bJ
 
 <span class="cm"># 2 · vectors and their products</span>
 python bq_dirac_bilinear.py
-python bq_dirac_triple.py</pre>
+python bq_dirac_triple.py
+python bq_dirac_quadratics.py</pre>
   </section>
 
   <section class="about" aria-label="About these models">
@@ -248,7 +278,7 @@ python bq_dirac_triple.py</pre>
       <h3>Links</h3>
       <ul>
         <li><b>1. The basis</b>: <a href="models/BQ_Dirac_Multiplication_Table.html">BQ-Dirac multiplication table</a></li>
-        <li><b>2. Vectors and their products</b>: <a href="models/BQ_Dirac_Bilinear_Product_Explorer.html">Bilinear product explorer</a>, <a href="models/BQ_Dirac_Triple_Product_Explorer.html">Triple product explorer</a></li>
+        <li><b>2. Vectors and their products</b>: <a href="models/BQ_Dirac_Bilinear_Product_Explorer.html">Bilinear product explorer</a>, <a href="models/BQ_Dirac_Triple_Product_Explorer.html">Triple product explorer</a>, <a href="models/BQ_Dirac_Field_Quadratics.html">Field quadratics</a></li>
         <li><a href="../index.html">The BQ-Pauli models</a>: the algebra, vectors, Lorentz transformations and gravity</li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra/tree/main/dirac/py_sources">Python sources</a>: exact SymPy reproduction</li>
         <li><a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>: galaxy, jet and SPARC models</li>
