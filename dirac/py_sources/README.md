@@ -17,11 +17,12 @@ The scripts are self-contained and do not import the BQ-Pauli scripts in `../../
 |---|---|---|
 | `bq_dirac_table.py` | the 16×16 BQ-Dirac multiplication table: β₀ = [[0,T̂],[T̂,0]], β_i = [[0,K̂_i],[−K̂_i,0]], the other twelve elements computed (α_i, Σ_i, χ, β̃_μ); the Pauli block content of all sixteen; Clifford relations; χ² = −𝟙 and its (anti)commutation; trace orthogonality; all 256 products by the block route and the 4×4 route, each ± one basis element | `python bq_dirac_table.py bI bJ` |
 
-### 2 · Vectors and their product
+### 2 · Vectors and their products
 
 | Script | Reproduces | Example |
 |---|---|---|
 | `bq_dirac_bilinear.py` | the bilinear A/B/ of two Dirac-level four-vectors A/ = A_μβ^μ: the channel rule −(a₀b₀ − a·b)𝟙 + (a₀b − ab₀)·α + (a×b)·Σ with no odd or χ channels; the block form A/ = [[0,A],[−Aᵀ,0]] and A/B/ = [[−ABᵀ,0],[0,−AᵀB]] (Pauli correspondence 1̂ → −𝟙, K̂ → Σ, σ̂ → α); all 144 pairs of named vectors with the operator order kept; ∂/A/, ∂/G/, U/U/, ∂/R/ and ∂/∂/ as in the papers | `python bq_dirac_bilinear.py` |
+| `bq_dirac_triple.py` | the triple product D/(A/B/): the rule (d₀s − d·c_α)β₀ + (ds − d₀c_α − d×c_Σ)·β − (d·c_Σ)β̃₀ + (d×c_α − d₀c_Σ)·β̃ with only odd channels; the four-gradient on a general even field; the block form [[0, −D(AᵀB)], [DᵀABᵀ, 0]] (Pauli correspondence [E/]_β₀ = −e_T, [E/]_β = −e_K, [E/]_β̃₀ = e₁, [E/]_β̃ = e_σ); Maxwell ∂/B/ by grade and the Lorentz force J/B/ = −F/_L + pseudovector part, as in the Weyl-level EM paper | `python bq_dirac_triple.py` |
 
 ## Install and run
 
@@ -34,8 +35,9 @@ pip install -r requirements.txt        # SymPy only
 python bq_dirac_table.py               # all checks and the 16 x 16 table (a few seconds)
 python bq_dirac_table.py bI bJ         # one product: Pauli blocks, block terms, 4x4 matrices
 
-# 2 · vectors and their product
+# 2 · vectors and their products
 python bq_dirac_bilinear.py            # channel rule, Pauli block form, 144 pairs, paper results (about a minute)
+python bq_dirac_triple.py              # triple rule, operator triples, Pauli block form, Maxwell, Lorentz force (seconds)
 ```
 
 Element names: `one b0 bI bJ bK aI aJ aK SI SJ SK bt0 btI btJ btK chi`.

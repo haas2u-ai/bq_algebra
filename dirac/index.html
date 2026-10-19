@@ -147,8 +147,8 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
   </section>
 
   <section class="theme" aria-labelledby="d2">
-    <h3 class="tname" id="d2"><span class="tnum">2</span>Vectors and their product</h3>
-    <p class="groupnote">Physical four-vectors on the Weyl vector basis, and the product of two of them.</p>
+    <h3 class="tname" id="d2"><span class="tnum">2</span>Vectors and their products</h3>
+    <p class="groupnote">Physical four-vectors on the Weyl vector basis, and the products of two and of three of them.</p>
     <div class="grid">
 
     <a class="card" href="models/BQ_Dirac_Bilinear_Product_Explorer.html">
@@ -176,6 +176,34 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
         <span class="open">Open the explorer</span>
       </div>
     </a>
+    <a class="card" href="models/BQ_Dirac_Triple_Product_Explorer.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="A vector times an even element gives a vector and a pseudovector part">
+        <rect width="320" height="200" fill="#03050b"/>
+        <defs><marker id="dt1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#97a2b9"/></marker></defs>
+        <g font-family="Source Serif 4, Georgia, serif">
+          <text x="22" y="106" fill="#e7ebf3" font-size="28">D</text><line x1="28" y1="110" x2="40" y2="82" stroke="#e7ebf3" stroke-width="1.6"/>
+          <text x="46" y="106" fill="#e7ebf3" font-size="28">(</text>
+          <text x="56" y="106" fill="#e7ebf3" font-size="28">A</text><line x1="62" y1="110" x2="74" y2="82" stroke="#e7ebf3" stroke-width="1.6"/>
+          <text x="80" y="106" fill="#e7ebf3" font-size="28">B</text><line x1="86" y1="110" x2="98" y2="82" stroke="#e7ebf3" stroke-width="1.6"/>
+          <text x="102" y="106" fill="#e7ebf3" font-size="28">)</text>
+          <path d="M120 92 C 150 66, 168 58, 196 56" fill="none" stroke="#97a2b9" marker-end="url(#dt1)"/>
+          <path d="M120 102 C 150 128, 168 136, 196 138" fill="none" stroke="#97a2b9" marker-end="url(#dt1)"/>
+          <text x="204" y="54" fill="#f2a24a" font-size="17">β<tspan font-size="11" baseline-shift="sub">μ</tspan></text><text x="230" y="54" fill="#97a2b9" font-size="12" font-family="IBM Plex Sans, sans-serif">vector</text>
+          <text x="204" y="72" fill="#97a2b9" font-size="11" font-family="IBM Plex Sans, sans-serif">Gauss–Ampère, four-force</text>
+          <text x="204" y="140" fill="#5fd38a" font-size="17">β̃<tspan font-size="11" baseline-shift="sub">μ</tspan></text><text x="230" y="140" fill="#97a2b9" font-size="12" font-family="IBM Plex Sans, sans-serif">pseudovector</text>
+          <text x="204" y="158" fill="#97a2b9" font-size="11" font-family="IBM Plex Sans, sans-serif">Gauss–Faraday</text>
+          <text x="22" y="188" fill="#97a2b9" font-size="12" font-family="IBM Plex Sans, sans-serif">upper-right block = −D(AᵀB), the Pauli triple</text>
+        </g>
+      </svg>
+      <div class="body">
+        <span class="step">Dirac step 3 · three four-vectors</span>
+        <h3>Triple product explorer</h3>
+        <p>Multiply the even product <span class="sl">A</span><span class="sl">B</span> from the left by a third vector <span class="sl">D</span>. The result fills only the vector and pseudovector channels. <span class="sl">∂</span><span class="sl">B</span> splits Maxwell’s equations into the sourced and the homogeneous ones, and <span class="sl">J</span><span class="sl">B</span> gives the Lorentz four-force with its pseudovector companion. The upper-right block is minus the Pauli triple product.</p>
+        <div class="rule"><span class="sl">D</span><span class="sl">C</span> = (d<sub>0</sub>s − <b>d</b>·<b>c</b><sub>α</sub>)β<sub>0</sub> + (<b>d</b>s − d<sub>0</sub><b>c</b><sub>α</sub> − <b>d</b>×<b>c</b><sub>Σ</sub>)·<b>β</b> − (<b>d</b>·<b>c</b><sub>Σ</sub>)β̃<sub>0</sub> + (<b>d</b>×<b>c</b><sub>α</sub> − d<sub>0</sub><b>c</b><sub>Σ</sub>)·<b>β̃</b></div>
+        <div class="tags"><span><span class="sl">∂</span><span class="sl">B</span> = −μ₀<span class="sl">J</span></span><span><span class="sl">J</span><span class="sl">B</span>, <span class="sl">U</span><span class="sl">H</span>, <span class="sl">∂</span><span class="sl">H</span></span></div>
+        <span class="open">Open the explorer</span>
+      </div>
+    </a>
 
     </div>
   </section>
@@ -187,8 +215,9 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
       <ul class="files">
         <li class="fh">1 · The basis</li>
         <li><code>bq_dirac_table.py</code> · the 16 × 16 table, Pauli block content, Clifford relations, χ, trace orthogonality, block route = 4×4 route</li>
-        <li class="fh">2 · Vectors and their product</li>
+        <li class="fh">2 · Vectors and their products</li>
         <li><code>bq_dirac_bilinear.py</code> · the channels of <span class="sl">A</span><span class="sl">B</span>, the block form with −A<sup>T</sup>B, all 144 pairs, and ∂̸A̸, ∂̸G̸, U̸U̸, ∂̸R̸, ∂̸∂̸ from the papers</li>
+        <li><code>bq_dirac_triple.py</code> · the triple rule, ∂̸ on a general even field, the block form with −D(A<sup>T</sup>B), Maxwell and the Lorentz force</li>
       </ul>
       <p>Only Python 3 and SymPy are needed.</p>
     </div>
@@ -203,8 +232,9 @@ python bq_dirac_table.py
 <span class="cm"># one product in detail</span>
 python bq_dirac_table.py bI bJ
 
-<span class="cm"># 2 · vectors and their product</span>
-python bq_dirac_bilinear.py</pre>
+<span class="cm"># 2 · vectors and their products</span>
+python bq_dirac_bilinear.py
+python bq_dirac_triple.py</pre>
   </section>
 
   <section class="about" aria-label="About these models">
@@ -218,7 +248,7 @@ python bq_dirac_bilinear.py</pre>
       <h3>Links</h3>
       <ul>
         <li><b>1. The basis</b>: <a href="models/BQ_Dirac_Multiplication_Table.html">BQ-Dirac multiplication table</a></li>
-        <li><b>2. Vectors and their product</b>: <a href="models/BQ_Dirac_Bilinear_Product_Explorer.html">Bilinear product explorer</a></li>
+        <li><b>2. Vectors and their products</b>: <a href="models/BQ_Dirac_Bilinear_Product_Explorer.html">Bilinear product explorer</a>, <a href="models/BQ_Dirac_Triple_Product_Explorer.html">Triple product explorer</a></li>
         <li><a href="../index.html">The BQ-Pauli models</a>: the algebra, vectors, Lorentz transformations and gravity</li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra/tree/main/dirac/py_sources">Python sources</a>: exact SymPy reproduction</li>
         <li><a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>: galaxy, jet and SPARC models</li>
