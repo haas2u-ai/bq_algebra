@@ -156,17 +156,31 @@ table.lm td:first-child,table.lm th:first-child{text-align:left;font-family:var(
 .bh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}
 .bh b{font:600 19px var(--serif)}.bh span{font-size:12.5px;color:var(--soft)}
 .bm .mxs{font-size:13.5px}
-table.wt{border-collapse:separate;border-spacing:2px;font:500 12.5px var(--serif)}
-table.wt th{font-weight:600;padding:3px 4px;white-space:nowrap}
-table.wt td{padding:4px 3px;text-align:center;white-space:nowrap;border-radius:4px;cursor:pointer;min-width:38px}
+table.wt{border-collapse:collapse;table-layout:fixed;margin:0;font:500 13px var(--serif)}
+table.wt th,table.wt td{width:42px;height:42px;padding:0;text-align:center;vertical-align:middle;white-space:nowrap;border:2px solid var(--surface)}
+table.wt th{font-weight:600;font-size:14px}
+table.wt td{cursor:pointer;border-radius:0}
+table.wt .vr{border-right:3px solid var(--sep)}
+table.wt .hb{border-bottom:3px solid var(--sep)}
+:root{--sep:color-mix(in srgb,var(--ink) 55%,transparent)}
 table.wt td.g0{background:color-mix(in srgb,var(--g0) 18%,transparent)}table.wt td.g1{background:color-mix(in srgb,var(--g1) 20%,transparent)}
 table.wt td.g2b{background:color-mix(in srgb,var(--g2b) 20%,transparent)}table.wt td.g2s{background:color-mix(in srgb,var(--g2s) 20%,transparent)}
 table.wt td.g3{background:color-mix(in srgb,var(--g3) 20%,transparent)}table.wt td.g4{background:color-mix(in srgb,var(--g4) 22%,transparent)}
 table.wt th.g0{color:var(--g0)}table.wt th.g1{color:var(--g1)}table.wt th.g2b{color:var(--g2b)}table.wt th.g2s{color:var(--g2s)}table.wt th.g3{color:var(--g3)}table.wt th.g4{color:var(--g4)}
-table.wt td.on{outline:2.5px solid var(--ink);outline-offset:-1px}
+table.wt td.on{outline:2.5px solid var(--ink);outline-offset:-3px}
 table.wt td:focus-visible{outline:2px solid var(--sel)}
 .big{font:600 24px var(--serif);margin:4px 0 10px}
-.mxrow.fx .mxs{font-size:12.5px;gap:2px 9px}
+.selrow.fx .mxs{font-size:18px;gap:5px 16px;padding:5px 13px}
+.selrow{font-size:21px;margin:6px 0 4px}.selrow .mxs{font-size:18px;gap:4px 18px;padding:4px 12px}.selrow b{font:600 23px var(--serif)}
+.sub{font:600 16px var(--serif);margin:14px 0 6px;color:var(--ink)}
+.tabwrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:1060px){.tabwrap{grid-template-columns:minmax(0,1fr)}}
+.tside{position:sticky;top:12px;min-width:0}
+.sidehead{font:600 26px var(--serif);margin:2px 0 12px}
+.sideline{margin:4px 0;font-size:15.5px;color:var(--soft)}
+.sidemx{font-size:18px;margin-bottom:10px}.sidemx .mxs{font-size:17px;gap:4px 16px;padding:4px 12px}
+.one{position:relative;display:inline-block}
+.one::after{content:"";position:absolute;left:50%;top:-.12em;width:.42em;height:.42em;border-left:.075em solid currentColor;border-top:.075em solid currentColor;transform:translateX(-50%) rotate(45deg) scale(.7,.55);transform-origin:center}
 .nl{padding-left:18px;margin:4px 0}.nl li{font-size:14.5px;margin-bottom:7px}
 </style>
 </head><body>
@@ -185,20 +199,15 @@ table.wt td:focus-visible{outline:2px solid var(--sel)}
   <p class="cap">Grades: <span class="gk g0">grade 0</span> <span class="gk g1">grade 1, vector</span> <span class="gk g2b">grade 2, boost bivector</span> <span class="gk g2s">grade 2, spin bivector</span> <span class="gk g3">grade 3, pseudovector</span> <span class="gk g4">grade 4, pseudoscalar</span>. Blocks use the BQ-Pauli basis 1̂, T̂ = i1̂, Î, Ĵ, K̂, σ̂<sub>I</sub>, σ̂<sub>J</sub>, σ̂<sub>K</sub>, with K̂<sub>i</sub> = T̂σ̂<sub>i</sub>. 𝟙 is the 4×4 unit.</p>
 </section>
 
-<div class="grid" style="margin-top:18px">
-  <section class="card" aria-labelledby="h-tab">
-    <h2 id="h-tab">The 16 × 16 table (row · column)</h2>
-    <div class="tscroll"><table class="wt" id="tab"></table></div>
-    <p class="cap">Each cell is the product of its row element (left) times its column element (right), coloured by the grade of the result. The selected cell is outlined.</p>
-  </section>
-  <section class="card" aria-labelledby="h-sel">
-    <h2 id="h-sel">The selected product</h2>
-    <div id="sel"></div>
-  </section>
-</div>
+<section class="card" style="margin-top:18px" aria-labelledby="h-tab">
+  <h2 id="h-tab">The 16 × 16 table (row · column)</h2>
+  <div class="tabwrap"><div class="tscroll"><table class="wt" id="tab"></table></div><div class="tside" id="side" aria-live="polite"></div></div>
+  <p class="cap">Each cell is the product of its row element (left) times its column element (right), coloured by the grade of the result. The selected cell is outlined.</p>
+</section>
 
-<section class="card" style="margin-top:18px" aria-labelledby="h-blk">
-  <h2 id="h-blk">Block product with the BQ-Pauli entries</h2>
+<section class="card" style="margin-top:18px" aria-labelledby="h-sel">
+  <h2 id="h-sel">The selected product, with the BQ-Pauli entries</h2>
+  <div id="sel"></div>
   <div id="blk"></div>
 </section>
 
@@ -234,7 +243,7 @@ const P = {'1':[[C(1),C(0)],[C(0),C(1)]], T:[[C(0,1),C(0)],[C(0),C(0,1)]], I:[[C
   J:[[C(0),C(1)],[C(-1),C(0)]], K:[[C(0),C(0,1)],[C(0,1),C(0)]],
   sI:[[C(1),C(0)],[C(0),C(-1)]], sJ:[[C(0),C(0,-1)],[C(0,1),C(0)]], sK:[[C(0),C(1)],[C(1),C(0)]]};
 const PK = ['1', 'T', 'I', 'J', 'K', 'sI', 'sJ', 'sK'];
-const PL = {'1':'1̂', T:'T̂', I:'Î', J:'Ĵ', K:'K̂', sI:'σ̂<sub>I</sub>', sJ:'σ̂<sub>J</sub>', sK:'σ̂<sub>K</sub>'};
+const PL = {'1':'<span class="one">1</span>', T:'T̂', I:'Î', J:'Ĵ', K:'K̂', sI:'σ̂<sub>I</sub>', sJ:'σ̂<sub>J</sub>', sK:'σ̂<sub>K</sub>'};
 const cm = (a, b) => [a[0]*b[0] - a[1]*b[1], a[0]*b[1] + a[1]*b[0]];
 const ca = (a, b) => [a[0] + b[0], a[1] + b[1]];
 const eq = (a, b) => Math.abs(a[0] - b[0]) < 1e-12 && Math.abs(a[1] - b[1]) < 1e-12;
@@ -306,30 +315,33 @@ function basis(){
   $('basis').innerHTML = EL.map((x, n) => `<div class="bel ${x[3]}"><div class="bh"><b>${x[1]}</b><span>${x[4]}</span></div><div class="bm">${VIEW === 'B' ? bmx(x[2]) : fmx(F4[n])}</div></div>`).join('');
 }
 function table(){
-  let h = `<thead><tr><th class="corner">·</th>${EL.map(x => `<th class="${x[3]}">${x[1]}</th>`).join('')}</tr></thead><tbody>`;
-  EL.forEach((x, a) => { h += `<tr><th class="${x[3]}">${x[1]}</th>`;
-    EL.forEach((y, b) => { const t = TAB[a][b]; h += `<td class="${EL[t.id.n][3]}${a === SEL[0] && b === SEL[1] ? ' on' : ''}" data-a="${a}" data-b="${b}" tabindex="0" aria-label="${x[0]} times ${y[0]}">${sn(t.id.s, t.id.n)}</td>`; });
+  const END = new Set([0, 4, 7, 10, 14]);              /* last index of the groups 𝟙 | β | α | Σ | β̃ | χ */
+  const vr = n => END.has(n) ? ' vr' : '', hb = n => END.has(n) ? ' hb' : '';
+  let h = `<thead><tr><th class="corner vr hb">·</th>${EL.map((x, n) => `<th class="${x[3]} hb${vr(n)}">${x[1]}</th>`).join('')}</tr></thead><tbody>`;
+  EL.forEach((x, a) => { h += `<tr><th class="${x[3]} vr${hb(a)}">${x[1]}</th>`;
+    EL.forEach((y, b) => { const t = TAB[a][b]; h += `<td class="${EL[t.id.n][3]}${vr(b)}${hb(a)}${a === SEL[0] && b === SEL[1] ? ' on' : ''}" data-a="${a}" data-b="${b}" tabindex="0" aria-label="${x[0]} times ${y[0]}">${sn(t.id.s, t.id.n)}</td>`; });
     h += '</tr>'; });
   $('tab').innerHTML = h + '</tbody>';
 }
 function detail(){
   const [a, b] = SEL, X = EL[a], Y = EL[b], t = TAB[a][b], r = sn(t.id.s, t.id.n);
-  $('sel').innerHTML = `<div class="big">${X[1]} · ${Y[1]} = <b class="${EL[t.id.n][3]}t">${r}</b></div>
-    <div class="vec"><div class="math">${X[1]} = ${bmx(X[2])} &nbsp;&nbsp; ${Y[1]} = ${bmx(Y[2])}</div>
-    <div class="math">grades ${gr(X[3])} · ${gr(Y[3])} → ${gr(EL[t.id.n][3])}</div></div>
-    <p class="note">Block route and 4×4 route agree: <b style="color:var(${t.agree ? '--good' : '--bad'})">${t.agree ? 'yes, entry by entry' : 'NO'}</b>. ${X[0] === 'one' || Y[0] === 'one' ? '' : commute(a, b)}</p>`;
   const log = []; bmul(X[2], Y[2], log);
   const term = tt => tt.zero ? '0' : `(${bs(tt.a)})(${bs(tt.b)}) = ${tt.a.s*tt.b.s < 0 ? '−' : ''}${PL[tt.a.k]}${PL[tt.b.k]} = ${bs({s:tt.s, k:tt.k})}`;
   const rows = log.map(L => `<div class="dl dwrap">(XY)<sub>${L.i}${L.k}</sub> = X<sub>${L.i}0</sub>Y<sub>0${L.k}</sub> + X<sub>${L.i}1</sub>Y<sub>1${L.k}</sub> = ${L.terms.map(term).join(' &nbsp;+&nbsp; ')} &nbsp;⇒&nbsp; <b>${bs(L.res)}</b></div>`).join('');
-  $('blk').innerHTML = `<div class="mxrow"><span>${X[1]} · ${Y[1]} =</span> ${bmx(X[2])} ${bmx(Y[2])} <span>=</span> ${bmx(t.B)} <span>=</span> <b>${r}</b></div>
-    ${rows}
-    <p class="note">X = ${X[1]}, Y = ${Y[1]}. Each product of two BQ-Pauli elements is read from the 8×8 <a href="../../BQ_models/BQ_Pauli_Multiplication_Table.html">BQ-Pauli table</a>; a product of two blocks is again ± one Pauli element, so each result block is a single term or zero.</p>`;
-  $('full').innerHTML = `<div class="mxrow fx"><span>${X[1]} · ${Y[1]} =</span> ${fmx(F4[a])} ${fmx(F4[b])} <span>=</span> ${fmx(t.M)} <span>=</span> <b>${r}</b></div>
+  $('side').innerHTML = `<div class="sidehead">${X[1]} · ${Y[1]} = <b class="${EL[t.id.n][3]}t">${r}</b></div>
+    <div class="mxrow sidemx">${bmx(X[2])} ${bmx(Y[2])} <span>=</span> ${bmx(t.B)}</div>
+    <p class="sideline">Grades ${gr(X[3])} · ${gr(Y[3])} → ${gr(EL[t.id.n][3])}.</p>
+    ${X[0] === 'one' || Y[0] === 'one' ? '' : `<p class="sideline">${commute(a, b)}</p>`}`;
+  $('sel').innerHTML = `<div class="mxrow selrow"><span>${X[1]} · ${Y[1]} =</span> ${bmx(X[2])} ${bmx(Y[2])} <span>=</span> ${bmx(t.B)} <span>=</span> <b class="${EL[t.id.n][3]}t">${r}</b></div>
+    <p class="note">Grades ${gr(X[3])} · ${gr(Y[3])} → ${gr(EL[t.id.n][3])}. ${X[0] === 'one' || Y[0] === 'one' ? '' : commute(a, b)} Block route and 4×4 route agree: <b style="color:var(${t.agree ? '--good' : '--bad'})">${t.agree ? 'yes, entry by entry' : 'NO'}</b>.</p>`;
+  $('blk').innerHTML = `<div class="sub">The four blocks, X = ${X[1]}, Y = ${Y[1]}</div>${rows}
+    <p class="note">Each product of two BQ-Pauli elements is read from the 8×8 <a href="../../BQ_models/BQ_Pauli_Multiplication_Table.html">BQ-Pauli table</a>; a product of two blocks is again ± one Pauli element, so each result block is a single term or zero.</p>`;
+  $('full').innerHTML = `<div class="mxrow selrow fx"><span>${X[1]} · ${Y[1]} =</span> ${fmx(F4[a])} ${fmx(F4[b])} <span>=</span> ${fmx(t.M)} <span>=</span> <b class="${EL[t.id.n][3]}t">${r}</b></div>
     <p class="note">Ordinary 4×4 complex matrix product; entries are 0, ±1 or ±i. The result equals ${t.id.s < 0 ? 'minus ' : ''}the 4×4 matrix of ${EL[t.id.n][1]}.</p>`;
   document.querySelectorAll('#tab td').forEach(td => td.classList.toggle('on', +td.dataset.a === a && +td.dataset.b === b));
 }
 const gr = g => ({g0:'0', g1:'1', g2b:'2 (boost)', g2s:'2 (spin)', g3:'3', g4:'4'})[g];
-function commute(a, b){ const t1 = TAB[a][b].id, t2 = TAB[b][a].id; return t1.n === t2.n && t1.s === t2.s ? `${EL[a][1]} and ${EL[b][1]} commute.` : `${EL[a][1]} and ${EL[b][1]} anticommute: ${EL[b][1]} · ${EL[a][1]} = ${sn(t2.s, t2.n)}.`; }
+function commute(a, b){ if (a === b){ const t = TAB[a][a].id; return `A square: ${EL[a][1]}² = ${sn(t.s, t.n)}.`; } const t1 = TAB[a][b].id, t2 = TAB[b][a].id; return t1.n === t2.n && t1.s === t2.s ? `${EL[a][1]} and ${EL[b][1]} commute.` : `${EL[a][1]} and ${EL[b][1]} anticommute: ${EL[b][1]} · ${EL[a][1]} = ${sn(t2.s, t2.n)}.`; }
 function facts(){
   const sq = EL.map((x, n) => ({n, s:TAB[n][n].id.s}));
   const neg = sq.filter(q => q.s < 0).map(q => EL[q.n][1]).join(', '), pos = sq.filter(q => q.s > 0).map(q => EL[q.n][1]).join(', ');
