@@ -1,6 +1,6 @@
 # BQ-Pauli algebra: Python reproduction scripts
 
-Independent Python/SymPy implementation of the ten interactive models in this
+Independent Python/SymPy implementation of the eleven interactive models in this
 repository (the web pages run their own JavaScript). Every channel rule is checked
 **exactly** (symbolically) along two independent routes:
 
@@ -52,6 +52,7 @@ A rapidity field χ(r, t) feeding a local rotor.
 | `bq_gravity_rotor.py` | the gravity rotor G = e^{χσ̂/2} fed by ψ_N, ψ_H, χ_φ: dR^G = G⁻¹dRG⁻¹ (nested for two boosts), the flat exact quadratic (and flat consistent truncation), the Galilean (PG) coframe and the term it drops, g_μν, Schwarzschild, de Sitter/FLRW, Schwarzschild–de Sitter and rigid-rotation comparisons in both time orientations, and the Einstein tensor for general u(r), Ω(r) | `python bq_gravity_rotor.py` |
 | `bq_cl_killing.py` | CL in the Galilean-coframe metric: river observers geodesic for any shift, Killing energy E = c², γ_rs = −u·u_s/c² = c/√(−g_tt) (= rotor Γ = cosh χ_r cosh χ_φ + O(χ⁴)), CL ⇔ ∂_r g_tt = 0 ⇔ v_r² + v_φ² = K where v_r ≠ 0, the closures K = 3GM/R and (3/2)v_r(R)², quasi-stationary H (adiabatic parameter, both evolution prescriptions, the Ḣ shift-rate residual), and G_n̂n̂ = −r²Ω′²/(4c²) < 0 for the CL disk at H = 0 | `python bq_cl_killing.py` |
 | `bq_mc_connection.py` | the Maurer–Cartan route to isorapidity: U_g = G(cT̂)G† for G = G_φG_r, Ω_τ = (DG/Dτ)G⁻¹ with its Thomas–Wigner channel, the channels of U_gΩ_τ (V5 eqs. 47–53), e_T = (c/2)DΓ/Dτ exactly in the rapidities, Newtonian-only e_T ≠ 0, isorapidity e_T = 0 with e_σ left free, and the slow-flow virial closure giving the rotation law (V5 eq. 43) | `python bq_mc_connection.py` |
+| `bq_kinematic_route.py` | the kinematic route to isorapidity: A_g = DU_g/Dτ is a minquat with a₀ = c DΓ/Dτ (V5 eqs. 14–16), orthogonality [U_gᵀA_g]_1̂ = 0 and the remaining bilinear channels, the power reading, the two branches (Newtonian only: all along the flow; isorapidity: purely transverse), the bridge A_g = Ω_τU_g + U_gΩ_τ† with a₀ = 2e_T, and the transverse leg-rotation terms | `python bq_kinematic_route.py` |
 
 ## Install and run
 
@@ -92,6 +93,7 @@ python bq_triple_lorentz.py --every    # each of the 2197 triples separately (ov
 python bq_gravity_rotor.py             # gravity rotor: rapidity -> dR^G -> Galilean coframe -> g_μν -> G_μν (about 20 s)
 python bq_cl_killing.py                # CL as an equi-redshift flow (a few seconds)
 python bq_mc_connection.py             # Maurer-Cartan route: e_T = (c/2) DGamma/Dtau, isorapidity, rotation law (a few seconds)
+python bq_kinematic_route.py           # kinematic route: a0 = c DGamma/Dtau, orthogonality, A = Omega U + U Omega^dagger (a few seconds)
 ```
 
 Four-vectors (`python bq_bilinear.py --list`): `R` position (ct, r), `dR` displacement,
