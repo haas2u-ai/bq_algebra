@@ -92,12 +92,13 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
 .back{display:inline-block;margin:0 0 18px;font-size:14.5px;color:var(--sn);text-decoration:none}.back:hover{text-decoration:underline}
 .sl{position:relative;display:inline-block}
 .sl::after{content:"";position:absolute;left:50%;top:6%;height:88%;border-left:1.3px solid currentColor;transform:translateX(-50%) rotate(26deg);pointer-events:none}
+.home{margin:0 0 16px;font-size:14.5px}.home a{color:var(--sn);text-decoration:none}.home a:hover{text-decoration:underline}.home a:focus-visible{outline:2px solid currentColor;outline-offset:2px}.home .sep{color:var(--soft);margin:0 8px}
 </style>
 </head>
 <body>
 <main>
   <header>
-    <a class="back" href="../index.html">← The BQ-Pauli models</a>
+    <nav class="home" aria-label="Site"><a href="/">← All sites</a><span class="sep">·</span><a href="../index.html">The BQ-Pauli models</a></nav>
     <p class="kicker">E.P.J. de Haas · Kandinsky College, Nijmegen</p>
     <h1>The BQ algebra at the Dirac level</h1>
     <p class="lede">At the Dirac level the BQ algebra lives in 4×4 complex matrices, in the <em>Weyl representation</em>. Each of its sixteen basis elements is a 2×2 block matrix whose blocks are BQ-Pauli elements, so every Dirac-level product is a block product of BQ-Pauli products. Only the four vectors β<sub>μ</sub> are defined by hand; the other twelve elements are their products. All coordinates stay real.</p>
@@ -236,6 +237,40 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
     </div>
   </section>
 
+  <section class="theme" aria-labelledby="d3">
+    <h3 class="tname" id="d3"><span class="tnum">3</span>Lorentz transformations, as global rapidity</h3>
+    <p class="groupnote">The Pauli rotor U doubled into the Weyl boost Λ = diag(U<sup>−1</sup>, U), acting on vectors by one similarity.</p>
+    <div class="grid">
+
+    <a class="card" href="models/BQ_Dirac_Lorentz_Transformations.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="The Pauli rotor U and its inverse placed on the diagonal of the Dirac boost Lambda">
+        <rect width="320" height="200" fill="#03050b"/>
+        <g font-family="Source Serif 4, Georgia, serif">
+          <text x="20" y="40" fill="#97a2b9" font-size="13" font-family="IBM Plex Sans, sans-serif">Pauli: two rules</text>
+          <text x="20" y="64" fill="#e7ebf3" font-size="16">U⁻¹AU⁻¹, &#160;UAᵀU</text>
+          <text x="20" y="104" fill="#97a2b9" font-size="13" font-family="IBM Plex Sans, sans-serif">Dirac: one similarity</text>
+          <text x="20" y="130" fill="#e7ebf3" font-size="18">Λ =</text>
+          <path d="M60 112 v40 M60 112 h5 M60 152 h5 M150 112 v40 M150 112 h-5 M150 152 h-5" stroke="#e7ebf3" fill="none" stroke-width="1.4"/>
+          <text x="70" y="128" fill="#f2a24a" font-size="16">U⁻¹</text><text x="120" y="128" fill="#97a2b9" font-size="14">0</text>
+          <text x="72" y="148" fill="#97a2b9" font-size="14">0</text><text x="118" y="148" fill="#48dbfb" font-size="16">U</text>
+          <text x="164" y="128" fill="#e7ebf3" font-size="15">= e<tspan font-size="11" baseline-shift="super">−ψα</tspan><tspan font-size="8" baseline-shift="super">I</tspan><tspan font-size="11" baseline-shift="super">/2</tspan></text>
+          <text x="164" y="150" fill="#97a2b9" font-size="12" font-family="IBM Plex Sans, sans-serif">a ↦ ΛaΛ⁻¹</text>
+          <text x="20" y="186" fill="#97a2b9" font-size="12" font-family="IBM Plex Sans, sans-serif">two boosts across: boost + Thomas–Wigner rotation</text>
+        </g>
+      </svg>
+      <div class="body">
+        <span class="step">Dirac step 5 · boosting vectors</span>
+        <h3>Lorentz transformations</h3>
+        <p>The Pauli boost U<sup>−1</sup>AU<sup>−1</sup> and the adjoint rule UA<sup>T</sup>U are the two blocks of one similarity with Λ = diag(U<sup>−1</sup>, U) = e<sup>−ψα<sub>I</sub>/2</sup>, the double of U. The page derives this step by step, boosts the vectors of the papers, turns the Pauli Lemma into a similarity, and goes beyond the I axis: boosts in any direction, rotations, and two boosts that compose into a boost and a Thomas–Wigner rotation.</p>
+        <div class="rule"><span class="sl">a</span><sup>L</sup> = Λ<span class="sl">a</span>Λ<sup>−1</sup>, &nbsp; Λ = cosh(ψ/2)𝟙 − sinh(ψ/2)α<sub>I</sub> = diag(U<sup>−1</sup>, U)</div>
+        <div class="tags"><span>doubling of U</span><span>Dirac lemma</span><span>Thomas–Wigner</span></div>
+        <span class="open">Open the model</span>
+      </div>
+    </a>
+
+    </div>
+  </section>
+
   <section class="py" aria-labelledby="h-py">
     <div>
       <h2 class="group" id="h-py">Reproduce in Python</h2>
@@ -247,6 +282,8 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
         <li><code>bq_dirac_bilinear.py</code> · the channels of <span class="sl">A</span><span class="sl">B</span>, the block form with −A<sup>T</sup>B, all 144 pairs, and <span class="sl">∂</span><span class="sl">A</span>, <span class="sl">∂</span><span class="sl">G</span>, <span class="sl">U</span><span class="sl">U</span>, <span class="sl">∂</span><span class="sl">R</span>, <span class="sl">∂</span><span class="sl">∂</span> from the papers</li>
         <li><code>bq_dirac_triple.py</code> · the triple rule, <span class="sl">∂</span> on a general even field, the block form with −D(A<sup>T</sup>B), Maxwell and the Lorentz force</li>
         <li><code>bq_dirac_quadratics.py</code> · the field square and the sandwich, the Pauli blocks FF and F<sup>T</sup>AF, the EM invariants and stress–energy array, the fluid products, and a boost along I</li>
+        <li class="fh">3 · Lorentz transformations</li>
+        <li><code>bq_dirac_lorentz.py</code> · Λ = diag(U<sup>−1</sup>, U) = e<sup>−ψα<sub>I</sub>/2</sup> as the double of U, the boost of a vector and its blocks, the Dirac lemma, boosts along any <b>n</b>, rotations, and the composition of two boosts with the Thomas–Wigner angle</li>
       </ul>
       <p>Only Python 3 and SymPy are needed.</p>
     </div>
@@ -264,7 +301,10 @@ python bq_dirac_table.py bI bJ
 <span class="cm"># 2 · vectors and their products</span>
 python bq_dirac_bilinear.py
 python bq_dirac_triple.py
-python bq_dirac_quadratics.py</pre>
+python bq_dirac_quadratics.py
+
+<span class="cm"># 3 · Lorentz transformations</span>
+python bq_dirac_lorentz.py</pre>
   </section>
 
   <section class="about" aria-label="About these models">
