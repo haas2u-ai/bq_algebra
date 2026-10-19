@@ -1,0 +1,452 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kinematic Isorapidity Route</title>
+<meta name="description" content="The kinematic route at the BQ-Pauli level: the convective four-acceleration A_g = DU_g/Dtau of the rotor-boosted four-velocity has time channel c dGamma/dtau and is orthogonal to U_g, so isorapidity is zero power along the flow with purely transverse acceleration; A_g = Omega U + U Omega^dagger ties it to the Maurer-Cartan route.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&display=swap" rel="stylesheet">
+<style>
+/* Layout: chooser on the left, channel readout on the right (stacked on phones); numerical matrix check and notes below. Same family as the BQ-Pauli table page. */
+:root{
+  --bg:#f5f6fa;--surface:#ffffff;--edge:#d6dce8;--ink:#141a28;--soft:#55607a;
+  --st:#b8620f;--st-bg:rgba(184,98,15,.09);      /* space-time basis T̂, K̂ */
+  --sn:#0f7fb0;--sn-bg:rgba(15,127,176,.09);     /* spin-norm basis 1̂, σ̂ */
+  --sel:#5b4fd6;--good:#2f8a4f;--bad:#b23a3a;
+  --serif:"Source Serif 4",Georgia,serif;--sans:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.11);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.09);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.11);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.09);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans)}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font:600 clamp(24px,3.4vw,34px)/1.15 var(--serif);margin:0 0 6px;text-wrap:balance}
+h2{font:600 18px/1.3 var(--serif);margin:0 0 10px;text-wrap:balance}
+h3{font:600 12px/1.3 var(--sans);margin:0 0 8px;color:var(--soft);letter-spacing:.06em;text-transform:uppercase}
+.lede{color:var(--soft);max-width:82ch;margin:0 0 20px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:start}
+@media (max-width:960px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--edge);border-radius:12px;padding:16px;min-width:0}
+select,button,input{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:5px 8px}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--sel);outline-offset:2px}
+.pick{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 12px;align-items:center}
+.pick label{font:600 20px var(--serif)}
+.pick select{width:100%}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.qs{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.qs button{font-size:12.5px;padding:4px 9px}
+.math{font:500 16.5px/1.9 var(--serif);overflow-x:auto}
+.math b{font-weight:700}
+.vec{border:1px solid var(--edge);border-radius:10px;padding:10px 12px;margin-top:12px;background:var(--bg)}
+.vec .what{font-size:12.5px;color:var(--soft);margin-bottom:2px}
+.ts{color:var(--st)}.ns{color:var(--sn)}
+.formula{font:500 16px/1.8 var(--serif);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:8px 12px;overflow-x:auto;white-space:nowrap}
+.fwith{font:13px var(--sans);color:var(--soft);white-space:normal}
+.ch{display:grid;grid-template-columns:minmax(0,10.5em) minmax(0,1fr);gap:4px 14px;padding:12px 0;border-bottom:1px solid var(--edge)}
+.ch:last-of-type{border-bottom:none}
+.ch .nm{font:600 14px var(--sans)}
+.ch .nm small{display:block;font:400 12px var(--sans);color:var(--soft)}
+.ch .ex{font:500 16.5px/1.75 var(--serif);overflow-x:auto;min-width:0}
+.ch .ex .gen{color:var(--soft);font-size:14.5px}
+.ch .ex .res{font-weight:600}
+.ch.n .nm{color:var(--sn)}.ch.k .nm{color:var(--st)}.ch.s .nm{color:var(--sn)}
+@media (max-width:560px){.ch{grid-template-columns:minmax(0,1fr)}}
+.total{font:600 17px/1.8 var(--serif);border:1.5px solid var(--sel);border-radius:10px;padding:10px 12px;margin-top:10px;overflow-x:auto}
+.interp{margin-top:12px;font-size:14.5px;color:var(--ink);background:var(--bg);border:1px dashed var(--edge);border-radius:10px;padding:10px 12px}
+.interp .src{display:block;font-size:12.5px;color:var(--soft);margin-top:4px}
+.note{font-size:14px;color:var(--soft);max-width:74ch;margin:8px 0 0}
+.note b{color:var(--ink)}
+/* numeric check */
+.numgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:900px){.numgrid{grid-template-columns:minmax(0,1fr)}}
+.inrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.inrow label{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--soft);min-width:0}
+.inrow input{width:100%;font:13.5px var(--mono)}
+.mxrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font:500 17px var(--serif);margin:10px 0;overflow-x:auto}
+.mx{display:inline-grid;grid-template-columns:auto auto;gap:2px 14px;padding:5px 11px;position:relative;font:13.5px var(--mono);font-variant-numeric:tabular-nums}
+.mx::before,.mx::after{content:"";position:absolute;top:0;bottom:0;width:7px;border:1.5px solid var(--ink)}
+.mx::before{left:0;border-right:none}.mx::after{right:0;border-left:none}
+.mx span{text-align:right;white-space:nowrap}
+.tscroll{overflow-x:auto}
+table.dc{border-collapse:collapse;font:13.5px var(--mono);font-variant-numeric:tabular-nums;width:100%}
+table.dc th,table.dc td{padding:4px 10px;border-bottom:1px solid var(--edge);text-align:right;white-space:nowrap}
+table.dc th{font:600 12px var(--sans);color:var(--soft);text-align:right}
+table.dc td:first-child,table.dc th:first-child{text-align:left;font-family:var(--serif);font-size:15px}
+.pill{display:inline-block;font:500 12.5px var(--sans);border:1px solid var(--edge);border-radius:99px;padding:2px 10px;color:var(--soft);margin-top:10px}
+.pill.ok{border-color:var(--good);color:var(--good)}.pill.no{border-color:var(--bad);color:var(--bad)}
+.notes{margin-top:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:900px){.notes{grid-template-columns:minmax(0,1fr)}}
+.notes li{font-size:14px;max-width:70ch;margin-bottom:6px}
+.notes ul{padding-left:18px;margin:6px 0}
+.cap{font-size:12.5px;color:var(--soft);margin:10px 0 0}
+a{color:var(--sn)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.chk{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--soft);cursor:pointer}
+.split{margin-top:8px}
+.pill.st{border-color:var(--st);color:var(--st)}.pill.sn{border-color:var(--sn);color:var(--sn)}
+.sstep{margin:14px 0 0}
+.sstep h3{margin:0 0 6px}
+.sline{font:500 15px/1.9 var(--serif);overflow-x:auto;white-space:nowrap;padding:1px 0}
+.sline .lab{display:inline-block;min-width:5.6em;color:var(--soft)}
+.sbox{background:var(--bg);border:1px solid var(--edge);border-radius:10px;padding:8px 12px}
+.sgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:900px){.sgrid{grid-template-columns:minmax(0,1fr)}}
+.sgrid .sline{font-size:14.5px}
+.sres{font-weight:600}
+.ctlline{margin:0 0 8px}
+.numdet{margin-top:16px;border-top:1px solid var(--edge);padding-top:10px}
+.numdet summary{cursor:pointer;font:500 14px var(--sans);color:var(--soft)}
+.numgrid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:900px){.numgrid.three{grid-template-columns:minmax(0,1fr)}}
+.vec .math .what{margin:0 0 4px 0}
+.kv{font-weight:700}
+.slider{margin-top:14px;display:grid;gap:6px}
+.slider label{font-size:13.5px;color:var(--soft)}.slider label b{color:var(--ink);font:500 14px var(--mono)}
+.slider input{width:100%;accent-color:var(--st)}
+.kp{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+@media (max-width:560px){.kp{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.kp div{border:1px solid var(--edge);border-radius:8px;padding:5px 7px;min-width:0}
+.kp span{display:block;font-size:11.5px;color:var(--soft)}.kp b{font:500 14px var(--mono)}
+.trc{border:1px solid var(--edge);border-left-width:3px;border-radius:10px;padding:8px 12px;margin-bottom:10px}
+.trc.st{border-left-color:var(--st)}.trc.sn{border-left-color:var(--sn)}
+.trc h3{margin:0 0 4px}.trc .ops{font:500 15px/1.8 var(--serif);overflow-x:auto}
+.numv{font:13px var(--mono);color:var(--soft)}
+.leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--soft);margin-top:6px}
+.leg>span{display:inline-flex;align-items:center;gap:6px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%}
+.sw{display:inline-block;width:18px;height:0;border-top:2px solid}
+svg{display:block;width:100%;height:auto;max-width:100%}
+svg text{font:12px var(--mono);fill:var(--soft)}
+svg .ax{stroke:var(--edge);fill:none}
+svg .ttl{font:13px var(--sans);fill:var(--soft)}
+.dsteps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:10px}
+@media (max-width:960px){.dsteps{grid-template-columns:minmax(0,1fr)}}
+.dstep{border:1px solid var(--edge);border-radius:10px;padding:10px 14px;background:var(--bg);min-width:0}
+.dstep h3{margin:0 0 6px;color:var(--ink);font:600 15.5px var(--serif);letter-spacing:0;text-transform:none}
+.dstep h3 .n{display:inline-block;min-width:1.6em;color:var(--st)}
+.dl{font:500 15px/1.85 var(--serif);overflow-x:auto;white-space:nowrap}
+.dl.dwrap{white-space:normal}
+.dnum{font:13px/1.7 var(--mono);color:var(--soft);overflow-x:auto;white-space:nowrap}
+.dk{font-size:13.5px;color:var(--soft);margin:6px 0 0}
+.mxs{display:inline-grid;gap:2px 14px;padding:3px 10px;position:relative;vertical-align:middle;font:500 14px var(--serif)}
+.mxs::before,.mxs::after{content:"";position:absolute;top:0;bottom:0;width:6px;border:1.4px solid var(--ink)}
+.mxs::before{left:0;border-right:none}.mxs::after{right:0;border-left:none}
+.mxs span{text-align:center;white-space:nowrap}
+table.lm{border-collapse:collapse;font:13px var(--mono);width:100%}
+table.lm th,table.lm td{padding:3px 8px;border-bottom:1px solid var(--edge);text-align:right;white-space:nowrap}
+table.lm th{font:600 12px var(--sans);color:var(--soft)}
+table.lm td:first-child,table.lm th:first-child{text-align:left;font-family:var(--serif)}
+
+.tog{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 12px}
+.tog button{padding:7px 12px;border-radius:99px;font-size:13.5px}
+.tog button b{font:600 15px var(--serif);margin-right:4px}
+.tog button[aria-pressed="true"]{background:var(--st-bg);border-color:var(--st);color:var(--ink)}
+.row button[aria-pressed="true"]{background:var(--st-bg);border-color:var(--st)}
+.sliders{display:grid;gap:4px;margin-top:6px}
+svg .gr{stroke:var(--edge);stroke-opacity:.6;fill:none}
+[hidden]{display:none!important}
+.keybox{border:1.6px solid var(--sel);font-size:17px;white-space:normal;margin:8px 0;padding:10px 14px}
+.core{font-size:18.5px;max-width:82ch}
+#lim ul{padding-left:18px;margin:4px 0}#lim li{font-size:14px;margin-bottom:6px}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <h1>The Kinematic Route to Isorapidity</h1>
+  <p class="lede">The second branch of the rotor hierarchy differentiates the four-velocity itself. The local rotor G = G<sub>φ</sub>G<sub>r</sub> boosts the rest frame to U<sub>g</sub> = G(cT̂)G<sup>†</sup>; its material derivative along the flow is the convective four-acceleration A<sub>g</sub> = DU<sub>g</sub>/Dτ. Its time channel is the rate of the composed Lorentz factor, and its norm with U<sub>g</sub> vanishes identically:</p>
+  <div class="formula keybox core">a<sub>0</sub> = [A<sub>g</sub>]<sub>T</sub> = c DΓ/Dτ, &nbsp;[U<sub>g</sub><sup>T</sup>A<sub>g</sub>]<sub>1̂</sub> = u<sup>0</sup>a<sub>0</sub> − <b>u</b>·<b>a</b> = 0 &nbsp;— exact in the rapidities</div>
+  <p class="lede">So isorapidity is zero power along the flow, and the spatial acceleration of an isorapid flow is purely transverse: the river turns but does not speed up. The bridge A<sub>g</sub> = Ω<sub>τ</sub>U<sub>g</sub> + U<sub>g</sub>Ω<sub>τ</sub><sup>†</sup> shows that this route and the Maurer–Cartan route of step 10 are one statement, a<sub>0</sub> = 2e<sub>T</sub>. Choose the rapidities.</p>
+</header>
+
+<div class="grid">
+  <section class="card" aria-labelledby="h-par">
+    <h2 id="h-par">Rapidities feeding the rotor</h2>
+    <div class="tog" role="group" aria-label="Rapidity fields">
+      <button type="button" aria-pressed="true" disabled><b>ψ<sub>N</sub></b> Newtonian radial</button>
+      <button type="button" id="bP" aria-pressed="false"><b>χ<sub>φ</sub></b> azimuthal</button>
+      <button type="button" id="bH" aria-pressed="false"><b>ψ<sub>H</sub></b> Hubble radial</button>
+    </div>
+    <div class="row" id="azRow" role="group" aria-label="Azimuthal rapidity" hidden style="margin:0 0 10px"><button type="button" id="aIso" aria-pressed="true">isorapidity: e<sub>T</sub> = 0</button><button type="button" id="aKep" aria-pressed="false">Keplerian, χ<sub>φ</sub> = √(GM/r)/c</button></div>
+    <div class="sliders">
+      <div class="slider"><label for="RS">Bulge radius R/r<sub>s</sub> <b id="RLab"></b></label><input id="RS" type="range" min="0.5" max="6" step="0.05" value="2"></div>
+      <div class="slider" id="sH" hidden><label for="hS">Hubble rate h = Hr<sub>s</sub>/c <b id="hLab"></b></label><input id="hS" type="range" min="-13" max="-2" step="0.05" value="-5"></div>
+      <div class="slider"><label for="xS">Evaluation radius r/R <b id="xLab"></b></label><input id="xS" type="range" min="0" max="2" step="0.01" value="0.6"></div>
+    </div>
+    <div class="row" style="margin:6px 0 4px"><button type="button" id="pDemo">compact demo</button><button type="button" id="pGal">galaxy scale</button></div>
+    <div class="vec" id="defs"></div>
+    <p class="cap">Units: c = 1, r<sub>s</sub> = 2GM/c² = 1. Paper chart: χ<sub>r</sub> = ψ<sub>N</sub> − ψ<sub>H</sub> = √(r<sub>s</sub>/r) − Hr/c, so v<sub>r</sub> = c tanh χ<sub>r</sub> ≈ √(2GM/r) − Hr in slow flow. The galaxy-scale preset takes M ≈ 10¹¹ M<sub>⊙</sub>, R ≈ 2 kpc and a local H<sub>z</sub> chosen so that r<sub>c</sub> ≈ 20R.</p>
+  </section>
+
+  <section class="card" aria-labelledby="h-fr">
+    <h2 id="h-fr">How much of the acceleration is along the flow</h2>
+    <svg id="fr" viewBox="0 0 560 340" role="img" aria-label="Longitudinal fraction of the spatial acceleration against radius"></svg>
+    <div class="leg" id="leg"></div>
+    <p class="cap" id="frcap"></p>
+  </section>
+</div>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-der">
+  <h2 id="h-der">From the rotor to the acceleration in eight steps</h2>
+  <p class="note">BQ-Pauli level, following de Haas (2026), <i>A Spin(1,3) Rapidity Theory for Galactic Rotation Curves</i>, §2.2–2.5. Orthonormal legs (Î<sub>r</sub>, Ĵ<sub>θ</sub>, K̂<sub>φ</sub>) and (σ̂<sub>r</sub>, σ̂<sub>θ</sub>, σ̂<sub>φ</sub>) in the order (I, J, K); time adjoint A<sup>T</sup> = −a<sub>0</sub>T̂ + <b>a</b>·<b class="kv">K̂</b>.</p>
+  <div class="dsteps" id="deriv"></div>
+</section>
+
+<div class="grid" style="margin-top:18px">
+  <section class="card" aria-labelledby="h-vec">
+    <h2 id="h-vec">Velocity and acceleration in the disk</h2>
+    <svg id="vec" viewBox="0 0 420 340" role="img" aria-label="Direction of the spatial velocity and of the spatial acceleration at the evaluation radius, with its longitudinal and transverse parts"></svg>
+    <p class="cap" id="veccap"></p>
+  </section>
+  <section class="card" aria-labelledby="h-num">
+    <h2 id="h-num">Check by explicit matrix multiplication</h2>
+    <div id="num"></div>
+  </section>
+</div>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-lim">
+  <h2 id="h-lim">What this does and does not show</h2>
+  <div id="lim"></div>
+</section>
+<p class="cap" style="margin-top:14px">Rotor, four-velocity, convective acceleration, orthogonality and the power reading (eqs. 12–25) from de Haas (2026), A Spin(1,3) Rapidity Theory for Galactic Rotation Curves; the Maurer–Cartan route is step 10. Part of <a href="../index.html">the BQ algebra models</a>.</p>
+</div>
+
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+const fx = (x, d) => (Math.abs(x) < 5e-13 ? 0 : +x.toFixed(d == null ? 4 : d)).toString().replace('-', '−');
+const fg = x => { if (!isFinite(x)) return '—'; if (x === 0) return '0'; const a = Math.abs(x); if (a >= 1e-3 && a < 1e5) return fx(x, 4); const [m, e] = x.toExponential(3).split('e'); return m.replace('-', '−') + '×10<sup>' + (+e).toString().replace('-', '−') + '</sup>'; };
+const S = {P:false, H:false, az:'iso'};
+const val = id => +$(id).value;
+const R = () => Math.pow(10, val('RS')), h = () => S.H ? Math.pow(10, val('hS')) : 0, X = () => R()*Math.pow(10, val('xS'));
+const sub = s => `<sub>${s}</sub>`;
+const NS = 'http://www.w3.org/2000/svg';
+const sv = (tag, at, p) => { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); if (p) p.appendChild(e); return e; };
+const sup = n => (n < 0 ? '⁻' : '') + String(Math.abs(n)).split('').map(d => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+
+/* ---------- rapidity fields (c = 1, r_s = 1, GM = 1/2) ---------- */
+const chiR = r => Math.sqrt(1/r) - h()*r;                    /* psi_N - psi_H, paper chart */
+const rc = () => S.H ? Math.pow(h(), -2/3) : Infinity;       /* balance radius: chi_r = 0 */
+const chiKep = r => Math.sqrt(1/(2*r));
+const chiPR = () => chiR(R())/Math.SQRT2;                     /* virial closure at R: chi_phi(R)^2 = chi_r(R)^2 / 2 */
+const Gam0 = () => Math.cosh(chiR(R()))*Math.cosh(chiPR());
+const Kslow = () => 1.5*chiR(R())**2;
+function chiIso(r){ if (r < R()*(1 - 1e-9) || r > rc()*(1 + 1e-9)) return NaN; const a = Gam0()/Math.cosh(chiR(r)); return a >= 1 ? Math.acosh(a) : NaN; }
+const chiP = (r, mode) => { const m = mode || (S.P ? S.az : 'none'); return m === 'none' ? 0 : m === 'kep' ? chiKep(r) : chiIso(r); };
+const Gam = (r, mode) => Math.cosh(chiR(r))*Math.cosh(chiP(r, mode));
+/* e_T = (c/2) DGamma/Dtau = (c/2) u^r d_r Gamma, u^r = c sinh chi_r; isorapidity analytically 0 */
+function eT(r, mode){ const m = mode || (S.P ? S.az : 'none'); if (m === 'iso') return isFinite(chiIso(r)) ? 0 : NaN;
+  const e = 1e-5*r; return 0.5*Math.sinh(chiR(r))*(Gam(r + e, m) - Gam(r - e, m))/(2*e); }
+
+/* ---------- complex 2x2 BQ-Pauli matrices ---------- */
+const C = (re, im) => [re, im || 0];
+const cadd = (a, b) => [a[0] + b[0], a[1] + b[1]], cmul = (a, b) => [a[0]*b[0] - a[1]*b[1], a[0]*b[1] + a[1]*b[0]];
+const mm = (A, B) => [[cadd(cmul(A[0][0], B[0][0]), cmul(A[0][1], B[1][0])), cadd(cmul(A[0][0], B[0][1]), cmul(A[0][1], B[1][1]))],
+                      [cadd(cmul(A[1][0], B[0][0]), cmul(A[1][1], B[1][0])), cadd(cmul(A[1][0], B[0][1]), cmul(A[1][1], B[1][1]))]];
+const msc = (A, s) => A.map(r => r.map(z => [z[0]*s, z[1]*s]));
+const madd = (A, B) => A.map((r, i) => r.map((z, j) => cadd(z, B[i][j])));
+const mdag = A => [[[A[0][0][0], -A[0][0][1]], [A[1][0][0], -A[1][0][1]]], [[A[0][1][0], -A[0][1][1]], [A[1][1][0], -A[1][1][1]]]];
+function minv(A){ const det = cadd(cmul(A[0][0], A[1][1]), msc([[cmul(A[0][1], A[1][0])]], -1)[0][0]); const d2 = det[0]**2 + det[1]**2, di = [det[0]/d2, -det[1]/d2];
+  return [[cmul(A[1][1], di), cmul([-A[0][1][0], -A[0][1][1]], di)], [cmul([-A[1][0][0], -A[1][0][1]], di), cmul(A[0][0], di)]]; }
+const One = [[C(1), C(0)], [C(0), C(1)]], That = [[C(0, 1), C(0)], [C(0), C(0, 1)]];
+const bas = {'1':[[C(1),C(0)],[C(0),C(1)]], T:That, I:[[C(0,1),C(0)],[C(0),C(0,-1)]], J:[[C(0),C(1)],[C(-1),C(0)]], K:[[C(0),C(0,1)],[C(0,1),C(0)]],
+             sI:[[C(1),C(0)],[C(0),C(-1)]], sJ:[[C(0),C(0,-1)],[C(0,1),C(0)]], sK:[[C(0),C(1)],[C(1),C(0)]]};
+/* exact decomposition onto 1, T, I, J, K, sI, sJ, sK (real coefficients) */
+function dec(M){ const p = M[0][0], s = M[1][1], u = M[0][1], l = M[1][0];
+  return {'1':(p[0] + s[0])/2, T:(p[1] + s[1])/2, I:(p[1] - s[1])/2, J:(u[0] - l[0])/2, K:(u[1] + l[1])/2, sI:(p[0] - s[0])/2, sJ:(l[1] - u[1])/2, sK:(u[0] + l[0])/2}; }
+const build = c => Object.keys(bas).reduce((A, k) => madd(A, msc(bas[k], c[k] || 0)), [[C(0),C(0)],[C(0),C(0)]]);
+const Gr = x => [[C(Math.exp(x/2)), C(0)], [C(0), C(Math.exp(-x/2))]];                                  /* e^{chi sI/2} */
+const Gp = x => [[C(Math.cosh(x/2)), C(Math.sinh(x/2))], [C(Math.sinh(x/2)), C(Math.cosh(x/2))]];      /* e^{chi sK/2} */
+const Grot = r => mm(Gp(chiP(r)), Gr(chiR(r)));
+
+/* ---------- top ---------- */
+function renderTop(){
+  $('bP').setAttribute('aria-pressed', S.P ? 'true' : 'false'); $('bH').setAttribute('aria-pressed', S.H ? 'true' : 'false');
+  $('azRow').hidden = !S.P; $('sH').hidden = !S.H;
+  $('aIso').setAttribute('aria-pressed', S.az === 'iso' ? 'true' : 'false'); $('aKep').setAttribute('aria-pressed', S.az === 'kep' ? 'true' : 'false');
+  $('RLab').innerHTML = fg(R()); $('hLab').innerHTML = fg(Math.pow(10, val('hS'))); $('xLab').innerHTML = fg(Math.pow(10, val('xS')));
+  const x = X(), cp = chiP(x);
+  $('defs').innerHTML = `<div class="what">At r = ${fg(x/R())} R = ${fg(x)} r<sub>s</sub></div>
+    <div class="math">χ<sub>r</sub> = ${fg(chiR(x))}${S.P ? `, &nbsp;χ<sub>φ</sub> = ${isFinite(cp) ? fg(cp) : '— (outside R ≤ r ≤ r<sub>c</sub>)'}` : ''}, &nbsp;Γ − 1 = ${fg(Gam(x) - 1)}</div>
+    ${S.P && S.az === 'iso' ? `<div class="math">Γ<sub>0</sub> − 1 = ${fg(Gam0() - 1)}, &nbsp;v<sub>L</sub>² = (3/2)χ<sub>r</sub>(R)² c² = ${fg(Kslow())} c²</div>` : ''}
+    ${S.H ? `<div class="math">balance radius r<sub>c</sub> = (2GM/H²)<sup>1/3</sup> = ${fg(rc())} r<sub>s</sub> = ${fg(rc()/R())} R</div>` : ''}`;
+}
+
+/* ---------- generic log-x plot ---------- */
+function frame(s, W, Hh, lx0, lx1, y0, y1, logy, ylab){
+  while (s.firstChild) s.removeChild(s.firstChild);
+  const L = 58, Rm = 14, T = 14, B = 40;
+  const PX = lx => L + (lx - lx0)/(lx1 - lx0)*(W - L - Rm), PY = y => T + (y1 - Math.max(y0, Math.min(y1, y)))/(y1 - y0)*(Hh - T - B);
+  const step = (lx1 - lx0) > 2.5 ? 1 : 0.5;
+  for (let e = Math.ceil(lx0/step)*step; e <= lx1 + 1e-9; e += step){ sv('line', {x1:PX(e), x2:PX(e), y1:T, y2:Hh - B, class:'gr'}, s); const t = sv('text', {x:PX(e), y:Hh - B + 16, 'text-anchor':'middle'}, s); t.textContent = String(parseFloat(Math.pow(10, e).toPrecision(3))); }
+  if (logy){ for (let e = Math.ceil(y0); e <= y1; e++){ sv('line', {x1:L, x2:W - Rm, y1:PY(e), y2:PY(e), class:'gr'}, s); const t = sv('text', {x:L - 6, y:PY(e) + 4, 'text-anchor':'end'}, s); t.textContent = '10' + sup(e); } }
+  else { const dy = (y1 - y0) > 1.6 ? 0.5 : 0.25; for (let y = 0; y <= y1 + 1e-9; y += dy){ sv('line', {x1:L, x2:W - Rm, y1:PY(y), y2:PY(y), class:'gr'}, s); const t = sv('text', {x:L - 6, y:PY(y) + 4, 'text-anchor':'end'}, s); t.textContent = fx(y, 2); } }
+  const tl = sv('text', {x:(L + W - Rm)/2, y:Hh - 6, 'text-anchor':'middle', class:'ttl'}, s); tl.textContent = 'r / R (log scale)';
+  const tv = sv('text', {x:14, y:(T + Hh - B)/2, 'text-anchor':'middle', class:'ttl', transform:`rotate(-90 14 ${(T + Hh - B)/2})`}, s); tv.textContent = ylab;
+  return {PX, PY, T, B, L, W, Hh, Rm};
+}
+function curve(s, F, f, lx0, lx1, col, dash, logy){
+  let d = '', pen = false;
+  for (let n = 0; n <= 500; n++){ const lx = lx0 + (lx1 - lx0)*n/500; let y = f(R()*Math.pow(10, lx)); if (logy) y = y > 0 ? Math.log10(y) : NaN;
+    if (!isFinite(y)){ pen = false; continue; } d += (pen ? 'L' : 'M') + F.PX(lx).toFixed(1) + ',' + F.PY(y).toFixed(1); pen = true; }
+  sv('path', Object.assign({d, fill:'none', stroke:col, 'stroke-width':2.1}, dash ? {'stroke-dasharray':dash} : {}), s);
+}
+const vline = (s, F, lx, col, txt, dash) => { sv('line', {x1:F.PX(lx), x2:F.PX(lx), y1:F.T, y2:F.Hh - F.B, stroke:col, 'stroke-dasharray':dash || '4 3', 'stroke-width':1.3}, s);
+  if (txt){ const t = sv('text', {x:F.PX(lx) + 4, y:F.T + 12}, s); t.textContent = txt; t.setAttribute('style', `fill:${col}`); } };
+const lxRange = () => [-0.3, S.H ? Math.min(Math.log10(rc()/R()) + 0.25, 3.2) : 2.3];
+
+/* ---------- the eight steps ---------- */
+const mxs = rows => `<span class="mxs" style="grid-template-columns:repeat(${rows[0].length},auto)">${rows.flat().map(x => `<span>${x}</span>`).join('')}</span>`;
+
+/* ---------- convective acceleration (stationary: D/Dtau = u^r d_r), c = 1 ---------- */
+const dChiR = r => -0.5*Math.pow(r, -1.5) - h();
+function kin(r, mode){
+  const m = mode || (S.P ? S.az : 'none'), xr = chiR(r), xp = chiP(r, m);
+  if (!isFinite(xp)) return null;
+  const Cr = Math.cosh(xr), Sr = Math.sinh(xr), Cp = Math.cosh(xp), Sp = Math.sinh(xp);
+  const ur = Sr, up = Cr*Sp, u0 = Cr*Cp, Dr = ur*dChiR(r);
+  const Dp = m === 'none' ? 0 : m === 'kep' ? ur*(-0.5*xp/r) : -Sr*Cp/(Cr*Sp)*Dr;   /* isorapidity: implicit derivative of Gamma = Gamma_0 */
+  const a0 = m === 'iso' ? 0 : Sr*Cp*Dr + Cr*Sp*Dp;
+  const ar = Cr*Dr, ap = Sr*Sp*Dr + Cr*Cp*Dp;
+  const ul = Math.hypot(ur, up), al = Math.hypot(ar, ap), along = (ur*ar + up*ap)/(ul || 1);
+  return {xr, xp, ur, up, u0, Dr, Dp, a0, ar, ap, along, frac: al > 0 ? Math.abs(along)/al : NaN};
+}
+
+/* ---------- longitudinal fraction plot ---------- */
+function frPlot(){
+  const s = $('fr'), [lx0, lx1] = lxRange();
+  const fns = [[r => { const k = kin(r, 'none'); return k ? k.frac : NaN; }, 'var(--soft)', '5 4', 'radial river only']];
+  if (S.P){ fns.push([r => { const k = kin(r, 'kep'); return k ? k.frac : NaN; }, 'var(--sn)', '', 'with Keplerian χ<sub>φ</sub>']);
+            fns.push([r => { const k = kin(r, 'iso'); return k ? k.frac : NaN; }, 'var(--st)', '', 'isorapidity']); }
+  const F = frame(s, 560, 340, lx0, lx1, 0, 1.05, false, '|a_∥| / |a|');
+  fns.forEach(([f, col, dash]) => curve(s, F, f, lx0, lx1, col, dash, false));
+  vline(s, F, 0, 'var(--good)', 'R'); if (S.H && Math.log10(rc()/R()) < lx1) vline(s, F, Math.log10(rc()/R()), 'var(--bad, #e66)', 'r_c');
+  const lx = val('xS'); if (lx >= lx0 && lx <= lx1) vline(s, F, lx, 'var(--ink)', '', '2 2');
+  $('leg').innerHTML = fns.map(([, col, dash, t]) => `<span><i class="sw" style="border-color:${col};${dash ? 'border-top-style:dashed' : ''}"></i><span>${t}</span></span>`).join('');
+  $('frcap').innerHTML = 'The share of the spatial acceleration (a<sub>r</sub>, a<sub>φ</sub>) that lies along the spatial velocity (u<sup>r</sup>, u<sup>φ</sup>), |<b>u</b>·<b>a</b>|/(|<b>u</b>||<b>a</b>|) = u<sup>0</sup>|a<sub>0</sub>|/(|<b>u</b>||<b>a</b>|). '
+    + (!S.P ? 'The radial river accelerates only along itself: the fraction is 1 everywhere, because a<sub>0</sub> ≠ 0. Switch on χ<sub>φ</sub>.'
+       : 'Isorapidity gives 0 at every radius: a<sub>0</sub> = 0, so the acceleration only turns the flow. The Keplerian choice keeps a longitudinal part.')
+    + (S.H ? ' At r<sub>c</sub> the radial river stops and the fraction is undefined there.' : '');
+}
+
+/* ---------- velocity / acceleration diagram ---------- */
+function vecPlot(){
+  const s = $('vec'); while (s.firstChild) s.removeChild(s.firstChild);
+  const k = kin(X());
+  if (!k){ $('veccap').innerHTML = 'No isorapidity solution at this radius (outside R ≤ r ≤ r<sub>c</sub>).'; return; }
+  const cx = 150, cy = 190, L = 120;
+  sv('line', {x1:cx - 120, x2:cx + 240, y1:cy, y2:cy, class:'gr'}, s); sv('line', {x1:cx, x2:cx, y1:cy + 130, y2:cy - 170, class:'gr'}, s);
+  const tr = sv('text', {x:cx + 236, y:cy - 6, 'text-anchor':'end'}, s); tr.textContent = 'r̂ (outward)';
+  const tp = sv('text', {x:cx + 6, y:cy - 156}, s); tp.textContent = 'φ̂';
+  const defs = sv('defs', {}, s);
+  const mk = (id, col) => { const m = sv('marker', {id, viewBox:'0 0 10 10', refX:8, refY:5, markerWidth:7, markerHeight:7, orient:'auto-start-reverse'}, defs); sv('path', {d:'M0,0 L10,5 L0,10 z', fill:col}, m); };
+  mk('mU', 'var(--sn)'); mk('mA', 'var(--ink)'); mk('mL', 'var(--st)'); mk('mT', 'var(--sel)');
+  const arrow = (dx, dy, col, id, w, dash) => sv('line', Object.assign({x1:cx, y1:cy, x2:cx + dx, y2:cy - dy, stroke:col, 'stroke-width':w || 2.4, 'marker-end':`url(#${id})`}, dash ? {'stroke-dasharray':dash} : {}), s);
+  const ul = Math.hypot(k.ur, k.up), al = Math.hypot(k.ar, k.ap);
+  const ux = k.ur/ul, uy = k.up/ul;
+  arrow(ux*L, uy*L, 'var(--sn)', 'mU', 2.6);
+  if (al > 0){
+    const ax = k.ar/al, ay = k.ap/al, pl = ax*ux + ay*uy;
+    if (Math.abs(pl) > 1e-3) arrow(pl*ux*L, pl*uy*L, 'var(--st)', 'mL', 3.2);
+    const tx = ax - pl*ux, ty = ay - pl*uy;
+    if (Math.hypot(tx, ty) > 1e-3) arrow(tx*L, ty*L, 'var(--sel)', 'mT', 3.2);
+    arrow(ax*L, ay*L, 'var(--ink)', 'mA', 1.6, '5 3');
+  }
+  const lab = (x, y, t, col) => { const e = sv('text', {x, y}, s); e.textContent = t; e.setAttribute('style', `fill:${col};font-weight:600`); };
+  lab(cx + ux*L*1.08 + 4, cy - uy*L*1.08, 'u', 'var(--sn)');
+  $('veccap').innerHTML = `Directions in the (r̂, φ̂) plane at r = ${fg(X()/R())} R (unit length each): the spatial velocity <span style="color:var(--sn)">u</span>, the spatial acceleration a (dashed), its part along the flow <span style="color:var(--st)">a<sub>∥</sub></span> and across it <span style="color:var(--sel)">a<sub>⊥</sub></span>. Here a<sub>∥</sub> = u<sup>0</sup>a<sub>0</sub>/|<b>u</b>| = ${fg(k.along)}, |a<sub>⊥</sub>| = ${fg(Math.sqrt(Math.max(0, al*al - k.along*k.along)))} (units c²/r<sub>s</sub>). ${!S.P ? 'Radial only: velocity and acceleration are collinear.' : S.az === 'iso' ? 'Isorapidity: the acceleration is perpendicular to the flow.' : 'Keplerian: the acceleration has a part along the flow.'} The rotation of the legs adds (−u<sub>φ</sub>²/r, u<sub>r</sub>u<sub>φ</sub>/r) = (${fg(-k.up*k.up/X())}, ${fg(k.ur*k.up/X())}), also perpendicular to the flow.`;
+}
+
+/* ---------- the eight steps ---------- */
+function deriv(){
+  const P = S.P, iso = P && S.az === 'iso';
+  let d = '';
+  d += `<div class="dstep"><h3><span class="n">1</span>Rapidities and rotor</h3>
+    <div class="dl">χ<sub>r</sub>(r) = √(r<sub>s</sub>/r)${S.H ? ' − Hr/c' : ''}${P ? `, &nbsp;χ<sub>φ</sub>(r) ${iso ? 'from isorapidity (step 7)' : '= √(GM/r)/c'}` : ', &nbsp;χ<sub>φ</sub> = 0'}</div>
+    <div class="dl">G = ${P ? 'G<sub>φ</sub>G<sub>r</sub>, &nbsp;G<sub>i</sub> = cosh(χ<sub>i</sub>/2) 1̂ + sinh(χ<sub>i</sub>/2) σ̂<sub>i</sub>' : 'G<sub>r</sub> = cosh(χ<sub>r</sub>/2) 1̂ + sinh(χ<sub>r</sub>/2) σ̂<sub>r</sub>'}</div>
+    <p class="dk">The same scalar fields and the same ordered rotor as in step 10.</p></div>`;
+  d += `<div class="dstep"><h3><span class="n">2</span>The four-velocity</h3>
+    <div class="dl dwrap">U<sub>g</sub> = G(cT̂)G<sup>†</sup> = cΓ T̂ + c sinh χ<sub>r</sub> Î<sub>r</sub>${P ? ' + c cosh χ<sub>r</sub> sinh χ<sub>φ</sub> K̂<sub>φ</sub>' : ''}</div>
+    <div class="dl">Γ = cosh χ<sub>r</sub>${P ? ' cosh χ<sub>φ</sub>' : ''}, &nbsp;U<sub>g</sub><sup>T</sup>U<sub>g</sub> = c² 1̂</div>
+    <p class="dk">The rest-frame time direction cT̂, boosted locally.</p></div>`;
+  d += `<div class="dstep"><h3><span class="n">3</span>The material derivative</h3>
+    <div class="dl">D/Dτ = (u<sup>0</sup>/c)∂<sub>t</sub> + u<sup>r</sup>∂<sub>r</sub> = Γ∂<sub>t</sub> + c sinh χ<sub>r</sub> ∂<sub>r</sub></div>
+    <div class="dl">A<sub>g</sub> = DU<sub>g</sub>/Dτ = a<sub>0</sub>T̂ + a<sub>r</sub>Î<sub>r</sub> + a<sub>φ</sub>K̂<sub>φ</sub></div>
+    <p class="dk">Stationary and axisymmetric here, so D/Dτ = u<sup>r</sup>∂<sub>r</sub>. A<sub>g</sub> stays a minquat: no 1̂, Ĵ<sub>θ</sub> or σ̂ channels.</p></div>`;
+  d += `<div class="dstep"><h3><span class="n">4</span>The channels</h3>
+    <div class="formula keybox">a<sub>0</sub> = c DΓ/Dτ</div>
+    <div class="dl">a<sub>r</sub> = c cosh χ<sub>r</sub> Dχ<sub>r</sub>${P ? ', &nbsp;a<sub>φ</sub> = c(sinh χ<sub>r</sub> sinh χ<sub>φ</sub> Dχ<sub>r</sub> + cosh χ<sub>r</sub> cosh χ<sub>φ</sub> Dχ<sub>φ</sub>)' : ''}</div>
+    <p class="dk">With Dχ = c sinh χ<sub>r</sub> χ′ these are V5 eqs. 14–16 (stationary parts).</p></div>`;
+  d += `<div class="dstep"><h3><span class="n">5</span>Orthogonality</h3>
+    <div class="dl">D(U<sub>g</sub><sup>T</sup>U<sub>g</sub>)/Dτ = 0 &nbsp;⇒&nbsp; [U<sub>g</sub><sup>T</sup>A<sub>g</sub>]<sub>1̂</sub> = u<sup>0</sup>a<sub>0</sub> − u<sup>r</sup>a<sub>r</sub> − u<sup>φ</sup>a<sub>φ</sub> = 0</div>
+    <div class="dl dwrap">U<sub>g</sub><sup>T</sup>A<sub>g</sub> = (<b>u</b>×<b>a</b>)·<b class="kv">K̂</b> + (u<sup>0</sup><b>a</b> − a<sub>0</sub><b>u</b>)·σ̂</div>
+    <p class="dk">The bilinear of the four-velocity with its own rate has no norm channel: the four-acceleration is orthogonal to the flow, for every rapidity profile.</p></div>`;
+  d += `<div class="dstep"><h3><span class="n">6</span>Power along the flow</h3>
+    <div class="dl">E/m = c u<sup>0</sup> = c²Γ &nbsp;⇒&nbsp; (1/m) DE/Dτ = c a<sub>0</sub> = c² DΓ/Dτ</div>
+    <p class="dk">a<sub>0</sub> is the power per unit mass delivered along the flow; a<sub>r</sub>, a<sub>φ</sub> are forces per unit mass. Isorapidity is conservation of the relativistic energy per unit mass along the streamline.</p></div>`;
+  d += `<div class="dstep"><h3><span class="n">7</span>Two branches</h3>
+    <div class="dl">u<sup>r</sup>a<sub>r</sub> + u<sup>φ</sup>a<sub>φ</sub> = u<sup>0</sup>a<sub>0</sub></div>
+    <div class="dl">a<sub>0</sub> = 0: purely transverse &nbsp;|&nbsp; a<sub>0</sub> ≠ 0: a longitudinal part</div>
+    <p class="dk">${!P ? 'Newtonian only: a<sub>0</sub> = c sinh χ<sub>r</sub> Dχ<sub>r</sub> ≠ 0 and all of the acceleration is along the flow; the radial river speeds up or slows down. An azimuthal rapidity is needed for the other branch.' : iso ? 'Isorapidity, cosh χ<sub>r</sub> cosh χ<sub>φ</sub> = Γ<sub>0</sub>: Dχ<sub>φ</sub> = −(tanh χ<sub>r</sub>/tanh χ<sub>φ</sub>)Dχ<sub>r</sub>, a<sub>0</sub> = 0, and a<sub>φ</sub> = −c sinh χ<sub>r</sub>Dχ<sub>r</sub>/sinh χ<sub>φ</sub>: the flow is turned, never sped up.' : 'Keplerian: Γ falls with r, so a<sub>0</sub> ≠ 0 and part of the acceleration lies along the flow.'}</p></div>`;
+  d += `<div class="dstep"><h3><span class="n">8</span>One statement with the Maurer–Cartan route</h3>
+    <div class="formula keybox">A<sub>g</sub> = Ω<sub>τ</sub>U<sub>g</sub> + U<sub>g</sub>Ω<sub>τ</sub><sup>†</sup> &nbsp;⇒&nbsp; a<sub>0</sub> = 2e<sub>T</sub> = 2[U<sub>g</sub>Ω<sub>τ</sub>]<sub>T</sub></div>
+    <div class="dl dwrap">with the virial closure at R: v<sub>φ</sub>²(r) = (3/2)v<sub>r</sub>(R)² − v<sub>r</sub>(r)² (step 10)</div>
+    <p class="dk">Differentiating U<sub>g</sub> = G(cT̂)G<sup>†</sup> brings in DG = Ω<sub>τ</sub>G on both sides. Both branches impose the same condition; the closure then gives the same rotation law.</p></div>`;
+  $('deriv').innerHTML = d;
+}
+
+/* ---------- numbers by matrices ---------- */
+const lbl = {'1':'1̂', T:'T̂', I:'Î<sub>r</sub>', J:'Ĵ<sub>θ</sub>', K:'K̂<sub>φ</sub>', sI:'σ̂<sub>r</sub>', sJ:'σ̂<sub>θ</sub>', sK:'σ̂<sub>φ</sub>'};
+function num(){
+  const x = X(), k = kin(x);
+  if (!k){ $('num').innerHTML = '<p class="note">No isorapidity solution at this radius (outside R ≤ r ≤ r<sub>c</sub>). Move the evaluation radius.</p>'; return; }
+  const Uof = r => { const G = Grot(r); return mm(mm(G, That), mdag(G)); };
+  const e = 1e-5*x, ur = Math.sinh(chiR(x));
+  const U = Uof(x), A = msc(madd(Uof(x + e), msc(Uof(x - e), -1)), ur/(2*e));
+  const G = Grot(x), Om = mm(msc(madd(Grot(x + e), msc(Grot(x - e), -1)), ur/(2*e)), minv(G));
+  const bridge = madd(mm(Om, U), mm(U, mdag(Om)));
+  const dU = dec(U), dA = dec(A), dB = dec(bridge), eT2 = 2*dec(mm(U, Om)).T;
+  const UA = dec(mm(build(Object.assign({}, dU, {T:-dU.T})), A));
+  const res = Math.max(...Object.keys(dA).map(q => Math.abs(dA[q] - dB[q])));
+  const DGam = ur*(Gam(x + e) - Gam(x - e))/(2*e);
+  const scale = Math.max(...Object.values(dA).map(Math.abs), 1e-300);
+  const keys = ['1', 'T', 'I', 'J', 'K', 'sI', 'sJ', 'sK'];
+  const cell = v => fg(Math.abs(v) < 1e-9*scale ? 0 : v);
+  const row = (n, dd) => `<tr><td>${n}</td>${keys.map(q => `<td>${cell(dd[q])}</td>`).join('')}</tr>`;
+  $('num').innerHTML = `<div class="tscroll"><table class="dc"><thead><tr><th></th>${keys.map(q => `<th>${lbl[q]}</th>`).join('')}</tr></thead><tbody>
+    ${row('U<sub>g</sub>', dU)}${row('A<sub>g</sub> = DU<sub>g</sub>/Dτ', dA)}${row('Ω<sub>τ</sub>U<sub>g</sub> + U<sub>g</sub>Ω<sub>τ</sub><sup>†</sup>', dB)}${row('U<sub>g</sub><sup>T</sup>A<sub>g</sub>', UA)}</tbody></table></div>
+    <div class="vec" style="margin-top:10px">
+      <div class="math">a<sub>0</sub> (matrix) = ${fg(dA.T)}, &nbsp;c DΓ/Dτ = ${fg(DGam)}, &nbsp;2e<sub>T</sub> = ${fg(eT2)}${S.P && S.az === 'iso' ? ' &nbsp;(all 0 up to the finite-difference error)' : ''}</div>
+      <div class="math">[U<sub>g</sub><sup>T</sup>A<sub>g</sub>]<sub>1̂</sub> = ${cell(UA['1'])}; &nbsp;A<sub>g</sub> − (Ω<sub>τ</sub>U<sub>g</sub> + U<sub>g</sub>Ω<sub>τ</sub><sup>†</sup>): largest difference ${fg(res)}</div>
+    </div>
+    <p class="note">At r = ${fg(x/R())} R, c = 1. U<sub>g</sub> = G(cT̂)G<sup>†</sup> as 2×2 complex matrices; A<sub>g</sub> = u<sup>r</sup>∂<sub>r</sub>U<sub>g</sub> and DG/Dτ = u<sup>r</sup>∂<sub>r</sub>G by central differences; every result decomposed exactly on the eight basis matrices, columns in (I, J, K) = (r, θ, φ). The rows A<sub>g</sub> and Ω<sub>τ</sub>U<sub>g</sub> + U<sub>g</sub>Ω<sub>τ</sub><sup>†</sup> agree; U<sub>g</sub><sup>T</sup>A<sub>g</sub> has no 1̂ entry.</p>`;
+}
+
+/* ---------- limits ---------- */
+function limits(){
+  $('lim').innerHTML = `<ul>
+    <li><b>It shows</b> that the constant-Lagrangian condition is zero power along the flow, a<sub>0</sub> = c DΓ/Dτ = 0, exactly in the rapidities, and that the acceleration of an isorapid river is then purely transverse. Through A<sub>g</sub> = Ω<sub>τ</sub>U<sub>g</sub> + U<sub>g</sub>Ω<sub>τ</sub><sup>†</sup> it shows that the kinematic and Maurer–Cartan routes impose one and the same condition.</li>
+    <li><b>a<sub>0</sub> = 0 is chosen, not forced.</b> Orthogonality holds for every rapidity profile; isorapidity selects the branch without longitudinal acceleration. The constant Γ<sub>0</sub> again comes from the virial closure at R.</li>
+    <li><b>Component derivative.</b> As in V5, a<sub>r</sub> and a<sub>φ</sub> are the rates of the components on the orthonormal legs. The rotation of the legs adds (−u<sub>φ</sub>²/r, u<sub>r</sub>u<sub>φ</sub>/r), the centripetal and Coriolis-type terms; they are perpendicular to the flow and change neither a<sub>0</sub> nor the longitudinal part.</li>
+    <li><b>Stationary flow.</b> Here D/Dτ = u<sup>r</sup>∂<sub>r</sub>. A slowly changing H adds Γ∂<sub>t</sub> terms of relative size ε, as on step 9.</li>
+    <li><b>Velocities.</b> The relations are exact in the rapidities; reading χ<sub>r</sub> as v<sub>r</sub>/c and the virial closure are slow-flow identifications. Physical velocities are c tanh χ.</li>
+  </ul>`;
+}
+
+/* ---------- wiring ---------- */
+function render(){ renderTop(); frPlot(); deriv(); vecPlot(); num(); limits(); }
+$('bP').addEventListener('click', () => { S.P = !S.P; render(); });
+$('bH').addEventListener('click', () => { S.H = !S.H; render(); });
+$('aIso').addEventListener('click', () => { S.az = 'iso'; render(); });
+$('aKep').addEventListener('click', () => { S.az = 'kep'; render(); });
+const setv = (id, v) => { $(id).value = v; };
+$('pDemo').addEventListener('click', () => { setv('RS', 2); setv('hS', -5); setv('xS', 0.6); render(); });
+$('pGal').addEventListener('click', () => { setv('RS', 5.32); setv('hS', -9.94); setv('xS', 0.8); S.P = true; S.H = true; S.az = 'iso'; render(); });
+['RS', 'hS', 'xS'].forEach(id => $(id).addEventListener('input', render));
+render();
+})();
+</script>
+</body></html>
