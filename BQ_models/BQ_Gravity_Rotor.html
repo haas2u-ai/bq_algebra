@@ -1,0 +1,574 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BQ Gravity Rotor</title>
+<meta name="description" content="The BQ gravity rotor at the BQ-Pauli level: Newtonian, Hubble and azimuthal rapidity fields feed a local Lorentz rotor G; dR^G = G^-1 dR G^-1, the flat exact quadratic, the slow-flow projection to the Painleve-Gullstrand coframe, the riverbed and the metric g_munu, compared with Schwarzschild, de Sitter, Schwarzschild-de Sitter and rotating-frame metrics.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&display=swap" rel="stylesheet">
+<style>
+/* Layout: chooser on the left, channel readout on the right (stacked on phones); numerical matrix check and notes below. Same family as the BQ-Pauli table page. */
+:root{
+  --bg:#f5f6fa;--surface:#ffffff;--edge:#d6dce8;--ink:#141a28;--soft:#55607a;
+  --st:#b8620f;--st-bg:rgba(184,98,15,.09);      /* space-time basis T̂, K̂ */
+  --sn:#0f7fb0;--sn-bg:rgba(15,127,176,.09);     /* spin-norm basis 1̂, σ̂ */
+  --sel:#5b4fd6;--good:#2f8a4f;--bad:#b23a3a;
+  --serif:"Source Serif 4",Georgia,serif;--sans:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.11);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.09);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.11);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.09);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans)}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font:600 clamp(24px,3.4vw,34px)/1.15 var(--serif);margin:0 0 6px;text-wrap:balance}
+h2{font:600 18px/1.3 var(--serif);margin:0 0 10px;text-wrap:balance}
+h3{font:600 12px/1.3 var(--sans);margin:0 0 8px;color:var(--soft);letter-spacing:.06em;text-transform:uppercase}
+.lede{color:var(--soft);max-width:82ch;margin:0 0 20px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:start}
+@media (max-width:960px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--edge);border-radius:12px;padding:16px;min-width:0}
+select,button,input{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:5px 8px}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--sel);outline-offset:2px}
+.pick{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 12px;align-items:center}
+.pick label{font:600 20px var(--serif)}
+.pick select{width:100%}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.qs{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.qs button{font-size:12.5px;padding:4px 9px}
+.math{font:500 16.5px/1.9 var(--serif);overflow-x:auto}
+.math b{font-weight:700}
+.vec{border:1px solid var(--edge);border-radius:10px;padding:10px 12px;margin-top:12px;background:var(--bg)}
+.vec .what{font-size:12.5px;color:var(--soft);margin-bottom:2px}
+.ts{color:var(--st)}.ns{color:var(--sn)}
+.formula{font:500 16px/1.8 var(--serif);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:8px 12px;overflow-x:auto;white-space:nowrap}
+.fwith{font:13px var(--sans);color:var(--soft);white-space:normal}
+.ch{display:grid;grid-template-columns:minmax(0,10.5em) minmax(0,1fr);gap:4px 14px;padding:12px 0;border-bottom:1px solid var(--edge)}
+.ch:last-of-type{border-bottom:none}
+.ch .nm{font:600 14px var(--sans)}
+.ch .nm small{display:block;font:400 12px var(--sans);color:var(--soft)}
+.ch .ex{font:500 16.5px/1.75 var(--serif);overflow-x:auto;min-width:0}
+.ch .ex .gen{color:var(--soft);font-size:14.5px}
+.ch .ex .res{font-weight:600}
+.ch.n .nm{color:var(--sn)}.ch.k .nm{color:var(--st)}.ch.s .nm{color:var(--sn)}
+@media (max-width:560px){.ch{grid-template-columns:minmax(0,1fr)}}
+.total{font:600 17px/1.8 var(--serif);border:1.5px solid var(--sel);border-radius:10px;padding:10px 12px;margin-top:10px;overflow-x:auto}
+.interp{margin-top:12px;font-size:14.5px;color:var(--ink);background:var(--bg);border:1px dashed var(--edge);border-radius:10px;padding:10px 12px}
+.interp .src{display:block;font-size:12.5px;color:var(--soft);margin-top:4px}
+.note{font-size:14px;color:var(--soft);max-width:74ch;margin:8px 0 0}
+.note b{color:var(--ink)}
+/* numeric check */
+.numgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:900px){.numgrid{grid-template-columns:minmax(0,1fr)}}
+.inrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.inrow label{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--soft);min-width:0}
+.inrow input{width:100%;font:13.5px var(--mono)}
+.mxrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font:500 17px var(--serif);margin:10px 0;overflow-x:auto}
+.mx{display:inline-grid;grid-template-columns:auto auto;gap:2px 14px;padding:5px 11px;position:relative;font:13.5px var(--mono);font-variant-numeric:tabular-nums}
+.mx::before,.mx::after{content:"";position:absolute;top:0;bottom:0;width:7px;border:1.5px solid var(--ink)}
+.mx::before{left:0;border-right:none}.mx::after{right:0;border-left:none}
+.mx span{text-align:right;white-space:nowrap}
+.tscroll{overflow-x:auto}
+table.dc{border-collapse:collapse;font:13.5px var(--mono);font-variant-numeric:tabular-nums;width:100%}
+table.dc th,table.dc td{padding:4px 10px;border-bottom:1px solid var(--edge);text-align:right;white-space:nowrap}
+table.dc th{font:600 12px var(--sans);color:var(--soft);text-align:right}
+table.dc td:first-child,table.dc th:first-child{text-align:left;font-family:var(--serif);font-size:15px}
+.pill{display:inline-block;font:500 12.5px var(--sans);border:1px solid var(--edge);border-radius:99px;padding:2px 10px;color:var(--soft);margin-top:10px}
+.pill.ok{border-color:var(--good);color:var(--good)}.pill.no{border-color:var(--bad);color:var(--bad)}
+.notes{margin-top:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:900px){.notes{grid-template-columns:minmax(0,1fr)}}
+.notes li{font-size:14px;max-width:70ch;margin-bottom:6px}
+.notes ul{padding-left:18px;margin:6px 0}
+.cap{font-size:12.5px;color:var(--soft);margin:10px 0 0}
+a{color:var(--sn)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.chk{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--soft);cursor:pointer}
+.split{margin-top:8px}
+.pill.st{border-color:var(--st);color:var(--st)}.pill.sn{border-color:var(--sn);color:var(--sn)}
+.sstep{margin:14px 0 0}
+.sstep h3{margin:0 0 6px}
+.sline{font:500 15px/1.9 var(--serif);overflow-x:auto;white-space:nowrap;padding:1px 0}
+.sline .lab{display:inline-block;min-width:5.6em;color:var(--soft)}
+.sbox{background:var(--bg);border:1px solid var(--edge);border-radius:10px;padding:8px 12px}
+.sgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:900px){.sgrid{grid-template-columns:minmax(0,1fr)}}
+.sgrid .sline{font-size:14.5px}
+.sres{font-weight:600}
+.ctlline{margin:0 0 8px}
+.numdet{margin-top:16px;border-top:1px solid var(--edge);padding-top:10px}
+.numdet summary{cursor:pointer;font:500 14px var(--sans);color:var(--soft)}
+.numgrid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:900px){.numgrid.three{grid-template-columns:minmax(0,1fr)}}
+.vec .math .what{margin:0 0 4px 0}
+.kv{font-weight:700}
+.slider{margin-top:14px;display:grid;gap:6px}
+.slider label{font-size:13.5px;color:var(--soft)}.slider label b{color:var(--ink);font:500 14px var(--mono)}
+.slider input{width:100%;accent-color:var(--st)}
+.kp{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+@media (max-width:560px){.kp{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.kp div{border:1px solid var(--edge);border-radius:8px;padding:5px 7px;min-width:0}
+.kp span{display:block;font-size:11.5px;color:var(--soft)}.kp b{font:500 14px var(--mono)}
+.trc{border:1px solid var(--edge);border-left-width:3px;border-radius:10px;padding:8px 12px;margin-bottom:10px}
+.trc.st{border-left-color:var(--st)}.trc.sn{border-left-color:var(--sn)}
+.trc h3{margin:0 0 4px}.trc .ops{font:500 15px/1.8 var(--serif);overflow-x:auto}
+.numv{font:13px var(--mono);color:var(--soft)}
+.leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--soft);margin-top:6px}
+.leg>span{display:inline-flex;align-items:center;gap:6px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%}
+.sw{display:inline-block;width:18px;height:0;border-top:2px solid}
+svg{display:block;width:100%;height:auto;max-width:100%}
+svg text{font:12px var(--mono);fill:var(--soft)}
+svg .ax{stroke:var(--edge);fill:none}
+svg .ttl{font:13px var(--sans);fill:var(--soft)}
+.dsteps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:10px}
+@media (max-width:960px){.dsteps{grid-template-columns:minmax(0,1fr)}}
+.dstep{border:1px solid var(--edge);border-radius:10px;padding:10px 14px;background:var(--bg);min-width:0}
+.dstep h3{margin:0 0 6px;color:var(--ink);font:600 15.5px var(--serif);letter-spacing:0;text-transform:none}
+.dstep h3 .n{display:inline-block;min-width:1.6em;color:var(--st)}
+.dl{font:500 15px/1.85 var(--serif);overflow-x:auto;white-space:nowrap}
+.dl.dwrap{white-space:normal}
+.dnum{font:13px/1.7 var(--mono);color:var(--soft);overflow-x:auto;white-space:nowrap}
+.dk{font-size:13.5px;color:var(--soft);margin:6px 0 0}
+.mxs{display:inline-grid;gap:2px 14px;padding:3px 10px;position:relative;vertical-align:middle;font:500 14px var(--serif)}
+.mxs::before,.mxs::after{content:"";position:absolute;top:0;bottom:0;width:6px;border:1.4px solid var(--ink)}
+.mxs::before{left:0;border-right:none}.mxs::after{right:0;border-left:none}
+.mxs span{text-align:center;white-space:nowrap}
+table.lm{border-collapse:collapse;font:13px var(--mono);width:100%}
+table.lm th,table.lm td{padding:3px 8px;border-bottom:1px solid var(--edge);text-align:right;white-space:nowrap}
+table.lm th{font:600 12px var(--sans);color:var(--soft)}
+table.lm td:first-child,table.lm th:first-child{text-align:left;font-family:var(--serif)}
+
+.tog{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 12px}
+.tog button{padding:7px 12px;border-radius:99px;font-size:13.5px}
+.flip{font-size:13px}
+.flip b{font-weight:600}
+.tog button b{font:600 15px var(--serif);margin-right:4px}
+.tog button[aria-pressed="true"]{background:var(--st-bg);border-color:var(--st);color:var(--ink)}
+.tog button#bP[aria-pressed="true"]{background:var(--sn-bg);border-color:var(--sn)}
+.sliders{display:grid;gap:4px;margin-top:6px}
+svg .gr{stroke:var(--edge);stroke-opacity:.6;fill:none}
+.trc h3{text-transform:none;letter-spacing:0;font:600 14px var(--sans);color:var(--ink)}
+.mxrow{flex-wrap:wrap}
+[hidden]{display:none!important}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <h1>BQ Gravity Rotor: from Rapidity to Metric</h1>
+  <p class="lede">Gravity enters the BQ-Pauli algebra as a <em>local</em> Lorentz rotor field. Rapidity potentials feed the rotor G(r, t) = e<sup>χσ̂/2</sup>: at every point it boosts the coordinate line element, dR<sup>G</sup> = G<sup>−1</sup>dR G<sup>−1</sup>, where a Lorentz transformation would use one global rapidity. The exact image has a flat quadratic: a local Lorentz transformation alone gives back Minkowski space. The metric appears only after a further, physical step, the Painlevé–Gullstrand prescription for the coframe, and its Einstein tensor shows what source it needs. Choose the rapidities that feed the rotor.</p>
+</header>
+
+<div class="grid">
+  <section class="card" aria-labelledby="h-rap">
+    <h2 id="h-rap">Rapidities feeding the rotor</h2>
+    <div class="tog" role="group" aria-label="Rapidity fields">
+      <button type="button" id="bN" aria-pressed="true"><b>ψ<sub>N</sub></b> Newtonian radial</button>
+      <button type="button" id="bH" aria-pressed="false"><b>ψ<sub>H</sub></b> Hubble radial</button>
+      <button type="button" id="bP" aria-pressed="false"><b>χ<sub>φ</sub></b> azimuthal</button>
+    </div>
+    <div class="row" style="margin:0 0 10px"><button type="button" id="bF" class="flip" aria-pressed="false"></button></div>
+    <div class="pick" id="azRow" hidden><label for="azSel">χ<sub>φ</sub></label><select id="azSel">
+      <option value="kep">Keplerian orbit, v<sub>φ</sub> = √(GM/r)</option>
+      <option value="cl">constant-Lagrangian disk, v<sub>φ</sub> = √(3GM/R − 2GM/r)</option>
+      <option value="rig">rigid rotation, v<sub>φ</sub> = Ωr</option>
+      <option value="gen">undetermined, χ<sub>φ</sub>(r) free</option>
+    </select></div>
+    <div class="vec" id="defs"></div>
+    <div class="sliders">
+      <div class="slider" id="sH" hidden><label for="hS">Hubble rate h = Hr<sub>s</sub>/c <b id="hLab"></b></label><input id="hS" type="range" min="-6" max="-0.5" step="0.05" value="-2"></div>
+      <div class="slider" id="sR" hidden><label for="RS">Bulge radius R/r<sub>s</sub> (constant-Lagrangian disk) <b id="RLab"></b></label><input id="RS" type="range" min="0" max="4" step="0.02" value="2"></div>
+      <div class="slider" id="sG" hidden><label for="gS">Value χ<sub>φ</sub>(r) at the evaluation radius <b id="gLab"></b></label><input id="gS" type="range" min="-1" max="1" step="0.01" value="0.2"></div>
+      <div class="slider" id="sW" hidden><label for="wS">Rotation rate w = Ωr<sub>s</sub>/c <b id="wLab"></b></label><input id="wS" type="range" min="-4" max="-0.3" step="0.05" value="-1.5"></div>
+      <div class="slider"><label for="xS">Evaluation radius r/r<sub>s</sub> <b id="xLab"></b></label><input id="xS" type="range" min="-0.25" max="5" step="0.01" value="1"></div>
+    </div>
+    <div class="kp" id="kp"></div>
+    <p class="cap">Units: c = 1 and r<sub>s</sub> = 2GM/c² = 1, so ψ<sub>N</sub> = √(r<sub>s</sub>/r). The equatorial plane θ = π/2 is used for the numbers.</p>
+  </section>
+
+  <section class="card" aria-labelledby="h-river">
+    <h2 id="h-river">The riverbed</h2>
+    <svg id="river" viewBox="0 0 560 360" role="img" aria-label="Riverbed: flow velocities against radius"></svg>
+    <div class="leg" id="leg"></div>
+    <p class="cap" id="rivcap"></p>
+  </section>
+</div>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-der">
+  <h2 id="h-der">From the rapidity field to g<sub>μν</sub> in eight steps</h2>
+  <p class="note">The steps follow de Haas (2026), <i>The Gravitational Rapidity Potential</i>, Sections 2–5, at the BQ-Pauli level. Here C<sub>r</sub> = cosh χ<sub>r</sub>, S<sub>r</sub> = sinh χ<sub>r</sub>, C<sub>φ</sub> = cosh χ<sub>φ</sub>, S<sub>φ</sub> = sinh χ<sub>φ</sub>, s<sub>θ</sub> = sin θ.</p>
+  <div class="dsteps" id="deriv"></div>
+</section>
+
+<div class="grid" style="margin-top:18px">
+  <section class="card" aria-labelledby="h-cmp">
+    <h2 id="h-cmp">Comparison with the known metric</h2>
+    <div id="cmp"></div>
+  </section>
+  <section class="card" aria-labelledby="h-num">
+    <h2 id="h-num">Check by explicit matrix multiplication</h2>
+    <div id="numwrap"></div>
+  </section>
+</div>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-curv">
+  <h2 id="h-curv">Curvature: the Einstein tensor of the prescribed metric</h2>
+  <div id="curv"></div>
+</section>
+
+<div class="notes">
+  <section class="card"><h2>A field of Lorentz transformations</h2>
+    <ul>
+      <li><b>Global versus local.</b> A Lorentz transformation relates two inertial frames with one constant rapidity. Here χ(r, t) is a spacetime field, so G(r, t) assigns a boost to every point. A constant χ gives back the global boost of the Lorentz pages.</li>
+      <li><b>Two exact projections.</b> On the reference vector cT̂ the rotor gives the gravitational four-velocity U<sub>g</sub> = G<sup>−1</sup>(cT̂)G<sup>−1</sup> = c cosh χ T̂ − c sinh χ Î, with γ = cosh χ and v<sup>FR</sup> = c tanh χ &lt; c. On dR it gives the exact image dR<sup>G</sup>.</li>
+      <li><b>Where the gravity enters.</b> The exact quadratic (dR<sup>G</sup>)<sup>T</sup>dR<sup>G</sup> = dR<sup>T</sup>dR is flat, and so is every consistent truncation of dR<sup>G</sup>. The metric needs (1) the PG prescription, which keeps the boosted spatial legs with v = cχ and takes the clock form θ<sup>0</sup> = c dt, and (2) the quadratic of that coframe. Step (1) is the physical postulate of the construction, motivated by the weak flow and adopted as an exact ansatz.</li>
+      <li><b>Sign of the flow.</b> With G = e<sup>χσ̂<sub>r</sub>/2</sup> and dR<sup>G</sup> = G<sup>−1</sup>dRG<sup>−1</sup>, the matrices give θ<sup>r</sup> = dr − cχ<sub>r</sub>dt and g<sub>tr</sub> = −v<sub>r</sub>, as in the paper’s coframe and metric (eqs. 46, 51). For v<sub>r</sub> &gt; 0 this is the outgoing PG chart, and for the Hubble term a contracting one: the time reverse of infall plus expansion. The time-orientation toggle flips the rotor rapidity to −χ and gives the ingoing, expanding chart, g<sub>tr</sub> = +v<sub>r</sub>. Both charts describe the same geometry.</li>
+    </ul>
+  </section>
+  <section class="card"><h2>Two boosts</h2>
+    <p class="note">With a radial and an azimuthal rapidity the boosts are applied one after the other, radial first: dR<sup>G</sup> = G<sub>φ</sub><sup>−1</sup>(G<sub>r</sub><sup>−1</sup>dR G<sub>r</sub><sup>−1</sup>)G<sub>φ</sub><sup>−1</sup>. Each step keeps dR<sup>G</sup> a minquat, and the exact quadratic stays flat. The single product G<sup>−1</sup>dRG<sup>−1</sup> with G = G<sub>φ</sub>G<sub>r</sub> is not the same: G<sub>φ</sub>G<sub>r</sub> is not a pure boost (it contains the Thomas–Wigner rotation), and that product leaves the minquat space at order χ<sub>r</sub>χ<sub>φ</sub>. The order of the two boosts and the Wigner rotation only affect terms of order χ<sub>r</sub>χ<sub>φ</sub>, which the slow-flow projection drops.</p>
+    <p class="cap">Rapidity fields, rotor, coframe and metric as in de Haas (2026), The Gravitational Rapidity Potential, and de Haas (2025), Constructing Spacetime from Rapidity. Part of <a href="../index.html">the BQ algebra models</a>.</p>
+  </section>
+</div>
+</div>
+
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+const fx = (x, d) => (Math.abs(x) < 5e-13 ? 0 : +x.toFixed(d == null ? 4 : d)).toString().replace('-', '−');
+const fg = x => { if (!isFinite(x)) return '—'; if (x === 0) return '0'; const a = Math.abs(x); if (a >= 1e-3 && a < 1e5) return fx(x, 4); const [m, e] = x.toExponential(3).split('e'); return m.replace('-', '−') + '×10<sup>' + (+e).toString().replace('-', '−') + '</sup>'; };
+const S = {N:true, H:false, P:false, az:'kep', flip:false};
+const sg = () => S.flip ? -1 : 1;
+const M = () => S.flip ? '+' : '−';
+const val = id => +$(id).value;
+const h = () => Math.pow(10, val('hS')), w = () => Math.pow(10, val('wS')), Rb = () => Math.pow(10, val('RS')), X = () => Math.pow(10, val('xS'));
+const BK = '<b class="kv">K̂</b>';
+const sub = s => `<sub>${s}</sub>`;
+
+/* ---------- rapidity fields (c = 1, r_s = 2GM/c^2 = 1) ---------- */
+const psiN = x => S.N ? Math.sqrt(1/x) : 0;
+const psiH = x => S.H ? h()*x : 0;
+const chiR = x => psiN(x) - psiH(x);
+function chiP(x){
+  if (!S.P) return 0;
+  if (S.az === 'kep') return Math.sqrt(1/(2*x));
+  if (S.az === 'rig') return w()*x;
+  if (S.az === 'gen') return val('gS');
+  /* constant-Lagrangian condition in slow flow: v_r^2 + v_phi^2 = 3GM/R, with the full radial river v_r = c chi_r */
+  const R = Rb(), q = y => 1.5/R - chiR(y)*chiR(y);
+  if (x >= R) return q(x) >= 0 ? Math.sqrt(q(x)) : NaN;
+  return q(R) >= 0 ? Math.sqrt(q(R))*x/R : NaN;
+}
+const chiPx = x => { const v = chiP(x); return isFinite(v) ? v : 0; };
+const noCL = () => S.P && S.az === 'cl' && !isFinite(chiP(X()));
+const radial = () => S.N || S.H;
+const rc = () => (S.N && S.H) ? Math.pow(h(), -2/3) : null;
+
+/* ---------- symbolic strings ---------- */
+function sym(){
+  const vr = S.N && S.H ? '√(2GM/r) − Hr' : S.N ? '√(2GM/r)' : S.H ? '−Hr' : '0';
+  const chr = S.N && S.H ? 'ψ' + sub('N') + ' − ψ' + sub('H') : S.N ? 'ψ' + sub('N') : S.H ? '−ψ' + sub('H') : '0';
+  const vp = !S.P ? '0' : S.az === 'kep' ? '√(GM/r)' : S.az === 'rig' ? 'Ωr s<sub>θ</sub>' : S.az === 'gen' ? 'v<sub>φ</sub>(r)' : '√(3GM/R − v<sub>r</sub>²)';
+  return {vr, chr, vp, rad:radial(), az:S.P};
+}
+
+/* ---------- complex 2x2 machinery ---------- */
+const cx = (re, im) => [re, im], cm = (p, q) => [p[0]*q[0]-p[1]*q[1], p[0]*q[1]+p[1]*q[0]], ca = (p, q) => [p[0]+q[0], p[1]+q[1]];
+const mm = (A, B) => [[ca(cm(A[0][0],B[0][0]),cm(A[0][1],B[1][0])), ca(cm(A[0][0],B[0][1]),cm(A[0][1],B[1][1]))],[ca(cm(A[1][0],B[0][0]),cm(A[1][1],B[1][0])), ca(cm(A[1][0],B[0][1]),cm(A[1][1],B[1][1]))]];
+const mat = (x0, x1, x2, x3) => [[cx(0, x0 + x1), cx(x2, x3)], [cx(-x2, x3), cx(0, x0 - x1)]];
+function cdec(M){ const z0 = ca(M[0][0], M[1][1]).map(v => v/2), zI = [(M[0][0][0] - M[1][1][0])/2, (M[0][0][1] - M[1][1][1])/2];
+  const d = [M[0][1][0] - M[1][0][0], M[0][1][1] - M[1][0][1]], zJ = [-d[1]/2, d[0]/2], zK = [(M[0][1][0] + M[1][0][0])/2, (M[0][1][1] + M[1][0][1])/2];
+  return {f:z0[0], t:z0[1], k:[zI[1], zJ[1], zK[1]], s:[zI[0], zJ[0], zK[0]]}; }
+const rotI = a => [[cx(Math.exp(a/2),0),cx(0,0)],[cx(0,0),cx(Math.exp(-a/2),0)]];                    /* e^{a σ_I/2} */
+const rotK = a => { const c = Math.cosh(a/2), s = Math.sinh(a/2); return [[cx(c,0),cx(s,0)],[cx(s,0),cx(c,0)]]; };  /* e^{a σ_K/2} */
+const fz = z => { const r = Math.abs(z[0]) < 5e-13 ? 0 : z[0], i = Math.abs(z[1]) < 5e-13 ? 0 : z[1]; const f = v => (+v.toFixed(4)).toString().replace('-', '−');
+  if (i === 0) return f(r); if (r === 0) return f(i) + 'i'; return f(r) + (i < 0 ? ' − ' : ' + ') + f(Math.abs(i)) + 'i'; };
+const mxH = M => '<span class="mx">' + M.flat().map(z => `<span>${fz(z)}</span>`).join('') + '</span>';
+const mxs = rows => `<span class="mxs" style="grid-template-columns:repeat(${rows[0].length},auto)">${rows.flat().map(x => `<span>${x}</span>`).join('')}</span>`;
+
+/* ---------- controls and readouts ---------- */
+function renderTop(){
+  $('bF').setAttribute('aria-pressed', S.flip ? 'true' : 'false'); $('bF').innerHTML = S.flip ? 'Time orientation: <b>ingoing / expanding chart</b> (rotor rapidity −χ)' : 'Time orientation: <b>paper chart</b> (rotor rapidity χ, eqs. 46, 51)';
+  ['bN', 'bH', 'bP'].forEach((id, i) => $(id).setAttribute('aria-pressed', [S.N, S.H, S.P][i] ? 'true' : 'false'));
+  $('azRow').hidden = !S.P; $('sH').hidden = !S.H; $('sR').hidden = !(S.P && S.az === 'cl'); $('sW').hidden = !(S.P && S.az === 'rig'); $('sG').hidden = !(S.P && S.az === 'gen'); $('gLab').textContent = fx(val('gS'), 2);
+  $('azSel').value = S.az;
+  $('hLab').innerHTML = fg(h()); $('RLab').innerHTML = fg(Rb()); $('wLab').innerHTML = fg(w()); $('xLab').innerHTML = fg(X());
+  const s = sym();
+  let d = '<div class="what">Primary rapidity potentials (de Haas 2026, eqs. 1–3)</div>';
+  if (S.N) d += `<div class="math">ψ${sub('N')}(r) = √(2GM/r)/c</div>`;
+  if (S.H) d += `<div class="math">ψ${sub('H')}(r, t) = H(t) r/c</div>`;
+  d += `<div class="math">χ${sub('r')} = ${s.chr}${radial() ? ' &nbsp;(collinear rapidities add)' : ''}</div>`;
+  if (S.P) d += `<div class="math">χ${sub('φ')} = v${sub('φ')}/c, &nbsp;v${sub('φ')} = ${s.vp}${S.az === 'gen' ? ' (profile left free: one value at the evaluation radius is used for the numbers)' : S.az === 'cl' ? ' for r ≥ R, rigid inside R: the slow-flow constant-Lagrangian condition v<sub>r</sub>² + v<sub>φ</sub>² = 3GM/R with the full radial river (exact form: cosh χ<sub>r</sub> cosh χ<sub>φ</sub> = Γ<sub>0</sub>); for H = 0, v<sub>φ</sub> = √(3GM/R − 2GM/r)' : S.az === 'rig' ? ' (the numbers use the equatorial plane, s<sub>θ</sub> = 1)' : ''}${noCL() ? '<br><b>No constant-Lagrangian solution at this radius: v<sub>r</sub>² &gt; 3GM/R.</b> χ<sub>φ</sub> = 0 is used below.' : ''}</div>`;
+  if (!radial() && !S.P) d += `<div class="what">No rapidity selected: G = 1̂ and the metric is flat Minkowski.</div>`;
+  $('defs').innerHTML = d;
+  const x = X(), cr = chiR(x), cp = chiPx(x);
+  const k = [['χ<sub>r</sub>', fg(cr)], ['v<sub>r</sub> = cχ<sub>r</sub>', fg(cr)], ['v<sup>FR</sup> = c tanh χ<sub>r</sub>', fg(Math.tanh(cr))], ['γ = cosh χ<sub>r</sub>', fg(Math.cosh(cr))]];
+  if (S.P) k.push(['χ<sub>φ</sub>', fg(cp)]); else if (rc()) k.push(['r<sub>c</sub>/r<sub>s</sub>', fg(rc())]); else k.push(['1 − v<sub>r</sub>²/c²', fg(1 - cr*cr)]);
+  $('kp').innerHTML = k.map(q => `<div><span>${q[0]}</span><b>${q[1]}</b></div>`).join('');
+}
+
+/* ---------- riverbed plot ---------- */
+const NS = 'http://www.w3.org/2000/svg';
+const sv = (tag, at, p) => { const e = document.createElementNS(NS, tag); for (const kk in at) e.setAttribute(kk, at[kk]); if (p) p.appendChild(e); return e; };
+function river(){
+  const s = $('river'); while (s.firstChild) s.removeChild(s.firstChild);
+  const W = 560, Hh = 360, L = 52, Rm = 14, T = 14, B = 40;
+  let lx0 = Math.log10(0.3), lx1 = 3;
+  if (rc()) lx1 = Math.max(3, Math.log10(rc()) + 0.8);
+  if (S.H && !S.N) lx1 = Math.log10(1.6/h());
+  if (S.P && S.az === 'rig') lx1 = Math.max(S.N || S.H ? lx1 : 1, Math.log10(1.6/w()));
+  lx1 = Math.min(lx1, 7); lx0 = Math.min(lx0, lx1 - 2);
+  const ymin = -1.5, ymax = 1.5;
+  const PX = lx => L + (lx - lx0)/(lx1 - lx0)*(W - L - Rm), PY = y => T + (ymax - Math.max(ymin, Math.min(ymax, y)))/(ymax - ymin)*(Hh - T - B);
+  /* grid and axes */
+  for (let e = Math.ceil(lx0); e <= Math.floor(lx1); e++){ sv('line', {x1:PX(e), x2:PX(e), y1:T, y2:Hh - B, class:'gr'}, s); const t = sv('text', {x:PX(e), y:Hh - B + 16, 'text-anchor':'middle'}, s); t.textContent = '10' + (e === 0 ? '⁰' : e < 0 ? '⁻' + '⁰¹²³⁴⁵⁶⁷⁸⁹'[-e] : '⁰¹²³⁴⁵⁶⁷⁸⁹'[e]); }
+  [-1.5, -1, -0.5, 0, 0.5, 1, 1.5].forEach(y => { sv('line', {x1:L, x2:W - Rm, y1:PY(y), y2:PY(y), class:y === 0 ? 'ax' : 'gr'}, s); const t = sv('text', {x:L - 6, y:PY(y) + 4, 'text-anchor':'end'}, s); t.textContent = fx(y, 1); });
+  [1, -1].forEach(y => sv('line', {x1:L, x2:W - Rm, y1:PY(y), y2:PY(y), stroke:'var(--sel)', 'stroke-dasharray':'2 3', 'stroke-width':1}, s));
+  const tl = sv('text', {x:(L + W - Rm)/2, y:Hh - 6, 'text-anchor':'middle', class:'ttl'}, s); tl.textContent = 'r / rₛ  (log scale)';
+  const tv = sv('text', {x:14, y:(T + Hh - B)/2, 'text-anchor':'middle', class:'ttl', transform:`rotate(-90 14 ${(T + Hh - B)/2})`}, s); tv.textContent = 'velocity / c';
+  const curve = (f, col, dash, wdt) => { let d = '', pen = false; for (let n = 0; n <= 400; n++){ const lx = lx0 + (lx1 - lx0)*n/400, y = f(Math.pow(10, lx));
+      if (!isFinite(y)) { pen = false; continue; } const yc = Math.max(ymin - 0.05, Math.min(ymax + 0.05, y)); d += (pen ? 'L' : 'M') + PX(lx).toFixed(1) + ',' + PY(yc).toFixed(1); pen = Math.abs(y) <= ymax + 0.05; }
+    sv('path', Object.assign({d, fill:'none', stroke:col, 'stroke-width':wdt || 2}, dash ? {'stroke-dasharray':dash} : {}), s); };
+  const leg = [];
+  if (radial()){ curve(chiR, 'var(--st)', null, 2.2); curve(x => Math.tanh(chiR(x)), 'var(--st)', '6 4', 1.6);
+    leg.push(['var(--st)', '', 'v<sub>r</sub> = cχ<sub>r</sub>, the PG riverbed (slow-flow projection)'], ['var(--st)', 'd', 'v<sub>r</sub><sup>FR</sup> = c tanh χ<sub>r</sub>, exact, bounded by c']); }
+  if (S.P && S.az !== 'gen'){ curve(chiP, 'var(--sn)', null, 2.2); curve(x => Math.tanh(chiP(x)), 'var(--sn)', '6 4', 1.6);
+    leg.push(['var(--sn)', '', 'v<sub>φ</sub> = cχ<sub>φ</sub>'], ['var(--sn)', 'd', 'c tanh χ<sub>φ</sub>']); }
+  if (S.P && S.az === 'gen') leg.push(['var(--sn)', '', 'χ<sub>φ</sub>(r): undetermined profile, one value shown at the evaluation radius']);
+  if (rc()){ const lx = Math.log10(rc()); sv('line', {x1:PX(lx), x2:PX(lx), y1:T, y2:Hh - B, stroke:'var(--good)', 'stroke-dasharray':'4 3'}, s); const t = sv('text', {x:PX(lx) + 4, y:T + 12}, s); t.textContent = 'r_c'; t.setAttribute('style', 'fill:var(--good)'); }
+  const lxe = Math.log10(X()); if (lxe >= lx0 && lxe <= lx1){ sv('line', {x1:PX(lxe), x2:PX(lxe), y1:T, y2:Hh - B, stroke:'var(--ink)', 'stroke-opacity':.5}, s);
+    if (radial()) sv('circle', {cx:PX(lxe), cy:PY(chiR(X())), r:4.5, fill:'var(--st)'}, s); if (S.P && isFinite(chiP(X()))) sv('circle', {cx:PX(lxe), cy:PY(chiP(X())), r:4.5, fill:'var(--sn)'}, s); }
+  $('leg').innerHTML = leg.map(([col, d, t]) => `<span><i class="sw" style="border-color:${col};${d ? 'border-top-style:dashed' : ''}"></i><span>${t}</span></span>`).join('')
+    + '<span><i class="sw" style="border-color:var(--sel);border-top-style:dotted"></i><span>|v| = c</span></span>' + (rc() ? '<span><i class="sw" style="border-color:var(--good);border-top-style:dashed"></i><span>balance radius r<sub>c</sub></span></span>' : '');
+  let cap = '';
+  if (S.N && !S.H) cap = 'The PG river v<sub>r</sub> = √(2GM/r) equals c at r = r<sub>s</sub>, the horizon of the PG metric. c tanh χ<sub>r</sub> is a different object, the exact boost speed of the rotor, and stays below c; it is not a correction of the PG river. At r<sub>s</sub>, χ<sub>r</sub> = 1: the slow-flow motivation no longer holds there, and the PG coframe is used as an exact ansatz.';
+  else if (S.H && !S.N) cap = 'The Hubble river −Hr reaches −c at the cosmological horizon r = c/H; c tanh χ<sub>r</sub> is the exact boost speed, a different object.';
+  else if (S.N && S.H) cap = `Inflow dominates inside the balance radius r<sub>c</sub> = (2GM/H²)<sup>1/3</sup> = ${fg(rc())} r<sub>s</sub>, outflow outside it; at r<sub>c</sub> the radial rotor is the identity, G<sub>r</sub> = 1̂${S.P ? ', while the azimuthal rotor G<sub>φ</sub> remains' : ''}.`;
+  else if (S.P) cap = 'Only the azimuthal rapidity is active.';
+  else cap = 'No rapidity selected.';
+  $('rivcap').innerHTML = cap + ' The vertical line marks the evaluation radius.';
+}
+
+/* ---------- the eight steps ---------- */
+function deriv(){
+  const s = sym(), x = X(), cr = chiR(x), cp = chiPx(x);
+  const Gr = rotI(sg()*cr), Gp = rotK(sg()*cp), m = M();
+  const rdtT = s.rad && s.az ? `C${sub('φ')}(c C${sub('r')} dt ${m} S${sub('r')} dr) ${m} S${sub('φ')} r s${sub('θ')} dφ` : s.rad ? `c C${sub('r')} dt ${m} S${sub('r')} dr` : s.az ? `c C${sub('φ')} dt ${m} S${sub('φ')} r s${sub('θ')} dφ` : 'c dt';
+  const rdtI = s.rad ? `C${sub('r')} dr ${m} c S${sub('r')} dt` : 'dr';
+  const rdtK = s.az && s.rad ? `C${sub('φ')} r s${sub('θ')} dφ ${m} S${sub('φ')}(c C${sub('r')} dt ${m} S${sub('r')} dr)` : s.az ? `C${sub('φ')} r s${sub('θ')} dφ ${m} c S${sub('φ')} dt` : `r s${sub('θ')} dφ`;
+  const th = {r: s.rad ? `dr ${m} v` + sub('r') + ' dt' : 'dr', p: s.az ? `r s${sub('θ')} dφ ${m} v${sub('φ')} dt` : `r s${sub('θ')} dφ`};
+  const gv = q => (S.flip ? '' : '−') + q;
+  let h = '';
+  /* 1 */
+  h += `<div class="dstep"><h3><span class="n">1</span>The rapidity field</h3>
+    <div class="dl">χ${sub('r')}(r, t) = ${s.chr}${s.rad ? ` = (${s.vr})/c` : ''}</div>
+    ${s.az ? `<div class="dl">χ${sub('φ')}(r) = (${s.vp})/c</div>` : ''}
+    <div class="dnum">at r = ${fg(x)} r<sub>s</sub>: χ<sub>r</sub> = ${fg(cr)}${s.az ? `, χ<sub>φ</sub> = ${fg(cp)}` : ''}</div>
+    <p class="dk">The rapidities are the primary fields. Collinear radial rapidities add before any projection; velocities follow from them as v = c tanh χ (exact) or v = cχ (slow flow).</p></div>`;
+  /* 2 */
+  h += `<div class="dstep"><h3><span class="n">2</span>The local rotor G(r, t)</h3>
+    ${s.rad ? `<div class="dl">G${sub('r')} = e<sup>χ<sub>r</sub>σ̂<sub>r</sub>/2</sup> = cosh(χ${sub('r')}/2) 1̂ + sinh(χ${sub('r')}/2) σ̂${sub('r')} = ${mxs([['e<sup>χ<sub>r</sub>/2</sup>', '0'], ['0', 'e<sup>−χ<sub>r</sub>/2</sup>']])}</div>` : ''}
+    ${s.az ? `<div class="dl">G${sub('φ')} = e<sup>χ<sub>φ</sub>σ̂<sub>φ</sub>/2</sup> = cosh(χ${sub('φ')}/2) 1̂ + sinh(χ${sub('φ')}/2) σ̂${sub('φ')} = ${mxs([['cosh(χ<sub>φ</sub>/2)', 'sinh(χ<sub>φ</sub>/2)'], ['sinh(χ<sub>φ</sub>/2)', 'cosh(χ<sub>φ</sub>/2)']])}</div>` : ''}
+    ${!s.rad && !s.az ? '<div class="dl">G = 1̂</div>' : ''}
+    <div class="dl dwrap">with σ̂${sub('r')} = σ̂${sub('I')} along Î${sub('r')} and σ̂${sub('φ')} = σ̂${sub('K')} along K̂${sub('φ')}; σ̂² = 1̂ splits the exponential into cosh and sinh.</div>
+    <div class="mxrow">${s.rad ? `<span>G<sub>r</sub> =</span>${mxH(Gr)}` : ''}${s.az ? `<span>G<sub>φ</sub> =</span>${mxH(Gp)}` : ''}</div>
+    <p class="dk">The same rotor as the global boost U, but its rapidity is a field: a different Lorentz transformation at every point.</p></div>`;
+  /* 3 */
+  h += `<div class="dstep" style="grid-column:1/-1"><h3><span class="n">3</span>The exact image of the line element</h3>
+    <div class="dl">dR = c dt T̂ + dr Î${sub('r')} + r dθ Ĵ${sub('θ')} + r s${sub('θ')} dφ K̂${sub('φ')}</div>
+    <div class="dl">dR<sup>G</sup> = ${s.az && s.rad ? `G${sub('φ')}<sup>−1</sup>(G${sub('r')}<sup>−1</sup> dR G${sub('r')}<sup>−1</sup>)G${sub('φ')}<sup>−1</sup>` : 'G<sup>−1</sup> dR G<sup>−1</sup>'}, &nbsp; by the table: G<sup>−1</sup>T̂G<sup>−1</sup> = C T̂ − S X̂, &nbsp;G<sup>−1</sup>X̂G<sup>−1</sup> = C X̂ − S T̂ for the boost direction X̂; transverse elements unchanged</div>
+    <div class="sgrid">
+      <div class="dl dwrap">T̂: &nbsp;${rdtT}</div><div class="dl dwrap">Î${sub('r')}: &nbsp;${rdtI}</div>
+      <div class="dl dwrap">Ĵ${sub('θ')}: &nbsp;r dθ</div><div class="dl dwrap">K̂${sub('φ')}: &nbsp;${rdtK}</div></div>
+    ${s.rad && !s.az ? `<div class="dl dwrap">With γ = cosh χ${sub('r')}, v<sup>FR</sup> = c tanh χ${sub('r')}: &nbsp;dR<sup>G</sup> = γ(c dt ${m} v<sup>FR</sup>dr/c) T̂ + γ(dr ${m} v<sup>FR</sup>dt) Î${sub('r')} + r dθ Ĵ${sub('θ')} + r s${sub('θ')} dφ K̂${sub('φ')}</div>` : ''}
+    <p class="dk">Exact and Lorentz covariant: the full hyperbolic information (γ, v<sup>FR</sup> &lt; c) is still present. The image is a minquat again; no spin-norm channel appears.</p></div>`;
+  /* 4 */
+  h += `<div class="dstep"><h3><span class="n">4</span>The exact quadratic is flat</h3>
+    <div class="dl">(dR<sup>G</sup>)<sup>T</sup> = G dR<sup>T</sup> G &nbsp;⇒&nbsp; (dR<sup>G</sup>)<sup>T</sup>dR<sup>G</sup> = G(dR<sup>T</sup>dR)G<sup>−1</sup></div>
+    <div class="dl">= (c²dt² − dr² − r²dθ² − r²s${sub('θ')}²dφ²) 1̂</div>
+    <p class="dk">dR<sup>T</sup>dR lies in the 1̂ channel, which commutes with every rotor, so the rapidity cancels exactly. The exact image returns the Minkowski metric: a local Lorentz transformation, even with a position-dependent rapidity, does not by itself produce a new, curved metric.</p></div>`;
+  /* 5 */
+  const lo0 = s.rad || s.az ? `c dt${s.rad ? ` ${m} χ${sub('r')} dr` : ''}${s.az ? ` ${m} χ${sub('φ')} r s${sub('θ')} dφ` : ''}` : 'c dt';
+  h += `<div class="dstep" style="grid-column:1/-1"><h3><span class="n">5</span>The PG prescription: the physical step</h3>
+    <div class="dl dwrap"><b>Consistent truncation stays flat.</b> To first order in χ the exact image is θ<sup>0</sup> = ${lo0}, θ<sup>r</sup> = ${th.r.replace('v' + sub('r'), 'cχ' + sub('r'))}${s.az ? `, θ<sup>φ</sup> = ${th.p.replace('v' + sub('φ'), 'cχ' + sub('φ'))}` : ''}. In −(θ<sup>0</sup>)² + (θ<sup>r</sup>)² the cross terms ±2cχ${sub('r')} dt dr cancel, leaving −c²(1 − χ²)dt² + (1 − χ²)dr²: to O(χ²) this is the flat quadratic of step 4 (γ² = 1 + O(χ²)). Every consistent truncation of the exact image is flat.</div>
+    <div class="dl dwrap"><b>The prescription.</b> Keep the boosted spatial legs, θ<sup>r</sup> = ${th.r}${s.az ? `, θ<sup>φ</sup> = ${th.p}` : ''} with v = cχ, and take the clock form θ<sup>0</sup> = c dt: unit lapse, coordinate time = proper time of the river observers.${s.rad || s.az ? ` Dropping ${s.rad ? `${m} χ${sub('r')} dr` : ''}${s.rad && s.az ? ' and ' : ''}${s.az ? `${m} χ${sub('φ')} r s${sub('θ')} dφ` : ''} from θ<sup>0</sup> is what breaks the cancellation: it leaves the cross term${s.rad && s.az ? 's' : ''} ${s.rad ? `${m}2v${sub('r')} dr dt` : ''}${s.rad && s.az ? ', ' : ''}${s.az ? `${m}2v${sub('φ')} r s${sub('θ')} dφ dt` : ''} and the v² in g<sub>tt</sub>.` : ''}</div>
+    <div class="dl dwrap">dR<sup>G</sup>|<sub>PG</sub> = c dt T̂ + (${th.r}) Î${sub('r')} + r dθ Ĵ${sub('θ')} + (${th.p}) K̂${sub('φ')}</div>
+    <div class="dnum" style="white-space:normal">at r = ${fg(x)} r<sub>s</sub>: χ<sub>r</sub> = ${fg(cr)}${s.az ? `, χ<sub>φ</sub> = ${fg(cp)}` : ''}; γ − 1 = ${fg(Math.cosh(cr) - 1)}</div>
+    <p class="dk">This is not a truncation of the Lorentz transformation but an additional physical construction: the gravitational content of the model enters here, and nowhere else. It is motivated by the weak flow (χ ≪ 1) and then adopted as an exact ansatz for the coframe; only as an exact ansatz does it reproduce Schwarzschild, also at r = r<sub>s</sub> where χ = 1.</p></div>`;
+  /* 6 */
+  h += `<div class="dstep"><h3><span class="n">6</span>Read off the PG coframe</h3>
+    <div class="dl">θ<sup>0</sup> = c dt, &nbsp;θ<sup>r</sup> = ${th.r}, &nbsp;θ<sup>θ</sup> = r dθ, &nbsp;θ<sup>φ</sup> = ${th.p}</div>
+    <div class="dl">e<sup>a</sup>${sub('μ')} = ${mxs([['c', '0', '0', '0'], [s.rad ? gv('v<sub>r</sub>') : '0', '1', '0', '0'], ['0', '0', 'r', '0'], [s.az ? gv('v<sub>φ</sub>') : '0', '0', '0', 'r s<sub>θ</sub>']])}, &nbsp;dx<sup>μ</sup> = (dt, dr, dθ, dφ)</div>
+    <p class="dk">The coframe one-forms are the minquat coordinates of the prescribed line element: no further product is needed. Unit lapse, shift (v${sub('r')}, v${sub('φ')}).</p></div>`;
+  /* 7 */
+  const terms = [`−(c²${s.rad ? ' − v<sub>r</sub>²' : ''}${s.az ? ' − v<sub>φ</sub>²' : ''}) dt²`]; if (s.rad) terms.push(m + ' 2v<sub>r</sub> dr dt'); if (s.az) terms.push(m + ' 2v<sub>φ</sub> r s<sub>θ</sub> dφ dt'); terms.push('+ dr² + r²dθ² + r²s<sub>θ</sub>²dφ²');
+  h += `<div class="dstep"><h3><span class="n">7</span>The coframe quadratic</h3>
+    <div class="dl dwrap">(dR<sup>G</sup>|<sub>slow</sub>)<sup>T</sup>(dR<sup>G</sup>|<sub>slow</sub>) = ((θ<sup>0</sup>)² − (θ<sup>r</sup>)² − (θ<sup>θ</sup>)² − (θ<sup>φ</sup>)²) 1̂ = −ds² 1̂</div>
+    <div class="formula" style="white-space:normal;margin:6px 0">ds² = ${terms.join(' ')}</div>
+    <p class="dk">Exact algebra on the prescribed coframe. It keeps exactly the terms that cancel in the exact image: v² in g<sub>tt</sub> and the linear river velocity in g<sub>tr</sub>. Neither contains γ.</p></div>`;
+  /* 8 */
+  const vpL = s.az ? 'v<sub>φ</sub> r s<sub>θ</sub>' : '0';
+  h += `<div class="dstep"><h3><span class="n">8</span>The metric tensor g<sub>μν</sub></h3>
+    <div class="dl">g${sub('μν')} = η${sub('ab')} e<sup>a</sup>${sub('μ')} e<sup>b</sup>${sub('ν')} = ${mxs([[`−(c²${s.rad ? ' − v<sub>r</sub>²' : ''}${s.az ? ' − v<sub>φ</sub>²' : ''})`, s.rad ? gv('v<sub>r</sub>') : '0', '0', s.az ? gv(vpL) : '0'], [s.rad ? gv('v<sub>r</sub>') : '0', '1', '0', '0'], ['0', '0', 'r²', '0'], [s.az ? gv(vpL) : '0', '0', '0', 'r²s<sub>θ</sub>²']])}</div>
+    <div class="dl">det g = −c² r⁴ s${sub('θ')}² &nbsp;(unit lapse: the shift does not enter the determinant)</div>
+    <div class="dl">with v${sub('r')} = ${s.vr}${s.az ? `, v${sub('φ')} = ${s.vp}` : ''}</div>
+    <p class="dk">The metric is the symmetric quadratic of the prescribed coframe. Whether it is a vacuum metric is a separate question, answered by its Einstein tensor below.</p></div>`;
+  $('deriv').innerHTML = h;
+}
+
+/* ---------- comparison with known metrics ---------- */
+function compare(){
+  const s = sym(), x = X(), cr = chiR(x), cp = chiPx(x);
+  const pg = -(1 - cr*cr - cp*cp);
+  let h = '';
+  const card = (cls, t, body) => `<div class="trc ${cls}"><h3>${t}</h3>${body}</div>`;
+  const diag = `<div class="dl dwrap">With dT = dt ${S.flip ? '−' : '+'} v<sub>r</sub>dr/(c² − v<sub>r</sub>²) the cross term drops out: ds² = −(c² − v<sub>r</sub>²)dT² + c²dr²/(c² − v<sub>r</sub>²) + r²dΩ²${S.H ? '; this dT is integrable only for constant H (static v<sub>r</sub>(r))' : ''}.</div>`;
+  if (S.N && !S.H){
+    h += card('st', 'Schwarzschild, in Painlevé–Gullstrand coordinates', `<div class="dl dwrap">v<sub>r</sub>² = 2GM/r &nbsp;⇒&nbsp; g<sub>tt</sub> = −c²(1 − r<sub>s</sub>/r), &nbsp;r<sub>s</sub> = 2GM/c²</div>${diag}
+      <div class="dl dwrap">ds² = −c²(1 − r<sub>s</sub>/r)dT² + dr²/(1 − r<sub>s</sub>/r) + r²dΩ²</div>
+      <div class="dnum" style="white-space:normal">at r = ${fg(x)} r<sub>s</sub>: g<sub>tt</sub>(rotor) = ${fg(-(1 - cr*cr))}, g<sub>tt</sub>(Schwarzschild) = ${fg(-(1 - 1/x))} ✓</div>
+      <p class="dk">Exact agreement: the Newtonian rapidity field gives the Schwarzschild geometry (Hamilton–Lisle river model). ${S.flip ? 'This chart, g<sub>tr</sub> = +v<sub>r</sub>, is the ingoing river of Hamilton and Lisle.' : 'For v<sub>r</sub> &gt; 0 the sign g<sub>tr</sub> = −v<sub>r</sub> of the paper chart is the outgoing (time-reversed) PG chart; the time-orientation toggle gives the ingoing one, g<sub>tr</sub> = +v<sub>r</sub>.'}</p>`);
+  }
+  if (S.H && !S.N){
+    const hh = h0();
+    h += card('st', 'de Sitter and flat FLRW', `<div class="dl dwrap">v<sub>r</sub> = −Hr &nbsp;⇒&nbsp; g<sub>tt</sub> = −c²(1 − H²r²/c²)</div>${diag}
+      <div class="dl dwrap">For constant H: static de Sitter, ds² = −c²(1 − H²r²/c²)dT² + dr²/(1 − H²r²/c²) + r²dΩ², Λ = 3H²/c²</div>
+      <div class="dl dwrap">${S.flip ? 'Here θ<sup>r</sup> = dr − Hr dt. With r = a(t)χ, H = ȧ/a: dr − Hr dt = a dχ ⇒ ds² = −c²dt² + a²(dχ² + χ²dΩ²), an expanding flat FLRW.' : 'Here θ<sup>r</sup> = dr + Hr dt, the time-reversed chart: with r = a(t)χ it is FLRW with H → −H (contracting). The time-orientation toggle gives θ<sup>r</sup> = dr − Hr dt = a dχ and the expanding flat FLRW, ds² = −c²dt² + a²(dχ² + χ²dΩ²).'}</div>
+      <div class="dnum" style="white-space:normal">at r = ${fg(x)} r<sub>s</sub>: g<sub>tt</sub>(rotor) = ${fg(-(1 - cr*cr))}, g<sub>tt</sub>(de Sitter) = ${fg(-(1 - hh*hh*x*x))} ✓</div>
+      <p class="dk">The Hubble rapidity alone gives the spatially flat FLRW metric in PG form (de Haas 2025, explicit calculus).</p>`);
+  }
+  if (S.N && S.H){
+    const hh = h0(), sds = -(1 - 1/x - hh*hh*x*x), pgr = -(1 - cr*cr);
+    h += card('st', 'Schwarzschild–de Sitter, and the Newton–Hubble cross term', `<div class="dl dwrap">v<sub>r</sub>² = c²(ψ<sub>N</sub> − ψ<sub>H</sub>)² = 2GM/r + H²r² − 2H√(2GMr)</div>
+      <div class="dl dwrap">Schwarzschild–de Sitter (Kottler), Λ = 3H²/c²: &nbsp;g<sub>tt</sub> = −c²(1 − r<sub>s</sub>/r − H²r²/c²), i.e. v<sub>SdS</sub>² = 2GM/r + H²r²</div>
+      <div class="dl dwrap">g<sub>tt</sub>(rotor) − g<sub>tt</sub>(SdS) = −2c²ψ<sub>N</sub>ψ<sub>H</sub> = −2H√(2GMr)</div>${diag}
+      <div class="dnum" style="white-space:normal">at r = ${fg(x)} r<sub>s</sub>: g<sub>tt</sub>(rotor) = ${fg(pgr)}, g<sub>tt</sub>(SdS) = ${fg(sds)}, difference = ${fg(pgr - sds)} = −2h√(r/r<sub>s</sub>) = ${fg(-2*hh*Math.sqrt(x))}</div>
+      <p class="dk">Adding rapidities, not squared velocities, produces the interaction term −2ψ<sub>N</sub>ψ<sub>H</sub> (de Haas 2026, eq. 60). Kottler adds the squares; the two agree where either rapidity dominates and differ most near r<sub>c</sub>, where the rotor river vanishes and the Kottler river does not.</p>`);
+  }
+  if (S.P){
+    if (S.az === 'rig'){
+      const ww = w();
+      h += card('sn', radial() ? 'Azimuthal part: a rigidly rotating frame' : 'Minkowski space in rotating coordinates', `<div class="dl dwrap">v<sub>φ</sub> = Ωr s<sub>θ</sub>: &nbsp;θ<sup>φ</sup> = r s<sub>θ</sub>(dφ ${M()} Ω dt)</div>
+        <div class="dl dwrap">φ′ = φ ${M()} Ωt &nbsp;⇒&nbsp; θ<sup>φ</sup> = r s<sub>θ</sub> dφ′, and the rotation is removed exactly</div>
+        <div class="dl dwrap">ds² = −(c² − Ω²r²s<sub>θ</sub>²)dt² ${M()} 2Ωr²s<sub>θ</sub>² dφ dt + … (Langevin metric)</div>
+        <div class="dnum" style="white-space:normal">at r = ${fg(x)} r<sub>s</sub>, equatorial: g<sub>tt</sub> contribution −(1 − Ω²r²) with Ωr/c = ${fg(ww*x)}</div>
+        <p class="dk">${radial() ? 'Combined with the radial river this is the radial metric seen from a rotating frame.' : 'Without radial rapidity the space is flat: the rotor field of a rigid rotation is a coordinate effect.'} At the light cylinder Ωr s<sub>θ</sub> = c only g<sub>tt</sub> vanishes: the metric stays nondegenerate (det g = −c²r⁴s<sub>θ</sub>²), and beyond it no observer can co-rotate (a static limit, not a singularity).</p>`);
+    } else if (S.az === 'gen'){
+      h += card('sn', 'Axisymmetric PG form with a free azimuthal shift', `<div class="dl dwrap">θ<sup>φ</sup> = r s<sub>θ</sub> dφ ${M()} v<sub>φ</sub>(r) dt = r s<sub>θ</sub>(dφ ${M()} Ω(r) dt), &nbsp;Ω(r) = v<sub>φ</sub>(r)/r, &nbsp;g<sub>tφ</sub> = ${S.flip ? '+' : '−'}v<sub>φ</sub>(r) r s<sub>θ</sub></div>
+        <div class="dl dwrap">The rotor construction fixes the form of the metric for every χ<sub>φ</sub>(r); it does not fix the profile.</div>
+        <div class="dl dwrap">A separate condition selects it: a geodesic circular orbit gives Kepler, v<sub>φ</sub> = √(GM/r); the constant-Lagrangian isorapidity condition cosh χ<sub>r</sub> cosh χ<sub>φ</sub> = Γ<sub>0</sub> gives the CL disk (de Haas 2026, eq. 68); constant Ω gives rigid rotation, which φ′ = φ − Ωt removes (flat).</div>
+        <div class="dnum" style="white-space:normal">at r = ${fg(x)} r<sub>s</sub>: χ<sub>φ</sub> = ${fg(cp)}${radial() ? `, χ<sub>r</sub> = ${fg(cr)}; Γ = cosh χ<sub>r</sub> cosh χ<sub>φ</sub> = ${fg(Math.cosh(cr)*Math.cosh(cp))}` : ''}</div>
+        <p class="dk">Only a differential Ω(r) is a genuine rotating river: then no rotating coordinate removes the shift. It is not frame dragging and not the Kerr metric.</p>`);
+    } else {
+      const nm = S.az === 'kep' ? 'Keplerian' : 'constant-Lagrangian';
+      h += card('sn', 'Axisymmetric PG form with an azimuthal shift', `<div class="dl dwrap">e<sup>φ</sup> = r s<sub>θ</sub>(dφ − Ω(r) dt), &nbsp;Ω = v<sub>φ</sub>/r, &nbsp;v<sub>φ</sub> = ${s.vp}</div>
+        <div class="dl dwrap">ds² = −(c² − v<sub>r</sub>² − v<sub>φ</sub>²)dt² ${M()} 2v<sub>r</sub>dr dt ${M()} 2r v<sub>φ</sub> dφ dt + dr² + r²dφ² + dz²</div>
+        <p class="dk">This is the axisymmetric PG metric of de Haas (2025), A new solution class (eq. 1, equatorial, θ → z). A ${nm} Ω(r) is differential, so φ′ = φ − Ωt cannot remove it: the azimuthal shift is a rotating river, not frame dragging. It is not the Kerr metric, whose g<sub>tφ</sub> falls off as aGM/r and comes from the source’s spin.</p>`);
+    }
+  }
+  if (!radial() && !S.P) h = card('st', 'Minkowski', '<div class="dl dwrap">G = 1̂, dR<sup>G</sup> = dR, ds² = −c²dt² + dr² + r²dΩ²</div>');
+  $('cmp').innerHTML = h;
+}
+const h0 = () => S.H ? h() : 0;
+
+/* ---------- curvature: Einstein tensor of the prescribed metric (river frame, equatorial plane) ---------- */
+/* exact (SymPy) for the coframe theta^r = dr - u dt, theta^phi = r s dphi - r s Omega dt, at theta = pi/2, c = 1:
+   G00 = F'/r^2 - r^2 Om'^2/4, Grr = -G00, Gthth = -F''/(2r) - r^2 Om'^2/4, Gphph = -F''/(2r) - 3 r^2 Om'^2/4,
+   G0ph = (r^4 Om')'/(2 r^3), Grph = u (r^4 Om')'/(2 r^3),  with F = r u^2  */
+function einstein(){
+  const x = X(), e = 1e-4*x;
+  const u = y => sg()*chiR(y), Om = y => sg()*chiPx(y)/y;
+  const F = y => y*u(y)*u(y);
+  const d1 = f => (f(x + e) - f(x - e))/(2*e), d2 = f => (f(x + e) - 2*f(x) + f(x - e))/(e*e);
+  const Omp = y => (Om(y + e) - Om(y - e))/(2*e);
+  const Fp = d1(F), Fpp = d2(F), op = S.P ? Omp(x) : 0;
+  const J = y => Math.pow(y, 4)*Omp(y), Jp = S.P ? (J(x + e) - J(x - e))/(2*e) : 0;
+  const G00 = Fp/(x*x) - x*x*op*op/4;
+  return {G00, Grr:-G00, Gtt:-Fpp/(2*x) - x*x*op*op/4, Gpp:-Fpp/(2*x) - 3*x*x*op*op/4, G0p:Jp/(2*x*x*x), Grp:u(x)*Jp/(2*x*x*x), x};
+}
+function curvature(){
+  const E = einstein(), x = E.x, hh = h0();
+  const rows = [['G<sub>00</sub>', E.G00, 'energy density'], ['G<sub>rr</sub>', E.Grr, 'radial pressure'], ['G<sub>θθ</sub>', E.Gtt, 'transverse pressure'], ['G<sub>φφ</sub>', E.Gpp, 'azimuthal pressure'], ['G<sub>0φ</sub>', E.G0p, 'azimuthal energy flux'], ['G<sub>rφ</sub>', E.Grp, 'shear stress']];
+  const tol = 1e-7*Math.max(1, 1/(x*x)); rows.forEach(r => { if (Math.abs(r[1]) < 1e-9*Math.max(1, 1/(x*x))) r[1] = 0; });
+  const L = S.H ? 3*hh*hh : 0, lam = [L, -L, -L, -L, 0, 0];
+  const vac = rows.every((r, i) => Math.abs(r[1] - lam[i]) < tol), pure = L === 0;
+  let ref = '';
+  if (S.N && !S.H && !S.P) ref = 'Schwarzschild: r v<sub>r</sub>² = 2GM is constant, so every component vanishes: a vacuum solution. ✓';
+  else if (S.H && !S.N && !S.P) ref = `de Sitter: r v<sub>r</sub>² = H²r³ gives G<sub>ab</sub> = −Λη<sub>ab</sub> with Λ = 3H²/c² = ${fg(3*hh*hh)} r<sub>s</sub><sup>−2</sup>: vacuum energy only. ✓`;
+  else if (S.N && S.H && !S.P) ref = `Newton + Hubble: besides the Λ term 3H²/c² = ${fg(3*hh*hh)}, the cross term −2c²ψ<sub>N</sub>ψ<sub>H</sub> needs a source: G<sub>00</sub> − Λ = −3H√(2GM)/(c²r<sup>3/2</sup>) = ${fg(E.G00 - 3*hh*hh)}, G<sub>rr</sub> + Λ = ${fg(E.Grr + 3*hh*hh)}, G<sub>θθ</sub> + Λ = +(3/4)H√(2GM)/(c²r<sup>3/2</sup>) = ${fg(E.Gtt + 3*hh*hh)}. This is a negative energy density with anisotropic stress, so the metric is not Schwarzschild–de Sitter and not a vacuum + Λ solution of GR.`;
+  if (S.P && S.az === 'rig') ref += (ref ? ' ' : '') + 'Rigid rotation adds nothing: Ω′ = 0, so the azimuthal terms vanish (the rotation is a coordinate effect).';
+  else if (S.P) ref += (ref ? ' ' : '') + `The azimuthal shift contributes through Ω′ only: −r²Ω′²/4 to the energy density (negative) and an energy flux (r⁴Ω′)′/(2cr³)${S.az === 'gen' ? '; for the numbers the free profile is held at constant χ<sub>φ</sub> (a flat rotation curve, Ω ∝ 1/r)' : ''}. A differentially rotating river is therefore not a vacuum metric.`;
+  if (!radial() && !S.P) ref = 'Minkowski: all components vanish.';
+  $('curv').innerHTML = `<div class="dl dwrap">Einstein tensor in the river frame e<sup>a</sup> (orthonormal components, written G<sub>ab</sub>), at θ = π/2, for θ<sup>r</sup> = dr − u dt and θ<sup>φ</sup> = r s<sub>θ</sub>(dφ − Ω dt), u = ${S.flip ? '−' : ''}v<sub>r</sub>, Ω = ${S.flip ? '−' : ''}v<sub>φ</sub>/r (constant H):</div>
+    <div class="sgrid"><div class="dl dwrap">c²G<sub>00</sub> = −c²G<sub>rr</sub> = (r u²)′/r² − r²Ω′²/4</div><div class="dl dwrap">c²G<sub>θθ</sub> = −(r u²)″/(2r) − r²Ω′²/4</div>
+    <div class="dl dwrap">c²G<sub>φφ</sub> = −(r u²)″/(2r) − 3r²Ω′²/4</div><div class="dl dwrap">c G<sub>0φ</sub> = (r⁴Ω′)′/(2r³), &nbsp;c²G<sub>rφ</sub> = u(r⁴Ω′)′/(2r³)</div></div>
+    <div class="tscroll"><table class="dc"><thead><tr><th>component</th><th>value at r = ${fg(x)} r<sub>s</sub> [r<sub>s</sub><sup>−2</sup>]</th><th>reading as a source, 8πG T<sub>ab</sub>/c⁴</th></tr></thead><tbody>
+      ${rows.map(r => `<tr><td>${r[0]}</td><td>${fg(r[1])}</td><td style="font-family:var(--sans);font-size:12.5px">${r[2]}</td></tr>`).join('')}</tbody></table></div>
+    <span class="pill ${vac ? 'ok' : ''}">${vac ? (pure ? '✓ vacuum: G<sub>μν</sub> = 0' : '✓ vacuum with a cosmological constant: G<sub>ab</sub> = −Λη<sub>ab</sub>') : (L ? 'not a vacuum + Λ metric: G<sub>ab</sub> + Λη<sub>ab</sub> ≠ 0' : 'not a vacuum metric: G<sub>μν</sub> ≠ 0')}</span>
+    <p class="note">${ref}</p>
+    <p class="cap">Formulas derived exactly with SymPy from the prescribed coframe (bq_gravity_rotor.py); here they are evaluated with numerical r-derivatives of the selected u(r) and Ω(r). The checks above establish algebraic consistency; this panel is the first test of physical content.</p>`;
+}
+
+/* ---------- numerical check ---------- */
+const DIF = [1, 0.3, 0.2, 0.4];   /* c dt, dr, r dθ, r sθ dφ */
+function renderNum(){
+  const lab = ['c dt', 'dr', 'r dθ', 'r s<sub>θ</sub> dφ'];
+  $('numwrap').innerHTML = `<p class="note">dR at the evaluation radius, θ = π/2, with differentials (c = 1):</p><div class="inrow">${lab.map((l, i) => `<label for="d${i}"><span>${l}</span><input id="d${i}" data-i="${i}" type="number" step="0.1" value="${DIF[i]}"></label>`).join('')}</div><div id="numout"></div>`;
+  $('numwrap').querySelectorAll('input').forEach(el => el.addEventListener('input', () => { const v = parseFloat(el.value); if (isFinite(v)){ DIF[+el.dataset.i] = v; numOut(); } }));
+  numOut();
+}
+function numOut(){
+  const x = X(), cr = chiR(x), cp = chiPx(x), [a0, a1, a2, a3] = DIF;
+  const Gri = rotI(-sg()*cr), Gpi = rotK(-sg()*cp);
+  const dR = mat(a0, a1, a2, a3);
+  const dRG = mm(mm(Gpi, mm(mm(Gri, dR), Gri)), Gpi);
+  const d = cdec(dRG);
+  const Cr = Math.cosh(cr), Sr = Math.sinh(sg()*cr), Cp = Math.cosh(cp), Sp = Math.sinh(sg()*cp);
+  const T1 = Cr*a0 - Sr*a1;
+  const ex = [Cp*T1 - Sp*a3, Cr*a1 - Sr*a0, a2, Cp*a3 - Sp*T1];
+  const got = [d.t, ...d.k];
+  const e1 = Math.max(...got.map((v, i) => Math.abs(v - ex[i])), Math.abs(d.f), ...d.s.map(Math.abs));
+  /* exact quadratic: (dR^G)^T dR^G with the time adjoint */
+  const Q = cdec(mm(mat(-d.t, d.k[0], d.k[1], d.k[2]), dRG)), flat = a0*a0 - a1*a1 - a2*a2 - a3*a3;
+  const e2 = Math.max(Math.abs(Q.f - flat), Math.abs(Q.t), ...Q.k.map(Math.abs), ...Q.s.map(Math.abs));
+  /* slow-flow coframe and metric */
+  const vr = sg()*cr, vp = sg()*cp, dt = a0, dr = a1;
+  const th = [a0, a1 - vr*dt, a2, a3 - vp*dt];
+  const mds = th[0]**2 - th[1]**2 - th[2]**2 - th[3]**2;
+  const g = [[-(1 - vr*vr - vp*vp), -vr, 0, -vp], [-vr, 1, 0, 0], [0, 0, 1, 0], [-vp, 0, 0, 1]];     /* orthonormal angular differentials: r dθ, r dφ */
+  const dx = [dt, dr, a2, a3]; let ds2 = 0; for (let m = 0; m < 4; m++) for (let n = 0; n < 4; n++) ds2 += g[m][n]*dx[m]*dx[n];
+  const e3 = Math.abs(mds + ds2);
+  const SQ = cdec(mm(mat(-th[0], th[1], th[2], th[3]), mat(...th)));
+  /* the plain product G^-1 dR G^-1 with G = G_phi G_r */
+  const Gi = mm(Gri, Gpi), plain = cdec(mm(mm(Gi, dR), Gi));
+  const leak = Math.max(Math.abs(plain.f), ...plain.s.map(Math.abs));
+  const sc = Math.max(1, ...ex.map(Math.abs), ...got.map(Math.abs)), sc3 = Math.max(1, ...th.map(Math.abs))**2;
+  const ok = e1 < 1e-9*sc && e2 < 1e-9*sc*sc && e3 < 1e-9*sc3;
+  const row = (nm, v) => `<tr><td>${nm}</td>${v.map(q => `<td>${fx(q)}</td>`).join('')}</tr>`;
+  $('numout').innerHTML = `<div class="mxrow"><span>dR<sup>G</sup> =</span>${S.P ? mxH(Gpi) + '(' : ''}${mxH(Gri)}${mxH(dR)}${mxH(Gri)}${S.P ? ')' + mxH(Gpi) : ''} = ${mxH(dRG)}</div>
+    <div class="tscroll"><table class="dc"><thead><tr><th></th><th>T̂</th><th>Î<sub>r</sub></th><th>Ĵ<sub>θ</sub></th><th>K̂<sub>φ</sub></th></tr></thead><tbody>
+      ${row('dR', DIF)}${row('dR<sup>G</sup> from the matrices', got)}${row('exact formulas (step 3)', ex)}${row('slow-flow coframe θ<sup>a</sup>', th)}</tbody></table></div>
+    <div class="tscroll"><table class="dc"><thead><tr><th></th><th>value</th></tr></thead><tbody>
+      <tr><td>1̂ channel of (dR<sup>G</sup>)<sup>T</sup>dR<sup>G</sup></td><td>${fx(Q.f)}</td></tr>
+      <tr><td>flat c²dt² − dr² − r²dΩ²</td><td>${fx(flat)}</td></tr>
+      <tr><td>1̂ channel of (θ)<sup>T</sup>θ = −ds²</td><td>${fx(SQ.f)}</td></tr>
+      <tr><td>g<sub>μν</sub>dx<sup>μ</sup>dx<sup>ν</sup> = ds²</td><td>${fx(ds2)}</td></tr>
+      <tr><td>difference ds²(rotor) − ds²(flat)</td><td>${fx(ds2 + flat)}</td></tr></tbody></table></div>
+    ${Math.max(Math.abs(cr), Math.abs(cp)) > 30 ? `<span class="pill">rapidity ${fg(Math.max(Math.abs(cr), Math.abs(cp)))}: far beyond the horizon, cosh χ exceeds double precision; move the evaluation radius inward</span>` : `<span class="pill ${ok ? 'ok' : 'no'}">${ok ? '✓ the matrices give the exact formulas, a pure minquat; the exact quadratic is flat; the coframe quadratic equals g<sub>μν</sub>dx<sup>μ</sup>dx<sup>ν</sup>' : '✗ relative difference ' + Math.max(e1/sc, e2/(sc*sc), e3/sc3).toExponential(2)}</span>`}
+    ${S.P && radial() ? `<p class="note">For comparison, the single product G<sup>−1</sup>dRG<sup>−1</sup> with G = G<sub>φ</sub>G<sub>r</sub> leaks into the spin-norm channels: largest 1̂/σ̂ coefficient ${fx(leak)} (order χ<sub>r</sub>χ<sub>φ</sub> = ${fg(cr*cp)}). The nested action has none.</p>` : ''}`;
+}
+
+/* ---------- wiring ---------- */
+function render(){ renderTop(); river(); deriv(); compare(); curvature(); renderNum(); }
+$('bN').addEventListener('click', () => { S.N = !S.N; render(); });
+$('bH').addEventListener('click', () => { S.H = !S.H; render(); });
+$('bP').addEventListener('click', () => { S.P = !S.P; render(); });
+$('bF').addEventListener('click', () => { S.flip = !S.flip; render(); });
+$('azSel').addEventListener('change', e => { S.az = e.target.value; render(); });
+['hS', 'RS', 'wS', 'gS', 'xS'].forEach(id => $(id).addEventListener('input', () => { renderTop(); river(); deriv(); compare(); curvature(); numOut(); }));
+render();
+})();
+</script>
+</body></html>
