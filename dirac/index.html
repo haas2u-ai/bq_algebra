@@ -114,7 +114,7 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
   </header>
 
   <h2 class="group" id="models">Models</h2>
-  <p class="groupnote">The Dirac-level models will follow the same order as the BQ-Pauli site: first the basis and its products, then vectors, fields and Lorentz transformations, then gravity.</p>
+  <p class="groupnote">The Dirac-level models will follow the same order as the BQ-Pauli site: first the basis and its products, then vectors, fields and Lorentz transformations, then gravity as a local rapidity.</p>
 
   <section class="theme" aria-labelledby="d1">
     <h3 class="tname" id="d1"><span class="tnum">1</span>The basis</h3>
@@ -367,6 +367,39 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
     </div>
   </section>
 
+  <section class="theme" aria-labelledby="d4">
+    <h3 class="tname" id="d4"><span class="tnum">4</span>Gravity, as local rapidity</h3>
+    <p class="groupnote">The rapidity of the Lorentz boost becomes a field χ(r, t): the same doubled rotor, now a different boost at every point. The Galilean coframe gives the metric, read at the Dirac level as the Clifford square and as the anticommutator of the curved β-matrices.</p>
+    <div class="grid">
+
+    <a class="card" href="models/BQ_Dirac_Gravity_Rotor.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="The PG riverbed: the river velocity falls with radius, with the doubled rotor Q_g = diag(G inverse, G) above it">
+        <rect width="320" height="200" fill="#03050b"/>
+        <g font-family="Source Serif 4, Georgia, serif" font-size="13" fill="#e7ebf3">
+          <line x1="30" y1="150" x2="300" y2="150" stroke="#3a4257"/><line x1="30" y1="40" x2="30" y2="150" stroke="#3a4257"/>
+          <line x1="30" y1="80" x2="300" y2="80" stroke="#7a86a8" stroke-dasharray="2 3"/>
+          <path d="M44 44 C70 78, 95 104, 130 118 S 220 138, 300 143" fill="none" stroke="#f2a24a" stroke-width="2.2"/>
+          <path d="M44 74 C70 92, 95 108, 130 119 S 220 138, 300 143" fill="none" stroke="#f2a24a" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <text x="268" y="74" fill="#97a2b9" font-size="11">v = c</text>
+          <text x="150" y="44">Q<tspan font-size="9" baseline-shift="sub">g</tspan> = diag(G⁻¹, G)</text>
+          <text x="150" y="66" fill="#a29bfe">= e<tspan font-size="9" baseline-shift="super">−χα/2</tspan></text>
+          <text x="40" y="170">{θ̸<tspan font-size="9" baseline-shift="sub">μ</tspan>, θ̸<tspan font-size="9" baseline-shift="sub">ν</tspan>} = 2g<tspan font-size="9" baseline-shift="sub">μν</tspan>𝟙</text>
+          <text x="40" y="194" fill="#97a2b9" font-size="12">riverbed v = cχ and the PG metric</text>
+        </g>
+      </svg>
+      <div class="body">
+        <span class="step">Dirac step 9 · gravity as a local rotor</span>
+        <h3>The gravity rotor at the Dirac level</h3>
+        <p>Newtonian, Hubble and azimuthal rapidity fields feed the BQ-Pauli rotor G, and its Dirac double Q<sub>g</sub> = diag(G<sup>−1</sup>, G) = e<sup>−χα/2</sup> gives the exact image d<span class="sl">R</span><sub>g</sub> = Q<sub>g</sub>d<span class="sl">R</span>Q<sub>g</sub><sup>−1</sup>, whose square is flat. Its Galilean limit <span class="sl">θ</span> gives the metric as the Clifford square <span class="sl">θ</span><span class="sl">θ</span> = ds²𝟙, and g<sub>μν</sub> as the anticommutator of the β-matrices <span class="sl">θ</span><sub>μ</sub>, where the exact d<span class="sl">R</span><sub>g,μ</sub> give the flat g⁰<sub>μν</sub>. With the riverbed, the boosted basis, the comparison with Schwarzschild, de Sitter and Kottler, and a 4×4 check.</p>
+        <div class="rule">d<span class="sl">R</span><sub>g</sub> = Q<sub>g</sub> d<span class="sl">R</span> Q<sub>g</sub><sup>−1</sup>, &nbsp;{<span class="sl">θ</span><sub>μ</sub>, <span class="sl">θ</span><sub>ν</sub>} = 2g<sub>μν</sub>𝟙</div>
+        <div class="tags"><span>rapidity buttons</span><span>exact vs Galilean</span><span>Clifford square</span></div>
+        <span class="open">Open the model</span>
+      </div>
+    </a>
+
+    </div>
+  </section>
+
   <section class="py" aria-labelledby="h-py">
     <div>
       <h2 class="group" id="h-py">Reproduce in Python</h2>
@@ -384,6 +417,7 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
         <li><code>bq_dirac_bilinear_lorentz.py</code> · the boost of <span class="sl">C</span> = <span class="sl">A</span><span class="sl">B</span> as Λ<span class="sl">C</span>Λ<sup>−1</sup>, the block form with U(A<sup>T</sup>B)U<sup>−1</sup>, the channel rule, the invariants, the complex form and the Pauli correspondence</li>
         <li><code>bq_dirac_triple_lorentz.py</code> · the boost of <span class="sl">E</span> = <span class="sl">D</span>(<span class="sl">A</span><span class="sl">B</span>) as Λ<span class="sl">E</span>Λ<sup>−1</sup>, both sectors as four-vectors, the invariants, the Pauli rule U<sup>−1</sup>EU<sup>−1</sup>, and the four-gradient on a general boosted field</li>
         <li><code>bq_dirac_lorentz_representations.py</code> · <a href="models/BQ_Dirac_Lorentz_Weyl_and_Dirac.html">Lorentz transformations, Weyl and Dirac</a>: Λ<sub>D</sub> = SΛ<sub>W</sub>S<sup>−1</sup> in blocks and as a rotor, the commuting square, the same boosted coordinates, the Dirac block mixing, spinors and Λ<sup>2</sup>, and Λ = e<sup>(ψ/2)σ<sub>I</sub></sup> in both</li>
+        <li><code>bq_dirac_gravity_rotor.py</code> · <a href="models/BQ_Dirac_Gravity_Rotor.html">the gravity rotor at the Dirac level</a>: Q<sub>g</sub> = diag(G<sup>−1</sup>, G) = e<sup>−χα/2</sup> and the nested rotor Q<sub>g,φ</sub>Q<sub>g,r</sub>, the exact image d<span class="sl">R</span><sub>g</sub> with the Pauli image as its block, its flat square, the boosted basis, <span class="sl">θ</span><span class="sl">θ</span> = ds²𝟙, and {d<span class="sl">R</span><sub>g,μ</sub>, d<span class="sl">R</span><sub>g,ν</sub>} = 2g⁰<sub>μν</sub>𝟙 against {<span class="sl">θ</span><sub>μ</sub>, <span class="sl">θ</span><sub>ν</sub>} = 2g<sub>μν</sub>𝟙, both time orientations</li>
       </ul>
       <p>Only Python 3 and SymPy are needed.</p>
     </div>
@@ -410,7 +444,8 @@ python bq_dirac_quadratics.py
 python bq_dirac_lorentz.py
 python bq_dirac_bilinear_lorentz.py
 python bq_dirac_triple_lorentz.py
-python bq_dirac_lorentz_representations.py</pre>
+python bq_dirac_lorentz_representations.py
+python bq_dirac_gravity_rotor.py</pre>
   </section>
 
   <section class="about" aria-label="About these models">
@@ -426,6 +461,7 @@ python bq_dirac_lorentz_representations.py</pre>
         <li><b>1. The basis</b>: <a href="models/BQ_Dirac_Multiplication_Table.html">BQ-Dirac multiplication table in the Weyl representation</a>, <a href="models/BQ_Dirac_Weyl_Dirac_Representations.html">Weyl and Dirac representations</a></li>
         <li><b>2. Vectors and their products</b>: <a href="models/BQ_Dirac_Bilinear_Product_Explorer.html">Bilinear product explorer</a>, <a href="models/BQ_Dirac_Triple_Product_Explorer.html">Triple product explorer</a>, <a href="models/BQ_Dirac_Field_Quadratics.html">Field quadratics</a></li>
         <li><b>3. Lorentz transformations</b>: <a href="models/BQ_Dirac_Lorentz_Transformations.html">Boosting vectors</a>, <a href="models/BQ_Dirac_Bilinear_Lorentz_Transformation.html">Boosting bilinears</a>, <a href="models/BQ_Dirac_Triple_Product_Covariance.html">Covariance of the triple</a>, <a href="models/BQ_Dirac_Lorentz_Weyl_and_Dirac.html">Weyl and Dirac</a></li>
+        <li><b>4. Gravity</b>: <a href="models/BQ_Dirac_Gravity_Rotor.html">The gravity rotor</a></li>
         <li><a href="../index.html">The BQ-Pauli models</a>: the algebra, vectors, Lorentz transformations and gravity</li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra/tree/main/dirac/py_sources">Python sources</a>: exact SymPy reproduction</li>
         <li><a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>: galaxy, jet and SPARC models</li>
