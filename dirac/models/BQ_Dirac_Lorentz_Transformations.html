@@ -182,59 +182,77 @@ table.arr td.z{color:var(--soft)}
 .ctl label{display:grid;gap:3px;font-size:13px;color:var(--soft)}
 .ctl input[type=number]{width:6.5em}
 .ctl input[type=range]{width:min(260px,70vw);accent-color:var(--st)}
+.sm{display:inline-grid;gap:3px 14px;padding:4px 11px;position:relative;vertical-align:middle;font:500 15px/1.35 var(--serif);flex:none}
+.sm::before,.sm::after{content:"";position:absolute;top:0;bottom:0;width:6px;border:1.4px solid var(--ink)}
+.sm::before{left:0;border-right:none}.sm::after{right:0;border-left:none}
+.sm span{text-align:center;white-space:nowrap;padding:1px 2px}
+.sm span.bl{border-left:1px dashed var(--soft);padding-left:12px}
+.sm span.bt{border-top:1px dashed var(--soft);padding-top:4px}
+.eqm{display:flex;flex-wrap:wrap;align-items:center;gap:10px 10px;margin:10px 0;font:500 16px/1.6 var(--serif);max-width:100%;overflow-x:auto}
+.eqm .eqt{white-space:normal}
+.sub{border-top:1px solid var(--edge);padding:12px 0 4px}
+.sub:first-child{border-top:none;padding-top:0}
+.sub h3{color:var(--sel);margin:0 0 4px}
+.tag-ext{font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--soft);border:1px solid var(--edge);border-radius:20px;padding:2px 8px;vertical-align:middle}
+details.numdet.card>summary{font:600 17px/1.3 var(--serif);cursor:pointer}
+.sub h3{text-transform:none;letter-spacing:0;font:600 14.5px/1.3 var(--sans)}
 </style>
 </head><body>
 <div class="wrap">
 <header>
   <a class="back" href="../index.html">← The BQ algebra at the Dirac level</a>
   <h1>BQ-Dirac Lorentz Transformations</h1>
-  <p class="lede">At the Pauli level a boost along Î acts on a four-vector from both sides, A<sup>L</sup> = U<sup>−1</sup>AU<sup>−1</sup>, and its time adjoint goes the other way, (A<sup>L</sup>)<sup>T</sup> = UA<sup>T</sup>U. The Dirac vector <span class="sl">a</span> holds A and A<sup>T</sup> as its two off-diagonal blocks. One block-diagonal matrix Λ = diag(U<sup>−1</sup>, U) therefore moves both at once, by an ordinary similarity. That Λ is the double of U, and it is itself an element of the algebra: the exponential of the boost bivector α<sub>I</sub>. From there the page boosts vectors, reads the boost on the basis, turns to other directions and rotations, and composes two boosts into a boost and a Thomas–Wigner rotation. Vectors only.</p>
-  <div class="formula keybox"><span class="sl">a</span><sup>L</sup> = Λ<span class="sl">a</span>Λ<sup>−1</sup>, &nbsp; Λ = diag(U<sup>−1</sup>, U) = e<sup>−ψα<sub>I</sub>/2</sup> = cosh(ψ/2) <span class="g0">𝟙</span> − sinh(ψ/2) <span class="g2b">α<sub>I</sub></span>, &nbsp; U = e<sup>ψ<span class="hs">σ</span><sub>I</sub>/2</sup> = diag(e<sup>ψ/2</sup>, e<sup>−ψ/2</sup>)</div>
+  <p class="lede">A Lorentz boost along I acts on a Dirac-level four-vector <span class="sl">a</span> = a<sub>0</sub>β<sub>0</sub> + <b>a</b>·<b>β</b> by one similarity, <span class="sl">a</span><sup>L</sup> = Λ<span class="sl">a</span>Λ<sup>−1</sup>, with Λ = [[U<sup>−1</sup>, 0], [0, U]] built from the Pauli rotor U = e<sup>ψ<span class="hs">σ</span><sub>I</sub>/2</sup>. Choose a four-vector and a velocity; the justification from the Pauli boost and the lifted Pauli results follow below.</p>
+  <div class="formula keybox"><span class="sl">a</span><sup>L</sup> = Λ<span class="sl">a</span>Λ<sup>−1</sup>, &nbsp; Λ = [[U<sup>−1</sup>, 0], [0, U]] = e<sup>−ψα<sub>I</sub>/2</sup> = cosh(ψ/2) <span class="g0">𝟙</span> − sinh(ψ/2) <span class="g2b">α<sub>I</sub></span></div>
 </header>
 
-<section class="card" aria-labelledby="h-dbl">
-  <h2 id="h-dbl">1 · From the Pauli U to the Dirac Λ</h2>
-  <div class="slider" style="margin-top:0;max-width:640px">
-    <label for="beta">Velocity β = v/c along I <b id="betaLab"></b></label>
-    <input id="beta" type="range" min="-0.95" max="0.95" step="0.01" value="0.6">
-    <div class="kp" id="kp"></div>
-  </div>
-  <div class="steps" id="steps" style="margin-top:14px"></div>
-</section>
-
-<div class="grid" style="margin-top:18px">
+<div class="grid">
   <section class="card" aria-labelledby="h-pick">
-    <h2 id="h-pick">2 · Boost a vector</h2>
+    <h2 id="h-pick">Vector and boost</h2>
     <div class="pick"><label for="selA"><span class="sl">a</span></label><select id="selA"></select></div>
     <div class="vec" id="vA"></div>
-    <p class="note">The velocity is set in section 1. The boosted coordinates are read off Λ<span class="sl">a</span>Λ<sup>−1</sup> on the right; the numbers below come from the explicit 4×4 matrices.</p>
+    <div class="slider">
+      <label for="beta">Velocity β = v/c along I <b id="betaLab"></b></label>
+      <input id="beta" type="range" min="-0.95" max="0.95" step="0.01" value="0.6">
+      <div class="kp" id="kp"></div>
+    </div>
+    <h3 style="margin-top:14px">The rotor</h3>
+    <div class="formula" style="white-space:normal;line-height:1.9" id="rotor"></div>
   </section>
   <section class="card" aria-labelledby="h-tr" aria-live="polite">
-    <h2 id="h-tr">The boosted vector</h2>
+    <h2 id="h-tr">The Lorentz transformation of <span class="sl">a</span></h2>
     <div id="tr"></div>
   </section>
 </div>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-why">
+  <h2 id="h-why">Why Λ<span class="sl">a</span>Λ<sup>−1</sup>: the lift of the Pauli boost</h2>
+  <p class="note" style="margin-top:0">Take the BQ-Pauli boost as known: A<sup>L</sup> = U<sup>−1</sup>AU<sup>−1</sup>, and for the time adjoint (A<sup>L</sup>)<sup>T</sup> = UA<sup>T</sup>U. The Dirac vector carries A and −A<sup>T</sup> as its two blocks, so its boost follows in one line:</p>
+  <div id="why"></div>
+  <p class="note">The two Pauli rules, neither of them a similarity, are the two blocks of one similarity. Λ is fixed by the upper block (up to a common factor, which cancels), and the lower block then comes out as the Pauli adjoint rule by itself.</p>
+</section>
 
 <div class="grid" style="margin-top:18px">
   <section class="card" aria-labelledby="h-diag">
     <h2 id="h-diag">In the (a<sub>1</sub>, a<sub>0</sub>) plane</h2>
     <svg id="diag" viewBox="0 0 420 420" role="img" aria-label="Spacetime diagram of the vector, its boost and its inverse boost on the invariant hyperbola"></svg>
     <div class="leg"><span><i class="dot" style="background:var(--ink)"></i><span class="sl">a</span></span><span><i class="dot" style="background:var(--st)"></i>Λ<span class="sl">a</span>Λ<sup>−1</sup></span><span><i class="dot" style="background:var(--sn)"></i>Λ<sup>−1</sup><span class="sl">a</span>Λ</span><span><i class="sw" style="border-color:var(--soft);border-top-style:dashed"></i>a<sub>0</sub>² − a<sub>1</sub>² = const</span><span><i class="sw" style="border-color:var(--sel)"></i>light cone</span></div>
-    <p class="cap">The boost slides the point along its hyperbola; a<sub>0</sub> ± a<sub>1</sub> are multiplied by e<sup>∓ψ</sup>, the Doppler factors, and a<sub>2</sub>, a<sub>3</sub> are unchanged. The invariant is the square <span class="sl">a</span><span class="sl">a</span> = −(a<sub>0</sub>² − <b>a</b>²) <span class="g0">𝟙</span>.</p>
+    <p class="cap">The boost slides the point along its hyperbola: a<sub>0</sub> ± a<sub>1</sub> are multiplied by e<sup>∓ψ</sup>, the Doppler factors, and a<sub>2</sub>, a<sub>3</sub> are unchanged. The invariant is the square <span class="sl">a</span><span class="sl">a</span> = −(a<sub>0</sub>² − <b>a</b>²) <span class="g0">𝟙</span>.</p>
   </section>
   <section class="card" aria-labelledby="h-num">
-    <h2 id="h-num">Check by explicit 4×4 matrices</h2>
+    <h2 id="h-num">Check by explicit 4×4 matrix multiplication</h2>
     <div id="numwrap"></div>
   </section>
 </div>
 
-<section class="card" style="margin-top:18px" aria-labelledby="h-bas">
-  <h2 id="h-bas">3 · The basis route: the lemma becomes a similarity</h2>
-  <div id="baswrap"></div>
+<section class="card" style="margin-top:18px" aria-labelledby="h-lift">
+  <h2 id="h-lift">The Pauli results, lifted</h2>
+  <div id="lift"></div>
 </section>
 
 <section class="card" style="margin-top:18px" aria-labelledby="h-gen">
-  <h2 id="h-gen">4 · Beyond the I axis</h2>
+  <h2 id="h-gen">Beyond the I axis <span class="tag-ext">extension</span></h2>
+  <p class="note" style="margin-top:0">Written as a rotor, Λ = e<sup>−ψα<sub>I</sub>/2</sup>, the boost generalizes by replacing α<sub>I</sub>: e<sup>−ψ<b>n</b>·<b>α</b>/2</sup> boosts along any <b>n</b>, e<sup>−θ<b>m</b>·<b>Σ</b>/2</sup> rotates about <b>m</b>, and two boosts in different directions compose into a boost and a Thomas–Wigner rotation. These go beyond the papers; the velocity is the one set above.</p>
   <div class="tabs" role="tablist" aria-label="Beyond the I axis">
     <button type="button" role="tab" id="t-dir" aria-selected="true" aria-controls="p-gen">Boost in any direction</button>
     <button type="button" role="tab" id="t-rot" aria-selected="false" aria-controls="p-gen">Rotation</button>
@@ -244,18 +262,12 @@ table.arr td.z{color:var(--soft)}
 </section>
 
 <div class="notes">
-  <section class="card"><h2>The doubling in short</h2>
-    <ul>
-      <li><b>Two rules, one similarity.</b> The Pauli boost U<sup>−1</sup>AU<sup>−1</sup> is not a similarity, and the time adjoint needs its own rule UA<sup>T</sup>U. In <span class="sl">a</span> = [[0, A], [−A<sup>T</sup>, 0]] both sit together, and Λ = diag(U<sup>−1</sup>, U) acts on them as Λ<span class="sl">a</span>Λ<sup>−1</sup>.</li>
-      <li><b>Λ is in the algebra.</b> α<sub>I</sub> = diag(<span class="hs">σ</span><sub>I</sub>, −<span class="hs">σ</span><sub>I</sub>) carries <span class="hs">σ</span><sub>I</sub> with opposite signs in its two blocks, so e<sup>−ψα<sub>I</sub>/2</sup> = diag(e<sup>−ψ<span class="hs">σ</span><sub>I</sub>/2</sup>, e<sup>ψ<span class="hs">σ</span><sub>I</sub>/2</sup>) = diag(U<sup>−1</sup>, U). The Pauli rotor and its inverse are the two halves of one even element.</li>
-      <li><b>Products follow.</b> Since Λ<sup>−1</sup>Λ = 𝟙, every product transforms by the same similarity: (Λ<span class="sl">a</span>Λ<sup>−1</sup>)(Λ<span class="sl">b</span>Λ<sup>−1</sup>) = Λ(<span class="sl">a</span><span class="sl">b</span>)Λ<sup>−1</sup>. 𝟙 commutes with Λ, so the scalar of <span class="sl">a</span><span class="sl">b</span> and the square <span class="sl">a</span><span class="sl">a</span> are invariant.</li>
-      <li><b>One group.</b> Boosts e<sup>−ψ<b>n</b>·<b>α</b>/2</sup> and rotations e<sup>−θ<b>m</b>·<b>Σ</b>/2</sup> are all Λ = diag(M, (M<sup>†</sup>)<sup>−1</sup>): M Hermitian for a boost, unitary for a rotation. Their products are the even rotors of the Weyl algebra.</li>
-    </ul>
+  <section class="card"><h2>Direction of the boost</h2>
+    <p class="note">As at the Pauli level, the diagonal Λ belongs to a boost along I: the frames are aligned so that their relative velocity lies along I (Synge’s communal photon), and the Doppler factors e<sup>±ψ/2</sup> sit on single diagonal entries. A boost in another direction can be replaced by a rotation and an I-boost, which is where the Thomas–Wigner rotation enters; the last section shows the same in rotor form.</p>
   </section>
   <section class="card"><h2>Sources and status</h2>
-    <p class="note">The Pauli rules, the rapidity and the Lemma on basis–component compatibility follow the BQ-Pauli papers; Λ = diag(U<sup>−1</sup>, U) and the similarity X<sup>L</sup> = ΛXΛ<sup>−1</sup> follow de Haas (2026), <i>BQ-Weyl electromagnetism</i>, eqs. 161–196. The paper writes the rotor as U = exp((ψ/2)Î) in eq. 161; that is the phase diag(e<sup>iψ/2</sup>, e<sup>−iψ/2</sup>). Its matrix Λ in eq. 163 needs U = exp((ψ/2)<span class="hs">σ</span><sub>I</sub>), which this page uses.</p>
-    <p class="note">The Pauli papers align the frames along I before boosting (Synge’s communal photon). The exponential form shows what that alignment buys: along I, U is diagonal and the Doppler factors e<sup>±ψ</sup> sit on single matrix entries. The transformation rule itself holds in any direction, with the Hermitian U<sub><b>n</b></sub> = e<sup>ψ<b>n</b>·<span class="hs">σ</span>/2</sup>, as section 4 shows. This is an extension of the papers.</p>
-    <p class="cap">All results are checked exactly in <code>bq_dirac_lorentz.py</code>, and numerically on this page. Part of <a href="../index.html">the BQ algebra at the Dirac level</a>; the Pauli version is <a href="../../BQ_models/BQ_Lorentz_Transformations.html">BQ Lorentz transformations</a>.</p>
+    <p class="note">The Pauli boost, the rapidity, (A<sup>L</sup>)<sup>T</sup> = UA<sup>T</sup>U and Lemma 2.1 follow the BQ-Pauli papers; Λ = diag(U<sup>−1</sup>, U) and X<sup>L</sup> = ΛXΛ<sup>−1</sup> follow de Haas (2026), <i>BQ-Weyl electromagnetism</i>, eqs. 161–196. Eq. 161 writes U = exp((ψ/2)Î), which is the phase diag(e<sup>iψ/2</sup>, e<sup>−iψ/2</sup>); the matrix Λ of eq. 163 needs U = exp((ψ/2)<span class="hs">σ</span><sub>I</sub>), used here. Λ<sub>ν</sub><sup>μ</sup> (with indices) is the real coordinate matrix, Λ (without) the 4×4 rotor.</p>
+    <p class="cap">Every identity is checked exactly in <code>bq_dirac_lorentz.py</code>. Part of <a href="../index.html">the BQ algebra at the Dirac level</a>; the Pauli version is <a href="../../BQ_models/BQ_Lorentz_Transformations.html">BQ Lorentz transformations</a>.</p>
   </section>
 </div>
 </div>
@@ -336,50 +348,12 @@ function vecLine(name, cs){
   return `${name}${name ? ' = ' : '= '}${cs.map((c, i) => t(c, BH[i], i === 0)).join('')}`;
 }
 
-/* ---------- section 1: the doubling ---------- */
-function renderSteps(){
-  const b = beta(), psi = Math.atanh(b), g = 1/Math.sqrt(1 - b*b), A = VI[SA], a = vals(SA), nm = SL(A.nm);
-  $('betaLab').textContent = (b >= 0 ? '' : '−') + Math.abs(b).toFixed(2);
-  $('kp').innerHTML = [['rapidity ψ = artanh β', fx(psi)], ['γ = cosh ψ', fx(g)], ['βγ = sinh ψ', fx(b*g)], ['cosh(ψ/2)', fx(Math.cosh(psi/2))], ['sinh(ψ/2)', fx(Math.sinh(psi/2))], ['e<sup>±ψ/2</sup>', fx(Math.exp(psi/2)) + ', ' + fx(Math.exp(-psi/2))]]
-    .map(k => `<div><span>${k[0]}</span><b>${k[1]}</b></div>`).join('');
-  const {L, Li, U, Ui} = lambdaI(psi), Ap = pauliA(a), ApT = pauliAT(a), Am = vec4(a), AL = mm(L, Am, Li);
-  const up = sub2(AL, 0, 2), lo = sub2(AL, 2, 0), PL = mm(Ui, Ap, Ui), PLT = mm(U, ApT, U);
-  const cS = Math.cosh(psi/2), sS = Math.sinh(psi/2), Lexp = madd(msc(BAS.one, cS), msc(BAS.aI, -sS));
-  const ALb = boostNums(a, 1, b), PLTcheck = pauliAT(ALb);
-  $('steps').innerHTML = `
-  <div class="stp"><h3>Step 1 · Two Pauli rules</h3>
-    <div class="formula">A<sup>L</sup> = U<sup>−1</sup>AU<sup>−1</sup>, &nbsp; (A<sup>L</sup>)<sup>T</sup> = UA<sup>T</sup>U, &nbsp; U = diag(e<sup>ψ/2</sup>, e<sup>−ψ/2</sup>)</div>
-    <p>The boost acts on A from both sides with the same U<sup>−1</sup>, so it is <b>not a similarity</b>; the time adjoint A<sup>T</sup> = −a<sub>0</sub>T̂ + <b>a</b>·<b class="kv">K̂</b> needs its own rule with U. Two rules, one for each object.</p>
-    <div class="mxrow selrow fx"><span>U =</span> ${mxs(U)} <span>, U<sup>−1</sup> =</span> ${mxs(Ui)}</div></div>
-  <div class="stp"><h3>Step 2 · The Dirac vector holds both</h3>
-    <div class="formula">${nm} = a<sub>0</sub>β<sub>0</sub> + <b>a</b>·<b>β</b> = [[0, A], [−A<sup>T</sup>, 0]]</div>
-    <p>With β<sub>0</sub> = [[0, T̂], [T̂, 0]] and β<sub>i</sub> = [[0, K̂<sub>i</sub>], [−K̂<sub>i</sub>, 0]], the upper-right block is the Pauli vector and the lower-left block is minus its time adjoint. For ${nm} = ${A.what}:</p>
-    <div class="mxrow selrow fx"><span>A =</span> ${mxs(Ap)} <span>, A<sup>T</sup> =</span> ${mxs(ApT)}</div></div>
-  <div class="stp"><h3>Step 3 · A block-diagonal similarity</h3>
-    <div class="formula">diag(X, Y) [[0, A], [−A<sup>T</sup>, 0]] diag(X<sup>−1</sup>, Y<sup>−1</sup>) = [[0, XAY<sup>−1</sup>], [−YA<sup>T</sup>X<sup>−1</sup>, 0]]</div>
-    <p>A similarity with a block-diagonal matrix multiplies the upper block by X on the left and Y<sup>−1</sup> on the right, and the lower block the other way round: Y on the left, X<sup>−1</sup> on the right.</p></div>
-  <div class="stp"><h3>Step 4 · Match the Pauli boost: X = U<sup>−1</sup>, Y = U</h3>
-    <div class="formula">XAY<sup>−1</sup> = U<sup>−1</sup>AU<sup>−1</sup> = A<sup>L</sup> &nbsp;⇒&nbsp; −YA<sup>T</sup>X<sup>−1</sup> = −UA<sup>T</sup>U = −(A<sup>L</sup>)<sup>T</sup></div>
-    <p>Fixing the upper block to the Pauli boost forces the lower block to be the Pauli adjoint rule: <b>both Pauli rules are the two blocks of one similarity</b> with Λ = diag(U<sup>−1</sup>, U).</p>
-    <div class="mxrow selrow fx"><span>upper block of Λ${nm}Λ<sup>−1</sup> =</span> ${mxs(up)} <span>= U<sup>−1</sup>AU<sup>−1</sup> =</span> ${mxs(PL)}</div>
-    <div class="mxrow selrow fx"><span>lower block =</span> ${mxs(lo)} <span>= −UA<sup>T</sup>U =</span> ${mxs(msc(PLT, -1))}</div>
-    ${pill(mdiff(up, PL) < 1e-9 && mdiff(lo, msc(PLT, -1)) < 1e-9 && mdiff(PLT, PLTcheck) < 1e-9, 'both blocks match, and UA<sup>T</sup>U is the time adjoint of the boosted A', 'blocks differ')}</div>
-  <div class="stp"><h3>Step 5 · Λ is a rotor of the Weyl algebra</h3>
-    <div class="formula">α<sub>I</sub> = β<sub>0</sub>β<sub>I</sub> = diag(<span class="hs">σ</span><sub>I</sub>, −<span class="hs">σ</span><sub>I</sub>), α<sub>I</sub>² = 𝟙 &nbsp;⇒&nbsp; e<sup>−ψα<sub>I</sub>/2</sup> = cosh(ψ/2) 𝟙 − sinh(ψ/2) α<sub>I</sub> = diag(e<sup>−ψ<span class="hs">σ</span><sub>I</sub>/2</sup>, e<sup>ψ<span class="hs">σ</span><sub>I</sub>/2</sup>) = diag(U<sup>−1</sup>, U)</div>
-    <p>The boost bivector carries <span class="hs">σ</span><sub>I</sub> with opposite signs in its two blocks, so its exponential is U<sup>−1</sup> above and U below: <b>Λ is the double of U</b>, and it lies in the even part of the algebra (scalar plus boost bivector). Λ<sup>−1</sup> = e<sup>+ψα<sub>I</sub>/2</sup> = diag(U, U<sup>−1</sup>). As a matrix, Λ = diag(e<sup>−ψ/2</sup>, e<sup>ψ/2</sup>, e<sup>ψ/2</sup>, e<sup>−ψ/2</sup>), eq. 163.</p>
-    <div class="mxrow selrow fx"><span>Λ = ${fx(cS)} 𝟙 − ${fx(sS)} α<sub>I</sub> =</span> ${mxs(Lexp)}</div>
-    ${pill(mdiff(Lexp, L) < 1e-9, 'cosh(ψ/2) 𝟙 − sinh(ψ/2) α<sub>I</sub> = diag(U<sup>−1</sup>, U)', 'differs')}</div>
-  <div class="stp"><h3>Step 6 · What the doubling buys</h3>
-    <div class="formula">(Λ${SL('a')}Λ<sup>−1</sup>)(Λ${SL('b')}Λ<sup>−1</sup>) = Λ(${SL('a')}${SL('b')})Λ<sup>−1</sup></div>
-    <p>A similarity passes through products, so every product of vectors transforms by the same Λ, with no adjoint rule. At the Pauli level this took the identity (A<sup>L</sup>)<sup>T</sup>B<sup>L</sup> = UA<sup>T</sup>U U<sup>−1</sup>BU<sup>−1</sup> = U(A<sup>T</sup>B)U<sup>−1</sup>; here it is automatic. 𝟙 commutes with Λ, so the square ${SL('a')}${SL('a')} = −(a<sub>0</sub>² − <b>a</b>²)𝟙 is invariant, the Weyl form of A<sup>T</sup>A = (a<sub>0</sub>² − <b>a</b>²)<span class="one">1</span>.</p></div>`;
-}
-
 /* ---------- section 2: boost a vector ---------- */
 function renderVec(){
   const A = VI[SA], [l0, l1, l2, l3] = A.comp, nm = SL(A.nm), b = beta(), psi = Math.atanh(b), a = vals(SA);
   $('selA').value = SA;
   $('vA').innerHTML = `<div class="what">${A.what}</div><div class="math">${vecLine(nm, A.comp)}</div><div class="math blk">Pauli blocks: A = ${l0} T̂ + ${l1} Î + ${l2} Ĵ + ${l3} K̂, &nbsp; A<sup>T</sup> = −${l0} T̂ + ${l1} Î + ${l2} Ĵ + ${l3} K̂</div>`;
-  const AL = boostNums(a, 1, b), AiL = boostNums(a, -1, b), num = arr => `<div class="numv">for the numbers on the left: (${arr.map(fx).join(', ')})</div>`;
+  const AL = boostNums(a, 1, b), AiL = boostNums(a, -1, b), num = arr => `<div class="numv">for the coordinates in the check below: (${arr.map(fx).join(', ')})</div>`;
   const card = (cls, title, ops, cs, n) => `<div class="trc ${cls}"><h3>${title}</h3><div class="ops">${ops}</div><div class="math">${vecLine('', cs)}</div>${n || ''}</div>`;
   const sq = x => x[0]*x[0] - x[1]*x[1] - x[2]*x[2] - x[3]*x[3];
   $('tr').innerHTML =
@@ -440,29 +414,6 @@ function numOut(){
       <tr><td>Λ<sup>−1</sup>${SL('a')}Λ</td>${ciL.map(v => `<td>${fx(v)}</td>`).join('')}<td>${fx(sqm(MiL))}</td></tr>
       <tr><td>Λ<sup>−1</sup>(${SL('a')}<sup>L</sup>)Λ</td>${cb.map(v => `<td>${fx(v)}</td>`).join('')}<td></td></tr></tbody></table></div>
     ${pill(err < 1e-9 && other < 1e-9 && Math.abs(s0 - sL) < 1e-9, 'the 4×4 similarity gives the γ-formulas, stays a pure vector, inverts, and keeps ' + SL('a') + SL('a') + ' unchanged', 'difference ' + err.toExponential(2))}`;
-}
-
-/* ---------- section 3: the basis route ---------- */
-function renderBasis(){
-  const b = beta(), psi = Math.atanh(b), {L, Li} = lambdaI(psi), ch = Math.cosh(psi), sh = Math.sinh(psi);
-  const rows = B4.map((B, mu) => { const M = mm(L, B, Li); return coords(M); });
-  const want = [[ch, -sh, 0, 0], [-sh, ch, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
-  const err = Math.max(...rows.flatMap((r, mu) => r.map((v, nu) => Math.abs(v - want[mu][nu]))));
-  const lab = ['β<sub>0</sub>', 'β<sub>I</sub>', 'β<sub>J</sub>', 'β<sub>K</sub>'], sym = ['coshψ β<sub>0</sub> − sinhψ β<sub>I</sub>', 'coshψ β<sub>I</sub> − sinhψ β<sub>0</sub>', 'β<sub>J</sub>', 'β<sub>K</sub>'];
-  const KP = [PM.T, PM.I, PM.J, PM.K], {U, Ui} = rot(psi);
-  const pErr = Math.max(...KP.map((K, mu) => mdiff(mm(Ui, K, Ui), KP.reduce((S, Kn, nu) => madd(S, msc(Kn, want[mu][nu])), Z2))));
-  $('baswrap').innerHTML = `<div class="steps">
-    <div class="stp"><h3>Half rapidity becomes full rapidity</h3>
-      <div class="formula">Λβ<sub>μ</sub>Λ<sup>−1</sup> = Λ²β<sub>μ</sub> (μ = 0, I), &nbsp; Λβ<sub>μ</sub>Λ<sup>−1</sup> = β<sub>μ</sub> (μ = J, K)</div>
-      <p>α<sub>I</sub> = β<sub>0</sub>β<sub>I</sub> anticommutes with β<sub>0</sub> and β<sub>I</sub> and commutes with β<sub>J</sub>, β<sub>K</sub>. So Λ<sup>−1</sup> = cosh(ψ/2)𝟙 + sinh(ψ/2)α<sub>I</sub> can be moved to the left through β<sub>0</sub>, β<sub>I</sub>, where it turns into Λ, and Λ² = cosh ψ 𝟙 − sinh ψ α<sub>I</sub>: the half rapidity of the rotor becomes the full rapidity of the vector. With α<sub>I</sub>β<sub>0</sub> = β<sub>I</sub> and α<sub>I</sub>β<sub>I</sub> = β<sub>0</sub> from the <a href="BQ_Dirac_Multiplication_Table.html">table</a>:</p>
-      <div class="formula">Λβ<sub>0</sub>Λ<sup>−1</sup> = coshψ β<sub>0</sub> − sinhψ β<sub>I</sub>, &nbsp; Λβ<sub>I</sub>Λ<sup>−1</sup> = coshψ β<sub>I</sub> − sinhψ β<sub>0</sub></div></div>
-    <div class="stp"><h3>The Dirac lemma</h3>
-      <div class="formula">β<sub>ν</sub> Λ<sup>ν</sup><sub>μ</sub> = Λβ<sub>μ</sub>Λ<sup>−1</sup>, &nbsp; Λ<sup>ν</sup><sub>μ</sub> = [[γ, −βγ, 0, 0], [−βγ, γ, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]</div>
-      <p>The coordinate rule a′<sup>ν</sup> = Λ<sup>ν</sup><sub>μ</sub>a<sup>μ</sup> and the basis rule β<sub>μ</sub> → Λβ<sub>μ</sub>Λ<sup>−1</sup> give the same vector: <span class="sl">a</span><sup>L</sup> = a′<sup>ν</sup>β<sub>ν</sub> = a<sup>μ</sup>(Λβ<sub>μ</sub>Λ<sup>−1</sup>). The upper block of this identity is the Pauli Lemma K̂<sub>ν</sub>Λ<sup>ν</sup><sub>μ</sub> = U<sup>−1</sup>K̂<sub>μ</sub>U<sup>−1</sup> (K̂<sub>0</sub> = T̂): <b>the two-sided Pauli lemma is one block of a similarity</b>.</p></div>
-    <div class="stp wide"><h3>Numbers, from Λβ<sub>μ</sub>Λ<sup>−1</sup> as 4×4 matrices (ψ = ${fx(psi)})</h3>
-      <div class="tscroll"><table class="dc"><thead><tr><th>μ</th><th>rule</th><th>β<sub>0</sub></th><th>β<sub>I</sub></th><th>β<sub>J</sub></th><th>β<sub>K</sub></th></tr></thead><tbody>
-      ${rows.map((r, mu) => `<tr><td>Λ${lab[mu]}Λ<sup>−1</sup></td><td>${sym[mu]}</td>${r.map(v => `<td>${fx(v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
-      ${pill(err < 1e-9, 'Λβ<sub>μ</sub>Λ<sup>−1</sup> = β<sub>ν</sub>Λ<sup>ν</sup><sub>μ</sub>, coshψ = ' + fx(ch) + ', sinhψ = ' + fx(sh), 'differs')} ${pill(pErr < 1e-9, 'upper blocks: U<sup>−1</sup>K̂<sub>μ</sub>U<sup>−1</sup> = K̂<sub>ν</sub>Λ<sup>ν</sup><sub>μ</sub>, the Pauli Lemma', 'Pauli lemma differs')}</div></div>`;
 }
 
 /* ---------- section 4: beyond the I axis ---------- */
@@ -550,13 +501,88 @@ const lin3P = (n, s) => madd(madd(msc(PM.sI, s*n[0]), msc(PM.sJ, s*n[1])), msc(P
 const inv2 = M => { const d = ca(cm(M[0][0], M[1][1]), cm([-M[0][1][0], -M[0][1][1]], M[1][0])), di = [d[0]/(d[0]*d[0] + d[1]*d[1]), -d[1]/(d[0]*d[0] + d[1]*d[1])];
   return [[cm(M[1][1], di), cm([-M[0][1][0], -M[0][1][1]], di)], [cm([-M[1][0][0], -M[1][0][1]], di), cm(M[0][0], di)]]; };
 
+/* ---------- symbolic matrices ---------- */
+const SM = (rows, blk4) => { const n = rows[0].length, h = n/2;
+  return `<span class="sm" style="grid-template-columns:repeat(${n},auto)">${rows.flatMap((r, i) => r.map((c, j) => `<span class="${blk4 && j === h ? 'bl ' : ''}${blk4 && i === h ? 'bt' : ''}">${c}</span>`)).join('')}</span>`; };
+const EQ = (...parts) => `<div class="eqm">${parts.map(p => p.startsWith('<span class="sm"') ? p : `<span class="eqt">${p}</span>`).join('')}</div>`;
+const Ex = s => `e<sup>${s}</sup>`;
+const four = (UL, UR, LL, LR) => [0,1,2,3].map(i => [0,1,2,3].map(j => { const B = i < 2 ? (j < 2 ? UL : UR) : (j < 2 ? LL : LR); return B ? B[i & 1][j & 1] : '0'; }));
+const Z = [['0','0'],['0','0']];
+const Um = [[Ex('ψ/2'),'0'],['0',Ex('−ψ/2')]], Uim = [[Ex('−ψ/2'),'0'],['0',Ex('ψ/2')]];
+const PB = {T:[['i','0'],['0','i']], I:[['i','0'],['0','−i']], J:[['0','1'],['−1','0']], K:[['0','i'],['i','0']]};
+const PBT = {T:[['−i','0'],['0','−i']], I:PB.I, J:PB.J, K:PB.K};       /* time adjoint: only T̂ changes sign */
+const neg2 = M => M.map(r => r.map(c => c === '0' ? '0' : (c.startsWith('−') ? c.slice(1) : '−' + c)));
+const LAMd = four(Uim, Z, Z, Um), LAMi = four(Um, Z, Z, Uim);
+const sqr = l => (/^[A-Za-zα-ω]\d*$/.test(l.replace(/<[^>]+>/g, '')) ? l : '(' + l + ')') + '²';
+function P_(){
+  const [l0, l1, l2, l3] = VI[SA].comp;
+  const S = `(${l0} + ${l1})`, D = `(${l0} − ${l1})`, P = `${l2} + i${l3}`, Q = `−${l2} + i${l3}`, nP = `−${l2} − i${l3}`, nQ = `${l2} − i${l3}`;
+  return {l0, l1, l2, l3, S, D, P, Q, nP, nQ,
+    A:[[`i${S}`, P], [Q, `i${D}`]],
+    AT:[[`−i${D}`, P], [Q, `−i${S}`]],
+    mAT:[[`i${D}`, nP], [nQ, `i${S}`]],
+    UiA:[[`${Ex('−ψ/2')} i${S}`, `${Ex('−ψ/2')}(${P})`], [`${Ex('ψ/2')}(${Q})`, `${Ex('ψ/2')} i${D}`]],
+    AL:[[`${Ex('−ψ')} i${S}`, P], [Q, `${Ex('ψ')} i${D}`]],
+    ALp:[[`i(a<sub>0</sub>′ + a<sub>1</sub>′)`, P], [Q, `i(a<sub>0</sub>′ − a<sub>1</sub>′)`]],
+    UAT:[[`−${Ex('ψ/2')} i${D}`, `${Ex('ψ/2')}(${P})`], [`${Ex('−ψ/2')}(${Q})`, `−${Ex('−ψ/2')} i${S}`]],
+    ATL:[[`−${Ex('ψ')} i${D}`, P], [Q, `−${Ex('−ψ')} i${S}`]],
+    mATL:[[`${Ex('ψ')} i${D}`, nP], [nQ, `${Ex('−ψ')} i${S}`]],
+    AiL:[[`${Ex('ψ')} i${S}`, P], [Q, `${Ex('−ψ')} i${D}`]],
+    mATiL:[[`${Ex('−ψ')} i${D}`, nP], [nQ, `${Ex('ψ')} i${S}`]]};
+}
+const sub = (t, body) => `<div class="sub"><h3>${t}</h3>${body}</div>`;
+const nt = s => `<p class="note">${s}</p>`;
+
+/* ---------- top: vector, rotor ---------- */
+function renderTop(){
+  const b = beta(), psi = Math.atanh(b), g = 1/Math.sqrt(1 - b*b);
+  $('betaLab').textContent = (b >= 0 ? '' : '−') + Math.abs(b).toFixed(2);
+  $('kp').innerHTML = [['rapidity ψ = artanh β', fx(psi)], ['γ = cosh ψ', fx(g)], ['βγ = sinh ψ', fx(b*g)], ['e<sup>−ψ</sup>, e<sup>ψ</sup>', fx(Math.exp(-psi)) + ', ' + fx(Math.exp(psi))], ['cosh(ψ/2)', fx(Math.cosh(psi/2))], ['sinh(ψ/2)', fx(Math.sinh(psi/2))]]
+    .map(k => `<div><span>${k[0]}</span><b>${k[1]}</b></div>`).join('');
+  const e = Math.exp(psi/2);
+  $('rotor').innerHTML = `U = e<sup>ψ<span class="hs">σ</span><sub>I</sub>/2</sup> = diag(e<sup>ψ/2</sup>, e<sup>−ψ/2</sup>) = diag(${fx(e)}, ${fx(1/e)})<br>Λ = [[U<sup>−1</sup>, 0], [0, U]] = e<sup>−ψα<sub>I</sub>/2</sup> = cosh(ψ/2) 𝟙 − sinh(ψ/2) α<sub>I</sub><br>&nbsp;&nbsp; = diag(e<sup>−ψ/2</sup>, e<sup>ψ/2</sup>, e<sup>ψ/2</sup>, e<sup>−ψ/2</sup>) = diag(${fx(1/e)}, ${fx(e)}, ${fx(e)}, ${fx(1/e)})<br>Λ<sup>−1</sup> = [[U, 0], [0, U<sup>−1</sup>]] = e<sup>ψα<sub>I</sub>/2</sup>`;
+}
+/* ---------- the justification: one chain ---------- */
+const B2 = (a, b, c, d) => SM([[a, b], [c, d]]);
+function renderWhy(){
+  const nm = SL(VI[SA].nm);
+  $('why').innerHTML =
+    EQ(`${nm} =`, B2('0', 'A', '−A<sup>T</sup>', '0'), `&nbsp;⟹&nbsp; ${nm}<sup>L</sup> =`, B2('0', 'A<sup>L</sup>', '−(A<sup>L</sup>)<sup>T</sup>', '0'), '=', B2('0', 'U<sup>−1</sup>AU<sup>−1</sup>', '−UA<sup>T</sup>U', '0'))
+  + EQ('=', B2('U<sup>−1</sup>', '0', '0', 'U'), B2('0', 'A', '−A<sup>T</sup>', '0'), B2('U', '0', '0', 'U<sup>−1</sup>'), `= Λ${nm}Λ<sup>−1</sup>, &nbsp; Λ =`, B2('U<sup>−1</sup>', '0', '0', 'U'));
+}
+/* ---------- the lifted Pauli results ---------- */
+function renderLift(){
+  const p = P_(), nm = SL(VI[SA].nm), big = (UL, UR, LL, LR) => SM(four(UL, UR, LL, LR), true);
+  const inv = `${sqr(p.l0)} − ${sqr(p.l1)} − ${sqr(p.l2)} − ${sqr(p.l3)}`;
+  $('lift').innerHTML =
+    sub('The rotor: Λ is the double of U',
+      EQ('α<sub>I</sub> = β<sub>0</sub>β<sub>I</sub> =', B2('<span class="hs">σ</span><sub>I</sub>', '0', '0', '−<span class="hs">σ</span><sub>I</sub>'), ', &nbsp; α<sub>I</sub>² = 𝟙 &nbsp;⟹&nbsp; Λ = e<sup>−ψα<sub>I</sub>/2</sup> = cosh(ψ/2) 𝟙 − sinh(ψ/2) α<sub>I</sub> =', B2('e<sup>−ψ<span class="hs">σ</span><sub>I</sub>/2</sup>', '0', '0', 'e<sup>ψ<span class="hs">σ</span><sub>I</sub>/2</sup>'), '=', B2('U<sup>−1</sup>', '0', '0', 'U'))
+      + nt('The boost bivector carries <span class="hs">σ</span><sub>I</sub> with opposite signs in its two blocks, so its exponential holds the Pauli rotor and its inverse: one even element of the algebra, where the Pauli level needed U and U<sup>−1</sup> separately.'))
+  + sub('Basis transformation: the matrix–rotor lemma',
+      nt('At the Pauli level, Lemma 2.1: K̂<sub>μ</sub>Λ<sub>ν</sub><sup>μ</sup> = U<sup>−1</sup>K̂<sub>ν</sub>U<sup>−1</sup>, and its time adjoint UK̂<sub>ν</sub><sup>T</sup>U = (K̂<sub>μ</sub>Λ<sub>ν</sub><sup>μ</sup>)<sup>T</sup>. With β<sub>ν</sub> = [[0, K̂<sub>ν</sub>], [−K̂<sub>ν</sub><sup>T</sup>, 0]], the same chain as above gives the Dirac lemma:')
+      + EQ('Λβ<sub>ν</sub>Λ<sup>−1</sup> =', B2('U<sup>−1</sup>', '0', '0', 'U'), B2('0', 'K̂<sub>ν</sub>', '−K̂<sub>ν</sub><sup>T</sup>', '0'), B2('U', '0', '0', 'U<sup>−1</sup>'), '=', B2('0', 'U<sup>−1</sup>K̂<sub>ν</sub>U<sup>−1</sup>', '−UK̂<sub>ν</sub><sup>T</sup>U', '0'), '=', B2('0', 'K̂<sub>μ</sub>Λ<sub>ν</sub><sup>μ</sup>', '−(K̂<sub>μ</sub>Λ<sub>ν</sub><sup>μ</sup>)<sup>T</sup>', '0'), '= β<sub>μ</sub>Λ<sub>ν</sub><sup>μ</sup>')
+      + nt('Column by column: Λβ<sub>0</sub>Λ<sup>−1</sup> = cosh ψ β<sub>0</sub> − sinh ψ β<sub>I</sub>, Λβ<sub>I</sub>Λ<sup>−1</sup> = cosh ψ β<sub>I</sub> − sinh ψ β<sub>0</sub>, Λβ<sub>J</sub>Λ<sup>−1</sup> = β<sub>J</sub>, Λβ<sub>K</sub>Λ<sup>−1</sup> = β<sub>K</sub>. In rotor form: α<sub>I</sub> anticommutes with β<sub>0</sub>, β<sub>I</sub> and commutes with β<sub>J</sub>, β<sub>K</sub>, so Λβ<sub>ν</sub>Λ<sup>−1</sup> = Λ²β<sub>ν</sub> for ν = 0, I, with Λ² = cosh ψ 𝟙 − sinh ψ α<sub>I</sub>: the half rapidity of the rotor becomes the full rapidity of the vector. Hence the coordinate route and the rotor route agree:')
+      + EQ(`${nm}<sup>L</sup> = a′<sup>μ</sup>β<sub>μ</sub> = Λ<sub>ν</sub><sup>μ</sup>a<sup>ν</sup>β<sub>μ</sub> = a<sup>ν</sup>Λβ<sub>ν</sub>Λ<sup>−1</sup> = Λ${nm}Λ<sup>−1</sup>`))
+  + sub('In the matrix',
+      EQ(`${nm} =`, big(null, p.A, p.mAT, null), `&nbsp;⟹&nbsp; ${nm}<sup>L</sup> =`, big(null, p.AL, p.mATL, null))
+      + nt('Λ is diagonal, so entry (j, k) is multiplied by Λ<sub>jj</sub>/Λ<sub>kk</sub>: the light-cone entries i(a<sub>0</sub> ± a<sub>1</sub>) get the Doppler factors e<sup>∓ψ</sup> in both blocks, the a<sub>2</sub>, a<sub>3</sub> entries are unchanged.'))
+  + sub('The inverse boost, and no separate adjoint rule',
+      EQ(`Λ<sup>−1</sup>${nm}Λ =`, B2('U', '0', '0', 'U<sup>−1</sup>'), B2('0', 'A', '−A<sup>T</sup>', '0'), B2('U<sup>−1</sup>', '0', '0', 'U'), '=', B2('0', 'UAU', '−U<sup>−1</sup>A<sup>T</sup>U<sup>−1</sup>', '0'), '=', B2('0', 'A<sup>L<sup>−1</sup></sup>', '−(A<sup>L<sup>−1</sup></sup>)<sup>T</sup>', '0'))
+      + nt('The Pauli inverse boost UAU is the upper block. The Pauli adjoint rules (A<sup>L</sup>)<sup>T</sup> = UA<sup>T</sup>U and (A<sup>T</sup>)<sup>L</sup> = U<sup>−1</sup>A<sup>T</sup>U<sup>−1</sup> = (A<sup>L<sup>−1</sup></sup>)<sup>T</sup> are no longer separate statements: they are the lower blocks of Λ' + nm + 'Λ<sup>−1</sup> and Λ<sup>−1</sup>' + nm + 'Λ.'))
+  + sub('Invariance and covariance',
+      EQ(`${nm}${nm} =`, B2('0', 'A', '−A<sup>T</sup>', '0'), B2('0', 'A', '−A<sup>T</sup>', '0'), '=', B2('−AA<sup>T</sup>', '0', '0', '−A<sup>T</sup>A'), `= −(${inv}) 𝟙`)
+      + nt(`The Pauli quadratic A<sup>T</sup>A = (${inv}) <span class="one">1</span> sits in the lower block. 𝟙 commutes with Λ, so (${nm}<sup>L</sup>)² = Λ${nm}${nm}Λ<sup>−1</sup> = ${nm}${nm}: invariant. A similarity passes through products:`)
+      + EQ(`(Λ${nm}Λ<sup>−1</sup>)(Λ${SL('b')}Λ<sup>−1</sup>) = Λ(${nm}${SL('b')})Λ<sup>−1</sup> =`, B2('−U<sup>−1</sup>(AB<sup>T</sup>)U', '0', '0', '−U(A<sup>T</sup>B)U<sup>−1</sup>'))
+      + nt('The lower block is the Pauli covariance (A<sup>L</sup>)<sup>T</sup>B<sup>L</sup> = UA<sup>T</sup>U U<sup>−1</sup>BU<sup>−1</sup> = U(A<sup>T</sup>B)U<sup>−1</sup>, here automatic.'));
+}
+
 /* ---------- wiring ---------- */
-function update(full){ renderSteps(); renderVec(); diagram(); if (full !== false) renderNum(); else numOut(); renderBasis(); genOut(); }
+function update(full){ renderTop(); renderVec(); diagram(); if (full !== false) renderNum(); else numOut(); genOut(); }
 $('selA').innerHTML = V.map(v => `<option value="${v.id}">${v.nm}/: ${v.what.replace(/<[^>]+>/g, '')}</option>`).join('');
-$('selA').addEventListener('change', e => { SA = e.target.value; update(); });
+$('selA').addEventListener('change', e => { SA = e.target.value; renderWhy(); renderLift(); update(); });
 $('beta').addEventListener('input', () => update(false));
 ['dir','rot','cmp'].forEach(t => $('t-' + t).addEventListener('click', () => { TAB = t; renderGen(); }));
-renderSteps(); renderVec(); diagram(); renderNum(); renderBasis(); renderGen();
+renderTop(); renderVec(); renderWhy(); diagram(); renderNum(); renderLift(); renderGen();
 })();
 </script>
 </body></html>

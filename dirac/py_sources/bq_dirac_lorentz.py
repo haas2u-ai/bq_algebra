@@ -138,6 +138,14 @@ def main():
     KK = [P['T']] + KP
     ok &= report('its upper block is the Pauli lemma K_nu Lambda^nu_mu = U^-1 K_mu U^-1',
                  all(zero(sum((Lam[nu, mu] * KK[nu] for nu in range(4)), sp.zeros(2)) - Ui * KK[mu] * Ui) for mu in range(4)))
+    ok &= report('and its lower block: -U K_mu^T U = -(U^-1 K_mu U^-1)^T = -(K_nu Lambda^nu_mu)^T, so the Dirac lemma follows',
+                 all(zero((L * BETA[mu] * Li)[2:4, 0:2] + U * adjT(KK[mu]) * U) and zero(U * adjT(KK[mu]) * U - adjT(Ui * KK[mu] * Ui))
+                     and zero(adjT(sum((Lam[nu, mu] * KK[nu] for nu in range(4)), sp.zeros(2))) - sum((Lam[nu, mu] * adjT(KK[nu]) for nu in range(4)), sp.zeros(2)))
+                     for mu in range(4)))
+    ok &= report('beta_mu = [[0, K_mu], [-K_mu^T, 0]] with K_0 = T^, K_i = K^_i', all(zero(BETA[mu] - blk(sp.zeros(2), KK[mu], -adjT(KK[mu]), sp.zeros(2))) for mu in range(4)))
+    gl = sp.Symbol('lam', nonzero=True)
+    ok &= report('a common factor cancels: diag(lam U^-1, lam U) gives the same boost (Lambda is fixed up to it)',
+                 zero(blk(gl * Ui, sp.zeros(2), sp.zeros(2), gl * U) * A * blk(gl * Ui, sp.zeros(2), sp.zeros(2), gl * U).inv() - AL))
 
     print('5  Any direction n (here n = (2/3, 1/3, 2/3), exact)')
     n = [sp.Rational(2, 3), sp.Rational(1, 3), sp.Rational(2, 3)]

@@ -29,7 +29,7 @@ The scripts are self-contained and do not import the BQ-Pauli scripts in `../../
 
 | Script | Reproduces | Example |
 |---|---|---|
-| `bq_dirac_lorentz.py` | the boost of a Dirac-level vector by one similarity, a/ᴸ = Λa/Λ⁻¹: diag(X, Y) acting on a/ = [[0,A],[−Aᵀ,0]] gives [[0, XAY⁻¹], [−YAᵀX⁻¹, 0]], so X = U⁻¹, Y = U carries both Pauli rules U⁻¹AU⁻¹ and (Aᴸ)ᵀ = UAᵀU; Λ = diag(U⁻¹, U) = e^(−ψα_I/2) = cosh(ψ/2)𝟙 − sinh(ψ/2)α_I (Weyl EM eq. 163); the γ-formulas, the invariant a/a/; the basis route Λβ_μΛ⁻¹ = Λ²β_μ and the Dirac lemma β_νΛ^ν_μ = Λβ_μΛ⁻¹ with the Pauli lemma as its upper block; boosts along any n with the Hermitian U_n; rotations e^(−θm·Σ/2) = diag(r, r); Λ = diag(M, (M†)⁻¹); collinear rapidity addition and the Thomas–Wigner rotation of two perpendicular boosts, tan(θ_W/2) = tanh(ψ₁/2) tanh(ψ₂/2) | `python bq_dirac_lorentz.py` |
+| `bq_dirac_lorentz.py` | the boost of a Dirac-level vector by one similarity, a/ᴸ = Λa/Λ⁻¹: diag(X, Y) acting on a/ = [[0,A],[−Aᵀ,0]] gives [[0, XAY⁻¹], [−YAᵀX⁻¹, 0]], so X = U⁻¹, Y = U carries both Pauli rules U⁻¹AU⁻¹ and (Aᴸ)ᵀ = UAᵀU (up to a common factor that cancels); Λ = diag(U⁻¹, U) = e^(−ψα_I/2) = cosh(ψ/2)𝟙 − sinh(ψ/2)α_I (Weyl EM eq. 163); the γ-formulas, the invariant a/a/; the basis route Λβ_μΛ⁻¹ = Λ²β_μ and the Dirac lemma β_νΛ^ν_μ = Λβ_μΛ⁻¹, proved block by block from the Pauli lemma (upper block) and its time adjoint (lower block); boosts along any n with the Hermitian U_n; rotations e^(−θm·Σ/2) = diag(r, r); Λ = diag(M, (M†)⁻¹); collinear rapidity addition and the Thomas–Wigner rotation of two perpendicular boosts, tan(θ_W/2) = tanh(ψ₁/2) tanh(ψ₂/2) | `python bq_dirac_lorentz.py` |
 
 ## Install and run
 
