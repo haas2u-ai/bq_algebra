@@ -1,0 +1,521 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BQ-Dirac Lorentz Weyl and Dirac</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="The Lorentz boost of a Dirac-level four-vector in the Weyl and in the Dirac representation, side by side: Lambda_D = S Lambda_W S^-1, the same boosted coordinates in both, how the Dirac boost mixes time and space blocks, and what it means for spinors.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&display=swap" rel="stylesheet">
+<style>
+
+/* Layout: chooser on the left, channel readout on the right (stacked on phones); numerical matrix check and notes below. Same family as the BQ-Pauli table page. */
+:root{
+  --bg:#f5f6fa;--surface:#ffffff;--edge:#d6dce8;--ink:#141a28;--soft:#55607a;
+  --st:#b8620f;--st-bg:rgba(184,98,15,.09);      /* space-time basis T̂, K̂ */
+  --sn:#0f7fb0;--sn-bg:rgba(15,127,176,.09);     /* spin-norm basis 1̂, σ̂ */
+  --sel:#5b4fd6;--good:#2f8a4f;--bad:#b23a3a;
+  --serif:"Source Serif 4",Georgia,serif;--sans:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.11);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.09);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.11);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.09);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans)}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font:600 clamp(24px,3.4vw,34px)/1.15 var(--serif);margin:0 0 6px;text-wrap:balance}
+h2{font:600 18px/1.3 var(--serif);margin:0 0 10px;text-wrap:balance}
+h3{font:600 12px/1.3 var(--sans);margin:0 0 8px;color:var(--soft);letter-spacing:.06em;text-transform:uppercase}
+.lede{color:var(--soft);max-width:82ch;margin:0 0 20px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:start}
+@media (max-width:960px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--edge);border-radius:12px;padding:16px;min-width:0}
+select,button,input{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:5px 8px}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--sel);outline-offset:2px}
+.pick{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 12px;align-items:center}
+.pick label{font:600 20px var(--serif)}
+.pick select{width:100%}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.qs{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.qs button{font-size:12.5px;padding:4px 9px}
+.math{font:500 16.5px/1.9 var(--serif);overflow-x:auto}
+.math b{font-weight:700}
+.vec{border:1px solid var(--edge);border-radius:10px;padding:10px 12px;margin-top:12px;background:var(--bg)}
+.vec .what{font-size:12.5px;color:var(--soft);margin-bottom:2px}
+.ts{color:var(--st)}.ns{color:var(--sn)}
+.formula{font:500 16px/1.8 var(--serif);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:8px 12px;overflow-x:auto;white-space:nowrap}
+.fwith{font:13px var(--sans);color:var(--soft);white-space:normal}
+.ch{display:grid;grid-template-columns:minmax(0,10.5em) minmax(0,1fr);gap:4px 14px;padding:12px 0;border-bottom:1px solid var(--edge)}
+.ch:last-of-type{border-bottom:none}
+.ch .nm{font:600 14px var(--sans)}
+.ch .nm small{display:block;font:400 12px var(--sans);color:var(--soft)}
+.ch .ex{font:500 16.5px/1.75 var(--serif);overflow-x:auto;min-width:0}
+.ch .ex .gen{color:var(--soft);font-size:14.5px}
+.ch .ex .res{font-weight:600}
+.ch.n .nm{color:var(--sn)}.ch.k .nm{color:var(--st)}.ch.s .nm{color:var(--sn)}
+@media (max-width:560px){.ch{grid-template-columns:minmax(0,1fr)}}
+.total{font:600 17px/1.8 var(--serif);border:1.5px solid var(--sel);border-radius:10px;padding:10px 12px;margin-top:10px;overflow-x:auto}
+.interp{margin-top:12px;font-size:14.5px;color:var(--ink);background:var(--bg);border:1px dashed var(--edge);border-radius:10px;padding:10px 12px}
+.interp .src{display:block;font-size:12.5px;color:var(--soft);margin-top:4px}
+.note{font-size:14px;color:var(--soft);max-width:74ch;margin:8px 0 0}
+.note b{color:var(--ink)}
+/* numeric check */
+.numgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:900px){.numgrid{grid-template-columns:minmax(0,1fr)}}
+.inrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.inrow label{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--soft);min-width:0}
+.inrow input{width:100%;font:13.5px var(--mono)}
+.mxrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font:500 17px var(--serif);margin:10px 0;overflow-x:auto}
+.mx{display:inline-grid;grid-template-columns:auto auto;gap:2px 14px;padding:5px 11px;position:relative;font:13.5px var(--mono);font-variant-numeric:tabular-nums}
+.mx::before,.mx::after{content:"";position:absolute;top:0;bottom:0;width:7px;border:1.5px solid var(--ink)}
+.mx::before{left:0;border-right:none}.mx::after{right:0;border-left:none}
+.mx span{text-align:right;white-space:nowrap}
+.tscroll{overflow-x:auto}
+table.dc{border-collapse:collapse;font:13.5px var(--mono);font-variant-numeric:tabular-nums;width:100%}
+table.dc th,table.dc td{padding:4px 10px;border-bottom:1px solid var(--edge);text-align:right;white-space:nowrap}
+table.dc th{font:600 12px var(--sans);color:var(--soft);text-align:right}
+table.dc td:first-child,table.dc th:first-child{text-align:left;font-family:var(--serif);font-size:15px}
+.pill{display:inline-block;font:500 12.5px var(--sans);border:1px solid var(--edge);border-radius:99px;padding:2px 10px;color:var(--soft);margin-top:10px}
+.pill.ok{border-color:var(--good);color:var(--good)}.pill.no{border-color:var(--bad);color:var(--bad)}
+.notes{margin-top:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:900px){.notes{grid-template-columns:minmax(0,1fr)}}
+.notes li{font-size:14px;max-width:70ch;margin-bottom:6px}
+.notes ul{padding-left:18px;margin:6px 0}
+.cap{font-size:12.5px;color:var(--soft);margin:10px 0 0}
+a{color:var(--sn)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.chk{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--soft);cursor:pointer}
+.split{margin-top:8px}
+.pill.st{border-color:var(--st);color:var(--st)}.pill.sn{border-color:var(--sn);color:var(--sn)}
+.sstep{margin:14px 0 0}
+.sstep h3{margin:0 0 6px}
+.sline{font:500 15px/1.9 var(--serif);overflow-x:auto;white-space:nowrap;padding:1px 0}
+.sline .lab{display:inline-block;min-width:5.6em;color:var(--soft)}
+.sbox{background:var(--bg);border:1px solid var(--edge);border-radius:10px;padding:8px 12px}
+.sgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:900px){.sgrid{grid-template-columns:minmax(0,1fr)}}
+.sgrid .sline{font-size:14.5px}
+.sres{font-weight:600}
+.ctlline{margin:0 0 8px}
+.numdet{margin-top:16px;border-top:1px solid var(--edge);padding-top:10px}
+.numdet summary{cursor:pointer;font:500 14px var(--sans);color:var(--soft)}
+.numgrid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:900px){.numgrid.three{grid-template-columns:minmax(0,1fr)}}
+.vec .math .what{margin:0 0 4px 0}
+.kv{font-weight:700}
+
+:root{--g0:#6b7488;--g1:var(--st);--g2b:#7a5fd0;--g2s:var(--sn);--g3:#2f8a4f;--g4:#c2417a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--g0:#a3acc0;--g2b:#a29bfe;--g3:#5fd38a;--g4:#ff7fb5}}
+:root[data-theme="dark"]{--g0:#a3acc0;--g2b:#a29bfe;--g3:#5fd38a;--g4:#ff7fb5}
+.g1{color:var(--g1)}.g2b{color:var(--g2b)}.g2s{color:var(--g2s)}
+.ch.c0 .nm{color:var(--g0)}.ch.c2b .nm{color:var(--g2b)}.ch.c2s .nm{color:var(--g2s)}
+.sl{position:relative;display:inline-block}
+.sl::after{content:"";position:absolute;left:50%;top:6%;height:88%;border-left:1.3px solid currentColor;transform:translateX(-50%) rotate(26deg);pointer-events:none}
+.keybox{border:1.6px solid var(--sel);font-size:17px;white-space:normal;margin:10px 0 0;padding:10px 14px}
+.vec .math.blk{font-size:14.5px;color:var(--soft)}
+.back{display:inline-block;margin:0 0 10px;font-size:14.5px;color:var(--sn);text-decoration:none}.back:hover{text-decoration:underline}
+.mxs{display:inline-grid;gap:2px 14px;padding:3px 10px;position:relative;vertical-align:middle;font:500 14px var(--serif)}
+.mxs::before,.mxs::after{content:"";position:absolute;top:0;bottom:0;width:6px;border:1.4px solid var(--ink)}
+.mxs::before{left:0;border-right:none}.mxs::after{right:0;border-left:none}
+.mxs span{text-align:center;white-space:nowrap}
+.selrow{font-size:19px;margin:6px 0 4px}.selrow.fx .mxs{font-size:17px;gap:5px 15px;padding:5px 12px}
+
+.g3{color:var(--g3)}
+.ch.c1 .nm{color:var(--g1)}.ch.c3 .nm{color:var(--g3)}
+.pill.v1{border-color:var(--g1);color:var(--g1)}.pill.v3{border-color:var(--g3);color:var(--g3)}
+
+.g4{color:var(--g4)}.ch.c4 .nm{color:var(--g4)}.g0{color:var(--g0)}
+.pill.v0{border-color:var(--g0);color:var(--g0)}.pill.v2{border-color:var(--g2b);color:var(--g2b)}.pill.v4{border-color:var(--g4);color:var(--g4)}
+.qblock{padding-bottom:6px}.qblock + .qblock{margin-top:18px;padding-top:14px;border-top:2px solid var(--edge)}
+.qhead{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-bottom:2px}.qhead h3{margin:0}
+.qhead select{max-width:100%}
+table.arr{border-collapse:collapse;font:500 15px/1.6 var(--serif);min-width:100%}
+table.arr th,table.arr td{border:1px solid var(--edge);padding:6px 10px;text-align:left;vertical-align:top}
+table.arr thead th{font:600 13px var(--sans);color:var(--soft);background:var(--bg);white-space:nowrap}
+table.arr th[scope=row]{font:600 15px var(--serif);white-space:nowrap;background:var(--bg)}
+table.arr tr.ps th[scope=row]{color:var(--g3)}table.arr tr.vv th[scope=row]{color:var(--g1)}
+table.arr tr.sep td,table.arr tr.sep th{border-top:2px solid var(--soft)}
+table.arr td.z{color:var(--soft)}
+.arrnote{font-size:13.5px;color:var(--soft);margin:8px 0 0;max-width:80ch}
+.lrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin:8px 0}
+.lrow input[type=number]{width:6.5em}
+.one{position:relative;display:inline-block}
+.one::after{content:"";position:absolute;left:50%;top:-.12em;width:.42em;height:.42em;border-left:.075em solid currentColor;border-top:.075em solid currentColor;transform:translateX(-50%) rotate(45deg) scale(.7,.55);transform-origin:center}
+.hs{position:relative;display:inline-block}
+.hs::after{content:"";position:absolute;left:50%;top:.08em;width:.42em;height:.42em;border-left:.075em solid currentColor;border-top:.075em solid currentColor;transform:translateX(-50%) rotate(45deg) scale(.7,.55);transform-origin:center}
+
+.slider{margin-top:14px;display:grid;gap:6px}
+.slider label{font-size:13.5px;color:var(--soft)}
+.slider label b{color:var(--ink);font:500 14px var(--mono)}
+.slider input{width:100%;accent-color:var(--st)}
+.kp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.kp div{border:1px solid var(--edge);border-radius:8px;padding:5px 7px;min-width:0}
+.kp span{display:block;font-size:11.5px;color:var(--soft)}
+.kp b{font:500 14px var(--mono)}
+.trc{border:1px solid var(--edge);border-left-width:3px;border-radius:10px;padding:8px 12px;margin-bottom:10px}
+.trc.st{border-left-color:var(--st)}.trc.sn{border-left-color:var(--sn)}.trc.sl2{border-left-color:var(--g2b)}
+.trc h3{margin:0 0 4px}
+.trc .ops{font:500 15px/1.8 var(--serif);overflow-x:auto}
+.numv{font:13px var(--mono);color:var(--soft)}
+.leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--soft);margin-top:6px}
+.leg>span{display:inline-flex;align-items:center;gap:6px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%}
+.sw{display:inline-block;width:18px;height:0;border-top:2px solid}
+.ax{stroke:var(--edge);fill:none}
+.ttl{font:13px var(--sans);fill:var(--soft)}
+#diag text{font:12px var(--mono);fill:var(--soft)}
+#diag{width:100%;max-width:440px;height:auto;display:block;margin:0 auto}
+.steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:900px){.steps{grid-template-columns:minmax(0,1fr)}}
+.stp{border:1px solid var(--edge);border-radius:10px;padding:10px 12px;background:var(--bg);min-width:0}
+.stp h3{margin:0 0 6px;color:var(--sel)}
+.stp .formula{background:var(--surface);white-space:normal}
+.stp p{margin:6px 0 0;font-size:14px;color:var(--soft)}
+.stp p b{color:var(--ink)}
+.stp.wide{grid-column:1/-1}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.tabs button[aria-selected="true"]{background:var(--sel);color:#fff;border-color:var(--sel)}
+.ctl{display:flex;flex-wrap:wrap;align-items:end;gap:10px 16px;margin:6px 0 10px}
+.ctl label{display:grid;gap:3px;font-size:13px;color:var(--soft)}
+.ctl input[type=number]{width:6.5em}
+.ctl input[type=range]{width:min(260px,70vw);accent-color:var(--st)}
+.sm{display:inline-grid;gap:3px 14px;padding:4px 11px;position:relative;vertical-align:middle;font:500 15px/1.35 var(--serif);flex:none}
+.sm::before,.sm::after{content:"";position:absolute;top:0;bottom:0;width:6px;border:1.4px solid var(--ink)}
+.sm::before{left:0;border-right:none}.sm::after{right:0;border-left:none}
+.sm span{text-align:center;white-space:nowrap;padding:1px 2px}
+.sm span.bl{border-left:1px dashed var(--soft);padding-left:12px}
+.sm span.bt{border-top:1px dashed var(--soft);padding-top:4px}
+.eqm{display:flex;flex-wrap:wrap;align-items:center;gap:10px 10px;margin:10px 0;font:500 16px/1.6 var(--serif);max-width:100%;overflow-x:auto}
+.eqm .eqt{white-space:normal}
+.sub{border-top:1px solid var(--edge);padding:12px 0 4px}
+.sub:first-child{border-top:none;padding-top:0}
+.sub h3{color:var(--sel);margin:0 0 4px}
+.tag-ext{font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--soft);border:1px solid var(--edge);border-radius:20px;padding:2px 8px;vertical-align:middle}
+details.numdet.card>summary{font:600 17px/1.3 var(--serif);cursor:pointer}
+.sub h3{text-transform:none;letter-spacing:0;font:600 14.5px/1.3 var(--sans)}
+
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.cols.one{grid-template-columns:minmax(0,1fr)}
+@media (max-width:900px){.cols{grid-template-columns:minmax(0,1fr)}}
+.rep{border:1px solid var(--edge);border-radius:10px;padding:10px 12px;min-width:0;overflow-x:auto}
+.rep[hidden]{display:none}
+.rh{font:600 17px var(--serif);margin:0 0 4px;text-transform:none;letter-spacing:0;color:var(--ink)}
+.same{margin-top:12px}
+.row button[aria-pressed="true"]{background:var(--sel);color:#fff;border-color:var(--sel)}
+.sq{display:grid;grid-template-columns:auto auto auto;gap:6px 18px;align-items:center;justify-items:center;width:max-content;max-width:100%;margin:8px 0;font:500 17px var(--serif)}
+.sq .h{font-size:14px;color:var(--st)}.sq .v{font-size:14px;color:var(--sn)}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <a class="back" href="../index.html">← The BQ algebra at the Dirac level</a>
+  <h1>BQ-Dirac Lorentz Transformations: Weyl and Dirac</h1>
+  <p class="lede">The same boost along I, written in the two representations. In the Weyl representation the boost is Λ<sub>W</sub> = diag(U<sup>−1</sup>, U), the doubled Pauli rotor of the previous three models. The Dirac boost is not new: it is Λ<sub>W</sub> carried over by the Weyl-to-Dirac matrix S. Choose a four-vector and a velocity to see the boost of <span class="sl">a</span> in both representations side by side. The boosted coordinates come out the same in both; only the 4×4 matrices that hold them differ.</p>
+  <div class="formula keybox">Λ<sub>W</sub> = e<sup>(ψ/2)σ<sub>I</sub><sup>W</sup></sup>, &nbsp; Λ<sub>D</sub> = e<sup>(ψ/2)σ<sub>I</sub><sup>D</sup></sup> = SΛ<sub>W</sub>S<sup>−1</sup>, &nbsp; <span class="sl">a</span><sup>L</sup> = Λ<span class="sl">a</span>Λ<sup>−1</sup> in both, &nbsp; S = <sup>1</sup>⁄<sub>√2</sub>[[<span class="one">1</span>, <span class="one">1</span>], [−<span class="one">1</span>, <span class="one">1</span>]]</div>
+</header>
+
+<div class="grid">
+  <section class="card" aria-labelledby="h-pick">
+    <h2 id="h-pick">Vector and boost</h2>
+    <div class="pick"><label for="selA"><span class="sl">a</span></label><select id="selA"></select></div>
+    <div class="vec" id="vA"></div>
+    <div class="slider">
+      <label for="beta">Velocity β = v/c along I <b id="betaLab"></b></label>
+      <input id="beta" type="range" min="-0.95" max="0.95" step="0.01" value="0.6">
+      <div class="kp" id="kp"></div>
+    </div>
+  </section>
+  <section class="card" aria-labelledby="h-lam">
+    <h2 id="h-lam">The two boost matrices</h2>
+    <div id="lam"></div>
+  </section>
+</div>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-exp">
+  <h2 id="h-exp">The exponential form: Λ = e<sup>(ψ/2)σ<sub>I</sub></sup> in both representations</h2>
+  <div id="exp"></div>
+</section>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-vec">
+  <h2 id="h-vec">The boost of <span class="sl">a</span> in both representations</h2>
+  <div class="row" role="group" aria-label="View" style="margin:0 0 10px"><button type="button" id="vS" aria-pressed="true">Side by side</button><button type="button" id="vW" aria-pressed="false">Weyl</button><button type="button" id="vD" aria-pressed="false">Dirac</button></div>
+  <div class="cols" id="cols"><div class="rep" id="cW"></div><div class="rep" id="cD"></div></div>
+  <div class="same" id="same" aria-live="polite"></div>
+</section>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-s">
+  <h2 id="h-s">From Λ<sub>W</sub> to Λ<sub>D</sub> through S</h2>
+  <div id="sder"></div>
+</section>
+
+<div class="grid" style="margin-top:18px">
+  <section class="card" aria-labelledby="h-mix">
+    <h2 id="h-mix">How the Dirac boost mixes time and space</h2>
+    <div id="mix"></div>
+  </section>
+  <section class="card" aria-labelledby="h-sp">
+    <h2 id="h-sp">What it means for spinors</h2>
+    <div id="spin"></div>
+  </section>
+</div>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-num">
+  <h2 id="h-num">Check by explicit 4×4 matrix multiplication</h2>
+  <div id="num"></div>
+</section>
+
+<div class="notes">
+  <section class="card"><h2>What changes and what does not</h2>
+    <p class="note">Changed by S: the matrices Λ, <span class="sl">a</span>, <span class="sl">a</span><sup>L</sup> and the spinor Ψ. Not changed: the coordinates a<sup>μ</sup> and a′<sup>μ</sup>, the rotor form c𝟙 − sα<sub>I</sub>, the invariant <span class="sl">a</span><span class="sl">a</span> = −(a<sub>0</sub>² − <b>a</b>²)𝟙, and the rotations diag(r, r), which are the same matrices in both representations. The boost is the one transformation whose matrix changes character: block diagonal in Weyl, inter-block in Dirac.</p>
+  </section>
+  <section class="card"><h2>Sources and status</h2>
+    <p class="note">S and the Dirac basis follow de Haas (2026), <i>From Weyl to Dirac</i>, eqs. 1–24; Λ<sub>W</sub> = diag(U<sup>−1</sup>, U), Ψ<sup>L</sup> = ΛΨ and Λ<sub>D</sub><sup>2</sup> follow de Haas (2025), <i>BQ Dirac Gravity</i>, eqs. 78–82 and 103–107. <b>Reported, not changed:</b> eq. 107 writes Λ<sub>D</sub><sup>2</sup> = 𝟙 cosh ψ + α<sub>I</sub> sinh ψ; with α<sub>I</sub><sup>D</sup> = [[0, −<span class="hs">σ</span><sub>I</sub>], [−<span class="hs">σ</span><sub>I</sub>, 0]] of <i>From Weyl to Dirac</i> eq. 14 the same matrix is cosh ψ 𝟙 − sinh ψ α<sub>I</sub><sup>D</sup>. The matrix [[cosh ψ <span class="one">1</span>, sinh ψ <span class="hs">σ</span><sub>I</sub>], [sinh ψ <span class="hs">σ</span><sub>I</sub>, cosh ψ <span class="one">1</span>]] itself agrees. The two agree if the α<sub>I</sub> of eq. 107 is the standard Dirac α = [[0, <span class="hs">σ</span><sub>I</sub>], [<span class="hs">σ</span><sub>I</sub>, 0]], which is σ<sub>I</sub><sup>D</sup> = −α<sub>I</sub><sup>D</sup> on this page.</p>
+    <p class="cap">Every identity is checked exactly in <code>bq_dirac_lorentz_representations.py</code>. Part of <a href="../index.html">the BQ algebra at the Dirac level</a>; the Weyl-only boost is <a href="BQ_Dirac_Lorentz_Transformations.html">BQ-Dirac Lorentz transformations</a>, the matrix S is on <a href="BQ_Dirac_Weyl_Dirac_Representations.html">BQ Weyl and Dirac representations</a>.</p>
+  </section>
+</div>
+</div>
+
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+const SL = s => `<span class="sl">${s}</span>`;
+const IJK = ['I', 'J', 'K'];
+/* ---------- the four-vectors of the BQ papers ---------- */
+const V = [
+  {id:'R', nm:'R', what:'space-time position', comp:['ct','r<sub>1</sub>','r<sub>2</sub>','r<sub>3</sub>'], def:[2, 1, 0.5, -0.3]},
+  {id:'dR', nm:'dR', what:'space-time displacement', comp:['c dt','dr<sub>1</sub>','dr<sub>2</sub>','dr<sub>3</sub>'], def:[1, 0.3, -0.2, 0.1]},
+  {id:'U', nm:'U', what:'proper velocity, γ(c, <b>v</b>)', comp:['γc','γv<sub>1</sub>','γv<sub>2</sub>','γv<sub>3</sub>'], def:[1.25, 0.5, 0.25, 0.5]},
+  {id:'P', nm:'P', what:'energy-momentum', comp:['E/c','p<sub>1</sub>','p<sub>2</sub>','p<sub>3</sub>'], def:[3, 0.5, 1, -0.5]},
+  {id:'A', nm:'A', what:'electromagnetic four-potential', comp:['φ/c','A<sub>1</sub>','A<sub>2</sub>','A<sub>3</sub>'], def:[0.8, -0.2, 0.6, 0.3]},
+  {id:'J', nm:'J', what:'electric four-current density', comp:['cρ','J<sub>1</sub>','J<sub>2</sub>','J<sub>3</sub>'], def:[1.5, 0.2, -0.4, 0.7]},
+  {id:'G', nm:'G', what:'energy-momentum density of a fluid', comp:['ε/c','g<sub>1</sub>','g<sub>2</sub>','g<sub>3</sub>'], def:[2.5, 0.6, 0.1, -0.2]},
+  {id:'F', nm:'F', what:'force-power density', comp:['𝒫/c','F<sub>1</sub>','F<sub>2</sub>','F<sub>3</sub>'], def:[0.4, 1, 0, -0.6]},
+  {id:'a', nm:'a', what:'general four-vector (a₀, a)', comp:['a<sub>0</sub>','a<sub>1</sub>','a<sub>2</sub>','a<sub>3</sub>'], def:[1, 2, 0, 0]}
+];
+const VI = Object.fromEntries(V.map(v => [v.id, v]));
+let SA = 'R', TAB = 'dir';
+const NUM = {};
+const vals = id => NUM[id] || (NUM[id] = VI[id].def.slice());
+const beta = () => +$('beta').value;
+const fx = x => (Math.abs(x) < 5e-13 ? 0 : +x.toFixed(4)).toString().replace('-', '−');
+const boostNums = (a, sgn, b) => { const g = 1/Math.sqrt(1 - b*b); return [g*(a[0] - sgn*b*a[1]), g*(a[1] - sgn*b*a[0]), a[2], a[3]]; };
+
+/* ---------- complex matrices ---------- */
+const cx = (re, im) => [re, im || 0], cm = (a, b) => [a[0]*b[0]-a[1]*b[1], a[0]*b[1]+a[1]*b[0]], ca = (a, b) => [a[0]+b[0], a[1]+b[1]];
+function mmul(X, Y){ const n = X.length, R = []; for (let i = 0; i < n; i++){ R.push([]); for (let k = 0; k < n; k++){ let s = cx(0); for (let j = 0; j < n; j++) s = ca(s, cm(X[i][j], Y[j][k])); R[i].push(s); } } return R; }
+const mm = (...Ms) => Ms.reduce((P, M) => mmul(P, M));
+const madd = (X, Y) => X.map((r, i) => r.map((z, j) => ca(z, Y[i][j])));
+const msc = (X, s) => X.map(r => r.map(z => [z[0]*s, z[1]*s]));
+const mdiff = (X, Y) => Math.max(...X.flatMap((r, i) => r.map((z, j) => Math.hypot(z[0] - Y[i][j][0], z[1] - Y[i][j][1]))));
+const Z2 = [[cx(0),cx(0)],[cx(0),cx(0)]];
+const PM = {one:[[cx(1),cx(0)],[cx(0),cx(1)]], T:[[cx(0,1),cx(0)],[cx(0),cx(0,1)]], I:[[cx(0,1),cx(0)],[cx(0),cx(0,-1)]], J:[[cx(0),cx(1)],[cx(-1),cx(0)]], K:[[cx(0),cx(0,1)],[cx(0,1),cx(0)]],
+            sI:[[cx(1),cx(0)],[cx(0),cx(-1)]], sJ:[[cx(0),cx(0,-1)],[cx(0,1),cx(0)]], sK:[[cx(0),cx(1)],[cx(1),cx(0)]]};
+const blk = (a, b, c, d) => [0,1,2,3].map(i => [0,1,2,3].map(j => { const B = i < 2 ? (j < 2 ? a : b) : (j < 2 ? c : d); return B[i & 1][j & 1]; }));
+const sub2 = (M, r, c) => [[M[r][c], M[r][c + 1]], [M[r + 1][c], M[r + 1][c + 1]]];
+const B4 = [blk(Z2, PM.T, PM.T, Z2), blk(Z2, PM.I, msc(PM.I, -1), Z2), blk(Z2, PM.J, msc(PM.J, -1), Z2), blk(Z2, PM.K, msc(PM.K, -1), Z2)];
+const BAS = {one:blk(PM.one, Z2, Z2, PM.one), b0:B4[0], bI:B4[1], bJ:B4[2], bK:B4[3], aI:mmul(B4[0], B4[1]), aJ:mmul(B4[0], B4[2]), aK:mmul(B4[0], B4[3]),
+             SI:mmul(B4[2], B4[3]), SJ:mmul(B4[3], B4[1]), SK:mmul(B4[1], B4[2])};
+BAS.chi = msc(mm(B4[0], B4[1], B4[2], B4[3]), -1);
+const ALPHA = [BAS.aI, BAS.aJ, BAS.aK], SIGMA = [BAS.SI, BAS.SJ, BAS.SK];
+const tr = M => M.reduce((s, r, i) => ca(s, r[i]), cx(0));
+const coef = (X, M) => tr(mmul(X, M))[0] / tr(mmul(X, X))[0];
+const lin = (cs, Ms) => cs.reduce((S, c, i) => madd(S, msc(Ms[i], c)), blk(Z2, Z2, Z2, Z2));
+const vec4 = a => lin(a, B4);
+const coords = M => B4.map(B => coef(B, M));
+const pauliA = a => madd(madd(msc(PM.T, a[0]), msc(PM.I, a[1])), madd(msc(PM.J, a[2]), msc(PM.K, a[3])));
+const pauliAT = a => pauliA([-a[0], a[1], a[2], a[3]]);
+const fz = z => { const r = Math.abs(z[0]) < 5e-13 ? 0 : z[0], i = Math.abs(z[1]) < 5e-13 ? 0 : z[1]; const f = v => (+v.toFixed(3)).toString().replace('-', '−');
+  if (i === 0) return f(r); if (r === 0) return (Math.abs(i) === 1 ? (i < 0 ? '−' : '') : f(i)) + 'i'; return f(r) + (i < 0 ? '−' : '+') + f(Math.abs(i)) + 'i'; };
+const mxs = M => `<span class="mxs" style="grid-template-columns:repeat(${M[0].length},auto)">${M.flat().map(z => `<span>${fz(z)}</span>`).join('')}</span>`;
+const pill = (ok, yes, no) => `<span class="pill ${ok ? 'ok' : 'no'}">${ok ? '✓ ' + yes : '✗ ' + no}</span>`;
+const EVEN = ['one','aI','aJ','aK','SI','SJ','SK','chi'];
+const ELH = {one:'<span class="g0">𝟙</span>', aI:'<span class="g2b">α<sub>I</sub></span>', aJ:'<span class="g2b">α<sub>J</sub></span>', aK:'<span class="g2b">α<sub>K</sub></span>',
+             SI:'<span class="g2s">Σ<sub>I</sub></span>', SJ:'<span class="g2s">Σ<sub>J</sub></span>', SK:'<span class="g2s">Σ<sub>K</sub></span>', chi:'<span class="g4">χ</span>'};
+const evenLine = M => { const parts = EVEN.map(k => [k, coef(BAS[k], M)]).filter(([, v]) => Math.abs(v) > 1e-12);
+  return parts.length ? parts.map(([k, v], i) => (v < 0 ? (i ? ' − ' : '−') : (i ? ' + ' : '')) + fx(Math.abs(v)) + ' ' + ELH[k]).join('') : '0'; };
+const residual = M => Math.max(...['b0','bI','bJ','bK'].concat(['0','I','J','K'].map(k => 'bt' + k)).map(k => 0), 0);
+
+/* ---------- boost rotors ---------- */
+const rot = (psi) => { const e = Math.exp(psi/2); return {U:[[cx(e),cx(0)],[cx(0),cx(1/e)]], Ui:[[cx(1/e),cx(0)],[cx(0),cx(e)]]}; };
+function lambdaI(psi){ const {U, Ui} = rot(psi); return {L:blk(Ui, Z2, Z2, U), Li:blk(U, Z2, Z2, Ui), U, Ui}; }
+const lambdaN = (psi, n) => { const c = Math.cosh(psi/2), s = Math.sinh(psi/2), na = lin(n, ALPHA);
+  return {L:madd(msc(BAS.one, c), msc(na, -s)), Li:madd(msc(BAS.one, c), msc(na, s))}; };
+const rotorM = (th, m) => { const c = Math.cos(th/2), s = Math.sin(th/2), mS = lin(m, SIGMA);
+  return {R:madd(msc(BAS.one, c), msc(mS, -s)), Ri:madd(msc(BAS.one, c), msc(mS, s))}; };
+
+/* ---------- symbolic matrices ---------- */
+const SM = (rows, blk4) => { const n = rows[0].length, h = n/2;
+  return `<span class="sm" style="grid-template-columns:repeat(${n},auto)">${rows.flatMap((r, i) => r.map((c, j) => `<span class="${blk4 && j === h ? 'bl ' : ''}${blk4 && i === h ? 'bt' : ''}">${c}</span>`)).join('')}</span>`; };
+const EQ = (...parts) => `<div class="eqm">${parts.map(p => p.startsWith('<span class="sm"') ? p : `<span class="eqt">${p}</span>`).join('')}</div>`;
+const Ex = s => `e<sup>${s}</sup>`;
+const four = (UL, UR, LL, LR) => [0,1,2,3].map(i => [0,1,2,3].map(j => { const B = i < 2 ? (j < 2 ? UL : UR) : (j < 2 ? LL : LR); return B ? B[i & 1][j & 1] : '0'; }));
+
+/* ---------- the Dirac representation and S ---------- */
+const B4D = [blk(PM.T, Z2, Z2, msc(PM.T, -1)), B4[1], B4[2], B4[3]];
+const r2 = Math.SQRT1_2;
+const S4 = blk(msc(PM.one, r2), msc(PM.one, r2), msc(PM.one, -r2), msc(PM.one, r2));
+const S4i = blk(msc(PM.one, r2), msc(PM.one, -r2), msc(PM.one, r2), msc(PM.one, r2));
+const aID = mmul(B4D[0], B4D[1]);
+const vecD = a => lin(a, B4D);
+const coordsD = M => B4D.map(B => coef(B, M));
+function lambdaD(psi){ const c = Math.cosh(psi/2), s = Math.sinh(psi/2);
+  return {L:blk(msc(PM.one, c), msc(PM.sI, s), msc(PM.sI, s), msc(PM.one, c)), Li:blk(msc(PM.one, c), msc(PM.sI, -s), msc(PM.sI, -s), msc(PM.one, c))}; }
+
+/* ---------- labels ---------- */
+const comb = (x, op, y) => `γ(${x} ${op} β${y.startsWith('−') ? '(' + y + ')' : y})`;
+const pr = l => l.includes('<') || l.length > 2 ? `(${l})′` : `${l}′`;
+const prime = l => { const m = l.match(/^([^<]+)(<sub>.*<\/sub>)$/); return m ? `${m[1]}′${m[2]}` : l + '′'; };
+const B2 = (a, b, c, d) => SM([[a, b], [c, d]]);
+const sub = (t, body) => `<div class="sub"><h3>${t}</h3>${body}</div>`;
+const nt = s => `<p class="note">${s}</p>`;
+const sig = '<span class="hs">σ</span><sub>I</sub>', one = '<span class="one">1</span>';
+let VIEW = 'S';
+
+/* ---------- top ---------- */
+function renderTop(){
+  const A = VI[SA], b = beta(), psi = Math.atanh(b), g = 1/Math.sqrt(1 - b*b);
+  $('selA').value = SA;
+  $('vA').innerHTML = `<div class="what">${A.what}</div><div class="math">${SL(A.nm)} = ${A.comp[0]} β<sub>0</sub> + ${A.comp[1]} β<sub>I</sub> + ${A.comp[2]} β<sub>J</sub> + ${A.comp[3]} β<sub>K</sub></div><p class="note" style="margin-top:4px">The same real coordinates in both representations; only β<sub>0</sub> differs.</p>`;
+  $('betaLab').textContent = (b >= 0 ? '' : '−') + Math.abs(b).toFixed(2);
+  $('kp').innerHTML = [['rapidity ψ = artanh β', fx(psi)], ['γ = cosh ψ', fx(g)], ['βγ = sinh ψ', fx(b*g)], ['c = cosh(ψ/2)', fx(Math.cosh(psi/2))], ['s = sinh(ψ/2)', fx(Math.sinh(psi/2))], ['e<sup>∓ψ/2</sup>', fx(Math.exp(-psi/2)) + ', ' + fx(Math.exp(psi/2))]]
+    .map(k => `<div><span>${k[0]}</span><b>${k[1]}</b></div>`).join('');
+  $('lam').innerHTML =
+    sub('Weyl', EQ('Λ<sub>W</sub> =', B2('U<sup>−1</sup>', '0', '0', 'U'), '=', B2(`c${one} − s${sig}`, '0', '0', `c${one} + s${sig}`))
+      + nt(`Block diagonal: the upper block is boosted by U<sup>−1</sup>, the lower by U, separately. U = e<sup>ψ<span class="hs">σ</span><sub>I</sub>/2</sup> = c<span class="one">1</span> + s<span class="hs">σ</span><sub>I</sub> = diag(e<sup>ψ/2</sup>, e<sup>−ψ/2</sup>).`))
+  + sub('Dirac', EQ('Λ<sub>D</sub> = SΛ<sub>W</sub>S<sup>−1</sup> =', B2(`c${one}`, `s${sig}`, `s${sig}`, `c${one}`))
+      + nt('Not block diagonal: the off-diagonal s<span class="hs">σ</span><sub>I</sub> mixes the upper and the lower block. Hyperbolic mixing, because c² − s² = 1.'))
+  + `<div class="formula" style="white-space:normal">Both: Λ = e<sup>(ψ/2)σ<sub>I</sub></sup> = e<sup>−ψα<sub>I</sub>/2</sup> = c<span class="g0">𝟙</span> − s<span class="g2b">α<sub>I</sub></span>, &nbsp; α<sub>I</sub><sup>W</sup> = [[<span class="hs">σ</span><sub>I</sub>, 0], [0, −<span class="hs">σ</span><sub>I</sub>]], &nbsp; α<sub>I</sub><sup>D</sup> = [[0, −<span class="hs">σ</span><sub>I</sub>], [−<span class="hs">σ</span><sub>I</sub>, 0]]</div>`;
+}
+
+
+/* ---------- the exponential form ---------- */
+function expm(M){ let T = BAS.one, R = BAS.one; for (let n = 1; n < 30; n++){ T = msc(mmul(T, M), 1/n); R = madd(R, T); } return R; }
+function renderExp(){
+  const psi = Math.atanh(beta());
+  const sW = blk(msc(PM.sI, -1), Z2, Z2, PM.sI), sD = blk(Z2, PM.sI, PM.sI, Z2);
+  const W = lambdaI(psi), D = lambdaD(psi);
+  const e1 = mdiff(expm(msc(sW, psi/2)), W.L), e2 = mdiff(expm(msc(sD, psi/2)), D.L), e3 = mdiff(mm(S4, sW, S4i), sD);
+  const E = x => `e<sup>${x}</sup>`, SG = '<span class="hs">σ</span><sub>I</sub>', mS = '−' + SG;
+  const four = rows => SM(rows, true);
+  $('exp').innerHTML =
+    nt(`The Pauli boost is the exponential of <span class="hs">σ</span><sub>I</sub>, and because <span class="hs">σ</span><sub>I</sub><sup>2</sup> = <span class="one">1</span> its power series splits into an even (cosh) and an odd (sinh) part:`).replace('<p class="note">', '<p class="note" style="margin-top:0">')
+  + EQ(`Pauli: &nbsp;U = ${E('(ψ/2)<span class="hs">σ</span><sub>I</sub>')} = Σ<sub>n</sub> (ψ/2)<sup>n</sup><span class="hs">σ</span><sub>I</sub><sup>n</sup>/n! = c<span class="one">1</span> + s<span class="hs">σ</span><sub>I</sub> =`, B2(E('ψ/2'), '0', '0', E('−ψ/2')))
+  + nt('At the Dirac level the same holds for a 4×4 lift of <span class="hs">σ</span><sub>I</sub>, one for each representation. Both lifts are built from <span class="hs">σ</span><sub>I</sub> blocks, and both square to 𝟙. That is why both boosts keep the form e<sup>(ψ/2)σ<sub>I</sub></sup> = c𝟙 + sσ<sub>I</sub> of the Pauli rotor.')
+  + `<div class="cols" style="margin-top:6px"><div class="rep"><h3 class="rh">Weyl</h3>`
+    + EQ('σ<sub>I</sub><sup>W</sup> =', B2(mS, '0', '0', SG), '=', four([['−1','0','0','0'],['0','1','0','0'],['0','0','1','0'],['0','0','0','−1']]), '= −α<sub>I</sub><sup>W</sup>')
+    + EQ('(σ<sub>I</sub><sup>W</sup>)<sup>2</sup> =', B2('<span class="hs">σ</span><sub>I</sub><sup>2</sup>', '0', '0', '<span class="hs">σ</span><sub>I</sub><sup>2</sup>'), '= 𝟙')
+    + EQ(`Λ<sub>W</sub> = ${E('(ψ/2)σ<sub>I</sub><sup>W</sup>')} = c𝟙 + sσ<sub>I</sub><sup>W</sup> =`, B2(E('−(ψ/2)<span class="hs">σ</span><sub>I</sub>'), '0', '0', E('(ψ/2)<span class="hs">σ</span><sub>I</sub>')), '=', B2('U<sup>−1</sup>', '0', '0', 'U'))
+    + EQ('=', four([[E('−ψ/2'),'0','0','0'],['0',E('ψ/2'),'0','0'],['0','0',E('ψ/2'),'0'],['0','0','0',E('−ψ/2')]]))
+    + nt('σ<sub>I</sub><sup>W</sup> is block diagonal, so the exponential acts block by block: each block is a Pauli rotor e<sup>∓(ψ/2)<span class="hs">σ</span><sub>I</sub></sup>, and the matrix is diagonal with the Doppler factors e<sup>±ψ/2</sup> visible.')
+  + `</div><div class="rep"><h3 class="rh">Dirac</h3>`
+    + EQ('σ<sub>I</sub><sup>D</sup> = Sσ<sub>I</sub><sup>W</sup>S<sup>−1</sup> =', B2('0', SG, SG, '0'), '=', four([['0','0','1','0'],['0','0','0','−1'],['1','0','0','0'],['0','−1','0','0']]), '= −α<sub>I</sub><sup>D</sup>')
+    + EQ('(σ<sub>I</sub><sup>D</sup>)<sup>2</sup> =', B2('0', SG, SG, '0'), B2('0', SG, SG, '0'), '=', B2('<span class="hs">σ</span><sub>I</sub><sup>2</sup>', '0', '0', '<span class="hs">σ</span><sub>I</sub><sup>2</sup>'), '= 𝟙')
+    + EQ(`Λ<sub>D</sub> = ${E('(ψ/2)σ<sub>I</sub><sup>D</sup>')} = c𝟙 + sσ<sub>I</sub><sup>D</sup> =`, B2(`c${one}`, `s${SG}`, `s${SG}`, `c${one}`))
+    + EQ('=', four([['c','0','s','0'],['0','c','0','−s'],['s','0','c','0'],['0','−s','0','c']]))
+    + nt('σ<sub>I</sub><sup>D</sup> is off-diagonal, but its square is block diagonal and equal to 𝟙. The series therefore again splits into c𝟙 (even powers) and sσ<sub>I</sub><sup>D</sup> (odd powers). The same Pauli rotor, now with its <span class="hs">σ</span><sub>I</sub> in the off-diagonal blocks. σ<sub>I</sub><sup>D</sup> is the standard Dirac α matrix for the I axis.')
+  + `</div></div>`
+  + `<h3 style="margin-top:14px">Why the two are the same exponential</h3>`
+  + `<div class="formula" style="white-space:normal;line-height:2">S ${E('(ψ/2)σ<sub>I</sub><sup>W</sup>')} S<sup>−1</sup> = Σ<sub>n</sub> (ψ/2)<sup>n</sup> S(σ<sub>I</sub><sup>W</sup>)<sup>n</sup>S<sup>−1</sup>/n! = Σ<sub>n</sub> (ψ/2)<sup>n</sup> (Sσ<sub>I</sub><sup>W</sup>S<sup>−1</sup>)<sup>n</sup>/n! = ${E('(ψ/2)σ<sub>I</sub><sup>D</sup>')}</div>`
+  + nt('S passes through every power, because the S<sup>−1</sup>S pairs cancel. The exponential of the transformed generator is therefore the transformed exponential. In both representations σ<sub>I</sub> has the eigenvalues +1, +1, −1, −1, so Λ has the eigenvalues e<sup>ψ/2</sup> (twice) and e<sup>−ψ/2</sup> (twice). In Weyl they stand on the diagonal; in Dirac they are hidden in the c/s mixing, and the eigenvectors are the columns of S. In terms of the BQ basis, σ<sub>I</sub> = −α<sub>I</sub>, so e<sup>(ψ/2)σ<sub>I</sub></sup> = e<sup>−(ψ/2)α<sub>I</sub></sup>: the boost bivector with the opposite sign.')
+  + `<div>${pill(e1 < 1e-10, 'e<sup>(ψ/2)σ<sub>I</sub><sup>W</sup></sup> = Λ<sub>W</sub> (power series)', 'Weyl exponential fails')} ${pill(e2 < 1e-10, 'e<sup>(ψ/2)σ<sub>I</sub><sup>D</sup></sup> = Λ<sub>D</sub> (power series)', 'Dirac exponential fails')} ${pill(e3 < 1e-12, 'Sσ<sub>I</sub><sup>W</sup>S<sup>−1</sup> = σ<sub>I</sub><sup>D</sup>', 'S fails')}</div>`;
+}
+
+/* ---------- the boosted vector, both columns ---------- */
+function renderVec(){
+  const A = VI[SA], [l0, l1, l2, l3] = A.comp, nm = SL(A.nm);
+  const ak = `${l1}Î + ${l2}Ĵ + ${l3}K̂`, akp = `${prime(l1)}Î + ${l2}Ĵ + ${l3}K̂`;
+  const p0 = comb(l0, '−', l1), p1 = comb(l1, '−', l0);
+  $('cW').innerHTML = `<h3 class="rh">Weyl</h3>`
+    + EQ(`${nm} =`, B2('0', 'A', '−A<sup>T</sup>', '0'))
+    + `<p class="note" style="margin-top:0">A = ${l0}T̂ + ${ak}, &nbsp;A<sup>T</sup> = −${l0}T̂ + ${ak}</p>`
+    + EQ(`${nm}<sup>L</sup> = Λ<sub>W</sub>${nm}Λ<sub>W</sub><sup>−1</sup> =`, B2('0', 'U<sup>−1</sup>AU<sup>−1</sup>', '−UA<sup>T</sup>U', '0'), '=', B2('0', 'A′', '−A′<sup>T</sup>', '0'))
+    + `<p class="note" style="margin-top:0">A′ = ${prime(l0)}T̂ + ${akp}: the time and I parts sit together in one block, and the Pauli boost U<sup>−1</sup>AU<sup>−1</sup> rescales a<sub>0</sub> ± a<sub>1</sub> by e<sup>∓ψ</sup>.</p>`;
+  $('cD').innerHTML = `<h3 class="rh">Dirac</h3>`
+    + EQ(`${nm} =`, B2(`${l0}T̂`, ak, `−(${ak})`, `−${l0}T̂`))
+    + `<p class="note" style="margin-top:0">Time on the diagonal, space off the diagonal.</p>`
+    + EQ(`${nm}<sup>L</sup> = Λ<sub>D</sub>${nm}Λ<sub>D</sub><sup>−1</sup> =`, B2(`${prime(l0)}T̂`, akp, `−(${akp})`, `−${prime(l0)}T̂`))
+    + `<p class="note" style="margin-top:0">The time part (diagonal) and the I part (off-diagonal) are in different blocks, so the boost has to mix the blocks to combine them.</p>`;
+  const a = vals(SA), b = beta(), ap = boostNums(a, 1, b), sq = x => x[0]*x[0] - x[1]*x[1] - x[2]*x[2] - x[3]*x[3];
+  $('same').innerHTML = `<div class="formula" style="white-space:normal;line-height:1.9">${prime(l0)} = ${p0}, &nbsp; ${prime(l1)} = ${p1}, &nbsp; ${prime(l2)} = ${l2}, &nbsp; ${prime(l3)} = ${l3}</div>
+    <p class="note">The same four coordinates in both columns, because S does not touch them: S β<sub>μ</sub><sup>W</sup> S<sup>−1</sup> = β<sub>μ</sub><sup>D</sup>. For the coordinates of the check below: (${a.map(fx).join(', ')}) → (${ap.map(fx).join(', ')}); the invariant a<sub>0</sub>² − <b>a</b>² = ${fx(sq(a))} stays ${fx(sq(ap))}.</p>`;
+  setView(VIEW);
+}
+function setView(v){
+  VIEW = v; ['S', 'W', 'D'].forEach(k => $('v' + k).setAttribute('aria-pressed', k === v ? 'true' : 'false'));
+  $('cW').hidden = v === 'D'; $('cD').hidden = v === 'W'; $('cols').classList.toggle('one', v !== 'S');
+}
+
+/* ---------- from Lambda_W to Lambda_D ---------- */
+function renderS(){
+  const nm = SL(VI[SA].nm);
+  $('sder').innerHTML =
+    nt('S conjugates every 4×4 element, X<sub>D</sub> = SX<sub>W</sub>S<sup>−1</sup>. For a block-diagonal X<sub>W</sub> = diag(P, Q) this gives ½[[P + Q, Q − P], [Q − P, P + Q]], so the boost follows in one line:').replace('<p class="note">', '<p class="note" style="margin-top:0">')
+  + EQ('Λ<sub>D</sub> = SΛ<sub>W</sub>S<sup>−1</sup> = ½', B2(one, one, '−' + one, one), B2('U<sup>−1</sup>', '0', '0', 'U'), B2(one, '−' + one, one, one), '= ½', B2('U<sup>−1</sup> + U', 'U − U<sup>−1</sup>', 'U − U<sup>−1</sup>', 'U<sup>−1</sup> + U'), '=', B2(`c${one}`, `s${sig}`, `s${sig}`, `c${one}`))
+  + nt('with U<sup>−1</sup> + U = 2c<span class="one">1</span> and U − U<sup>−1</sup> = 2s<span class="hs">σ</span><sub>I</sub>. The sum of the Pauli rotor and its inverse goes on the diagonal, their difference off it. In rotor form S only maps the generator, α<sub>I</sub><sup>D</sup> = Sα<sub>I</sub><sup>W</sup>S<sup>−1</sup>, and c𝟙 − sα<sub>I</sub> keeps its form.')
+  + `<h3 style="margin-top:14px">Boost first or switch first: the same result</h3>
+    <div class="sq" role="img" aria-label="Commuting square: boosting in Weyl and then switching with S equals switching with S and then boosting in Dirac">
+      <span class="n">${nm}<sub>W</sub></span><span class="h">Λ<sub>W</sub> · Λ<sub>W</sub><sup>−1</sup> →</span><span class="n">${nm}<sub>W</sub><sup>L</sup></span>
+      <span class="v">S · S<sup>−1</sup> ↓</span><span></span><span class="v">S · S<sup>−1</sup> ↓</span>
+      <span class="n">${nm}<sub>D</sub></span><span class="h">Λ<sub>D</sub> · Λ<sub>D</sub><sup>−1</sup> →</span><span class="n">${nm}<sub>D</sub><sup>L</sup></span>
+    </div>`
+  + EQ(`Λ<sub>D</sub>${nm}<sub>D</sub>Λ<sub>D</sub><sup>−1</sup> = (SΛ<sub>W</sub>S<sup>−1</sup>)(S${nm}<sub>W</sub>S<sup>−1</sup>)(SΛ<sub>W</sub><sup>−1</sup>S<sup>−1</sup>) = S(Λ<sub>W</sub>${nm}<sub>W</sub>Λ<sub>W</sub><sup>−1</sup>)S<sup>−1</sup>`)
+  + nt('The S<sup>−1</sup>S pairs cancel. Every Lorentz result of the Weyl models therefore holds in the Dirac representation, conjugated by S; nothing has to be derived again.');
+}
+
+/* ---------- mixing in the Dirac blocks ---------- */
+function renderMix(){
+  $('mix').innerHTML = nt('Take the upper-left block of Λ<sub>D</sub><span class="sl">a</span><sub>D</sub>Λ<sub>D</sub><sup>−1</sup>, with X = a<sub>1</sub>Î + a<sub>2</sub>Ĵ + a<sub>3</sub>K̂ the off-diagonal block of <span class="sl">a</span><sub>D</sub>:').replace('<p class="note">', '<p class="note" style="margin-top:0">')
+  + `<div class="formula" style="white-space:normal;line-height:2">[Λ<sub>D</sub><span class="sl">a</span><sub>D</sub>Λ<sub>D</sub><sup>−1</sup>]<sub>11</sub> = (c² + s²) a<sub>0</sub>T̂ − cs(<span class="hs">σ</span><sub>I</sub>X + X<span class="hs">σ</span><sub>I</sub>)<br><span class="hs">σ</span><sub>I</sub>Î = Î<span class="hs">σ</span><sub>I</sub> = T̂, &nbsp; <span class="hs">σ</span><sub>I</sub>Ĵ + Ĵ<span class="hs">σ</span><sub>I</sub> = <span class="hs">σ</span><sub>I</sub>K̂ + K̂<span class="hs">σ</span><sub>I</sub> = 0 &nbsp;⇒&nbsp; <span class="hs">σ</span><sub>I</sub>X + X<span class="hs">σ</span><sub>I</sub> = 2a<sub>1</sub>T̂<br>= (cosh ψ a<sub>0</sub> − sinh ψ a<sub>1</sub>) T̂ = γ(a<sub>0</sub> − βa<sub>1</sub>) T̂ = a<sub>0</sub>′ T̂</div>`
+  + nt('The inter-block terms s<span class="hs">σ</span><sub>I</sub> carry the spatial Î part from the off-diagonal block into the diagonal time block (<span class="hs">σ</span><sub>I</sub>Î = T̂) and, in the off-diagonal block, the time part into Î (<span class="hs">σ</span><sub>I</sub>T̂ = Î). Ĵ and K̂ anticommute with <span class="hs">σ</span><sub>I</sub>, so their terms cancel. In Weyl the same result needs no mixing, because a<sub>0</sub>T̂ and a<sub>1</sub>Î already share one block.');
+}
+
+/* ---------- spinors ---------- */
+function renderSpin(){
+  $('spin').innerHTML = nt('A spinor transforms with the same matrix from one side, Ψ<sup>L</sup> = ΛΨ (BQ Dirac Gravity, eqs. 103–104), and Ψ<sub>D</sub> = SΨ<sub>W</sub>.').replace('<p class="note">', '<p class="note" style="margin-top:0">')
+  + EQ('Weyl:', B2('U<sup>−1</sup>', '0', '0', 'U'), SM([['ξ'], ['η']]), '=', SM([['U<sup>−1</sup>ξ'], ['Uη']]))
+  + nt('The two Weyl spinors are rescaled separately and never mixed; their intensities get the Doppler factors e<sup>∓ψ</sup>.')
+  + EQ('Dirac:', B2(`c${one}`, `s${sig}`, `s${sig}`, `c${one}`), SM([['φ'], ['0']]), '=', SM([['cφ'], [`s${sig}φ`]]))
+  + nt('A spinor at rest in the upper (positive-energy adapted) block acquires a lower component s<span class="hs">σ</span><sub>I</sub>φ when boosted, with s = sinh(ψ/2): the small component of the moving particle. The lower block [0; η] gets an upper component in the same way. Intensities: Ψ<sup>†</sup>Ψ → Ψ<sup>†</sup>Λ<sup>2</sup>Ψ, with Λ<sub>W</sub><sup>2</sup> = diag(e<sup>−ψ</sup>, e<sup>ψ</sup>, e<sup>ψ</sup>, e<sup>−ψ</sup>) and Λ<sub>D</sub><sup>2</sup> = cosh ψ 𝟙 − sinh ψ α<sub>I</sub><sup>D</sup>.');
+}
+
+/* ---------- numerical check ---------- */
+function renderNum(){
+  const A = VI[SA], a = vals(SA);
+  $('num').innerHTML = `<h3>${SL(A.nm)}: coordinates</h3><div class="inrow">${A.comp.map((c, i) => `<label for="n${i}"><span>${c}</span><input id="n${i}" data-i="${i}" type="number" step="0.1" value="${a[i]}"></label>`).join('')}</div><div id="numout"></div>`;
+  $('num').querySelectorAll('input').forEach(inp => inp.addEventListener('input', () => { const x = parseFloat(inp.value); if (isFinite(x)){ vals(SA)[+inp.dataset.i] = x; numOut(); renderVec(); } }));
+  numOut();
+}
+function numOut(){
+  const a = vals(SA), b = beta(), psi = Math.atanh(b), W = lambdaI(psi), D = lambdaD(psi);
+  const AW = vec4(a), AD = vecD(a), LW = mm(W.L, AW, W.Li), LD = mm(D.L, AD, D.Li);
+  const cW = coords(LW), cD = coordsD(LD), f = boostNums(a, 1, b);
+  const e1 = mdiff(mm(S4, W.L, S4i), D.L), e2 = mdiff(LD, mm(S4, LW, S4i)), e3 = Math.max(...cW.map((v, i) => Math.abs(v - f[i])), ...cD.map((v, i) => Math.abs(v - f[i])));
+  const e4 = Math.max(mdiff(LW, vec4(f)), mdiff(LD, vecD(f))), e5 = mdiff(D.L, madd(msc(BAS.one, Math.cosh(psi/2)), msc(aID, -Math.sinh(psi/2))));
+  const sqm = M => coef(BAS.one, mmul(M, M));
+  $('numout').innerHTML = `<div class="numgrid">
+      <div><h3>Weyl</h3><div class="mxrow selrow fx"><span>Λ<sub>W</sub> =</span> ${mxs(W.L)}</div><div class="mxrow selrow fx"><span>${SL('a')}<sub>W</sub><sup>L</sup> =</span> ${mxs(LW)}</div></div>
+      <div><h3>Dirac</h3><div class="mxrow selrow fx"><span>Λ<sub>D</sub> =</span> ${mxs(D.L)}</div><div class="mxrow selrow fx"><span>${SL('a')}<sub>D</sub><sup>L</sup> =</span> ${mxs(LD)}</div></div>
+    </div>
+    <div class="tscroll"><table class="dc"><thead><tr><th></th><th>a<sub>0</sub>′</th><th>a<sub>1</sub>′</th><th>a<sub>2</sub>′</th><th>a<sub>3</sub>′</th><th>[<span class="sl">a</span><span class="sl">a</span>]<sub>𝟙</sub></th></tr></thead><tbody>
+      <tr><td>from Λ<sub>W</sub>${SL('a')}<sub>W</sub>Λ<sub>W</sub><sup>−1</sup></td>${cW.map(v => `<td>${fx(v)}</td>`).join('')}<td>${fx(sqm(LW))}</td></tr>
+      <tr><td>from Λ<sub>D</sub>${SL('a')}<sub>D</sub>Λ<sub>D</sub><sup>−1</sup></td>${cD.map(v => `<td>${fx(v)}</td>`).join('')}<td>${fx(sqm(LD))}</td></tr>
+      <tr><td>γ-formula</td>${f.map(v => `<td>${fx(v)}</td>`).join('')}<td>${fx(-(f[0]*f[0] - f[1]*f[1] - f[2]*f[2] - f[3]*f[3]))}</td></tr></tbody></table></div>
+    <div style="margin-top:8px">${pill(e1 < 1e-10, 'SΛ<sub>W</sub>S<sup>−1</sup> = Λ<sub>D</sub>', 'SΛ<sub>W</sub>S<sup>−1</sup> ≠ Λ<sub>D</sub>')}
+    ${pill(e5 < 1e-10, 'Λ<sub>D</sub> = c𝟙 − sα<sub>I</sub><sup>D</sup>', 'rotor form fails')}
+    ${pill(e2 < 1e-10, 'Λ<sub>D</sub>' + SL('a') + '<sub>D</sub>Λ<sub>D</sub><sup>−1</sup> = S(Λ<sub>W</sub>' + SL('a') + '<sub>W</sub>Λ<sub>W</sub><sup>−1</sup>)S<sup>−1</sup>', 'the square does not commute')}
+    ${pill(e3 < 1e-10 && e4 < 1e-10, 'the same a′<sup>μ</sup> in both, equal to the γ-formula, nothing outside the β<sub>μ</sub>', 'the coordinates differ')}</div>
+    <p class="note">Residuals: ${[e1, e5, e2, Math.max(e3, e4)].map(e => e.toExponential(1)).join(', ')}.</p>`;
+}
+
+/* ---------- wiring ---------- */
+function update(){ renderTop(); renderExp(); renderVec(); numOut(); }
+$('selA').innerHTML = V.map(v => `<option value="${v.id}">${v.nm}/: ${v.what.replace(/<[^>]+>/g, '')}</option>`).join('');
+$('selA').addEventListener('change', e => { SA = e.target.value; renderTop(); renderVec(); renderS(); renderNum(); });
+$('beta').addEventListener('input', update);
+['S', 'W', 'D'].forEach(k => $('v' + k).addEventListener('click', () => setView(k)));
+renderTop(); renderExp(); renderVec(); renderS(); renderMix(); renderSpin(); renderNum();
+})();
+</script>
+</body></html>

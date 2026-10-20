@@ -336,6 +336,34 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
       </div>
     </a>
 
+    <a class="card" href="models/BQ_Dirac_Lorentz_Weyl_and_Dirac.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="The boost is block diagonal in the Weyl representation and mixes the blocks in the Dirac representation; S connects the two">
+        <rect width="320" height="200" fill="#03050b"/>
+        <g font-family="Source Serif 4, Georgia, serif" font-size="13" fill="#e7ebf3">
+          <text x="34" y="26" fill="#97a2b9" font-size="12">Λ Weyl</text><text x="222" y="26" fill="#97a2b9" font-size="12">Λ Dirac</text>
+          <rect x="22" y="36" width="76" height="76" rx="6" fill="none" stroke="#3a4257"/><rect x="214" y="36" width="76" height="76" rx="6" fill="none" stroke="#3a4257"/>
+          <rect x="26" y="40" width="32" height="32" rx="4" fill="#a29bfe" fill-opacity=".75"/><rect x="62" y="76" width="32" height="32" rx="4" fill="#a29bfe" fill-opacity=".75"/>
+          <text x="30" y="61" fill="#03050b" font-size="12">U⁻¹</text><text x="72" y="97" fill="#03050b">U</text>
+          <rect x="218" y="40" width="32" height="32" rx="4" fill="#a29bfe" fill-opacity=".75"/><rect x="254" y="76" width="32" height="32" rx="4" fill="#a29bfe" fill-opacity=".75"/>
+          <rect x="254" y="40" width="32" height="32" rx="4" fill="#f2a24a" fill-opacity=".6"/><rect x="218" y="76" width="32" height="32" rx="4" fill="#f2a24a" fill-opacity=".6"/>
+          <text x="230" y="61" fill="#03050b">c</text><text x="266" y="97" fill="#03050b">c</text><text x="264" y="61" fill="#03050b">sσ</text><text x="228" y="97" fill="#03050b">sσ</text>
+          <path d="M112 74 H196" stroke="#48dbfb" stroke-width="1.6"/><path d="M190 69 L198 74 L190 79" fill="none" stroke="#48dbfb" stroke-width="1.6"/>
+          <text x="124" y="64" fill="#48dbfb">S Λ S⁻¹</text>
+          <text x="40" y="148">a′<tspan font-size="9" baseline-shift="sub">μ</tspan> = γ(a₀ − βa₁), … in both</text>
+          <text x="40" y="172" fill="#97a2b9" font-size="12">separate blocks vs hyperbolic mixing</text>
+        </g>
+      </svg>
+      <div class="body">
+        <span class="step">Dirac step 8 · the boost in two representations</span>
+        <h3>Lorentz transformations: Weyl and Dirac</h3>
+        <p>The same boost of a four-vector, side by side in the Weyl and the Dirac representation. The Dirac boost is the Weyl boost carried over by S, Λ<sub>D</sub> = SΛ<sub>W</sub>S<sup>−1</sup>: block diagonal in Weyl, mixing the time and space blocks in Dirac. The boosted coordinates are the same in both. With the commuting square, the block mechanism of the mixing, and what it means for spinors.</p>
+        <div class="rule">Λ<sub>D</sub> = SΛ<sub>W</sub>S<sup>−1</sup> = [[c 1̂, s σ̂<sub>I</sub>], [s σ̂<sub>I</sub>, c 1̂]]</div>
+        <div class="tags"><span>Weyl ↔ Dirac</span><span>same a′<sup>μ</sup></span><span>spinors</span></div>
+        <span class="open">Open the model</span>
+      </div>
+    </a>
+
+
     </div>
   </section>
 
@@ -355,6 +383,7 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
         <li><code>bq_dirac_lorentz.py</code> · Λ = diag(U<sup>−1</sup>, U) = e<sup>−ψα<sub>I</sub>/2</sup> as the double of U, the boost of a vector and its blocks, the Dirac lemma, boosts along any <b>n</b>, rotations, and the composition of two boosts with the Thomas–Wigner angle</li>
         <li><code>bq_dirac_bilinear_lorentz.py</code> · the boost of <span class="sl">C</span> = <span class="sl">A</span><span class="sl">B</span> as Λ<span class="sl">C</span>Λ<sup>−1</sup>, the block form with U(A<sup>T</sup>B)U<sup>−1</sup>, the channel rule, the invariants, the complex form and the Pauli correspondence</li>
         <li><code>bq_dirac_triple_lorentz.py</code> · the boost of <span class="sl">E</span> = <span class="sl">D</span>(<span class="sl">A</span><span class="sl">B</span>) as Λ<span class="sl">E</span>Λ<sup>−1</sup>, both sectors as four-vectors, the invariants, the Pauli rule U<sup>−1</sup>EU<sup>−1</sup>, and the four-gradient on a general boosted field</li>
+        <li><code>bq_dirac_lorentz_representations.py</code> · <a href="models/BQ_Dirac_Lorentz_Weyl_and_Dirac.html">Lorentz transformations, Weyl and Dirac</a>: Λ<sub>D</sub> = SΛ<sub>W</sub>S<sup>−1</sup> in blocks and as a rotor, the commuting square, the same boosted coordinates, the Dirac block mixing, spinors and Λ<sup>2</sup>, and Λ = e<sup>(ψ/2)σ<sub>I</sub></sup> in both</li>
       </ul>
       <p>Only Python 3 and SymPy are needed.</p>
     </div>
@@ -380,7 +409,8 @@ python bq_dirac_quadratics.py
 <span class="cm"># 3 · Lorentz transformations</span>
 python bq_dirac_lorentz.py
 python bq_dirac_bilinear_lorentz.py
-python bq_dirac_triple_lorentz.py</pre>
+python bq_dirac_triple_lorentz.py
+python bq_dirac_lorentz_representations.py</pre>
   </section>
 
   <section class="about" aria-label="About these models">
@@ -395,6 +425,7 @@ python bq_dirac_triple_lorentz.py</pre>
       <ul>
         <li><b>1. The basis</b>: <a href="models/BQ_Dirac_Multiplication_Table.html">BQ-Dirac multiplication table in the Weyl representation</a>, <a href="models/BQ_Dirac_Weyl_Dirac_Representations.html">Weyl and Dirac representations</a></li>
         <li><b>2. Vectors and their products</b>: <a href="models/BQ_Dirac_Bilinear_Product_Explorer.html">Bilinear product explorer</a>, <a href="models/BQ_Dirac_Triple_Product_Explorer.html">Triple product explorer</a>, <a href="models/BQ_Dirac_Field_Quadratics.html">Field quadratics</a></li>
+        <li><b>3. Lorentz transformations</b>: <a href="models/BQ_Dirac_Lorentz_Transformations.html">Boosting vectors</a>, <a href="models/BQ_Dirac_Bilinear_Lorentz_Transformation.html">Boosting bilinears</a>, <a href="models/BQ_Dirac_Triple_Product_Covariance.html">Covariance of the triple</a>, <a href="models/BQ_Dirac_Lorentz_Weyl_and_Dirac.html">Weyl and Dirac</a></li>
         <li><a href="../index.html">The BQ-Pauli models</a>: the algebra, vectors, Lorentz transformations and gravity</li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra/tree/main/dirac/py_sources">Python sources</a>: exact SymPy reproduction</li>
         <li><a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>: galaxy, jet and SPARC models</li>
