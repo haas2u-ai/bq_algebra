@@ -25,6 +25,12 @@ The scripts are self-contained and do not import the BQ-Pauli scripts in `../../
 | `bq_dirac_triple.py` | the triple product D/(A/B/): the rule (d₀s − d·c_α)β₀ + (ds − d₀c_α − d×c_Σ)·β − (d·c_Σ)β̃₀ + (d×c_α − d₀c_Σ)·β̃ with only odd channels; the four-gradient on a general even field; the block form [[0, −D(AᵀB)], [DᵀABᵀ, 0]] (Pauli correspondence [E/]_β₀ = −e_T, [E/]_β = −e_K, [E/]_β̃₀ = e₁, [E/]_β̃ = e_σ); Maxwell ∂/B/ by grade and the Lorentz force J/B/ = −F/_L + pseudovector part, as in the Weyl-level EM paper | `python bq_dirac_triple.py` |
 | `bq_dirac_quadratics.py` | the quadratics of a field F/ = f1 + p·α + q·Σ: the even product rule and the square (f² + p² − q²)1 + 2fp·α + 2fq·Σ − 2(p·q)χ; the sandwich F/a/F/ (vector, plus a pseudovector part when f ≠ 0); the blocks F/ = diag(−Fᵀ, −F), F/F/ = diag(FᵀFᵀ, FF), F/a/F/ = [[0, FᵀAF], [−FAᵀFᵀ, 0]]; the EM invariants (eq. 124), energy–Poynting (eq. 150) and Maxwell stress (eqs. 153–154); the fluid eqs. 296, 316 and 318; a boost Λ = diag(U⁻¹, U): invariant square, covariant map, frame-resolved β₀ | `python bq_dirac_quadratics.py` |
 
+### 3 · Lorentz transformations
+
+| Script | Reproduces | Example |
+|---|---|---|
+| `bq_dirac_lorentz.py` | the boost of a Dirac-level vector by one similarity, a/ᴸ = Λa/Λ⁻¹: diag(X, Y) acting on a/ = [[0,A],[−Aᵀ,0]] gives [[0, XAY⁻¹], [−YAᵀX⁻¹, 0]], so X = U⁻¹, Y = U carries both Pauli rules U⁻¹AU⁻¹ and (Aᴸ)ᵀ = UAᵀU; Λ = diag(U⁻¹, U) = e^(−ψα_I/2) = cosh(ψ/2)𝟙 − sinh(ψ/2)α_I (Weyl EM eq. 163); the γ-formulas, the invariant a/a/; the basis route Λβ_μΛ⁻¹ = Λ²β_μ and the Dirac lemma β_νΛ^ν_μ = Λβ_μΛ⁻¹ with the Pauli lemma as its upper block; boosts along any n with the Hermitian U_n; rotations e^(−θm·Σ/2) = diag(r, r); Λ = diag(M, (M†)⁻¹); collinear rapidity addition and the Thomas–Wigner rotation of two perpendicular boosts, tan(θ_W/2) = tanh(ψ₁/2) tanh(ψ₂/2) | `python bq_dirac_lorentz.py` |
+
 ## Install and run
 
 ```
@@ -40,6 +46,9 @@ python bq_dirac_table.py bI bJ         # one product: Pauli blocks, block terms,
 python bq_dirac_bilinear.py            # channel rule, Pauli block form, 144 pairs, paper results (about a minute)
 python bq_dirac_triple.py              # triple rule, operator triples, Pauli block form, Maxwell, Lorentz force (seconds)
 python bq_dirac_quadratics.py          # field square, sandwich, Pauli blocks, EM and fluid quadratics, boost (seconds)
+
+# 3 · Lorentz transformations
+python bq_dirac_lorentz.py             # doubling of U, boosts, Dirac lemma, any direction, rotations, Thomas-Wigner (about 15 s)
 ```
 
 Element names: `one b0 bI bJ bK aI aJ aK SI SJ SK bt0 btI btJ btK chi`.
