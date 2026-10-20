@@ -1,0 +1,576 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BQ-Dirac Bilinear LT</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="The Lorentz boost of the Dirac-level bilinear C-slash = A-slash B-slash in the BQ-Weyl algebra: one similarity Lambda C Lambda^-1, the channel rule that mixes the boost and spin bivectors like E and B, the invariants, and the Pauli boost of A^T B inside as a block.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&display=swap" rel="stylesheet">
+<style>
+
+/* Layout: chooser on the left, channel readout on the right (stacked on phones); numerical matrix check and notes below. Same family as the BQ-Pauli table page. */
+:root{
+  --bg:#f5f6fa;--surface:#ffffff;--edge:#d6dce8;--ink:#141a28;--soft:#55607a;
+  --st:#b8620f;--st-bg:rgba(184,98,15,.09);      /* space-time basis T̂, K̂ */
+  --sn:#0f7fb0;--sn-bg:rgba(15,127,176,.09);     /* spin-norm basis 1̂, σ̂ */
+  --sel:#5b4fd6;--good:#2f8a4f;--bad:#b23a3a;
+  --serif:"Source Serif 4",Georgia,serif;--sans:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.11);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.09);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.11);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.09);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans)}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font:600 clamp(24px,3.4vw,34px)/1.15 var(--serif);margin:0 0 6px;text-wrap:balance}
+h2{font:600 18px/1.3 var(--serif);margin:0 0 10px;text-wrap:balance}
+h3{font:600 12px/1.3 var(--sans);margin:0 0 8px;color:var(--soft);letter-spacing:.06em;text-transform:uppercase}
+.lede{color:var(--soft);max-width:82ch;margin:0 0 20px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:start}
+@media (max-width:960px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--edge);border-radius:12px;padding:16px;min-width:0}
+select,button,input{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:5px 8px}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--sel);outline-offset:2px}
+.pick{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 12px;align-items:center}
+.pick label{font:600 20px var(--serif)}
+.pick select{width:100%}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.qs{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.qs button{font-size:12.5px;padding:4px 9px}
+.math{font:500 16.5px/1.9 var(--serif);overflow-x:auto}
+.math b{font-weight:700}
+.vec{border:1px solid var(--edge);border-radius:10px;padding:10px 12px;margin-top:12px;background:var(--bg)}
+.vec .what{font-size:12.5px;color:var(--soft);margin-bottom:2px}
+.ts{color:var(--st)}.ns{color:var(--sn)}
+.formula{font:500 16px/1.8 var(--serif);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:8px 12px;overflow-x:auto;white-space:nowrap}
+.fwith{font:13px var(--sans);color:var(--soft);white-space:normal}
+.ch{display:grid;grid-template-columns:minmax(0,10.5em) minmax(0,1fr);gap:4px 14px;padding:12px 0;border-bottom:1px solid var(--edge)}
+.ch:last-of-type{border-bottom:none}
+.ch .nm{font:600 14px var(--sans)}
+.ch .nm small{display:block;font:400 12px var(--sans);color:var(--soft)}
+.ch .ex{font:500 16.5px/1.75 var(--serif);overflow-x:auto;min-width:0}
+.ch .ex .gen{color:var(--soft);font-size:14.5px}
+.ch .ex .res{font-weight:600}
+.ch.n .nm{color:var(--sn)}.ch.k .nm{color:var(--st)}.ch.s .nm{color:var(--sn)}
+@media (max-width:560px){.ch{grid-template-columns:minmax(0,1fr)}}
+.total{font:600 17px/1.8 var(--serif);border:1.5px solid var(--sel);border-radius:10px;padding:10px 12px;margin-top:10px;overflow-x:auto}
+.interp{margin-top:12px;font-size:14.5px;color:var(--ink);background:var(--bg);border:1px dashed var(--edge);border-radius:10px;padding:10px 12px}
+.interp .src{display:block;font-size:12.5px;color:var(--soft);margin-top:4px}
+.note{font-size:14px;color:var(--soft);max-width:74ch;margin:8px 0 0}
+.note b{color:var(--ink)}
+/* numeric check */
+.numgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:900px){.numgrid{grid-template-columns:minmax(0,1fr)}}
+.inrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.inrow label{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--soft);min-width:0}
+.inrow input{width:100%;font:13.5px var(--mono)}
+.mxrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font:500 17px var(--serif);margin:10px 0;overflow-x:auto}
+.mx{display:inline-grid;grid-template-columns:auto auto;gap:2px 14px;padding:5px 11px;position:relative;font:13.5px var(--mono);font-variant-numeric:tabular-nums}
+.mx::before,.mx::after{content:"";position:absolute;top:0;bottom:0;width:7px;border:1.5px solid var(--ink)}
+.mx::before{left:0;border-right:none}.mx::after{right:0;border-left:none}
+.mx span{text-align:right;white-space:nowrap}
+.tscroll{overflow-x:auto}
+table.dc{border-collapse:collapse;font:13.5px var(--mono);font-variant-numeric:tabular-nums;width:100%}
+table.dc th,table.dc td{padding:4px 10px;border-bottom:1px solid var(--edge);text-align:right;white-space:nowrap}
+table.dc th{font:600 12px var(--sans);color:var(--soft);text-align:right}
+table.dc td:first-child,table.dc th:first-child{text-align:left;font-family:var(--serif);font-size:15px}
+.pill{display:inline-block;font:500 12.5px var(--sans);border:1px solid var(--edge);border-radius:99px;padding:2px 10px;color:var(--soft);margin-top:10px}
+.pill.ok{border-color:var(--good);color:var(--good)}.pill.no{border-color:var(--bad);color:var(--bad)}
+.notes{margin-top:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:900px){.notes{grid-template-columns:minmax(0,1fr)}}
+.notes li{font-size:14px;max-width:70ch;margin-bottom:6px}
+.notes ul{padding-left:18px;margin:6px 0}
+.cap{font-size:12.5px;color:var(--soft);margin:10px 0 0}
+a{color:var(--sn)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.chk{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--soft);cursor:pointer}
+.split{margin-top:8px}
+.pill.st{border-color:var(--st);color:var(--st)}.pill.sn{border-color:var(--sn);color:var(--sn)}
+.sstep{margin:14px 0 0}
+.sstep h3{margin:0 0 6px}
+.sline{font:500 15px/1.9 var(--serif);overflow-x:auto;white-space:nowrap;padding:1px 0}
+.sline .lab{display:inline-block;min-width:5.6em;color:var(--soft)}
+.sbox{background:var(--bg);border:1px solid var(--edge);border-radius:10px;padding:8px 12px}
+.sgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:900px){.sgrid{grid-template-columns:minmax(0,1fr)}}
+.sgrid .sline{font-size:14.5px}
+.sres{font-weight:600}
+.ctlline{margin:0 0 8px}
+.numdet{margin-top:16px;border-top:1px solid var(--edge);padding-top:10px}
+.numdet summary{cursor:pointer;font:500 14px var(--sans);color:var(--soft)}
+.numgrid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:900px){.numgrid.three{grid-template-columns:minmax(0,1fr)}}
+.vec .math .what{margin:0 0 4px 0}
+.kv{font-weight:700}
+
+:root{--g0:#6b7488;--g1:var(--st);--g2b:#7a5fd0;--g2s:var(--sn);--g3:#2f8a4f;--g4:#c2417a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--g0:#a3acc0;--g2b:#a29bfe;--g3:#5fd38a;--g4:#ff7fb5}}
+:root[data-theme="dark"]{--g0:#a3acc0;--g2b:#a29bfe;--g3:#5fd38a;--g4:#ff7fb5}
+.g1{color:var(--g1)}.g2b{color:var(--g2b)}.g2s{color:var(--g2s)}
+.ch.c0 .nm{color:var(--g0)}.ch.c2b .nm{color:var(--g2b)}.ch.c2s .nm{color:var(--g2s)}
+.sl{position:relative;display:inline-block}
+.sl::after{content:"";position:absolute;left:50%;top:6%;height:88%;border-left:1.3px solid currentColor;transform:translateX(-50%) rotate(26deg);pointer-events:none}
+.keybox{border:1.6px solid var(--sel);font-size:17px;white-space:normal;margin:10px 0 0;padding:10px 14px}
+.vec .math.blk{font-size:14.5px;color:var(--soft)}
+.back{display:inline-block;margin:0 0 10px;font-size:14.5px;color:var(--sn);text-decoration:none}.back:hover{text-decoration:underline}
+.mxs{display:inline-grid;gap:2px 14px;padding:3px 10px;position:relative;vertical-align:middle;font:500 14px var(--serif)}
+.mxs::before,.mxs::after{content:"";position:absolute;top:0;bottom:0;width:6px;border:1.4px solid var(--ink)}
+.mxs::before{left:0;border-right:none}.mxs::after{right:0;border-left:none}
+.mxs span{text-align:center;white-space:nowrap}
+.selrow{font-size:19px;margin:6px 0 4px}.selrow.fx .mxs{font-size:17px;gap:5px 15px;padding:5px 12px}
+
+.g3{color:var(--g3)}
+.ch.c1 .nm{color:var(--g1)}.ch.c3 .nm{color:var(--g3)}
+.pill.v1{border-color:var(--g1);color:var(--g1)}.pill.v3{border-color:var(--g3);color:var(--g3)}
+
+.g4{color:var(--g4)}.ch.c4 .nm{color:var(--g4)}.g0{color:var(--g0)}
+.pill.v0{border-color:var(--g0);color:var(--g0)}.pill.v2{border-color:var(--g2b);color:var(--g2b)}.pill.v4{border-color:var(--g4);color:var(--g4)}
+.qblock{padding-bottom:6px}.qblock + .qblock{margin-top:18px;padding-top:14px;border-top:2px solid var(--edge)}
+.qhead{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-bottom:2px}.qhead h3{margin:0}
+.qhead select{max-width:100%}
+table.arr{border-collapse:collapse;font:500 15px/1.6 var(--serif);min-width:100%}
+table.arr th,table.arr td{border:1px solid var(--edge);padding:6px 10px;text-align:left;vertical-align:top}
+table.arr thead th{font:600 13px var(--sans);color:var(--soft);background:var(--bg);white-space:nowrap}
+table.arr th[scope=row]{font:600 15px var(--serif);white-space:nowrap;background:var(--bg)}
+table.arr tr.ps th[scope=row]{color:var(--g3)}table.arr tr.vv th[scope=row]{color:var(--g1)}
+table.arr tr.sep td,table.arr tr.sep th{border-top:2px solid var(--soft)}
+table.arr td.z{color:var(--soft)}
+.arrnote{font-size:13.5px;color:var(--soft);margin:8px 0 0;max-width:80ch}
+.lrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin:8px 0}
+.lrow input[type=number]{width:6.5em}
+.one{position:relative;display:inline-block}
+.one::after{content:"";position:absolute;left:50%;top:-.12em;width:.42em;height:.42em;border-left:.075em solid currentColor;border-top:.075em solid currentColor;transform:translateX(-50%) rotate(45deg) scale(.7,.55);transform-origin:center}
+.hs{position:relative;display:inline-block}
+.hs::after{content:"";position:absolute;left:50%;top:.08em;width:.42em;height:.42em;border-left:.075em solid currentColor;border-top:.075em solid currentColor;transform:translateX(-50%) rotate(45deg) scale(.7,.55);transform-origin:center}
+
+.slider{margin-top:14px;display:grid;gap:6px}
+.slider label{font-size:13.5px;color:var(--soft)}
+.slider label b{color:var(--ink);font:500 14px var(--mono)}
+.slider input{width:100%;accent-color:var(--st)}
+.kp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.kp div{border:1px solid var(--edge);border-radius:8px;padding:5px 7px;min-width:0}
+.kp span{display:block;font-size:11.5px;color:var(--soft)}
+.kp b{font:500 14px var(--mono)}
+.trc{border:1px solid var(--edge);border-left-width:3px;border-radius:10px;padding:8px 12px;margin-bottom:10px}
+.trc.st{border-left-color:var(--st)}.trc.sn{border-left-color:var(--sn)}.trc.sl2{border-left-color:var(--g2b)}
+.trc h3{margin:0 0 4px}
+.trc .ops{font:500 15px/1.8 var(--serif);overflow-x:auto}
+.numv{font:13px var(--mono);color:var(--soft)}
+.leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--soft);margin-top:6px}
+.leg>span{display:inline-flex;align-items:center;gap:6px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%}
+.sw{display:inline-block;width:18px;height:0;border-top:2px solid}
+.ax{stroke:var(--edge);fill:none}
+.ttl{font:13px var(--sans);fill:var(--soft)}
+#diag text{font:12px var(--mono);fill:var(--soft)}
+#diag{width:100%;max-width:440px;height:auto;display:block;margin:0 auto}
+.steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:900px){.steps{grid-template-columns:minmax(0,1fr)}}
+.stp{border:1px solid var(--edge);border-radius:10px;padding:10px 12px;background:var(--bg);min-width:0}
+.stp h3{margin:0 0 6px;color:var(--sel)}
+.stp .formula{background:var(--surface);white-space:normal}
+.stp p{margin:6px 0 0;font-size:14px;color:var(--soft)}
+.stp p b{color:var(--ink)}
+.stp.wide{grid-column:1/-1}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.tabs button[aria-selected="true"]{background:var(--sel);color:#fff;border-color:var(--sel)}
+.ctl{display:flex;flex-wrap:wrap;align-items:end;gap:10px 16px;margin:6px 0 10px}
+.ctl label{display:grid;gap:3px;font-size:13px;color:var(--soft)}
+.ctl input[type=number]{width:6.5em}
+.ctl input[type=range]{width:min(260px,70vw);accent-color:var(--st)}
+.sm{display:inline-grid;gap:3px 14px;padding:4px 11px;position:relative;vertical-align:middle;font:500 15px/1.35 var(--serif);flex:none}
+.sm::before,.sm::after{content:"";position:absolute;top:0;bottom:0;width:6px;border:1.4px solid var(--ink)}
+.sm::before{left:0;border-right:none}.sm::after{right:0;border-left:none}
+.sm span{text-align:center;white-space:nowrap;padding:1px 2px}
+.sm span.bl{border-left:1px dashed var(--soft);padding-left:12px}
+.sm span.bt{border-top:1px dashed var(--soft);padding-top:4px}
+.eqm{display:flex;flex-wrap:wrap;align-items:center;gap:10px 10px;margin:10px 0;font:500 16px/1.6 var(--serif);max-width:100%;overflow-x:auto}
+.eqm .eqt{white-space:normal}
+.sub{border-top:1px solid var(--edge);padding:12px 0 4px}
+.sub:first-child{border-top:none;padding-top:0}
+.sub h3{color:var(--sel);margin:0 0 4px}
+.tag-ext{font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--soft);border:1px solid var(--edge);border-radius:20px;padding:2px 8px;vertical-align:middle}
+details.numdet.card>summary{font:600 17px/1.3 var(--serif);cursor:pointer}
+.sub h3{text-transform:none;letter-spacing:0;font:600 14.5px/1.3 var(--sans)}
+.dim{color:var(--soft);font:13px var(--sans)} table.lt td{font:500 15.5px/1.6 var(--serif);text-align:left} table.lt td:first-child{font-weight:600}
+.sl + sup{margin-left:2px}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <a class="back" href="../index.html">← The BQ algebra at the Dirac level</a>
+  <h1>BQ-Dirac Lorentz Transformation of the Bilinear</h1>
+  <p class="lede">The bilinear of two Dirac-level four-vectors is even, <span class="sl">C</span> = <span class="sl">A</span><span class="sl">B</span> = s<span class="g0">𝟙</span> + <b>c</b><sub>α</sub>·<span class="g2b"><b>α</b></span> + <b>c</b><sub>Σ</sub>·<span class="g2s"><b>Σ</b></span>. Boosting both factors along I boosts the bilinear by the same similarity as the vectors, <span class="sl">C</span><sup>L</sup> = Λ<span class="sl">C</span>Λ<sup>−1</sup>. On the channels the scalar and the I components stay, and the transverse boost and spin bivectors mix in pairs, exactly as <b>E</b> and <b>B</b>. Choose A and B freely from the four-vectors of the papers, or click one of the familiar bilinears, and set a velocity.</p>
+  <div class="formula keybox"><span class="sl">C</span><sup>L</sup> = Λ<span class="sl">C</span>Λ<sup>−1</sup>: &nbsp; s′ = s, &nbsp; c′<sub>α,I</sub> = c<sub>α,I</sub>, &nbsp; c′<sub>Σ,I</sub> = c<sub>Σ,I</sub>, &nbsp; c′<sub>α,J</sub> = γ(c<sub>α,J</sub> − βc<sub>Σ,K</sub>), &nbsp; c′<sub>Σ,K</sub> = γ(c<sub>Σ,K</sub> − βc<sub>α,J</sub>), &nbsp; c′<sub>α,K</sub> = γ(c<sub>α,K</sub> + βc<sub>Σ,J</sub>), &nbsp; c′<sub>Σ,J</sub> = γ(c<sub>Σ,J</sub> + βc<sub>α,K</sub>)</div>
+</header>
+
+<div class="grid">
+  <section class="card" aria-labelledby="h-pick">
+    <h2 id="h-pick">Bilinear and boost</h2>
+    <div class="pick">
+      <label for="selA">A</label><select id="selA"></select>
+      <label for="selB">B</label><select id="selB"></select>
+    </div>
+    <div class="row"><button id="swap" type="button">Swap A and B</button></div>
+    <h3 style="margin-top:12px">Bilinears from the papers</h3>
+    <div class="qs" id="qs" role="group" aria-label="Bilinears from the papers"></div>
+    <div class="vec" id="vF"></div>
+    <div class="slider">
+      <label for="beta">Velocity β = v/c along I <b id="betaLab"></b></label>
+      <input id="beta" type="range" min="-0.95" max="0.95" step="0.01" value="0.6">
+      <div class="kp" id="kp"></div>
+    </div>
+    <p class="note">γ = cosh ψ and βγ = sinh ψ with the rapidity ψ = artanh β; for physical fields βc = v.</p>
+  </section>
+  <section class="card" aria-labelledby="h-tr" aria-live="polite">
+    <h2 id="h-tr">The boosted bilinear</h2>
+    <div id="tr"></div>
+  </section>
+</div>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-why">
+  <h2 id="h-why">Why: one similarity, and the channels it mixes</h2>
+  <div id="why"></div>
+</section>
+
+<details class="card numdet" style="margin-top:18px">
+  <summary>Check with numbers, by explicit 4×4 matrices</summary>
+  <div id="numwrap"></div>
+</details>
+
+<div class="notes">
+  <section class="card"><h2>Vectors and bilinears</h2>
+    <ul>
+      <li><b>One rule for both.</b> At the Pauli level a vector goes as U<sup>−1</sup>AU<sup>−1</sup> and the bilinear as UCU<sup>−1</sup>, two different rules. At the Dirac level both go by Λ…Λ<sup>−1</sup>; the difference sits in which blocks are filled.</li>
+      <li><b>Half and full rapidity.</b> The rotor carries ψ/2. Elements that anticommute with α<sub>I</sub> pick up Λ², so the transverse channels turn with the full rapidity ψ; elements that commute with α<sub>I</sub> do not change.</li>
+      <li><b>No time adjoint.</b> The Pauli bilinear A<sup>T</sup>B needs the adjoint of A. At the Dirac level the product <span class="sl">A</span><span class="sl">B</span> is plain, and A<sup>T</sup>B appears by itself as the lower block.</li>
+    </ul>
+  </section>
+  <section class="card"><h2>Sources and status</h2>
+    <p class="note">The Pauli rule C<sup>L</sup> = UCU<sup>−1</sup> and its channel form follow the BQ-Pauli papers and the <a href="../../BQ_models/BQ_Bilinear_Lorentz_Transformation.html">Pauli model</a>; Λ = diag(U<sup>−1</sup>, U) and X<sup>L</sup> = ΛXΛ<sup>−1</sup> follow de Haas (2026), <i>BQ-Weyl electromagnetism</i>, eqs. 161–196, where the boost of the field <span class="sl">B</span> and the invariance of <span class="sl">B</span>² are given. The fluid and bilinear readings follow by the same rule.</p>
+    <p class="cap">All identities are checked exactly in <code>bq_dirac_bilinear_lorentz.py</code>. Part of <a href="../index.html">the BQ algebra at the Dirac level</a>; see also the <a href="BQ_Dirac_Lorentz_Transformations.html">Lorentz transformations of vectors</a>.</p>
+  </section>
+</div>
+</div>
+
+<script>
+
+(function(){
+const $ = id => document.getElementById(id);
+/* ---------- symbols ---------- */
+const CONST = new Set(['c']);                     // constants pulled out of derivatives
+const ORDER = ['γ','c','m','E','ε','𝒫','ρ','φ','a0','b0','t','dt'];
+const SYMH = {a0:'a<sub>0</sub>', b0:'b<sub>0</sub>', dt:'dt'};
+const VECH = {r:'<b>r</b>', dr:'d<b>r</b>', v:'<b>v</b>', p:'<b>p</b>', A:'<b>A</b>', J:'<b>J</b>', g:'<b>g</b>', F:'<b>F</b>', a:'<b>a</b>', b:'<b>b</b>', N:'∇'};
+const sh = s => SYMH[s] || s;
+const sup = n => n === 1 ? '' : '<sup>' + n + '</sup>';
+function fmul(a, b){ const o = Object.assign({}, a); for (const k in b){ o[k] = (o[k] || 0) + b[k]; if (o[k] === 0) delete o[k]; } return o; }
+const fconst = f => Object.fromEntries(Object.entries(f).filter(([k]) => CONST.has(k)));
+const fvar = f => Object.fromEntries(Object.entries(f).filter(([k]) => !CONST.has(k)));
+const fempty = f => Object.keys(f).length === 0;
+const isT = f => Object.keys(f).length === 1 && f.t === 1;
+const okeys = f => Object.keys(f).sort((x, y) => (ORDER.indexOf(x) + 99*(ORDER.indexOf(x) < 0)) - (ORDER.indexOf(y) + 99*(ORDER.indexOf(y) < 0)));
+function fhtml(f){ return okeys(f).filter(k => f[k] > 0).map(k => sh(k) + sup(f[k])).join(''); }
+function fden(f){ return okeys(f).filter(k => f[k] < 0).map(k => sh(k) + sup(-f[k])).join(''); }
+function wrapVar(f){ const ks = Object.keys(f); const s = fhtml(f); return ks.length === 1 && f[ks[0]] === 1 ? s : '(' + s + ')'; }
+
+/* ---------- the four-vectors of the BQ papers ---------- */
+/* s0: time coordinate {k, f, op}; vv: spatial part {k, f, v, op} */
+const V = [
+  {id:'R',  nm:'R',  what:'space-time position', s0:{k:1,f:{c:1,t:1}}, vv:{k:1,f:{},v:'r'}, comp:['ct','r<sub>1</sub>','r<sub>2</sub>','r<sub>3</sub>'], def:[2,1,0.5,-0.3]},
+  {id:'dR', nm:'dR', what:'space-time displacement', s0:{k:1,f:{c:1,dt:1}}, vv:{k:1,f:{},v:'dr'}, comp:['c dt','dr<sub>1</sub>','dr<sub>2</sub>','dr<sub>3</sub>'], def:[1,0.3,-0.2,0.1]},
+  {id:'V',  nm:'V',  what:'coordinate velocity, dR/dt', s0:{k:1,f:{c:1}}, vv:{k:1,f:{},v:'v'}, comp:['c','v<sub>1</sub>','v<sub>2</sub>','v<sub>3</sub>'], def:[1,0.4,0.2,0]},
+  {id:'U',  nm:'U',  what:'proper velocity, dR/dτ = γV', s0:{k:1,f:{'γ':1,c:1}}, vv:{k:1,f:{'γ':1},v:'v'}, comp:['γc','γv<sub>1</sub>','γv<sub>2</sub>','γv<sub>3</sub>'], def:[1.25,0.5,0.25,0.5]},
+  {id:'P',  nm:'P',  what:'energy-momentum', s0:{k:1,f:{E:1,c:-1}}, vv:{k:1,f:{},v:'p'}, comp:['E/c','p<sub>1</sub>','p<sub>2</sub>','p<sub>3</sub>'], def:[3,0.5,1,-0.5]},
+  {id:'D',  nm:'∂',  what:'four-gradient (operator)', s0:{k:-1,f:{c:-1},op:true}, vv:{k:1,f:{},v:'N',op:true}, comp:['−(1/c)∂<sub>t</sub>','∇<sub>1</sub>','∇<sub>2</sub>','∇<sub>3</sub>'], def:null},
+  {id:'A',  nm:'A',  what:'electromagnetic four-potential', s0:{k:1,f:{'φ':1,c:-1}}, vv:{k:1,f:{},v:'A'}, comp:['φ/c','A<sub>1</sub>','A<sub>2</sub>','A<sub>3</sub>'], def:[0.8,-0.2,0.6,0.3]},
+  {id:'J',  nm:'J',  what:'electric four-current density', s0:{k:1,f:{c:1,'ρ':1}}, vv:{k:1,f:{},v:'J'}, comp:['cρ','J<sub>1</sub>','J<sub>2</sub>','J<sub>3</sub>'], def:[1.5,0.2,-0.4,0.7]},
+  {id:'G',  nm:'G',  what:'energy-momentum density of a fluid, ρ₀U', s0:{k:1,f:{'ε':1,c:-1}}, vv:{k:1,f:{},v:'g'}, comp:['ε/c','g<sub>1</sub>','g<sub>2</sub>','g<sub>3</sub>'], def:[2.5,0.6,0.1,-0.2]},
+  {id:'F',  nm:'F',  what:'force-power density', s0:{k:1,f:{'𝒫':1,c:-1}}, vv:{k:1,f:{},v:'F'}, comp:['𝒫/c','F<sub>1</sub>','F<sub>2</sub>','F<sub>3</sub>'], def:[0.4,1,0,-0.6]},
+  {id:'a',  nm:'A<sub>gen</sub>', what:'general four-vector (a₀, a)', s0:{k:1,f:{a0:1}}, vv:{k:1,f:{},v:'a'}, comp:['a<sub>0</sub>','a<sub>1</sub>','a<sub>2</sub>','a<sub>3</sub>'], def:[1,2,0,0]},
+  {id:'b',  nm:'B<sub>gen</sub>', what:'general four-vector (b₀, b)', s0:{k:1,f:{b0:1}}, vv:{k:1,f:{},v:'b'}, comp:['b<sub>0</sub>','b<sub>1</sub>','b<sub>2</sub>','b<sub>3</sub>'], def:[1,0,3,0]}
+];
+const VI = Object.fromEntries(V.map(v => [v.id, v]));
+
+/* ---------- terms: {k, f, ker, key} ---------- */
+const term = (k, f, ker) => ({k, f, ker:ker || ''});
+const ZERO = null;
+/* scalar · scalar, left acts on right */
+function sMul(a, b){
+  if (!a.op && !b.op) return term(a.k*b.k, fmul(a.f, b.f));
+  if (a.op && !b.op){ const X = fvar(b.f), C = fconst(b.f);
+    if (fempty(X)) return ZERO; if (isT(X)) return term(a.k*b.k, fmul(a.f, C));
+    return term(a.k*b.k, fmul(a.f, C), '∂<sub>t</sub>' + wrapVar(X)); }
+  if (!a.op && b.op) return term(a.k*b.k, fmul(a.f, b.f), '∂<sub>t</sub>');
+  return term(a.k*b.k, fmul(a.f, b.f), '∂<sub>t</sub><sup>2</sup>');
+}
+function vbody(f, v){ return fempty(f) ? VECH[v] : '(' + fhtml(f) + VECH[v] + ')'; }
+/* vector · vector (dot) and × (cross), left acts on right */
+function vDot(a, b){
+  if (!a.op && !b.op) return term(a.k*b.k, fmul(a.f, b.f), a.v === b.v ? VECH[a.v] + '<sup>2</sup>' : VECH[a.v] + '·' + VECH[b.v]);
+  if (a.op && !b.op){ const X = fvar(b.f), C = fconst(b.f);
+    if (fempty(X) && b.v === 'r') return term(3*a.k*b.k, fmul(a.f, C));
+    return term(a.k*b.k, fmul(a.f, C), '∇·' + vbody(X, b.v)); }
+  if (!a.op && b.op) return term(a.k*b.k, fmul(a.f, b.f), VECH[a.v] + '·∇');
+  return term(a.k*b.k, fmul(a.f, b.f), '∇<sup>2</sup>');
+}
+function vCross(a, b){
+  if (!a.op && !b.op) return a.v === b.v ? ZERO : term(a.k*b.k, fmul(a.f, b.f), VECH[a.v] + '×' + VECH[b.v]);
+  if (a.op && !b.op){ const X = fvar(b.f), C = fconst(b.f);
+    if (fempty(X) && b.v === 'r') return ZERO;
+    return term(a.k*b.k, fmul(a.f, C), '∇×' + vbody(X, b.v)); }
+  if (!a.op && b.op) return term(a.k*b.k, fmul(a.f, b.f), VECH[a.v] + '×∇');
+  return ZERO;
+}
+/* scalar (left) times vector (right): a0 b */
+function sV(s, b){
+  if (!s.op && !b.op) return term(s.k*b.k, fmul(s.f, b.f), VECH[b.v]);
+  if (s.op && !b.op){ const X = fvar(b.f), C = fconst(b.f);
+    if (fempty(X) && b.v === 'r') return ZERO;
+    return term(s.k*b.k, fmul(s.f, C), '∂<sub>t</sub>' + vbody(X, b.v)); }
+  if (!s.op && b.op) return term(s.k*b.k, fmul(s.f, b.f), '∇');
+  return term(s.k*b.k, fmul(s.f, b.f), '∂<sub>t</sub>∇');
+}
+/* vector (left) times scalar (right): the b0 a term, with a standing left of b0 */
+function vS(a, s){
+  if (!a.op && !s.op){ const t = term(a.k*s.k, fmul(a.f, s.f), VECH[a.v]); t.vf = true; return t; }
+  if (a.op && !s.op){ const X = fvar(s.f), C = fconst(s.f);
+    if (fempty(X) || isT(X)) return ZERO;
+    return term(a.k*s.k, fmul(a.f, C), '∇' + wrapVar(X)); }
+  if (!a.op && s.op) return term(a.k*s.k, fmul(a.f, s.f), VECH[a.v] + ' ∂<sub>t</sub>');
+  return term(a.k*s.k, fmul(a.f, s.f), '∂<sub>t</sub>∇');
+}
+const neg = t => t && Object.assign(term(-t.k, t.f, t.ker), t.vf ? {vf:true} : {});
+const keyOf = t => okeys(t.f).map(k => k + t.f[k]).join(',') + '|' + t.ker;
+function combine(list){ const m = new Map(); list.filter(Boolean).forEach(t => { const k = keyOf(t); if (m.has(k)) m.get(k).k += t.k; else m.set(k, Object.assign({}, t)); });
+  return [...m.values()].filter(t => Math.abs(t.k) > 1e-12); }
+function tHTML(t, first){
+  const sgn = t.k < 0 ? '−' : (first ? '' : '+'), ak = Math.abs(t.k), num = fhtml(t.f), den = fden(t.f);
+  let body;
+  const coef = ak === 1 ? '' : String(ak);
+  if (t.vf && t.ker){ const sc = (coef + num) ? (coef + num) + (den ? '/' + den : '') : (den ? '1/' + den : ''); body = t.ker + (sc ? ' ' + sc : ''); }
+  else if (den){
+    if (!t.ker && (num || coef)) body = coef + num + '/' + den;
+    else body = '(' + ((coef + num) || '1') + '/' + den + ') ' + t.ker;
+    if (!t.ker && !num && !coef) body = '1/' + den;
+  } else body = coef + num + (t.ker ? (coef || num ? ' ' : '') + t.ker : '') || '1';
+  if (!body) body = '1';
+  return (first ? (sgn ? sgn + ' ' : '') : ' ' + sgn + ' ') + body;
+}
+const tsHTML = list => list.length ? list.map((t, i) => tHTML(t, i === 0)).join('') : '0';
+const isVecChan = list => list.length > 0;
+
+function channels(A, B){
+  const norm = combine([sMul(A.s0, B.s0), neg(vDot(A.vv, B.vv))]);
+  const rot = combine([vCross(A.vv, B.vv)]);
+  const boost = combine([sV(A.s0, B.vv), neg(vS(A.vv, B.s0))]);
+  return {norm, rot, boost};
+}
+const s0HTML = v => tsHTML([term(v.s0.k, v.s0.f, v.s0.op ? '∂<sub>t</sub>' : '')]);
+const vvHTML = v => tsHTML([term(v.vv.k, v.vv.f, VECH[v.vv.v])]);
+
+
+V.push({id:'d', nm:'D<sub>gen</sub>', what:'general four-vector (d₀, d)', s0:{k:1,f:{d0:1}}, vv:{k:1,f:{},v:'d'}, comp:['d<sub>0</sub>','d<sub>1</sub>','d<sub>2</sub>','d<sub>3</sub>'], def:[0.5,1,-1,2]});
+VI.d = V[V.length-1]; SYMH.d0 = 'd<sub>0</sub>'; VECH.d = '<b>d</b>';
+const SL = v => { const m = v.nm.match(/^([^<]*)(.*)$/); return `<span class="sl">${m[1]}</span>${m[2]}`; };
+/* ---------- named channels of C/ = A/B/, as in the papers (Dirac level) ---------- */
+Object.assign(SYMH, {sg:'s', b1:'b<sub>1</sub>', Lg:'L', Sact:'S', Lfd:'𝓛', sE:'σ<sub>E</sub>'});
+Object.assign(VECH, {cA:'<b>c</b><sub>α</sub>', cS:'<b>c</b><sub>Σ</sub>', Bf:'<b>B</b>', Ef:'<b>E</b>', Tv:'<b>T</b>', Sv:'<b>S</b>', Lv:'<b>L</b>', Mv:'<b>M</b>', TK:'<b>T</b><sub>K</sub>', TS:'<b>T</b><sub>σ</sub>', Om:'<b>Ω</b>', Pi:'<b>Π</b>'});
+const NAMED = {
+  'D.A':{lab:'<span class="sl">B</span> = <span class="sl">∂</span><span class="sl">A</span>, the electromagnetic field',
+    s:{k:1,f:{b1:1}, def:'b<sub>1</sub> = (1/c²)∂<sub>t</sub>φ + ∇·<b>A</b>, zero in the Lorenz gauge'},
+    cA:{k:1,f:{c:-1},v:'Ef', def:'<b>E</b> = −∂<sub>t</sub><b>A</b> − ∇φ'}, cS:{k:1,f:{},v:'Bf', def:'<b>B</b> = ∇×<b>A</b>'}},
+  'J.A':{lab:'<span class="sl">J</span><span class="sl">A</span>, the current–potential bilinear',
+    s:{k:-1,f:{Lg:1}, def:'L = ρφ − <b>J</b>·<b>A</b>; −L = L<sub>int</sub>'},
+    cA:{k:1,f:{},v:'Sv', def:'<b>S</b> = cρ<b>A</b> − (φ/c)<b>J</b>'}, cS:{k:1,f:{},v:'Tv', def:'<b>T</b> = <b>J</b>×<b>A</b>'}},
+  'R.P':{lab:'<span class="sl">R</span><span class="sl">P</span>, action and angular-momentum bivector',
+    s:{k:1,f:{Sact:1}, def:'S = −(Et − <b>r</b>·<b>p</b>)'},
+    cA:{k:1,f:{},v:'Mv', def:'<b>M</b> = ct<b>p</b> − <b>r</b>E/c'}, cS:{k:1,f:{},v:'Lv', def:'<b>L</b> = <b>r</b>×<b>p</b>'}},
+  'U.G':{lab:'<span class="sl">T</span> = <span class="sl">U</span><span class="sl">G</span>, the fluid kinematic–dynamic bilinear',
+    s:{k:-1,f:{Lfd:1}, def:'𝓛 = (u<sub>0</sub>/c)ε − <b>u</b>·<b>g</b>, with u<sub>0</sub> = γc, <b>u</b> = γ<b>v</b>'},
+    cA:{k:1,f:{},v:'TS', def:'<b>T</b><sub>σ</sub> = u<sub>0</sub><b>g</b> − (ε/c)<b>u</b>'}, cS:{k:1,f:{},v:'TK', def:'<b>T</b><sub>K</sub> = <b>u</b>×<b>g</b>'}},
+  'D.G':{lab:'<span class="sl">H</span> = <span class="sl">∂</span><span class="sl">G</span>, the fluid field',
+    s:{k:1,f:{sE:1}, def:'σ<sub>E</sub> = (1/c²)∂<sub>t</sub>ε + ∇·<b>g</b>'},
+    cA:{k:-1,f:{c:-1},v:'Pi', def:'<b>Π</b> = ∂<sub>t</sub><b>g</b> + ∇ε'}, cS:{k:1,f:{},v:'Om', def:'<b>Ω</b> = ∇×<b>g</b>'}}
+};
+function cChannels(A, B, szero, expand){
+  const bl = channels(A, B), nmd = !expand && NAMED[A.id + '.' + B.id];
+  const sc = bl.norm.map(neg);                 /* Dirac scalar s = −(Pauli norm) */
+  const out = {bl:{s:sc, cA:bl.boost, cS:bl.rot}, nmd};
+  const mk = (list, gen, nm, isVec) => {
+    if (!list.length) return null;
+    if (nm) return isVec ? {k:nm.k, f:nm.f, v:nm.v} : {k:nm.k, f:nm.f};
+    return isVec ? {k:1, f:{}, v:gen} : {k:1, f:{sg:1}};
+  };
+  out.s = szero ? null : mk(sc, 'sg', nmd && nmd.s, false);
+  out.cA = mk(bl.boost, 'cA', nmd && nmd.cA, true);
+  out.cS = mk(bl.rot, 'cS', nmd && nmd.cS, true);
+  SYMH.sg = expand ? '(' + tsHTML(sc).trim() + ')' : 's';
+  VECH.cA = expand ? '(' + tsHTML(bl.boost).trim() + ')' : '<b>c</b><sub>α</sub>';
+  VECH.cS = expand ? '(' + tsHTML(bl.rot).trim() + ')' : '<b>c</b><sub>Σ</sub>';
+  return out;
+}
+/* ---------- matrices as symbols ---------- */
+const SM = (rows) => `<span class="sm" style="grid-template-columns:repeat(${rows[0].length},auto)">${rows.flat().map(c => `<span>${c}</span>`).join('')}</span>`;
+const EQ = (...parts) => `<div class="eqm">${parts.map(p => p.startsWith('<span class="sm"') ? p : `<span class="eqt">${p}</span>`).join('')}</div>`;
+const B2 = (a, b, c, d) => SM([[a, b], [c, d]]);
+const sub = (t, body) => `<div class="sub"><h3>${t}</h3>${body}</div>`;
+const nt = s => `<p class="note">${s}</p>`;
+const fx = x => (Math.abs(x) < 5e-13 ? 0 : +x.toFixed(4)).toString().replace('-', '−');
+const beta = () => +$('beta').value;
+const A1 = '<span class="g0">𝟙</span>', AL = n => `<span class="g2b">α<sub>${n}</sub></span>`, SG = n => `<span class="g2s">Σ<sub>${n}</sub></span>`;
+
+/* ---------- why ---------- */
+function renderWhy(){
+  const C = SLs('C'), A = SLs('A'), B = SLs('B');
+  $('why').innerHTML =
+    sub('One similarity',
+      nt('Each vector is boosted by Λ<span class="sl">a</span>Λ<sup>−1</sup> (the <a href="BQ_Dirac_Lorentz_Transformations.html">vector page</a>). In the product the inner Λ<sup>−1</sup>Λ cancels:')
+      + EQ(`${C} = ${A}${B} =`, B2('0', 'A', '−A<sup>T</sup>', '0'), B2('0', 'B', '−B<sup>T</sup>', '0'), '=', B2('−AB<sup>T</sup>', '0', '0', '−A<sup>T</sup>B'))
+      + EQ(`⟹ ${C}<sup>L</sup> = ${A}<sup>L</sup>${B}<sup>L</sup> = Λ${A}Λ<sup>−1</sup>Λ${B}Λ<sup>−1</sup> = Λ${C}Λ<sup>−1</sup> =`, B2('U<sup>−1</sup>', '0', '0', 'U'), B2('−AB<sup>T</sup>', '0', '0', '−A<sup>T</sup>B'), B2('U', '0', '0', 'U<sup>−1</sup>'), '=', B2('−U<sup>−1</sup>(AB<sup>T</sup>)U', '0', '0', '−U(A<sup>T</sup>B)U<sup>−1</sup>'))
+      + nt('The lower block is the Pauli boost of the bilinear, (A<sup>L</sup>)<sup>T</sup>B<sup>L</sup> = UA<sup>T</sup>U U<sup>−1</sup>BU<sup>−1</sup> = U(A<sup>T</sup>B)U<sup>−1</sup>; the upper block is its companion A<sup>L</sup>(B<sup>L</sup>)<sup>T</sup> = U<sup>−1</sup>(AB<sup>T</sup>)U.'))
+  + sub('Which channels move',
+      nt('With Λ = cosh(ψ/2)𝟙 − sinh(ψ/2)α<sub>I</sub>: an element X that commutes with α<sub>I</sub> passes through, ΛXΛ<sup>−1</sup> = X. One that anticommutes picks up the square, ΛXΛ<sup>−1</sup> = Λ²X with Λ² = cosh ψ 𝟙 − sinh ψ α<sub>I</sub>.')
+      + EQ(`commute: ${A1}, ${AL('I')}, ${SG('I')}, <span class="g4">χ</span> &nbsp;→&nbsp; unchanged`)
+      + EQ(`anticommute: ${AL('J')}, ${AL('K')}, ${SG('J')}, ${SG('K')} &nbsp;→&nbsp; with α<sub>I</sub>α<sub>J</sub> = Σ<sub>K</sub>, α<sub>I</sub>Σ<sub>K</sub> = α<sub>J</sub>, α<sub>I</sub>α<sub>K</sub> = −Σ<sub>J</sub>, α<sub>I</sub>Σ<sub>J</sub> = −α<sub>K</sub>:`)
+      + EQ(`Λ${AL('J')}Λ<sup>−1</sup> = γ${AL('J')} − βγ${SG('K')}, &nbsp; Λ${SG('K')}Λ<sup>−1</sup> = γ${SG('K')} − βγ${AL('J')}, &nbsp; Λ${AL('K')}Λ<sup>−1</sup> = γ${AL('K')} + βγ${SG('J')}, &nbsp; Λ${SG('J')}Λ<sup>−1</sup> = γ${SG('J')} + βγ${AL('K')}`)
+      + nt('Collecting the coefficients of ΛCΛ<sup>−1</sup> = s𝟙 + Σ c<sub>α,i</sub>Λα<sub>i</sub>Λ<sup>−1</sup> + Σ c<sub>Σ,i</sub>ΛΣ<sub>i</sub>Λ<sup>−1</sup> gives the channel rule at the top. The rotor holds ψ/2; the bivectors turn with ψ.'))
+  + sub('Complex form',
+      nt('Since Σ<sub>i</sub> = −χα<sub>i</sub>, χ² = −𝟙 and χ commutes with the bivectors, the bivector part is one complex three-vector on the α basis, with χ in the role of i:')
+      + EQ('<b>c</b><sub>α</sub>·<b>α</b> + <b>c</b><sub>Σ</sub>·<b>Σ</b> = 𝒞·<b>α</b>, &nbsp; 𝒞 = <b>c</b><sub>α</sub> − χ<b>c</b><sub>Σ</sub>, &nbsp; 𝒞′ =', SM([['1', '0', '0'], ['0', 'cosh ψ', '−χ sinh ψ'], ['0', 'χ sinh ψ', 'cosh ψ']]), '𝒞')
+      + nt('The boost is a rotation about I through the imaginary angle χψ (cos χψ = cosh ψ, sin χψ = χ sinh ψ), so 𝒞·𝒞 = (c<sub>α</sub>² − c<sub>Σ</sub>²) − 2χ(<b>c</b><sub>α</sub>·<b>c</b><sub>Σ</sub>) is invariant: the scalar and pseudoscalar channels of the square. This is the Dirac-level form of Minkowski’s complex field 𝒞 = <b>c</b><sub>σ</sub> + i<b>c</b><sub>K</sub> on the Pauli page.'));
+}
+
+const cx = (re, im) => [re, im || 0], cm = (a, b) => [a[0]*b[0]-a[1]*b[1], a[0]*b[1]+a[1]*b[0]], ca = (a, b) => [a[0]+b[0], a[1]+b[1]];
+function mmul(X, Y){ const n = X.length, R = []; for (let i = 0; i < n; i++){ R.push([]); for (let k = 0; k < n; k++){ let s = cx(0); for (let j = 0; j < n; j++) s = ca(s, cm(X[i][j], Y[j][k])); R[i].push(s); } } return R; }
+const mm = (...Ms) => Ms.reduce((P, M) => mmul(P, M));
+const madd = (X, Y) => X.map((r, i) => r.map((z, j) => ca(z, Y[i][j])));
+const msc = (X, s) => X.map(r => r.map(z => [z[0]*s, z[1]*s]));
+const Z2 = [[cx(0),cx(0)],[cx(0),cx(0)]];
+const PM = {one:[[cx(1),cx(0)],[cx(0),cx(1)]], T:[[cx(0,1),cx(0)],[cx(0),cx(0,1)]], I:[[cx(0,1),cx(0)],[cx(0),cx(0,-1)]], J:[[cx(0),cx(1)],[cx(-1),cx(0)]], K:[[cx(0),cx(0,1)],[cx(0,1),cx(0)]]};
+const blk = (a, b, c, d) => [0,1,2,3].map(i => [0,1,2,3].map(j => { const B = i < 2 ? (j < 2 ? a : b) : (j < 2 ? c : d); return B[i & 1][j & 1]; }));
+const B4 = [blk(Z2, PM.T, PM.T, Z2), blk(Z2, PM.I, msc(PM.I, -1), Z2), blk(Z2, PM.J, msc(PM.J, -1), Z2), blk(Z2, PM.K, msc(PM.K, -1), Z2)];
+const BAS = {one:blk(PM.one, Z2, Z2, PM.one), aI:mmul(B4[0], B4[1]), aJ:mmul(B4[0], B4[2]), aK:mmul(B4[0], B4[3]), SI:mmul(B4[2], B4[3]), SJ:mmul(B4[3], B4[1]), SK:mmul(B4[1], B4[2])};
+BAS.chi = msc(mm(B4[0], B4[1], B4[2], B4[3]), -1);
+const tr = M => M.reduce((s, r, i) => ca(s, r[i]), cx(0));
+const coef = (X, M) => tr(mmul(X, M))[0] / tr(mmul(X, X))[0];
+
+/* ---------- this page ---------- */
+const SLs = s => `<span class="sl">${s}</span>`;
+const IJK = ['I', 'J', 'K'];
+const PHYS = {
+  'D.A':{phys:'<b>E</b>′ = (E<sub>I</sub>, γ(E<sub>J</sub> − vB<sub>K</sub>), γ(E<sub>K</sub> + vB<sub>J</sub>)), &nbsp; <b>B</b>′ = (B<sub>I</sub>, γ(B<sub>J</sub> + vE<sub>K</sub>/c²), γ(B<sub>K</sub> − vE<sub>J</sub>/c²)): the standard transformation of the electromagnetic field for a frame moving with v along I.',
+         inv:'I<sub>1</sub> = B² − E²/c² and I<sub>2</sub> = <b>E</b>·<b>B</b>/c are the two field invariants; together with the gauge scalar b<sub>1</sub> they do not change.', num:[0, 0.6, 0.2, -0.4, 0.1, 0.8, 0.5]},
+  'D.G':{phys:'<b>Π</b>′ = (Π<sub>I</sub>, γ(Π<sub>J</sub> + vΩ<sub>K</sub>), γ(Π<sub>K</sub> − vΩ<sub>J</sub>)), &nbsp; <b>Ω</b>′ = (Ω<sub>I</sub>, γ(Ω<sub>J</sub> − vΠ<sub>K</sub>/c²), γ(Ω<sub>K</sub> + vΠ<sub>J</sub>/c²)): the field rule with <b>E</b>/c → −<b>Π</b>/c and <b>B</b> → <b>Ω</b>.',
+         inv:'σ<sub>E</sub>, Π²/c² − Ω² and <b>Π</b>·<b>Ω</b>/c are invariant: the fluid counterparts of the field invariants.', num:[0.4, -0.5, 0.3, 0.2, 0.7, -0.1, 0.6]},
+  'R.P':{phys:'The moment of energy <b>M</b> and the angular momentum <b>L</b> mix like <b>E</b>/c and <b>B</b>: together they are the six components of one angular-momentum bivector.',
+         inv:'S, M² − L² and <b>M</b>·<b>L</b> are invariant; for a product of two vectors <b>M</b>·<b>L</b> = 0 identically.'},
+  'J.A':{phys:'The interaction Lagrangian L is invariant; <b>S</b> and <b>T</b> mix like <b>E</b>/c and <b>B</b>.', inv:'L, S² − T² and <b>S</b>·<b>T</b> (= 0 for a product of two vectors) are invariant.'},
+  'U.G':{phys:'The fluid Lagrangian 𝓛 is invariant; for a single-component fluid <b>T</b><sub>σ</sub> = <b>T</b><sub>K</sub> = 0 in every frame.', inv:'𝓛, T<sub>σ</sub>² − T<sub>K</sub>² and <b>T</b><sub>σ</sub>·<b>T</b><sub>K</sub> (= 0) are invariant.'}
+};
+const QUICK = [['D','A','<span class="sl">∂</span><span class="sl">A</span>: EM field'], ['D','G','<span class="sl">∂</span><span class="sl">G</span>: fluid field'], ['R','P','<span class="sl">R</span><span class="sl">P</span>: angular momentum'],
+               ['J','A','<span class="sl">J</span><span class="sl">A</span>: interaction'], ['U','G','<span class="sl">U</span><span class="sl">G</span>: fluid bilinear'], ['a','b','general <span class="sl">A</span><span class="sl">B</span>']];
+let SA = 'D', SB = 'A';
+const baseOf = v => VECH[v].replace(/<\/?b>/g, '');
+const compOf = (v, i) => { const b = baseOf(v); return b.includes('</sub>') ? b.replace('</sub>', ',' + IJK[i] + '</sub>') : b + '<sub>' + IJK[i] + '</sub>'; };
+const scalLab = d => { if (!d) return '0'; const n = fhtml(d.f), dn = fden(d.f); return (d.k < 0 ? '−' : '') + (n || (dn ? '1' : '')) + (dn ? '/' + dn : ''); };
+const compLab = (d, i) => { if (!d) return '0'; const n = fhtml(d.f), dn = fden(d.f); return (d.k < 0 ? '−' : '') + n + compOf(d.v, i) + (dn ? '/' + dn : ''); };
+const wr = l => { const t = l.replace(/<[^>]+>/g, ''); return t.startsWith('−') || t.includes('/') ? '(' + l + ')' : l; };
+function mix(l1, sgn, l2){
+  if (l1 === '0' && l2 === '0') return '0';
+  if (l2 === '0') return 'γ' + wr(l1);
+  const second = (sgn < 0 ? '−' : '+') + ' βγ' + wr(l2);
+  return l1 === '0' ? (sgn < 0 ? '−βγ' : 'βγ') + wr(l2) : 'γ' + wr(l1) + ' ' + second;
+}
+const nameC = () => { const A = VI[SA], B = VI[SB]; return SLs('C') + ' = ' + SL(A) + SL(B); };
+function render(){
+  $('selA').value = SA; $('selB').value = SB;
+  const A = VI[SA], B = VI[SB], C = cChannels(A, B, false, false), key = SA + '.' + SB, ph = PHYS[key];
+  const b = beta(), psi = Math.atanh(b), g = 1/Math.sqrt(1 - b*b);
+  const nm = SLs('C');
+  const rowv = (lab, list, ct, isVec, def) => `<div class="math">${lab} = ${tsHTML(list)}${list.length && C.nmd ? ' = ' + (isVec ? tsHTML([term(ct.k, ct.f, VECH[ct.v])]) : tsHTML([term(ct.k, ct.f)])) : ''}${def ? `<div class="what">${def}</div>` : ''}</div>`;
+  $('vF').innerHTML = `<div class="what">${nameC()} = s𝟙 + <b>c</b><sub>α</sub>·<span class="g2b"><b>α</b></span> + <b>c</b><sub>Σ</sub>·<span class="g2s"><b>Σ</b></span>${C.nmd ? ': ' + C.nmd.lab : ''}</div>`
+    + rowv('s', C.bl.s, C.nmd && C.nmd.s, false, C.nmd && C.bl.s.length ? C.nmd.s.def : '')
+    + rowv('<b>c</b><sub>α</sub>', C.bl.cA, C.nmd && C.nmd.cA, true, C.nmd && C.bl.cA.length ? C.nmd.cA.def : '')
+    + rowv('<b>c</b><sub>Σ</sub>', C.bl.cS, C.nmd && C.nmd.cS, true, C.nmd && C.bl.cS.length ? C.nmd.cS.def : '');
+  $('betaLab').textContent = (b >= 0 ? '' : '−') + Math.abs(b).toFixed(2);
+  $('kp').innerHTML = [['rapidity ψ', fx(psi)], ['γ = cosh ψ', fx(g)], ['βγ = sinh ψ', fx(b*g)]].map(k => `<div><span>${k[0]}</span><b>${k[1]}</b></div>`).join('');
+  const sl = scalLab(C.s), pl = [0, 1, 2].map(i => compLab(C.cA, i)), ql = [0, 1, 2].map(i => compLab(C.cS, i));
+  const un = l => l + (l === '0' ? '' : ' &nbsp;<span class="dim">unchanged</span>');
+  const row = (el, before, after) => `<tr><td>${el}</td><td>${before}</td><td>${after}</td></tr>`;
+  const rows = [row(A1, sl, un(sl)), row(AL('I'), pl[0], un(pl[0])), row(SG('I'), ql[0], un(ql[0])),
+    row(AL('J'), pl[1], mix(pl[1], -1, ql[2])), row(SG('K'), ql[2], mix(ql[2], -1, pl[1])),
+    row(AL('K'), pl[2], mix(pl[2], +1, ql[1])), row(SG('J'), ql[1], mix(ql[1], +1, pl[2]))];
+  const vn = d => d ? tsHTML([term(d.k, d.f, VECH[d.v])]).trim() : '0';
+  const sq = d => d ? tsHTML([term(d.k*d.k, fmul(d.f, d.f), baseOf(d.v).replace(/^([^<]*)/, '$1') + '<sup>2</sup>')]).trim() : '0';
+  const invs = `${sl}, &nbsp; ${C.cA || C.cS ? `${C.cA ? sq(C.cA) : '0'} − ${C.cS ? sq(C.cS) : '0'}` : '0'}, &nbsp; ${C.cA && C.cS ? `${wr(vn(C.cA))}·${wr(vn(C.cS))}` : '0'}`;
+  const op = A.s0.op || B.s0.op;
+  const genInv = op ? 's, c<sub>α</sub>² − c<sub>Σ</sub>² and <b>c</b><sub>α</sub>·<b>c</b><sub>Σ</sub> are invariant.' : 's, c<sub>α</sub>² − c<sub>Σ</sub>² and <b>c</b><sub>α</sub>·<b>c</b><sub>Σ</sub> are invariant. For a product of two plain vectors <b>c</b><sub>α</sub>·<b>c</b><sub>Σ</sub> = (a<sub>0</sub><b>b</b> − <b>a</b>b<sub>0</sub>)·(<b>a</b>×<b>b</b>) = 0, so then only s and c<sub>α</sub>² − c<sub>Σ</sub>² carry information.';
+  $('tr').innerHTML = `<div class="formula">${nm}<sup>L</sup> = ${SL(A)}<sup>L</sup>${SL(B)}<sup>L</sup> = Λ${nm}Λ<sup>−1</sup>, &nbsp; Λ = e<sup>−ψα<sub>I</sub>/2</sup> = [[U<sup>−1</sup>, 0], [0, U]]</div>
+    <div class="tscroll"><table class="dc lt"><thead><tr><th>channel</th><th>in the old frame</th><th>in the boosted frame</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>
+    <p class="note">The scalar and the I components stay; the transverse pairs (α<sub>J</sub>, Σ<sub>K</sub>) and (α<sub>K</sub>, Σ<sub>J</sub>) turn through the full rapidity ψ, in opposite senses.${C.nmd ? '' : ' The channels of this pair are written s, c<sub>α,i</sub>, c<sub>Σ,i</sub>, with the expressions on the left.'}</p>
+    ${ph ? `<div class="trc st"><h3>In physical form</h3><div class="ops">${ph.phys}</div></div>` : ''}
+    <div class="trc sl2"><h3>Invariants</h3><div class="ops">${invs}</div><p class="note" style="margin-top:2px">${ph ? ph.inv : genInv} They are the 𝟙 and χ channels of the square ${nm}${nm} on the <a href="BQ_Dirac_Field_Quadratics.html">field-quadratics page</a>.</p></div>
+    <div class="trc sn"><h3>The Pauli bilinear inside</h3><div class="ops">${nm} = diag(−AB<sup>T</sup>, −A<sup>T</sup>B) &nbsp;⟹&nbsp; ${nm}<sup>L</sup> = diag(−U<sup>−1</sup>(AB<sup>T</sup>)U, −U(A<sup>T</sup>B)U<sup>−1</sup>)</div><p class="note" style="margin-top:2px">The lower block is the Pauli rule C<sup>L</sup> = UCU<sup>−1</sup> for C = A<sup>T</sup>B, with <b>c</b><sub>α</sub> = <b>c</b><sub>σ</sub> and <b>c</b><sub>Σ</sub> = <b>c</b><sub>K</sub>: the Pauli pairs (K̂<sub>J</sub>, <span class="hs">σ</span><sub>K</sub>) and (K̂<sub>K</sub>, <span class="hs">σ</span><sub>J</sub>) are the Dirac pairs (Σ<sub>J</sub>, α<sub>K</sub>) and (Σ<sub>K</sub>, α<sub>J</sub>).</p></div>`;
+  numOut();
+}
+
+/* ---------- numerical check ---------- */
+const EV = ['one','aI','aJ','aK','SI','SJ','SK'];
+const NUMV = {}, NUMC = {};
+const vv = id => NUMV[id] || (NUMV[id] = VI[id].def.slice());
+const cvals = () => { const k = SA + '.' + SB; return NUMC[k] || (NUMC[k] = (PHYS[k] && PHYS[k].num ? PHYS[k].num : [0.5, 1, 0, 0.5, 0, 2, -1]).slice()); };
+const vec4 = a => a.reduce((S, x, m) => madd(S, msc(B4[m], x)), blk(Z2, Z2, Z2, Z2));
+const isOp = () => VI[SA].s0.op || VI[SB].s0.op;
+function renderNum(){
+  const w = $('numwrap'), A = VI[SA], B = VI[SB];
+  if (isOp()){
+    const labs = ['s', 'c<sub>α,I</sub>', 'c<sub>α,J</sub>', 'c<sub>α,K</sub>', 'c<sub>Σ,I</sub>', 'c<sub>Σ,J</sub>', 'c<sub>Σ,K</sub>'], v = cvals();
+    w.innerHTML = `<p class="note"><span class="sl">∂</span> is an operator, so enter the channel values of the field at a point instead; the boost uses the velocity above.</p>
+      <div class="inrow">${labs.map((l, i) => `<label for="nc${i}"><span>${l}</span><input id="nc${i}" data-i="${i}" type="number" step="0.1" value="${v[i]}"></label>`).join('')}</div><div id="numout"></div>`;
+    w.querySelectorAll('input').forEach(inp => inp.addEventListener('input', () => { const y = parseFloat(inp.value); if (isFinite(y)){ cvals()[+inp.dataset.i] = y; numOut(); } }));
+  } else {
+    const inputs = (v, tag) => `<div><h3>${tag} = ${SL(v)}</h3><div class="inrow">${v.comp.map((c, i) => `<label for="n${tag}${i}"><span>${c}</span><input id="n${tag}${i}" data-v="${v.id}" data-i="${i}" type="number" step="0.1" value="${vv(v.id)[i]}"></label>`).join('')}</div></div>`;
+    w.innerHTML = `<div class="numgrid">${inputs(A, 'A')}${inputs(B, 'B')}</div><div id="numout"></div>`;
+    w.querySelectorAll('input').forEach(inp => inp.addEventListener('input', () => { const y = parseFloat(inp.value); if (isFinite(y)){ vv(inp.dataset.v)[+inp.dataset.i] = y;
+      w.querySelectorAll(`input[data-v="${inp.dataset.v}"][data-i="${inp.dataset.i}"]`).forEach(o => { if (o !== inp) o.value = inp.value; }); numOut(); } }));
+  }
+  numOut();
+}
+function numOut(){
+  if (!$('numout')) return;
+  const psi = Math.atanh(beta()), c = Math.cosh(psi), s = Math.sinh(psi), e = Math.exp(psi/2);
+  const L = blk([[cx(1/e),cx(0)],[cx(0),cx(e)]], Z2, Z2, [[cx(e),cx(0)],[cx(0),cx(1/e)]]), Li = blk([[cx(e),cx(0)],[cx(0),cx(1/e)]], Z2, Z2, [[cx(1/e),cx(0)],[cx(0),cx(e)]]);
+  let C, viaV = null;
+  if (isOp()){ const v = cvals(); C = EV.reduce((S, k, i) => madd(S, msc(BAS[k], v[i])), blk(Z2, Z2, Z2, Z2)); }
+  else { const Am = vec4(vv(SA)), Bm = vec4(vv(SB)); C = mmul(Am, Bm); viaV = mmul(mm(L, Am, Li), mm(L, Bm, Li)); }
+  const v = EV.map(k => coef(BAS[k], C)), CL = mm(L, C, Li), got = EV.map(k => coef(BAS[k], CL)), gv = viaV && EV.map(k => coef(BAS[k], viaV));
+  const [s0, p1, p2, p3, q1, q2, q3] = v, rule = [s0, p1, c*p2 - s*q3, c*p3 + s*q2, q1, c*q2 + s*p3, c*q3 - s*p2];
+  const err = Math.max(...got.map((g, i) => Math.abs(g - rule[i])), ...(gv ? gv.map((g, i) => Math.abs(g - rule[i])) : [0]));
+  const inv = (P, Q) => [P[0]*P[0] + P[1]*P[1] + P[2]*P[2] - Q[0]*Q[0] - Q[1]*Q[1] - Q[2]*Q[2], P[0]*Q[0] + P[1]*Q[1] + P[2]*Q[2]];
+  const i0 = inv([p1, p2, p3], [q1, q2, q3]), i1 = inv(got.slice(1, 4), got.slice(4, 7));
+  const names = ['𝟙', 'α<sub>I</sub>', 'α<sub>J</sub>', 'α<sub>K</sub>', 'Σ<sub>I</sub>', 'Σ<sub>J</sub>', 'Σ<sub>K</sub>'];
+  const ok = err < 1e-9 && Math.abs(i0[0] - i1[0]) < 1e-9 && Math.abs(i0[1] - i1[1]) < 1e-9;
+  $('numout').innerHTML = `<div class="tscroll"><table class="dc"><thead><tr><th>channel</th><th>${SLs('C')}</th><th>Λ${SLs('C')}Λ<sup>−1</sup></th>${gv ? `<th>${SL(VI[SA])}<sup>L</sup>${SL(VI[SB])}<sup>L</sup></th>` : ''}<th>channel rule</th></tr></thead><tbody>
+    ${names.map((n, i) => `<tr><td>${n}</td><td>${fx(v[i])}</td><td>${fx(got[i])}</td>${gv ? `<td>${fx(gv[i])}</td>` : ''}<td>${fx(rule[i])}</td></tr>`).join('')}
+    <tr><td>c<sub>α</sub>² − c<sub>Σ</sub>²</td><td>${fx(i0[0])}</td><td>${fx(i1[0])}</td>${gv ? '<td></td>' : ''}<td></td></tr>
+    <tr><td><b>c</b><sub>α</sub>·<b>c</b><sub>Σ</sub></td><td>${fx(i0[1])}</td><td>${fx(i1[1])}</td>${gv ? '<td></td>' : ''}<td></td></tr></tbody></table></div>
+    <span class="pill ${ok ? 'ok' : 'no'}">${ok ? '✓ ' + (gv ? 'boosting the bilinear, multiplying the boosted vectors and the channel rule agree' : 'the 4×4 similarity gives the channel rule') + '; the invariants do not change' : '✗ difference ' + err.toExponential(2)}</span>`;
+}
+
+/* ---------- wiring ---------- */
+['selA', 'selB'].forEach(id => { $(id).innerHTML = V.map(v => `<option value="${v.id}">${v.nm.replace(/<[^>]+>/g, '')}/: ${v.what}</option>`).join(''); });
+$('qs').innerHTML = QUICK.map(([a, b, l]) => `<button type="button" data-a="${a}" data-b="${b}">${l}</button>`).join('');
+$('qs').querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => { SA = btn.dataset.a; SB = btn.dataset.b; render(); renderNum(); }));
+$('selA').addEventListener('change', e => { SA = e.target.value; render(); renderNum(); });
+$('selB').addEventListener('change', e => { SB = e.target.value; render(); renderNum(); });
+$('swap').addEventListener('click', () => { [SA, SB] = [SB, SA]; render(); renderNum(); });
+$('beta').addEventListener('input', render);
+renderWhy(); render(); renderNum();
+})();
+</script>
+</body></html>
