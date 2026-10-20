@@ -448,6 +448,29 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
       </div>
     </a>
 
+    <a class="card" href="models/BQ_Dirac_MC_Connection.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="The transport product of the four-velocity and the Maurer-Cartan connection splits into a vector grade, the kinematic acceleration, and a pseudovector grade">
+        <rect width="320" height="200" fill="#03050b"/>
+        <g font-family="Source Serif 4, Georgia, serif" font-size="13" fill="#e7ebf3">
+          <text x="28" y="46" font-size="15">U̸ Ω̸ = ⟨U̸ Ω̸⟩₁ + ⟨U̸ Ω̸⟩₃</text>
+          <line x1="96" y1="58" x2="70" y2="96" stroke="#a29bfe" stroke-width="1.6"/><line x1="182" y1="58" x2="212" y2="96" stroke="#48dbfb" stroke-width="1.6"/>
+          <text x="22" y="116" fill="#a29bfe">−½ A̸ (step 11)</text>
+          <text x="180" y="116" fill="#48dbfb">Y_θ β̃_θ</text>
+          <text x="22" y="150" fill="#f2a24a">[U̸ Ω̸]_β₀ = −(c/2) DΓ/Dτ</text>
+          <text x="22" y="184" fill="#97a2b9" font-size="11.5">isorapidity: the β₀ channel vanishes, CL follows</text>
+        </g>
+      </svg>
+      <div class="body">
+        <span class="step">Dirac step 12 · the Maurer–Cartan route</span>
+        <h3>The Maurer–Cartan route to isorapidity and CL</h3>
+        <p>The ordered rotor Q<sub>g</sub> = Q<sub>g,φ</sub>Q<sub>g,r</sub> carries a Thomas–Wigner bivector; its connection <span class="sl">Ω</span><sub>τ</sub> = (DQ<sub>g</sub>)Q<sub>g</sub><sup>−1</sup>, transported with <span class="sl">U</span><sub>g</sub>, has β<sub>0</sub> channel −(c/2)DΓ/Dτ. The lift adds the grade split: the vector grade of <span class="sl">U</span><sub>g</sub><span class="sl">Ω</span><sub>τ</sub> is −½ the kinematic acceleration, so the two routes are one object. The virial closure at R gives the CL rotation law.</p>
+        <div class="rule">⟨<span class="sl">U</span><sub>g</sub><span class="sl">Ω</span><sub>τ</sub>⟩<sub>1</sub> = −½<span class="sl">A</span><sub>g</sub>, &nbsp;X<sub>0</sub> = −(c/2)DΓ/Dτ</div>
+        <div class="tags"><span>rotation curve</span><span>galaxy-scale preset</span><span>4×4 check</span></div>
+        <span class="open">Open the model</span>
+      </div>
+    </a>
+
+
 
 
     </div>
@@ -473,6 +496,7 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
         <li><code>bq_dirac_gravity_rotor.py</code> · <a href="models/BQ_Dirac_Gravity_Rotor.html">the gravity rotor at the Dirac level</a>: Q<sub>g</sub> = diag(G<sup>−1</sup>, G) = e<sup>−χα/2</sup> and the nested rotor Q<sub>g,φ</sub>Q<sub>g,r</sub>, the exact image d<span class="sl">R</span><sub>g</sub> with the Pauli image as its block, its flat square, the boosted basis, <span class="sl">θ</span><span class="sl">θ</span> = ds²𝟙, and {d<span class="sl">R</span><sub>g,μ</sub>, d<span class="sl">R</span><sub>g,ν</sub>} = 2g⁰<sub>μν</sub>𝟙 against {<span class="sl">θ</span><sub>μ</sub>, <span class="sl">θ</span><sub>ν</sub>} = 2g<sub>μν</sub>𝟙, both time orientations</li>
         <li><code>bq_dirac_cl_redshift.py</code> · <a href="models/BQ_Dirac_CL_Equi_Redshift.html">CL as an equi-redshift flow</a>: the observer product u̸<sub>s</sub>u̸ = −c²γ<sub>rs</sub>(𝟙 − v·α/c) as a rotor squared, γ<sub>rs</sub> and the Killing energy as anticommutators, β̂<sub>0</sub>β<sub>0</sub> with Γ<sub>rotor</sub>, the O(χ⁴) difference, CL along the flow</li>
         <li><code>bq_dirac_kinematic_route.py</code> · <a href="models/BQ_Dirac_Kinematic_Route.html">the kinematic route</a>: the active rotor Q<sub>g</sub> = diag(G, (G<sup>†</sup>)<sup>−1</sup>), <span class="sl">U</span><sub>g</sub> with the Pauli U<sub>g</sub> as block, the Dirac Maurer–Cartan form diag(Ω<sub>τ</sub>, −Ω<sub>τ</sub><sup>†</sup>), <span class="sl">A</span><sub>g</sub> = [<span class="sl">Ω</span><sub>τ</sub>, <span class="sl">U</span><sub>g</sub>], {<span class="sl">U</span><sub>g</sub>, <span class="sl">A</span><sub>g</sub>} = 0, isorapidity as zero power</li>
+        <li><code>bq_dirac_mc_connection.py</code> · <a href="models/BQ_Dirac_MC_Connection.html">the Maurer–Cartan route</a>: the ordered rotor Q<sub>g</sub> = Q<sub>g,φ</sub>Q<sub>g,r</sub> with its Thomas–Wigner Σ<sub>θ</sub> part, the connection (DQ<sub>g</sub>)Q<sub>g</sub><sup>−1</sup> = diag(Ω<sub>τ</sub>, −Ω<sub>τ</sub><sup>†</sup>), the transport product <span class="sl">U</span><sub>g</sub><span class="sl">Ω</span><sub>τ</sub> (vector and pseudovector, β<sub>0</sub> channel −(c/2)DΓ/Dτ), its grade split ⟨<span class="sl">U</span><sub>g</sub><span class="sl">Ω</span><sub>τ</sub>⟩<sub>1</sub> = −½<span class="sl">A</span><sub>g</sub>, isorapidity and the virial closure; reports the V5 discrepancies (eqs. 55–56, 66, 89, 95)</li>
       </ul>
       <p>Only Python 3 and SymPy are needed.</p>
     </div>
@@ -502,7 +526,8 @@ python bq_dirac_triple_lorentz.py
 python bq_dirac_lorentz_representations.py
 python bq_dirac_gravity_rotor.py
 python bq_dirac_cl_redshift.py
-python bq_dirac_kinematic_route.py</pre>
+python bq_dirac_kinematic_route.py
+python bq_dirac_mc_connection.py</pre>
   </section>
 
   <section class="about" aria-label="About these models">
@@ -518,7 +543,7 @@ python bq_dirac_kinematic_route.py</pre>
         <li><b>1. The basis</b>: <a href="models/BQ_Dirac_Multiplication_Table.html">BQ-Dirac multiplication table in the Weyl representation</a>, <a href="models/BQ_Dirac_Weyl_Dirac_Representations.html">Weyl and Dirac representations</a></li>
         <li><b>2. Vectors and their products</b>: <a href="models/BQ_Dirac_Bilinear_Product_Explorer.html">Bilinear product explorer</a>, <a href="models/BQ_Dirac_Triple_Product_Explorer.html">Triple product explorer</a>, <a href="models/BQ_Dirac_Field_Quadratics.html">Field quadratics</a></li>
         <li><b>3. Lorentz transformations</b>: <a href="models/BQ_Dirac_Lorentz_Transformations.html">Boosting vectors</a>, <a href="models/BQ_Dirac_Bilinear_Lorentz_Transformation.html">Boosting bilinears</a>, <a href="models/BQ_Dirac_Triple_Product_Covariance.html">Covariance of the triple</a>, <a href="models/BQ_Dirac_Lorentz_Weyl_and_Dirac.html">Weyl and Dirac</a></li>
-        <li><b>4. Gravity</b>: <a href="models/BQ_Dirac_Gravity_Rotor.html">The gravity rotor</a>, <a href="models/BQ_Dirac_CL_Equi_Redshift.html">CL as an equi-redshift flow</a>, <a href="models/BQ_Dirac_Kinematic_Route.html">The kinematic route</a></li>
+        <li><b>4. Gravity</b>: <a href="models/BQ_Dirac_Gravity_Rotor.html">The gravity rotor</a>, <a href="models/BQ_Dirac_CL_Equi_Redshift.html">CL as an equi-redshift flow</a>, <a href="models/BQ_Dirac_Kinematic_Route.html">The kinematic route</a>, <a href="models/BQ_Dirac_MC_Connection.html">The Maurer–Cartan route</a></li>
         <li><a href="../index.html">The BQ-Pauli models</a>: the algebra, vectors, Lorentz transformations and gravity</li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra/tree/main/dirac/py_sources">Python sources</a>: exact SymPy reproduction</li>
         <li><a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>: galaxy, jet and SPARC models</li>
