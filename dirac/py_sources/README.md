@@ -36,6 +36,7 @@ The scripts are self-contained and do not import the BQ-Pauli scripts in `../../
 | `bq_dirac_lorentz_representations.py` | the boost in the Weyl and the Dirac representation: Λ_D = SΛ_WS⁻¹ = ½[[U⁻¹+U, U−U⁻¹],[U−U⁻¹, U⁻¹+U]] = [[c 1̂, s σ̂_I],[s σ̂_I, c 1̂]] = c𝟙 − sα_I^D; the commuting square Λ_D a/_D Λ_D⁻¹ = S(Λ_W a/_W Λ_W⁻¹)S⁻¹; the same boosted coordinates in both; the Dirac blocks [[a₀′T̂, a′·K̂],[−a′·K̂, −a₀′T̂]]; rotations unchanged; spinors Ψ^L = ΛΨ and Λ²; the exponential form Λ = e^((ψ/2)σ_I) in both, with σ_I^W = diag(−σ̂_I, σ̂_I), σ_I^D = Sσ_I^WS⁻¹ = [[0, σ̂_I],[σ̂_I, 0]] and (σ_I)² = 𝟙; the sign of BQ Dirac Gravity eq. 107 reported | `python bq_dirac_lorentz_representations.py` |
 | `bq_dirac_gravity_rotor.py` | the gravity rotor at the Dirac level: Q_g,r = diag(G_r⁻¹, G_r) = e^(−χα_I/2), Q_g,φ likewise with α_K, and the nested action as the single rotor Q_g = Q_g,φQ_g,r; the exact image dR/_g = Q_g dR/ Q_g⁻¹ = [[0, dR^G],[−(dR^G)^T, 0]] in γ and v = c tanh χ, with the BQ-Pauli image as its block; its flat square; the boosted basis β̂_a = Q_gβ_aQ_g⁻¹ for both rotors (orthonormal, the same image); the Galilean limit θ/ with θ/θ/ = ds²𝟙; {dR/_g,μ, dR/_g,ν} = 2g⁰_μν𝟙 (flat) against {θ/_μ, θ/_ν} = 2g_μν𝟙 (PG with azimuthal shift); the Dirac representation; both time orientations; the sign of BQ Dirac Gravity eqs. 146–150 reported | `python bq_dirac_gravity_rotor.py` |
 | `bq_dirac_cl_redshift.py` | CL as an equi-redshift flow: river u/ = cβ₀ and static u/_s = (c/√(−g_tt)) θ/_t, both unit time vectors; their product u/_s u/ = −c²γ_rs(𝟙 − v·α/c) = −c²e^(−χ_rs n·α), only scalar and boost bivector; γ_rs and the Killing energy E = c² as anticommutators; the rotor level β̂₀β₀ = −(Γ_rotor𝟙 − …) with Γ_rotor = cosh χ_r cosh χ_φ and the Σ_J part of Q_g; γ_rs − Γ_rotor = (2χ_r⁴ + 3χ_r²χ_φ² + 2χ_φ⁴)/6 + O(χ⁶); CL along the flow | `python bq_dirac_cl_redshift.py` |
+| `bq_dirac_kinematic_route.py` | the kinematic route to isorapidity: the active rotor Q_g = diag(G, (G†)⁻¹) = Q_g,φQ_g,r (Q_g,x = e^(+χα/2)); U/_g = Q_g(cβ₀)Q_g⁻¹ with the Pauli U_g = G(cT̂)G† as block, U/_g² = −c²𝟙; the Dirac Maurer–Cartan form (DQ_g)Q_g⁻¹ = diag(Ω_τ, −Ω_τ†), bivector only; A/_g = [Ω/_τ, U/_g] with the Pauli bridge as upper block and a₀ = c DΓ/Dτ; {U/_g, A/_g} = 0; U/_gA/_g a pure bivector; isorapidity: a₀ = 0 and transverse acceleration | `python bq_dirac_kinematic_route.py` |
 
 ## Install and run
 
@@ -61,6 +62,7 @@ python bq_dirac_triple_lorentz.py      # covariance of the triple, both sectors,
 python bq_dirac_lorentz_representations.py   # the boost in Weyl and Dirac, Lambda_D = S Lambda_W S^-1 (seconds)
 python bq_dirac_gravity_rotor.py       # the gravity rotor at the Dirac level, both time orientations (about a minute)
 python bq_dirac_cl_redshift.py         # CL as an equi-redshift flow at the Dirac level (about a minute)
+python bq_dirac_kinematic_route.py     # the kinematic route to isorapidity at the Dirac level (about a minute)
 ```
 
 Element names: `one b0 bI bJ bK aI aJ aK SI SJ SK bt0 btI btJ btK chi`.

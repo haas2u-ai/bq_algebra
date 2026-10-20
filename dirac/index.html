@@ -424,6 +424,31 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
       </div>
     </a>
 
+    <a class="card" href="models/BQ_Dirac_Kinematic_Route.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="The four-velocity of the river with its acceleration perpendicular to it: an isorapid river turns without speeding up">
+        <rect width="320" height="200" fill="#03050b"/>
+        <g font-family="Source Serif 4, Georgia, serif" font-size="13" fill="#e7ebf3">
+          <path d="M40 150 C 90 140, 130 110, 150 70" fill="none" stroke="#48dbfb" stroke-opacity=".5" stroke-width="1.4" stroke-dasharray="4 3"/>
+          <line x1="110" y1="120" x2="150" y2="62" stroke="#48dbfb" stroke-width="2.4"/><path d="M150 62 l-2 12 l-8 -6 z" fill="#48dbfb"/>
+          <line x1="110" y1="120" x2="62" y2="88" stroke="#a29bfe" stroke-width="2.4"/><path d="M62 88 l12 -1 l-5 9 z" fill="#a29bfe"/>
+          <text x="154" y="60" fill="#48dbfb">U̸</text><text x="44" y="84" fill="#a29bfe">A̸</text>
+          <text x="180" y="62">A̸ = [Ω̸, U̸]</text>
+          <text x="180" y="90">{U̸, A̸} = 0</text>
+          <text x="180" y="118" fill="#f2a24a">a₀ = c DΓ/Dτ</text>
+          <text x="40" y="186" fill="#97a2b9" font-size="11.5">isorapidity: zero power, the river only turns</text>
+        </g>
+      </svg>
+      <div class="body">
+        <span class="step">Dirac step 11 · the kinematic route</span>
+        <h3>The kinematic route to isorapidity</h3>
+        <p>The active rotor Q<sub>g</sub> = diag(G, (G<sup>†</sup>)<sup>−1</sup>) boosts the rest frame to the river four-velocity <span class="sl">U</span><sub>g</sub> by one similarity; its convective acceleration is one commutator with the Dirac Maurer–Cartan form, and orthogonality is the derivative of the Clifford square <span class="sl">U</span><sub>g</sub>² = −c²𝟙. Isorapidity is zero power along the flow: the river turns, it does not speed up.</p>
+        <div class="rule"><span class="sl">A</span><sub>g</sub> = [<span class="sl">Ω</span><sub>τ</sub>, <span class="sl">U</span><sub>g</sub>], &nbsp;{<span class="sl">U</span><sub>g</sub>, <span class="sl">A</span><sub>g</sub>} = 0</div>
+        <div class="tags"><span>longitudinal fraction</span><span>galaxy-scale preset</span><span>4×4 check</span></div>
+        <span class="open">Open the model</span>
+      </div>
+    </a>
+
+
 
     </div>
   </section>
@@ -447,6 +472,7 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
         <li><code>bq_dirac_lorentz_representations.py</code> · <a href="models/BQ_Dirac_Lorentz_Weyl_and_Dirac.html">Lorentz transformations, Weyl and Dirac</a>: Λ<sub>D</sub> = SΛ<sub>W</sub>S<sup>−1</sup> in blocks and as a rotor, the commuting square, the same boosted coordinates, the Dirac block mixing, spinors and Λ<sup>2</sup>, and Λ = e<sup>(ψ/2)σ<sub>I</sub></sup> in both</li>
         <li><code>bq_dirac_gravity_rotor.py</code> · <a href="models/BQ_Dirac_Gravity_Rotor.html">the gravity rotor at the Dirac level</a>: Q<sub>g</sub> = diag(G<sup>−1</sup>, G) = e<sup>−χα/2</sup> and the nested rotor Q<sub>g,φ</sub>Q<sub>g,r</sub>, the exact image d<span class="sl">R</span><sub>g</sub> with the Pauli image as its block, its flat square, the boosted basis, <span class="sl">θ</span><span class="sl">θ</span> = ds²𝟙, and {d<span class="sl">R</span><sub>g,μ</sub>, d<span class="sl">R</span><sub>g,ν</sub>} = 2g⁰<sub>μν</sub>𝟙 against {<span class="sl">θ</span><sub>μ</sub>, <span class="sl">θ</span><sub>ν</sub>} = 2g<sub>μν</sub>𝟙, both time orientations</li>
         <li><code>bq_dirac_cl_redshift.py</code> · <a href="models/BQ_Dirac_CL_Equi_Redshift.html">CL as an equi-redshift flow</a>: the observer product u̸<sub>s</sub>u̸ = −c²γ<sub>rs</sub>(𝟙 − v·α/c) as a rotor squared, γ<sub>rs</sub> and the Killing energy as anticommutators, β̂<sub>0</sub>β<sub>0</sub> with Γ<sub>rotor</sub>, the O(χ⁴) difference, CL along the flow</li>
+        <li><code>bq_dirac_kinematic_route.py</code> · <a href="models/BQ_Dirac_Kinematic_Route.html">the kinematic route</a>: the active rotor Q<sub>g</sub> = diag(G, (G<sup>†</sup>)<sup>−1</sup>), <span class="sl">U</span><sub>g</sub> with the Pauli U<sub>g</sub> as block, the Dirac Maurer–Cartan form diag(Ω<sub>τ</sub>, −Ω<sub>τ</sub><sup>†</sup>), <span class="sl">A</span><sub>g</sub> = [<span class="sl">Ω</span><sub>τ</sub>, <span class="sl">U</span><sub>g</sub>], {<span class="sl">U</span><sub>g</sub>, <span class="sl">A</span><sub>g</sub>} = 0, isorapidity as zero power</li>
       </ul>
       <p>Only Python 3 and SymPy are needed.</p>
     </div>
@@ -475,7 +501,8 @@ python bq_dirac_bilinear_lorentz.py
 python bq_dirac_triple_lorentz.py
 python bq_dirac_lorentz_representations.py
 python bq_dirac_gravity_rotor.py
-python bq_dirac_cl_redshift.py</pre>
+python bq_dirac_cl_redshift.py
+python bq_dirac_kinematic_route.py</pre>
   </section>
 
   <section class="about" aria-label="About these models">
@@ -491,7 +518,7 @@ python bq_dirac_cl_redshift.py</pre>
         <li><b>1. The basis</b>: <a href="models/BQ_Dirac_Multiplication_Table.html">BQ-Dirac multiplication table in the Weyl representation</a>, <a href="models/BQ_Dirac_Weyl_Dirac_Representations.html">Weyl and Dirac representations</a></li>
         <li><b>2. Vectors and their products</b>: <a href="models/BQ_Dirac_Bilinear_Product_Explorer.html">Bilinear product explorer</a>, <a href="models/BQ_Dirac_Triple_Product_Explorer.html">Triple product explorer</a>, <a href="models/BQ_Dirac_Field_Quadratics.html">Field quadratics</a></li>
         <li><b>3. Lorentz transformations</b>: <a href="models/BQ_Dirac_Lorentz_Transformations.html">Boosting vectors</a>, <a href="models/BQ_Dirac_Bilinear_Lorentz_Transformation.html">Boosting bilinears</a>, <a href="models/BQ_Dirac_Triple_Product_Covariance.html">Covariance of the triple</a>, <a href="models/BQ_Dirac_Lorentz_Weyl_and_Dirac.html">Weyl and Dirac</a></li>
-        <li><b>4. Gravity</b>: <a href="models/BQ_Dirac_Gravity_Rotor.html">The gravity rotor</a>, <a href="models/BQ_Dirac_CL_Equi_Redshift.html">CL as an equi-redshift flow</a></li>
+        <li><b>4. Gravity</b>: <a href="models/BQ_Dirac_Gravity_Rotor.html">The gravity rotor</a>, <a href="models/BQ_Dirac_CL_Equi_Redshift.html">CL as an equi-redshift flow</a>, <a href="models/BQ_Dirac_Kinematic_Route.html">The kinematic route</a></li>
         <li><a href="../index.html">The BQ-Pauli models</a>: the algebra, vectors, Lorentz transformations and gravity</li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra/tree/main/dirac/py_sources">Python sources</a>: exact SymPy reproduction</li>
         <li><a href="https://haas2u-ai.github.io/bq-galaxy-models/">bq-galaxy-models</a>: galaxy, jet and SPARC models</li>
