@@ -140,10 +140,36 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
         <h3>BQ-Dirac multiplication table</h3>
         <p>The sixteen 4×4 basis matrices of the Weyl representation, each shown as a 2×2 block matrix of BQ-Pauli elements. Pick any of the 256 products to see it computed by blocks through the BQ-Pauli table and as an ordinary 4×4 complex matrix product.</p>
         <div class="rule">β<sub>0</sub>² = −𝟙, &nbsp;β<sub>i</sub>² = +𝟙, &nbsp;χ = −β<sub>0</sub>β<sub>I</sub>β<sub>J</sub>β<sub>K</sub>, &nbsp;χ² = −𝟙</div>
-        <div class="tags"><span>Weyl representation</span><span>Pauli blocks</span><span>grades 0–4</span></div>
+        <div class="tags"><span>Weyl representation</span><span>Pauli blocks</span><span>256 products</span></div>
         <span class="open">Open the table</span>
       </div>
     </a>
+
+    <a class="card" href="models/BQ_Dirac_Weyl_Dirac_Representations.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="beta_0 off-diagonal in the Weyl representation and diagonal in the Dirac representation, connected by the matrix S">
+        <rect width="320" height="200" fill="#03050b"/>
+        <g font-family="Source Serif 4, Georgia, serif" font-size="13" fill="#e7ebf3">
+          <text x="34" y="30" fill="#97a2b9" font-size="12">Weyl</text><text x="226" y="30" fill="#97a2b9" font-size="12">Dirac</text>
+          <rect x="22" y="40" width="76" height="76" rx="6" fill="none" stroke="#3a4257"/><rect x="214" y="40" width="76" height="76" rx="6" fill="none" stroke="#3a4257"/>
+          <rect x="62" y="44" width="32" height="32" rx="4" fill="#f2a24a" fill-opacity=".75"/><rect x="26" y="80" width="32" height="32" rx="4" fill="#f2a24a" fill-opacity=".75"/>
+          <rect x="218" y="44" width="32" height="32" rx="4" fill="#f2a24a" fill-opacity=".75"/><rect x="254" y="80" width="32" height="32" rx="4" fill="#f2a24a" fill-opacity=".45"/>
+          <text x="72" y="65" fill="#03050b">T̂</text><text x="36" y="101" fill="#03050b">T̂</text><text x="228" y="65" fill="#03050b">T̂</text><text x="258" y="101" fill="#03050b">−T̂</text>
+          <path d="M112 78 H196" stroke="#48dbfb" stroke-width="1.6"/><path d="M190 73 L198 78 L190 83" fill="none" stroke="#48dbfb" stroke-width="1.6"/>
+          <text x="126" y="68" fill="#48dbfb">S β₀ S⁻¹</text>
+          <text x="40" y="150">S = (1/√2) [[1̂, 1̂], [−1̂, 1̂]]</text>
+          <text x="40" y="172" fill="#97a2b9" font-size="12">same algebra, same table, other matrices</text>
+        </g>
+      </svg>
+      <div class="body">
+        <span class="step">Dirac step 1b · two representations</span>
+        <h3>BQ Weyl and Dirac representations</h3>
+        <p>The matrix S that carries the Weyl representation into the Dirac representation, and why both are used: Weyl for the construction, because the Pauli level and its rotor stay visible as blocks; Dirac for massive spinors, the rest frame and the comparison with the standard formalism. Then the sixteen basis matrices and all 256 products with a Weyl/Dirac switch.</p>
+        <div class="rule">X<sub>D</sub> = S X<sub>W</sub> S<sup>−1</sup>, &nbsp;S = e<sup>−(π/4)β̃<sub>0</sub></sup></div>
+        <div class="tags"><span>Weyl ↔ Dirac switch</span><span>matrix S</span><span>why both</span></div>
+        <span class="open">Open the representations</span>
+      </div>
+    </a>
+
 
     </div>
   </section>
@@ -320,6 +346,7 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
       <ul class="files">
         <li class="fh">1 · The basis</li>
         <li><code>bq_dirac_table.py</code> · the 16 × 16 table, Pauli block content, Clifford relations, χ, trace orthogonality, block route = 4×4 route</li>
+        <li><code>bq_dirac_representations.py</code> · <a href="models/BQ_Dirac_Weyl_Dirac_Representations.html">Weyl and Dirac representations</a>: the basis in the Dirac representation, the matrix S with X<sub>D</sub> = SX<sub>W</sub>S<sup>−1</sup>, the identical table, S = e<sup>−(π/4)β̃<sub>0</sub></sup>, and the vector and boost in both</li>
         <li class="fh">2 · Vectors and their products</li>
         <li><code>bq_dirac_bilinear.py</code> · the channels of <span class="sl">A</span><span class="sl">B</span>, the block form with −A<sup>T</sup>B, all 144 pairs, and <span class="sl">∂</span><span class="sl">A</span>, <span class="sl">∂</span><span class="sl">G</span>, <span class="sl">U</span><span class="sl">U</span>, <span class="sl">∂</span><span class="sl">R</span>, <span class="sl">∂</span><span class="sl">∂</span> from the papers</li>
         <li><code>bq_dirac_triple.py</code> · the triple rule, <span class="sl">∂</span> on a general even field, the block form with −D(A<sup>T</sup>B), Maxwell and the Lorentz force</li>
@@ -342,6 +369,9 @@ python bq_dirac_table.py
 <span class="cm"># one product in detail</span>
 python bq_dirac_table.py bI bJ
 
+<span class="cm"># the Dirac representation and the Weyl-to-Dirac matrix</span>
+python bq_dirac_representations.py
+
 <span class="cm"># 2 · vectors and their products</span>
 python bq_dirac_bilinear.py
 python bq_dirac_triple.py
@@ -363,7 +393,7 @@ python bq_dirac_triple_lorentz.py</pre>
     <div>
       <h3>Links</h3>
       <ul>
-        <li><b>1. The basis</b>: <a href="models/BQ_Dirac_Multiplication_Table.html">BQ-Dirac multiplication table</a></li>
+        <li><b>1. The basis</b>: <a href="models/BQ_Dirac_Multiplication_Table.html">BQ-Dirac multiplication table</a>, <a href="models/BQ_Dirac_Weyl_Dirac_Representations.html">Weyl and Dirac representations</a></li>
         <li><b>2. Vectors and their products</b>: <a href="models/BQ_Dirac_Bilinear_Product_Explorer.html">Bilinear product explorer</a>, <a href="models/BQ_Dirac_Triple_Product_Explorer.html">Triple product explorer</a>, <a href="models/BQ_Dirac_Field_Quadratics.html">Field quadratics</a></li>
         <li><a href="../index.html">The BQ-Pauli models</a>: the algebra, vectors, Lorentz transformations and gravity</li>
         <li><a href="https://github.com/haas2u-ai/bq_algebra/tree/main/dirac/py_sources">Python sources</a>: exact SymPy reproduction</li>

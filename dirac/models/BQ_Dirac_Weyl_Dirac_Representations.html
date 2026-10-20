@@ -1,0 +1,466 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BQ Weyl and Dirac Representations</title>
+<meta name="description" content="The BQ-Dirac algebra in the Weyl and the Dirac representation: the matrix S = (1/sqrt2)[[1,1],[-1,1]] that connects them, why the BQ construction starts in Weyl and why the Dirac representation is needed for massive particles, and the 16 basis matrices and 256 products with a Weyl/Dirac switch: each basis element as a 2x2 block matrix of BQ-Pauli elements, every product computed by blocks through the BQ-Pauli table and as a 4x4 complex matrix product.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500&display=swap" rel="stylesheet">
+<style>
+/* Layout: chooser on the left, channel readout on the right (stacked on phones); numerical matrix check and notes below. Same family as the BQ-Pauli table page. */
+:root{
+  --bg:#f5f6fa;--surface:#ffffff;--edge:#d6dce8;--ink:#141a28;--soft:#55607a;
+  --st:#b8620f;--st-bg:rgba(184,98,15,.09);      /* space-time basis T̂, K̂ */
+  --sn:#0f7fb0;--sn-bg:rgba(15,127,176,.09);     /* spin-norm basis 1̂, σ̂ */
+  --sel:#5b4fd6;--good:#2f8a4f;--bad:#b23a3a;
+  --serif:"Source Serif 4",Georgia,serif;--sans:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.11);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.09);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#05070d;--surface:#0d1220;--edge:#222c42;--ink:#e7ebf3;--soft:#97a2b9;
+  --st:#f2a24a;--st-bg:rgba(242,162,74,.11);--sn:#48dbfb;--sn-bg:rgba(72,219,251,.09);
+  --sel:#a29bfe;--good:#5fd38a;--bad:#ff7b7b;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans)}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font:600 clamp(24px,3.4vw,34px)/1.15 var(--serif);margin:0 0 6px;text-wrap:balance}
+h2{font:600 18px/1.3 var(--serif);margin:0 0 10px;text-wrap:balance}
+h3{font:600 12px/1.3 var(--sans);margin:0 0 8px;color:var(--soft);letter-spacing:.06em;text-transform:uppercase}
+.lede{color:var(--soft);max-width:82ch;margin:0 0 20px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:start}
+@media (max-width:960px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--edge);border-radius:12px;padding:16px;min-width:0}
+select,button,input{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:5px 8px}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--sel);outline-offset:2px}
+.pick{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 12px;align-items:center}
+.pick label{font:600 20px var(--serif)}
+.pick select{width:100%}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.qs{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.qs button{font-size:12.5px;padding:4px 9px}
+.math{font:500 16.5px/1.9 var(--serif);overflow-x:auto}
+.math b{font-weight:700}
+.vec{border:1px solid var(--edge);border-radius:10px;padding:10px 12px;margin-top:12px;background:var(--bg)}
+.vec .what{font-size:12.5px;color:var(--soft);margin-bottom:2px}
+.ts{color:var(--st)}.ns{color:var(--sn)}
+.formula{font:500 16px/1.8 var(--serif);background:var(--bg);border:1px solid var(--edge);border-radius:8px;padding:8px 12px;overflow-x:auto;white-space:nowrap}
+.fwith{font:13px var(--sans);color:var(--soft);white-space:normal}
+.ch{display:grid;grid-template-columns:minmax(0,10.5em) minmax(0,1fr);gap:4px 14px;padding:12px 0;border-bottom:1px solid var(--edge)}
+.ch:last-of-type{border-bottom:none}
+.ch .nm{font:600 14px var(--sans)}
+.ch .nm small{display:block;font:400 12px var(--sans);color:var(--soft)}
+.ch .ex{font:500 16.5px/1.75 var(--serif);overflow-x:auto;min-width:0}
+.ch .ex .gen{color:var(--soft);font-size:14.5px}
+.ch .ex .res{font-weight:600}
+.ch.n .nm{color:var(--sn)}.ch.k .nm{color:var(--st)}.ch.s .nm{color:var(--sn)}
+@media (max-width:560px){.ch{grid-template-columns:minmax(0,1fr)}}
+.total{font:600 17px/1.8 var(--serif);border:1.5px solid var(--sel);border-radius:10px;padding:10px 12px;margin-top:10px;overflow-x:auto}
+.interp{margin-top:12px;font-size:14.5px;color:var(--ink);background:var(--bg);border:1px dashed var(--edge);border-radius:10px;padding:10px 12px}
+.interp .src{display:block;font-size:12.5px;color:var(--soft);margin-top:4px}
+.note{font-size:14px;color:var(--soft);max-width:74ch;margin:8px 0 0}
+.note b{color:var(--ink)}
+/* numeric check */
+.numgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:900px){.numgrid{grid-template-columns:minmax(0,1fr)}}
+.inrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.inrow label{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--soft);min-width:0}
+.inrow input{width:100%;font:13.5px var(--mono)}
+.mxrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font:500 17px var(--serif);margin:10px 0;overflow-x:auto}
+.mx{display:inline-grid;grid-template-columns:auto auto;gap:2px 14px;padding:5px 11px;position:relative;font:13.5px var(--mono);font-variant-numeric:tabular-nums}
+.mx::before,.mx::after{content:"";position:absolute;top:0;bottom:0;width:7px;border:1.5px solid var(--ink)}
+.mx::before{left:0;border-right:none}.mx::after{right:0;border-left:none}
+.mx span{text-align:right;white-space:nowrap}
+.tscroll{overflow-x:auto}
+table.dc{border-collapse:collapse;font:13.5px var(--mono);font-variant-numeric:tabular-nums;width:100%}
+table.dc th,table.dc td{padding:4px 10px;border-bottom:1px solid var(--edge);text-align:right;white-space:nowrap}
+table.dc th{font:600 12px var(--sans);color:var(--soft);text-align:right}
+table.dc td:first-child,table.dc th:first-child{text-align:left;font-family:var(--serif);font-size:15px}
+.pill{display:inline-block;font:500 12.5px var(--sans);border:1px solid var(--edge);border-radius:99px;padding:2px 10px;color:var(--soft);margin-top:10px}
+.pill.ok{border-color:var(--good);color:var(--good)}.pill.no{border-color:var(--bad);color:var(--bad)}
+.notes{margin-top:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:900px){.notes{grid-template-columns:minmax(0,1fr)}}
+.notes li{font-size:14px;max-width:70ch;margin-bottom:6px}
+.notes ul{padding-left:18px;margin:6px 0}
+.cap{font-size:12.5px;color:var(--soft);margin:10px 0 0}
+a{color:var(--sn)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.chk{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--soft);cursor:pointer}
+.split{margin-top:8px}
+.pill.st{border-color:var(--st);color:var(--st)}.pill.sn{border-color:var(--sn);color:var(--sn)}
+.sstep{margin:14px 0 0}
+.sstep h3{margin:0 0 6px}
+.sline{font:500 15px/1.9 var(--serif);overflow-x:auto;white-space:nowrap;padding:1px 0}
+.sline .lab{display:inline-block;min-width:5.6em;color:var(--soft)}
+.sbox{background:var(--bg);border:1px solid var(--edge);border-radius:10px;padding:8px 12px}
+.sgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:900px){.sgrid{grid-template-columns:minmax(0,1fr)}}
+.sgrid .sline{font-size:14.5px}
+.sres{font-weight:600}
+.ctlline{margin:0 0 8px}
+.numdet{margin-top:16px;border-top:1px solid var(--edge);padding-top:10px}
+.numdet summary{cursor:pointer;font:500 14px var(--sans);color:var(--soft)}
+.numgrid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:900px){.numgrid.three{grid-template-columns:minmax(0,1fr)}}
+.vec .math .what{margin:0 0 4px 0}
+.kv{font-weight:700}
+.slider{margin-top:14px;display:grid;gap:6px}
+.slider label{font-size:13.5px;color:var(--soft)}.slider label b{color:var(--ink);font:500 14px var(--mono)}
+.slider input{width:100%;accent-color:var(--st)}
+.kp{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+@media (max-width:560px){.kp{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.kp div{border:1px solid var(--edge);border-radius:8px;padding:5px 7px;min-width:0}
+.kp span{display:block;font-size:11.5px;color:var(--soft)}.kp b{font:500 14px var(--mono)}
+.trc{border:1px solid var(--edge);border-left-width:3px;border-radius:10px;padding:8px 12px;margin-bottom:10px}
+.trc.st{border-left-color:var(--st)}.trc.sn{border-left-color:var(--sn)}
+.trc h3{margin:0 0 4px}.trc .ops{font:500 15px/1.8 var(--serif);overflow-x:auto}
+.numv{font:13px var(--mono);color:var(--soft)}
+.leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--soft);margin-top:6px}
+.leg>span{display:inline-flex;align-items:center;gap:6px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%}
+.sw{display:inline-block;width:18px;height:0;border-top:2px solid}
+svg{display:block;width:100%;height:auto;max-width:100%}
+svg text{font:12px var(--mono);fill:var(--soft)}
+svg .ax{stroke:var(--edge);fill:none}
+svg .ttl{font:13px var(--sans);fill:var(--soft)}
+.dsteps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:10px}
+@media (max-width:960px){.dsteps{grid-template-columns:minmax(0,1fr)}}
+.dstep{border:1px solid var(--edge);border-radius:10px;padding:10px 14px;background:var(--bg);min-width:0}
+.dstep h3{margin:0 0 6px;color:var(--ink);font:600 15.5px var(--serif);letter-spacing:0;text-transform:none}
+.dstep h3 .n{display:inline-block;min-width:1.6em;color:var(--st)}
+.dl{font:500 15px/1.85 var(--serif);overflow-x:auto;white-space:nowrap}
+.dl.dwrap{white-space:normal}
+.dnum{font:13px/1.7 var(--mono);color:var(--soft);overflow-x:auto;white-space:nowrap}
+.dk{font-size:13.5px;color:var(--soft);margin:6px 0 0}
+.mxs{display:inline-grid;gap:2px 14px;padding:3px 10px;position:relative;vertical-align:middle;font:500 14px var(--serif)}
+.mxs::before,.mxs::after{content:"";position:absolute;top:0;bottom:0;width:6px;border:1.4px solid var(--ink)}
+.mxs::before{left:0;border-right:none}.mxs::after{right:0;border-left:none}
+.mxs span{text-align:center;white-space:nowrap}
+table.lm{border-collapse:collapse;font:13px var(--mono);width:100%}
+table.lm th,table.lm td{padding:3px 8px;border-bottom:1px solid var(--edge);text-align:right;white-space:nowrap}
+table.lm th{font:600 12px var(--sans);color:var(--soft)}
+table.lm td:first-child,table.lm th:first-child{text-align:left;font-family:var(--serif)}
+
+[hidden]{display:none!important}
+.keybox{border:1.6px solid var(--sel);font-size:16.5px;white-space:normal;margin:8px 0;padding:10px 14px}
+.row button[aria-pressed="true"]{background:var(--st-bg);border-color:var(--st)}
+:root{--g0:#6b7488;--g1:var(--st);--g2b:#7a5fd0;--g2s:var(--sn);--g3:#2f8a4f;--g4:#c2417a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--g0:#a3acc0;--g2b:#a29bfe;--g3:#5fd38a;--g4:#ff7fb5}}
+:root[data-theme="dark"]{--g0:#a3acc0;--g2b:#a29bfe;--g3:#5fd38a;--g4:#ff7fb5}
+.gk{display:inline-block;border-left:4px solid;padding:0 6px;margin:2px 4px 2px 0}
+.gk.g0,.bel.g0{border-color:var(--g0)}.gk.g1,.bel.g1{border-color:var(--g1)}.gk.g2b,.bel.g2b{border-color:var(--g2b)}
+.gk.g2s,.bel.g2s{border-color:var(--g2s)}.gk.g3,.bel.g3{border-color:var(--g3)}.gk.g4,.bel.g4{border-color:var(--g4)}
+.g0t{color:var(--g0)}.g1t{color:var(--g1)}.g2bt{color:var(--g2b)}.g2st{color:var(--g2s)}.g3t{color:var(--g3)}.g4t{color:var(--g4)}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));gap:10px}
+.bel{border:1px solid var(--edge);border-left:4px solid;border-radius:8px;padding:8px 10px;overflow-x:auto}
+.bh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}
+.bh b{font:600 19px var(--serif)}.bh span{font-size:12.5px;color:var(--soft)}
+.bm .mxs{font-size:13.5px}
+table.wt{border-collapse:collapse;table-layout:fixed;margin:0;font:500 13px var(--serif)}
+table.wt th,table.wt td{width:42px;height:42px;padding:0;text-align:center;vertical-align:middle;white-space:nowrap;border:2px solid var(--surface)}
+table.wt th{font-weight:600;font-size:14px}
+table.wt td{cursor:pointer;border-radius:0}
+table.wt .vr{border-right:3px solid var(--sep)}
+table.wt .hb{border-bottom:3px solid var(--sep)}
+:root{--sep:color-mix(in srgb,var(--ink) 55%,transparent)}
+table.wt td.g0{background:color-mix(in srgb,var(--g0) 18%,transparent)}table.wt td.g1{background:color-mix(in srgb,var(--g1) 20%,transparent)}
+table.wt td.g2b{background:color-mix(in srgb,var(--g2b) 20%,transparent)}table.wt td.g2s{background:color-mix(in srgb,var(--g2s) 20%,transparent)}
+table.wt td.g3{background:color-mix(in srgb,var(--g3) 20%,transparent)}table.wt td.g4{background:color-mix(in srgb,var(--g4) 22%,transparent)}
+table.wt th.g0{color:var(--g0)}table.wt th.g1{color:var(--g1)}table.wt th.g2b{color:var(--g2b)}table.wt th.g2s{color:var(--g2s)}table.wt th.g3{color:var(--g3)}table.wt th.g4{color:var(--g4)}
+table.wt td.on{outline:2.5px solid var(--ink);outline-offset:-3px}
+table.wt td:focus-visible{outline:2px solid var(--sel)}
+.big{font:600 24px var(--serif);margin:4px 0 10px}
+.selrow.fx .mxs{font-size:18px;gap:5px 16px;padding:5px 13px}
+.selrow{font-size:21px;margin:6px 0 4px}.selrow .mxs{font-size:18px;gap:4px 18px;padding:4px 12px}.selrow b{font:600 23px var(--serif)}
+.sub{font:600 16px var(--serif);margin:14px 0 6px;color:var(--ink)}
+.tabwrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:1060px){.tabwrap{grid-template-columns:minmax(0,1fr)}}
+.tside{position:sticky;top:12px;min-width:0}
+.sidehead{font:600 26px var(--serif);margin:2px 0 12px}
+.sideline{margin:4px 0;font-size:15.5px;color:var(--soft)}
+.sidemx{font-size:18px;margin-bottom:10px}.sidemx .mxs{font-size:17px;gap:4px 16px;padding:4px 12px}
+.one{position:relative;display:inline-block}
+.one::after{content:"";position:absolute;left:50%;top:-.12em;width:.42em;height:.42em;border-left:.075em solid currentColor;border-top:.075em solid currentColor;transform:translateX(-50%) rotate(45deg) scale(.7,.55);transform-origin:center}
+.nl{padding-left:18px;margin:4px 0}.nl li{font-size:14.5px;margin-bottom:7px}
+.reprow{align-items:center;margin:10px 0 4px}.replab{font:600 13px var(--sans);color:var(--soft);letter-spacing:.06em;text-transform:uppercase;margin-right:4px}
+.reprow button[aria-pressed='true']{background:var(--sel);color:#fff;border-color:var(--sel)}
+.back{display:inline-block;margin:0 0 10px;font-size:14.5px;color:var(--sn);text-decoration:none}
+table.wd td{font:500 15px var(--serif);text-align:left}
+.hs{position:relative;display:inline-block}.hs::after{content:'';position:absolute;left:50%;top:.08em;width:.42em;height:.42em;border-left:.075em solid currentColor;border-top:.075em solid currentColor;transform:translateX(-50%) rotate(45deg) scale(.7,.55)}
+.pill{margin-right:6px}
+.why{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}@media (max-width:860px){.why{grid-template-columns:minmax(0,1fr)}}
+.wh{font:600 17px var(--serif);margin:2px 0 8px;text-transform:none;letter-spacing:0}
+table.wd th{text-align:left}table.wd td:first-child{white-space:nowrap}table.wd td{white-space:normal}
+.sl{position:relative;display:inline-block}.sl::after{content:'';position:absolute;left:50%;top:6%;height:88%;border-left:1.3px solid currentColor;transform:translateX(-50%) rotate(26deg)}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <h1>BQ Weyl and Dirac Representations</h1>
+  <a class="back" href="../index.html">← The BQ algebra at the Dirac level</a>
+  <p class="lede">The BQ-Dirac algebra has one set of sixteen basis elements and one multiplication table, but it can be written in more than one set of 4×4 matrices. The BQ construction is done in the Weyl representation; the Dirac representation is needed for massive particles and for the comparison with the standard Dirac formalism. One real orthogonal matrix S carries the one into the other. This page starts with S and why both representations are used, and then shows the sixteen basis matrices and all 256 products in either representation, with one switch.</p>
+</header>
+
+<section class="card" aria-labelledby="h-w2d">
+  <h2 id="h-w2d">The transformation matrix S, from Weyl to Dirac</h2>
+  <div id="w2d"></div>
+</section>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-why">
+  <h2 id="h-why">Why we start with Weyl, and when Dirac is needed</h2>
+  <div class="why">
+    <div>
+      <h3 class="wh">Weyl: the construction representation</h3>
+      <ul class="nl">
+        <li><b>The Pauli level stays visible.</b> A Weyl vector is <span class="sl">a</span> = [[0, A], [−A<sup>T</sup>, 0]]: its two blocks are the BQ-Pauli minquat A = a<sub>0</sub>T̂ + <b>a</b>·<b>K̂</b> and its time adjoint. A product of two vectors is then <span class="sl">a</span><span class="sl">b</span> = [[−AB<sup>T</sup>, 0], [0, −A<sup>T</sup>B]]: the Pauli bilinear A<sup>T</sup>B sits in it as a block.</li>
+        <li><b>Grade and block go together.</b> The even grades (𝟙, α<sub>i</sub>, Σ<sub>i</sub>, χ) are block diagonal and the odd grades (β<sub>μ</sub>, β̃<sub>μ</sub>) block off-diagonal.</li>
+        <li><b>The Pauli rotor is the boost.</b> Λ = diag(U<sup>−1</sup>, U), so the Dirac Lorentz transformation of a vector follows in one line from the Pauli one, A<sup>L</sup> = U<sup>−1</sup>AU<sup>−1</sup>. The same holds for the gravitational rotor: the PG metric, the flows and the CL invariants are computed here.</li>
+        <li><b>The chirality is diagonal.</b> χ = diag(T̂, −T̂): the two blocks are the two Weyl sectors, and the massless equations decouple into them.</li>
+      </ul>
+      <p class="note">This is why every BQ-Dirac model on this site is built in the Weyl representation: every Dirac result contains the Pauli result as a block (de Haas 2026, <i>Weyl-level EM</i>, the construction-oriented representation).</p>
+    </div>
+    <div>
+      <h3 class="wh">Dirac: the application representation</h3>
+      <ul class="nl">
+        <li><b>Mass.</b> In the Weyl representation <span class="sl">P</span><span class="sl">P</span> = <span class="sl">E</span><span class="sl">E</span> factorizes as (<span class="sl">P</span> − <span class="sl">E</span>)(<span class="sl">P</span> + <span class="sl">E</span>) = 0, and taken on their own the factors give nontrivial solutions only for m<sub>0</sub> = 0. Massive fermions need spinors and a representation that mixes the parity and time-reversal duplexes: the Dirac representation (de Haas 2025, <i>BQ Dirac Gravity</i>, eqs. 68–76).</li>
+        <li><b>Time on the diagonal.</b> β<sub>0</sub> = diag(T̂, −T̂), so a vector is [[a<sub>0</sub>T̂, <b>a</b>·<b>K̂</b>], [−<b>a</b>·<b>K̂</b>, −a<sub>0</sub>T̂]]. At rest the spinors separate into an upper and a lower block, u(0) ∝ [φ; 0] and v(0) ∝ [0; η]: positive- and negative-energy adapted sectors.</li>
+        <li><b>Comparison.</b> With β<sub>μ</sub> = iγ<sub>μ</sub>, the BQ-Dirac β<sub>μ</sub> are i times the standard Dirac-representation γ matrices (axis order I, J, K = z, y, x), so the massive Dirac equation, its non-relativistic limit and the literature are read in this form.</li>
+        <li><b>The spinor boost is constructed.</b> The Lorentz operator of Dirac spinors is SΛS<sup>−1</sup>, the Weyl boost carried over by S, not a postulated matrix.</li>
+      </ul>
+      <p class="note">The working order is therefore Dirac → Weyl → Dirac: take the massive spinor to the Weyl representation with S<sup>−1</sup>, do the geometric calculation there, and return with S (de Haas 2025, <i>M<sub>2</sub>(ℂ) unification</i>, Fig. 6).</p>
+    </div>
+  </div>
+  <div class="tscroll" style="margin-top:12px"><table class="dc wd"><thead><tr><th></th><th>Weyl</th><th>Dirac</th></tr></thead><tbody>
+    <tr><td>vector <span class="sl">a</span></td><td>[[0, A], [−A<sup>T</sup>, 0]]</td><td>[[a<sub>0</sub>T̂, <b>a</b>·<b>K̂</b>], [−<b>a</b>·<b>K̂</b>, −a<sub>0</sub>T̂]]</td></tr>
+    <tr><td>diagonal</td><td>the even grades, χ</td><td>β<sub>0</sub>, Σ<sub>i</sub>, β̃<sub>i</sub>, 𝟙</td></tr>
+    <tr><td>rotation (Σ<sub>i</sub>)</td><td>separate blocks, equal</td><td>separate blocks, equal</td></tr>
+    <tr><td>boost e<sup>−(ψ/2)α<sub>I</sub></sup></td><td>diag(U<sup>−1</sup>, U): separate, opposite</td><td>[[cosh, sinh <span class="hs">σ</span><sub>I</sub>], [sinh <span class="hs">σ</span><sub>I</sub>, cosh]]: hyperbolic mixing</td></tr>
+    <tr><td>phase e<sup>φχ</sup></td><td>diag(e<sup>φT̂</sup>, e<sup>−φT̂</sup>): separate, opposite</td><td>[[cos φ <span class="one">1</span>, −sin φ T̂], [−sin φ T̂, cos φ <span class="one">1</span>]]: circular mixing</td></tr>
+    <tr><td>suited to</td><td>construction, rotors, massless fields</td><td>massive spinors, rest frame, standard comparison</td></tr>
+  </tbody></table></div>
+  <p class="note">The boost and the phase are the opposite-sign pair: separate in Weyl, inter-block in Dirac, hyperbolic because α<sub>I</sub>² = +𝟙 and circular because χ² = −𝟙 (de Haas 2026, <i>From Weyl to Dirac</i>, eqs. 806–817).</p>
+</section>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-sw">
+  <h2 id="h-sw">The basis and the table in either representation</h2>
+  <div class="row reprow" role="group" aria-label="Representation"><span class="replab">Representation</span><button type="button" id="rW" aria-pressed="true">Weyl</button><button type="button" id="rD" aria-pressed="false">Dirac</button></div>
+  <div class="formula keybox core" id="keybox"></div>
+  <p class="note" style="max-width:none">All 256 products land on exactly one basis element, with sign ±1 and no factor i. Pick a cell to see both factors in their Pauli block content, the block product term by term, and the 4×4 product.</p>
+</section>
+
+<section class="card" aria-labelledby="h-bas">
+  <h2 id="h-bas">The sixteen basis matrices and their Pauli content: <span id="repname">Weyl</span> representation</h2>
+  <div class="row" role="group" aria-label="Basis view" style="margin:0 0 10px"><button type="button" id="vB" aria-pressed="true">2×2 Pauli blocks</button><button type="button" id="v4" aria-pressed="false">4×4 complex matrices</button></div>
+  <div class="bgrid" id="basis"></div>
+  <p class="cap">Grades: <span class="gk g0">grade 0</span> <span class="gk g1">grade 1, vector</span> <span class="gk g2b">grade 2, boost bivector</span> <span class="gk g2s">grade 2, spin bivector</span> <span class="gk g3">grade 3, pseudovector</span> <span class="gk g4">grade 4, pseudoscalar</span>. Blocks use the BQ-Pauli basis <span class="one">1</span>, T̂ = i<span class="one">1</span>, Î, Ĵ, K̂, <span class="hs">σ</span><sub>I</sub>, <span class="hs">σ</span><sub>J</sub>, <span class="hs">σ</span><sub>K</sub>, with K̂<sub>i</sub> = T̂<span class="hs">σ</span><sub>i</sub>. 𝟙 is the 4×4 unit.</p>
+</section>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-tab">
+  <h2 id="h-tab">The 16 × 16 table (row · column)</h2>
+  <div class="tabwrap"><div class="tscroll"><table class="wt" id="tab"></table></div><div class="tside" id="side" aria-live="polite"></div></div>
+  <p class="cap">Each cell is the product of its row element (left) times its column element (right), coloured by the grade of the result. The selected cell is outlined.</p>
+</section>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-sel">
+  <h2 id="h-sel">The selected product, with the BQ-Pauli entries</h2>
+  <div id="sel"></div>
+  <div id="blk"></div>
+</section>
+
+<section class="card" style="margin-top:18px" aria-labelledby="h-full">
+  <h2 id="h-full">The same product as 4×4 complex matrices</h2>
+  <div id="full"></div>
+</section>
+
+<div class="grid" style="margin-top:18px">
+  <section class="card" aria-labelledby="h-fac">
+    <h2 id="h-fac">Structure read off the table</h2>
+    <div id="facts"></div>
+  </section>
+  <section class="card" aria-labelledby="h-not">
+    <h2 id="h-not">Notes</h2>
+    <ul class="nl" id="notes"></ul>
+  </section>
+</div>
+<p class="cap" style="margin-top:14px">Definitions from de Haas (2026), <i>From Weyl to Dirac</i>, eqs. 1–24, and de Haas (2025), <i>BQ Dirac Gravity</i>, §3.3; checked exactly in <code>bq_dirac_representations.py</code>. The Weyl-only table is the <a href="BQ_Dirac_Multiplication_Table.html">BQ-Dirac multiplication table</a>. Part of <a href="../index.html">the BQ algebra at the Dirac level</a>; the BQ-Pauli models are at <a href="../../index.html">the main index</a>.</p>
+</div>
+
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+/* ---------- BQ-Pauli level (2x2, complex entries [re, im]) ---------- */
+const C = (a, b) => [a, b || 0];
+const P = {'1':[[C(1),C(0)],[C(0),C(1)]], T:[[C(0,1),C(0)],[C(0),C(0,1)]], I:[[C(0,1),C(0)],[C(0),C(0,-1)]],
+  J:[[C(0),C(1)],[C(-1),C(0)]], K:[[C(0),C(0,1)],[C(0,1),C(0)]],
+  sI:[[C(1),C(0)],[C(0),C(-1)]], sJ:[[C(0),C(0,-1)],[C(0,1),C(0)]], sK:[[C(0),C(1)],[C(1),C(0)]]};
+const PK = ['1', 'T', 'I', 'J', 'K', 'sI', 'sJ', 'sK'];
+const PL = {'1':'<span class="one">1</span>', T:'T̂', I:'Î', J:'Ĵ', K:'K̂', sI:'<span class="hs">σ</span><sub>I</sub>', sJ:'<span class="hs">σ</span><sub>J</sub>', sK:'<span class="hs">σ</span><sub>K</sub>'};
+const cm = (a, b) => [a[0]*b[0] - a[1]*b[1], a[0]*b[1] + a[1]*b[0]];
+const ca = (a, b) => [a[0] + b[0], a[1] + b[1]];
+const eq = (a, b) => Math.abs(a[0] - b[0]) < 1e-12 && Math.abs(a[1] - b[1]) < 1e-12;
+function mmul(A, B){ const n = A.length, R = []; for (let i = 0; i < n; i++){ R.push([]); for (let k = 0; k < n; k++){ let s = C(0); for (let j = 0; j < n; j++) s = ca(s, cm(A[i][j], B[j][k])); R[i].push(s); } } return R; }
+const msc = (A, s) => A.map(r => r.map(z => [z[0]*s, z[1]*s]));
+const meq = (A, B) => A.every((r, i) => r.every((z, j) => eq(z, B[i][j])));
+/* Pauli product table: X Y = s Z */
+const PT = {};
+PK.forEach(a => PK.forEach(b => { const M = mmul(P[a], P[b]); for (const k of PK) for (const s of [1, -1]) if (meq(M, msc(P[k], s))) PT[a + '|' + b] = {s, k}; }));
+
+/* ---------- Dirac level: block matrices, blocks = null or {s, k} ---------- */
+const blk = (a, b, c, d) => [[a, b], [c, d]];
+const e = (s, k) => ({s, k});
+function bmul(X, Y, log){
+  const R = [[null, null], [null, null]];
+  for (let i = 0; i < 2; i++) for (let k = 0; k < 2; k++){
+    const terms = [];
+    for (let j = 0; j < 2; j++){
+      const a = X[i][j], b = Y[j][k];
+      if (!a || !b){ terms.push({zero:true, a, b}); continue; }
+      const p = PT[a.k + '|' + b.k]; terms.push({a, b, s:a.s*b.s*p.s, k:p.k, ps:p.s});
+    }
+    const nz = terms.filter(t => !t.zero);
+    let res = null;
+    if (nz.length === 1) res = {s:nz[0].s, k:nz[0].k};
+    else if (nz.length === 2){ if (nz[0].k === nz[1].k){ const s = nz[0].s + nz[1].s; res = s === 0 ? null : {s, k:nz[0].k}; } else res = {mixed:nz}; }
+    R[i][k] = res;
+    if (log) log.push({i, k, terms, res});
+  }
+  return R;
+}
+const bneg = X => X.map(r => r.map(b => b ? {s:-b.s, k:b.k} : null));
+const full = X => { const Z = [[C(0),C(0)],[C(0),C(0)]], F = [];
+  for (let i = 0; i < 4; i++){ F.push([]); for (let j = 0; j < 4; j++){ const b = X[i >> 1][j >> 1]; F[i].push(b ? [P[b.k][i & 1][j & 1][0]*b.s, P[b.k][i & 1][j & 1][1]*b.s] : C(0)); } }
+  return F; };
+
+function build(rep){
+  const b0 = rep === 'W' ? blk(null, e(1, 'T'), e(1, 'T'), null) : blk(e(1, 'T'), null, null, e(-1, 'T'));
+  const bI = blk(null, e(1, 'I'), e(-1, 'I'), null), bJ = blk(null, e(1, 'J'), e(-1, 'J'), null), bK = blk(null, e(1, 'K'), e(-1, 'K'), null);
+  const one = blk(e(1, '1'), null, null, e(1, '1'));
+  const aI = bmul(b0, bI), aJ = bmul(b0, bJ), aK = bmul(b0, bK);
+  const SI = bmul(bJ, bK), SJ = bmul(bK, bI), SK = bmul(bI, bJ);
+  const chi = bneg(bmul(bmul(bmul(b0, bI), bJ), bK));
+  const bt = [b0, bI, bJ, bK].map(x => bmul(chi, x));
+  const L = [
+    ['one', '𝟙', one, 'g0', '4×4 unit'],
+    ['b0', 'β<sub>0</sub>', b0, 'g1', 'entered'], ['bI', 'β<sub>I</sub>', bI, 'g1', 'entered'], ['bJ', 'β<sub>J</sub>', bJ, 'g1', 'entered'], ['bK', 'β<sub>K</sub>', bK, 'g1', 'entered'],
+    ['aI', 'α<sub>I</sub>', aI, 'g2b', 'β<sub>0</sub>β<sub>I</sub>'], ['aJ', 'α<sub>J</sub>', aJ, 'g2b', 'β<sub>0</sub>β<sub>J</sub>'], ['aK', 'α<sub>K</sub>', aK, 'g2b', 'β<sub>0</sub>β<sub>K</sub>'],
+    ['SI', 'Σ<sub>I</sub>', SI, 'g2s', 'β<sub>J</sub>β<sub>K</sub>'], ['SJ', 'Σ<sub>J</sub>', SJ, 'g2s', 'β<sub>K</sub>β<sub>I</sub>'], ['SK', 'Σ<sub>K</sub>', SK, 'g2s', 'β<sub>I</sub>β<sub>J</sub>'],
+    ['bt0', 'β̃<sub>0</sub>', bt[0], 'g3', 'χβ<sub>0</sub>'], ['btI', 'β̃<sub>I</sub>', bt[1], 'g3', 'χβ<sub>I</sub>'], ['btJ', 'β̃<sub>J</sub>', bt[2], 'g3', 'χβ<sub>J</sub>'], ['btK', 'β̃<sub>K</sub>', bt[3], 'g3', 'χβ<sub>K</sub>'],
+    ['chi', 'χ', chi, 'g4', '−β<sub>0</sub>β<sub>I</sub>β<sub>J</sub>β<sub>K</sub>']];
+  const F = L.map(x => full(x[2]));
+  const idf = M => { for (let n = 0; n < 16; n++) for (const s of [1, -1]) if (meq(M, msc(F[n], s))) return {n, s}; return null; };
+  const T = L.map((x, a) => L.map((y, b) => { const B = bmul(x[2], y[2]), M = mmul(F[a], F[b]), idB = idf(full(B)), idM = idf(M);
+    return {B, M, id:idM, agree:meq(full(B), M) && idB && idM && idB.n === idM.n && idB.s === idM.s}; }));
+  return {EL:L, F4:F, TAB:T};
+}
+const REPS = {W:build('W'), D:build('D')};
+let REP = 'W', EL = REPS.W.EL, F4 = REPS.W.F4, TAB = REPS.W.TAB;
+function ident(M){ for (let n = 0; n < 16; n++) for (const s of [1, -1]) if (meq(M, msc(F4[n], s))) return {n, s}; return null; }
+
+/* ---------- formatting ---------- */
+const bs = b => !b ? '0' : (b.s < 0 ? '−' : '') + PL[b.k];
+const mxs = rows => `<span class="mxs" style="grid-template-columns:repeat(${rows[0].length},auto)">${rows.flat().map(x => `<span>${x}</span>`).join('')}</span>`;
+const bmx = X => mxs(X.map(r => r.map(bs)));
+const cz = z => { const r = Math.round(z[0]), i = Math.round(z[1]); if (!r && !i) return '0'; if (!i) return r < 0 ? '−1' : '1'; if (!r) return i < 0 ? '−i' : 'i'; return `${r}${i < 0 ? '−' : '+'}${Math.abs(i)}i`; };
+const fmx = M => mxs(M.map(r => r.map(cz)));
+const sn = (s, n) => (s < 0 ? '−' : '') + EL[n][1];
+const btx = X => `[[${bs(X[0][0])}, ${bs(X[0][1])}], [${bs(X[1][0])}, ${bs(X[1][1])}]]`;
+
+let SEL = [2, 3], VIEW = 'B';
+function basis(){
+  $('vB').setAttribute('aria-pressed', VIEW === 'B' ? 'true' : 'false'); $('v4').setAttribute('aria-pressed', VIEW === '4' ? 'true' : 'false');
+  $('basis').innerHTML = EL.map((x, n) => `<div class="bel ${x[3]}"><div class="bh"><b>${x[1]}</b><span>${x[4]}</span></div><div class="bm">${VIEW === 'B' ? bmx(x[2]) : fmx(F4[n])}</div></div>`).join('');
+}
+function table(){
+  const END = new Set([0, 4, 7, 10, 14]);              /* last index of the groups 𝟙 | β | α | Σ | β̃ | χ */
+  const vr = n => END.has(n) ? ' vr' : '', hb = n => END.has(n) ? ' hb' : '';
+  let h = `<thead><tr><th class="corner vr hb">·</th>${EL.map((x, n) => `<th class="${x[3]} hb${vr(n)}">${x[1]}</th>`).join('')}</tr></thead><tbody>`;
+  EL.forEach((x, a) => { h += `<tr><th class="${x[3]} vr${hb(a)}">${x[1]}</th>`;
+    EL.forEach((y, b) => { const t = TAB[a][b]; h += `<td class="${EL[t.id.n][3]}${vr(b)}${hb(a)}${a === SEL[0] && b === SEL[1] ? ' on' : ''}" data-a="${a}" data-b="${b}" tabindex="0" aria-label="${x[0]} times ${y[0]}">${sn(t.id.s, t.id.n)}</td>`; });
+    h += '</tr>'; });
+  $('tab').innerHTML = h + '</tbody>';
+}
+function detail(){
+  const [a, b] = SEL, X = EL[a], Y = EL[b], t = TAB[a][b], r = sn(t.id.s, t.id.n);
+  const log = []; bmul(X[2], Y[2], log);
+  const term = tt => tt.zero ? '0' : `(${bs(tt.a)})(${bs(tt.b)}) = ${tt.a.s*tt.b.s < 0 ? '−' : ''}${PL[tt.a.k]}${PL[tt.b.k]} = ${bs({s:tt.s, k:tt.k})}`;
+  const rows = log.map(L => `<div class="dl dwrap">(XY)<sub>${L.i}${L.k}</sub> = X<sub>${L.i}0</sub>Y<sub>0${L.k}</sub> + X<sub>${L.i}1</sub>Y<sub>1${L.k}</sub> = ${L.terms.map(term).join(' &nbsp;+&nbsp; ')} &nbsp;⇒&nbsp; <b>${bs(L.res)}</b></div>`).join('');
+  $('side').innerHTML = `<div class="sidehead">${X[1]} · ${Y[1]} = <b class="${EL[t.id.n][3]}t">${r}</b></div>
+    <div class="mxrow sidemx">${bmx(X[2])} ${bmx(Y[2])} <span>=</span> ${bmx(t.B)}</div>
+    <p class="sideline">Grades ${gr(X[3])} · ${gr(Y[3])} → ${gr(EL[t.id.n][3])}.</p>
+    ${X[0] === 'one' || Y[0] === 'one' ? '' : `<p class="sideline">${commute(a, b)}</p>`}`;
+  $('sel').innerHTML = `<div class="mxrow selrow"><span>${X[1]} · ${Y[1]} =</span> ${bmx(X[2])} ${bmx(Y[2])} <span>=</span> ${bmx(t.B)} <span>=</span> <b class="${EL[t.id.n][3]}t">${r}</b></div>
+    <p class="note">Grades ${gr(X[3])} · ${gr(Y[3])} → ${gr(EL[t.id.n][3])}. ${X[0] === 'one' || Y[0] === 'one' ? '' : commute(a, b)} Block route and 4×4 route agree: <b style="color:var(${t.agree ? '--good' : '--bad'})">${t.agree ? 'yes, entry by entry' : 'NO'}</b>.</p>`;
+  $('blk').innerHTML = `<div class="sub">The four blocks, X = ${X[1]}, Y = ${Y[1]}</div>${rows}
+    <p class="note">Each product of two BQ-Pauli elements is read from the 8×8 <a href="../../BQ_models/BQ_Pauli_Multiplication_Table.html">BQ-Pauli table</a>; a product of two blocks is again ± one Pauli element, so each result block is a single term or zero.</p>`;
+  $('full').innerHTML = `<div class="mxrow selrow fx"><span>${X[1]} · ${Y[1]} =</span> ${fmx(F4[a])} ${fmx(F4[b])} <span>=</span> ${fmx(t.M)} <span>=</span> <b class="${EL[t.id.n][3]}t">${r}</b></div>
+    <p class="note">Ordinary 4×4 complex matrix product; entries are 0, ±1 or ±i. The result equals ${t.id.s < 0 ? 'minus ' : ''}the 4×4 matrix of ${EL[t.id.n][1]}.</p>`;
+  document.querySelectorAll('#tab td').forEach(td => td.classList.toggle('on', +td.dataset.a === a && +td.dataset.b === b));
+}
+const gr = g => ({g0:'0', g1:'1', g2b:'2 (boost)', g2s:'2 (spin)', g3:'3', g4:'4'})[g];
+function commute(a, b){ if (a === b){ const t = TAB[a][a].id; return `A square: ${EL[a][1]}² = ${sn(t.s, t.n)}.`; } const t1 = TAB[a][b].id, t2 = TAB[b][a].id; return t1.n === t2.n && t1.s === t2.s ? `${EL[a][1]} and ${EL[b][1]} commute.` : `${EL[a][1]} and ${EL[b][1]} anticommute: ${EL[b][1]} · ${EL[a][1]} = ${sn(t2.s, t2.n)}.`; }
+function facts(){
+  const sq = EL.map((x, n) => ({n, s:TAB[n][n].id.s}));
+  const neg = sq.filter(q => q.s < 0).map(q => EL[q.n][1]).join(', '), pos = sq.filter(q => q.s > 0).map(q => EL[q.n][1]).join(', ');
+  let comm = 0, anti = 0; for (let a = 1; a < 16; a++) for (let b = a + 1; b < 16; b++){ const t1 = TAB[a][b].id, t2 = TAB[b][a].id; if (t1.n === t2.n && t1.s === t2.s) comm++; else anti++; }
+  const allOK = TAB.every(r => r.every(t => t.agree));
+  const chiC = EL.map((x, n) => n).filter(n => n > 0 && n < 15).map(n => { const t1 = TAB[15][n].id, t2 = TAB[n][15].id; return t1.n === t2.n && t1.s === t2.s ? 'c' : 'a'; });
+  $('facts').innerHTML = `<ul class="nl">
+    <li><b>Squares.</b> X² = −𝟙 for ${neg}; X² = +𝟙 for ${pos}.</li>
+    <li><b>Clifford relations.</b> β<sub>0</sub>² = −𝟙, β<sub>i</sub>² = +𝟙, and distinct β<sub>μ</sub> anticommute: β<sub>μ</sub>β<sub>ν</sub> + β<sub>ν</sub>β<sub>μ</sub> = 2η<sub>μν</sub>𝟙 with η = diag(−1, 1, 1, 1).</li>
+    <li><b>χ.</b> χ² = −𝟙; χ anticommutes with all β<sub>μ</sub> and β̃<sub>μ</sub> and commutes with all α<sub>i</sub> and Σ<sub>i</sub> (${chiC.filter(x => x === 'a').length} anticommuting, ${chiC.filter(x => x === 'c').length} commuting).</li>
+    <li><b>Boost and spin.</b> α<sub>I</sub> = ${btx(EL[5][2])} carries the spin-norm <span class="hs">σ</span> blocks, Σ<sub>I</sub> = ${btx(EL[8][2])} the space-time K̂ blocks: the Pauli-level <span class="hs">σ</span>/K̂ split reappears as the boost/spin split.</li>
+    <li><b>Duality.</b> χα<sub>i</sub> = −Σ<sub>i</sub> and χΣ<sub>i</sub> = α<sub>i</sub>: χ maps the boost bivectors onto the spin bivectors.</li>
+    <li><b>Count.</b> Of the 105 pairs of distinct non-unit elements, ${comm} commute and ${anti} anticommute. All 256 products agree between the block and the 4×4 route: <b style="color:var(${allOK ? '--good' : '--bad'})">${allOK ? 'yes' : 'no'}</b>.</li>
+  </ul>`;
+}
+$('tab').addEventListener('click', ev => { const td = ev.target.closest('td'); if (!td) return; SEL = [+td.dataset.a, +td.dataset.b]; detail(); });
+$('tab').addEventListener('keydown', ev => { const td = ev.target.closest('td'); if (td && (ev.key === 'Enter' || ev.key === ' ')){ ev.preventDefault(); SEL = [+td.dataset.a, +td.dataset.b]; detail(); } });
+$('vB').addEventListener('click', () => { VIEW = 'B'; basis(); });
+$('v4').addEventListener('click', () => { VIEW = '4'; basis(); });
+function notes(){
+  const diag = EL.filter(x => !x[2][0][1] && !x[2][1][0]).map(x => x[1]), off = EL.filter(x => !x[2][0][0] && !x[2][1][1]).map(x => x[1]);
+  $('notes').innerHTML = `<li><b>Definitions.</b> Only β<sub>0</sub>, β<sub>I</sub>, β<sub>J</sub>, β<sub>K</sub> are entered by hand, from their Pauli blocks. The other twelve elements are computed on this page as block products: α<sub>i</sub> = β<sub>0</sub>β<sub>i</sub>, Σ<sub>I</sub> = β<sub>J</sub>β<sub>K</sub> (cyclic), χ = −β<sub>0</sub>β<sub>I</sub>β<sub>J</sub>β<sub>K</sub>, β̃<sub>μ</sub> = χβ<sub>μ</sub>.</li>
+    <li><b>Block diagonal:</b> ${diag.join(', ')}. <b>Block off-diagonal:</b> ${off.join(', ')}.</li>
+    ${REP === 'W' ? '<li><b>Weyl: even and odd.</b> The even grades (𝟙, α, Σ, χ) are block diagonal and the odd grades (β, β̃) block off-diagonal. The two blocks of a vector are A and −A<sup>T</sup>, and χ = diag(T̂, −T̂) is diagonal: this is the representation in which the chirality χ and the boosts are diagonal.</li>'
+      : '<li><b>Dirac: time and space.</b> β<sub>0</sub> = diag(T̂, −T̂) is block diagonal and the β<sub>i</sub> are off-diagonal, so a vector is [[a<sub>0</sub>T̂, <b>a</b>·<b>K̂</b>], [−<b>a</b>·<b>K̂</b>, −a<sub>0</sub>T̂]]: time on the diagonal, space off it. This is the representation in which β<sub>0</sub> (energy, parity) is diagonal; the grade no longer decides the block pattern.</li>'}
+    <li><b>Check.</b> Each product is computed twice, by blocks through the BQ-Pauli table and as a 4×4 matrix product, and compared entry by entry; the result is matched against all sixteen ± basis matrices.</li>`;
+}
+function header(){
+  $('rW').setAttribute('aria-pressed', REP === 'W' ? 'true' : 'false'); $('rD').setAttribute('aria-pressed', REP === 'D' ? 'true' : 'false');
+  $('keybox').innerHTML = (REP === 'W' ? '<b>Weyl:</b> β<sub>0</sub> = [[0, T̂], [T̂, 0]]' : '<b>Dirac:</b> β<sub>0</sub> = [[T̂, 0], [0, −T̂]]')
+    + ', &nbsp;β<sub>i</sub> = [[0, K̂<sub>i</sub>], [−K̂<sub>i</sub>, 0]], &nbsp;α<sub>i</sub> = β<sub>0</sub>β<sub>i</sub>, &nbsp;Σ<sub>I</sub> = β<sub>J</sub>β<sub>K</sub>, &nbsp;χ = −β<sub>0</sub>β<sub>I</sub>β<sub>J</sub>β<sub>K</sub>, &nbsp;β̃<sub>μ</sub> = χβ<sub>μ</sub>';
+  $('repname').textContent = REP === 'W' ? 'Weyl' : 'Dirac';
+}
+/* ---------- the Weyl-to-Dirac matrix ---------- */
+function weylDirac(){
+  const r = Math.SQRT1_2;
+  const Sm = [0,1,2,3].map(i => [0,1,2,3].map(j => ((i & 1) !== (j & 1)) ? C(0) : C(r*((i >> 1) === 1 && (j >> 1) === 0 ? -1 : 1))));
+  const St = Sm[0].map((_, j) => Sm.map(row => row[j]));
+  const W = REPS.W, Dd = REPS.D;
+  const ok = W.F4.every((M, n) => meq(mmul(mmul(Sm, M), St), Dd.F4[n]));
+  const same = W.TAB.every((row, a) => row.every((t, b) => t.id.n === Dd.TAB[a][b].id.n && t.id.s === Dd.TAB[a][b].id.s));
+  const S4 = M => mxs(M.map(rw => rw.map(z => z[0] === 0 ? '0' : (z[0] < 0 ? '−1' : '1'))));
+  const u = PL['1'];
+  $('w2d').innerHTML = `<div class="mxrow selrow"><span>S = <sup>1</sup>⁄<sub>√2</sub></span> ${mxs([[u, u], ['−' + u, u]])} <span>= <sup>1</sup>⁄<sub>√2</sub></span> ${S4(Sm)}</div>
+    <div class="mxrow selrow"><span>S<sup>−1</sup> = S<sup>T</sup> = <sup>1</sup>⁄<sub>√2</sub></span> ${mxs([[u, '−' + u], [u, u]])} <span>= <sup>1</sup>⁄<sub>√2</sub></span> ${S4(St)}</div>
+    <div class="formula" style="white-space:normal;margin-top:8px">X<sub>Dirac</sub> = S X<sub>Weyl</sub> S<sup>−1</sup>, &nbsp; X<sub>Weyl</sub> = S<sup>−1</sup> X<sub>Dirac</sub> S</div>
+    <p class="note">S is real and orthogonal, so S<sup>−1</sup> = S<sup>T</sup>. It keeps the β<sub>i</sub> and turns β<sub>0</sub> into a diagonal matrix: S [[0, T̂], [T̂, 0]] S<sup>T</sup> = ½[[T̂ + T̂, T̂ − T̂], [−T̂ + T̂, −T̂ − T̂]] = [[T̂, 0], [0, −T̂]], while S [[0, K̂<sub>i</sub>], [−K̂<sub>i</sub>, 0]] S<sup>T</sup> = ½[[K̂<sub>i</sub> − K̂<sub>i</sub>, K̂<sub>i</sub> + K̂<sub>i</sub>], [−K̂<sub>i</sub> − K̂<sub>i</sub>, −K̂<sub>i</sub> + K̂<sub>i</sub>]] = [[0, K̂<sub>i</sub>], [−K̂<sub>i</sub>, 0]]. S is itself an element of the algebra: S = (𝟙 − β̃<sub>0</sub>)/√2 = cos(π/4)𝟙 − sin(π/4)β̃<sub>0</sub> = e<sup>−(π/4)β̃<sub>0</sub></sup>, with β̃<sub>0</sub>² = −𝟙, which is why β̃<sub>0</sub> is the same in both representations.</p>
+    <div class="tscroll"><table class="dc wd"><thead><tr><th>element</th><th>Weyl blocks</th><th>Dirac blocks = S · Weyl · S<sup>−1</sup></th></tr></thead><tbody>
+    ${W.EL.map((x, n) => `<tr><td class="${x[3]}t"><b>${x[1]}</b></td><td>${btx(x[2])}</td><td>${btx(Dd.EL[n][2])}</td></tr>`).join('')}</tbody></table></div>
+    <span class="pill ${ok ? 'ok' : 'no'}">${ok ? '✓ S X<sub>Weyl</sub> S<sup>−1</sup> = X<sub>Dirac</sub> for all sixteen, each built independently from its own β<sub>0</sub>' : '✗ the transformation fails'}</span>
+    <span class="pill ${same ? 'ok' : 'no'}">${same ? '✓ the 16 × 16 table is identical in both representations' : '✗ the tables differ'}</span>
+    <ul class="nl" style="margin-top:12px">
+      <li><b>The table does not change.</b> X<sub>D</sub>Y<sub>D</sub> = SX<sub>W</sub>S<sup>−1</sup>SY<sub>W</sub>S<sup>−1</sup> = S(X<sub>W</sub>Y<sub>W</sub>)S<sup>−1</sup>: every product, square, commutation and grade is the same; only the matrices differ.</li>
+      <li><b>The vector.</b> Weyl: <span class="sl">a</span> = [[0, A], [−A<sup>T</sup>, 0]] with A = a<sub>0</sub>T̂ + <b>a</b>·<b>K̂</b>. Dirac: <span class="sl">a</span> = [[a<sub>0</sub>T̂, <b>a</b>·<b>K̂</b>], [−<b>a</b>·<b>K̂</b>, −a<sub>0</sub>T̂]], with the time part on the diagonal.</li>
+      <li><b>The boost.</b> Weyl: Λ = diag(U<sup>−1</sup>, U), diagonal. Dirac: SΛS<sup>−1</sup> = cosh(ψ/2)𝟙 − sinh(ψ/2)α<sub>I</sub> = [[cosh(ψ/2)<span class="one">1</span>, sinh(ψ/2)<span class="hs">σ</span><sub>I</sub>], [sinh(ψ/2)<span class="hs">σ</span><sub>I</sub>, cosh(ψ/2)<span class="one">1</span>]], no longer diagonal. Rotations diag(r, r) are the same in both.</li>
+      <li><b>Where S comes from.</b> S is chosen so that the β<sub>i</sub> stay unchanged and β<sub>0</sub> becomes diagonal. Because S = e<sup>−(π/4)β̃<sub>0</sub></sup> is a rotation by π/4 inside the algebra, the switch is an exact similarity and no physical content changes; S<sup>−1</sup> = e<sup>+(π/4)β̃<sub>0</sub></sup> takes Dirac back to Weyl.</li>
+    </ul>`;
+}
+function setRep(r){ REP = r; ({EL, F4, TAB} = REPS[r]); header(); basis(); table(); detail(); facts(); notes(); }
+$('rW').addEventListener('click', () => setRep('W'));
+$('rD').addEventListener('click', () => setRep('D'));
+weylDirac(); header(); notes();
+basis(); table(); detail(); facts();
+})();
+</script>
+</body></html>

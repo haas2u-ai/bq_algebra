@@ -16,6 +16,7 @@ The scripts are self-contained and do not import the BQ-Pauli scripts in `../../
 | Script | Reproduces | Example |
 |---|---|---|
 | `bq_dirac_table.py` | the 16×16 BQ-Dirac multiplication table: β₀ = [[0,T̂],[T̂,0]], β_i = [[0,K̂_i],[−K̂_i,0]], the other twelve elements computed (α_i, Σ_i, χ, β̃_μ); the Pauli block content of all sixteen; Clifford relations; χ² = −𝟙 and its (anti)commutation; trace orthogonality; all 256 products by the block route and the 4×4 route, each ± one basis element | `python bq_dirac_table.py bI bJ` |
+| `bq_dirac_representations.py` | the same basis in the Dirac representation, β₀ = [[T̂,0],[0,−T̂]] with the β_i unchanged and the other twelve built as products; the matrix S = (1/√2)[[1̂,1̂],[−1̂,1̂]] (real orthogonal) with X_D = S X_W S⁻¹ for all sixteen; the identical 16×16 table; the Pauli blocks of both bases; S = (𝟙 − β̃₀)/√2 = e^(−(π/4)β̃₀); the vector [[a₀T̂, a·K̂], [−a·K̂, −a₀T̂]] and the boost [[c 1̂, s σ̂_I], [s σ̂_I, c 1̂]] in the Dirac representation | `python bq_dirac_representations.py` |
 
 ### 2 · Vectors and their products
 
@@ -43,6 +44,7 @@ pip install -r requirements.txt        # SymPy only
 # 1 · the basis
 python bq_dirac_table.py               # all checks and the 16 x 16 table (a few seconds)
 python bq_dirac_table.py bI bJ         # one product: Pauli blocks, block terms, 4x4 matrices
+python bq_dirac_representations.py     # the Dirac representation and the Weyl-to-Dirac matrix S (seconds)
 
 # 2 · vectors and their products
 python bq_dirac_bilinear.py            # channel rule, Pauli block form, 144 pairs, paper results (about a minute)

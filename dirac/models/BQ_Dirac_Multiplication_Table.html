@@ -182,11 +182,19 @@ table.wt td:focus-visible{outline:2px solid var(--sel)}
 .one{position:relative;display:inline-block}
 .one::after{content:"";position:absolute;left:50%;top:-.12em;width:.42em;height:.42em;border-left:.075em solid currentColor;border-top:.075em solid currentColor;transform:translateX(-50%) rotate(45deg) scale(.7,.55);transform-origin:center}
 .nl{padding-left:18px;margin:4px 0}.nl li{font-size:14.5px;margin-bottom:7px}
+.reprow{align-items:center;margin:10px 0 4px}.replab{font:600 13px var(--sans);color:var(--soft);letter-spacing:.06em;text-transform:uppercase;margin-right:4px}
+.reprow button[aria-pressed='true']{background:var(--sel);color:#fff;border-color:var(--sel)}
+.back{display:inline-block;margin:0 0 10px;font-size:14.5px;color:var(--sn);text-decoration:none}
+table.wd td{font:500 15px var(--serif);text-align:left}
+.hs{position:relative;display:inline-block}.hs::after{content:'';position:absolute;left:50%;top:.08em;width:.42em;height:.42em;border-left:.075em solid currentColor;border-top:.075em solid currentColor;transform:translateX(-50%) rotate(45deg) scale(.7,.55)}
+.pill{margin-right:6px}
+.sl{position:relative;display:inline-block}.sl::after{content:'';position:absolute;left:50%;top:6%;height:88%;border-left:1.3px solid currentColor;transform:translateX(-50%) rotate(26deg)}
 </style>
 </head><body>
 <div class="wrap">
 <header>
   <h1>BQ-Dirac Multiplication Table</h1>
+  <a class="back" href="../index.html">← The BQ algebra at the Dirac level</a>
   <p class="lede">At the Dirac level the BQ algebra lives in 4×4 complex matrices, in the Weyl representation. Every one of its sixteen basis elements is a 2×2 block matrix whose blocks are BQ-Pauli elements: the Dirac level is the Pauli level one storey up. A product of two Dirac elements is therefore a block product whose four blocks are BQ-Pauli products, and it can be checked a second time as an ordinary 4×4 complex matrix product.</p>
   <div class="formula keybox core">β<sub>0</sub> = [[0, T̂], [T̂, 0]], &nbsp;β<sub>i</sub> = [[0, K̂<sub>i</sub>], [−K̂<sub>i</sub>, 0]], &nbsp;α<sub>i</sub> = β<sub>0</sub>β<sub>i</sub>, &nbsp;Σ<sub>I</sub> = β<sub>J</sub>β<sub>K</sub>, &nbsp;χ = −β<sub>0</sub>β<sub>I</sub>β<sub>J</sub>β<sub>K</sub>, &nbsp;β̃<sub>μ</sub> = χβ<sub>μ</sub></div>
   <p class="lede">All 256 products land on exactly one basis element, with sign ±1 and no factor i. Pick a cell to see both factors in their Pauli block content, the block product term by term, and the 4×4 product.</p>
@@ -196,7 +204,7 @@ table.wt td:focus-visible{outline:2px solid var(--sel)}
   <h2 id="h-bas">The sixteen basis matrices and their Pauli content</h2>
   <div class="row" role="group" aria-label="Basis view" style="margin:0 0 10px"><button type="button" id="vB" aria-pressed="true">2×2 Pauli blocks</button><button type="button" id="v4" aria-pressed="false">4×4 complex matrices</button></div>
   <div class="bgrid" id="basis"></div>
-  <p class="cap">Grades: <span class="gk g0">grade 0</span> <span class="gk g1">grade 1, vector</span> <span class="gk g2b">grade 2, boost bivector</span> <span class="gk g2s">grade 2, spin bivector</span> <span class="gk g3">grade 3, pseudovector</span> <span class="gk g4">grade 4, pseudoscalar</span>. Blocks use the BQ-Pauli basis 1̂, T̂ = i1̂, Î, Ĵ, K̂, σ̂<sub>I</sub>, σ̂<sub>J</sub>, σ̂<sub>K</sub>, with K̂<sub>i</sub> = T̂σ̂<sub>i</sub>. 𝟙 is the 4×4 unit.</p>
+  <p class="cap">Grades: <span class="gk g0">grade 0</span> <span class="gk g1">grade 1, vector</span> <span class="gk g2b">grade 2, boost bivector</span> <span class="gk g2s">grade 2, spin bivector</span> <span class="gk g3">grade 3, pseudovector</span> <span class="gk g4">grade 4, pseudoscalar</span>. Blocks use the BQ-Pauli basis <span class="one">1</span>, T̂ = i<span class="one">1</span>, Î, Ĵ, K̂, <span class="hs">σ</span><sub>I</sub>, <span class="hs">σ</span><sub>J</sub>, <span class="hs">σ</span><sub>K</sub>, with K̂<sub>i</sub> = T̂<span class="hs">σ</span><sub>i</sub>. 𝟙 is the 4×4 unit.</p>
 </section>
 
 <section class="card" style="margin-top:18px" aria-labelledby="h-tab">
@@ -231,7 +239,7 @@ table.wt td:focus-visible{outline:2px solid var(--sel)}
     </ul>
   </section>
 </div>
-<p class="cap" style="margin-top:14px">Definitions from de Haas (2026), <i>From Weyl to Dirac</i>, and the BQ-Dirac algebra script of the project (Weyl representation). Part of <a href="../index.html">the BQ algebra at the Dirac level</a>; the BQ-Pauli models are at <a href="../../index.html">the main index</a>.</p>
+<p class="cap" style="margin-top:14px">Definitions from de Haas (2026), <i>From Weyl to Dirac</i>, and the BQ-Dirac algebra script of the project (Weyl representation). The same table in the Dirac representation, and the matrix S between the two, is on the page <a href="BQ_Dirac_Weyl_Dirac_Representations.html">BQ Weyl and Dirac representations</a>. Part of <a href="../index.html">the BQ algebra at the Dirac level</a>; the BQ-Pauli models are at <a href="../../index.html">the main index</a>.</p>
 </div>
 
 <script>
@@ -243,7 +251,7 @@ const P = {'1':[[C(1),C(0)],[C(0),C(1)]], T:[[C(0,1),C(0)],[C(0),C(0,1)]], I:[[C
   J:[[C(0),C(1)],[C(-1),C(0)]], K:[[C(0),C(0,1)],[C(0,1),C(0)]],
   sI:[[C(1),C(0)],[C(0),C(-1)]], sJ:[[C(0),C(0,-1)],[C(0,1),C(0)]], sK:[[C(0),C(1)],[C(1),C(0)]]};
 const PK = ['1', 'T', 'I', 'J', 'K', 'sI', 'sJ', 'sK'];
-const PL = {'1':'<span class="one">1</span>', T:'T̂', I:'Î', J:'Ĵ', K:'K̂', sI:'σ̂<sub>I</sub>', sJ:'σ̂<sub>J</sub>', sK:'σ̂<sub>K</sub>'};
+const PL = {'1':'<span class="one">1</span>', T:'T̂', I:'Î', J:'Ĵ', K:'K̂', sI:'<span class="hs">σ</span><sub>I</sub>', sJ:'<span class="hs">σ</span><sub>J</sub>', sK:'<span class="hs">σ</span><sub>K</sub>'};
 const cm = (a, b) => [a[0]*b[0] - a[1]*b[1], a[0]*b[1] + a[1]*b[0]];
 const ca = (a, b) => [a[0] + b[0], a[1] + b[1]];
 const eq = (a, b) => Math.abs(a[0] - b[0]) < 1e-12 && Math.abs(a[1] - b[1]) < 1e-12;
@@ -352,7 +360,7 @@ function facts(){
     <li><b>Squares.</b> X² = −𝟙 for ${neg}; X² = +𝟙 for ${pos}.</li>
     <li><b>Clifford relations.</b> β<sub>0</sub>² = −𝟙, β<sub>i</sub>² = +𝟙, and distinct β<sub>μ</sub> anticommute: β<sub>μ</sub>β<sub>ν</sub> + β<sub>ν</sub>β<sub>μ</sub> = 2η<sub>μν</sub>𝟙 with η = diag(−1, 1, 1, 1).</li>
     <li><b>χ.</b> χ² = −𝟙; χ anticommutes with all β<sub>μ</sub> and β̃<sub>μ</sub> and commutes with all α<sub>i</sub> and Σ<sub>i</sub> (${chiC.filter(x => x === 'a').length} anticommuting, ${chiC.filter(x => x === 'c').length} commuting).</li>
-    <li><b>Boost and spin.</b> α<sub>i</sub> = [[σ̂<sub>i</sub>, 0], [0, −σ̂<sub>i</sub>]] carries the spin-norm σ̂ blocks, Σ<sub>i</sub> = [[−K̂<sub>i</sub>, 0], [0, −K̂<sub>i</sub>]] the space-time K̂ blocks: the Pauli-level σ̂/K̂ split reappears as the boost/spin split.</li>
+    <li><b>Boost and spin.</b> α<sub>i</sub> = [[<span class="hs">σ</span><sub>i</sub>, 0], [0, −<span class="hs">σ</span><sub>i</sub>]] carries the spin-norm <span class="hs">σ</span> blocks, Σ<sub>i</sub> = [[−K̂<sub>i</sub>, 0], [0, −K̂<sub>i</sub>]] the space-time K̂ blocks: the Pauli-level <span class="hs">σ</span>/K̂ split reappears as the boost/spin split.</li>
     <li><b>Duality.</b> χα<sub>i</sub> = −Σ<sub>i</sub> and χΣ<sub>i</sub> = α<sub>i</sub>: χ maps the boost bivectors onto the spin bivectors.</li>
     <li><b>Count.</b> Of the 105 pairs of distinct non-unit elements, ${comm} commute and ${anti} anticommute. All 256 products agree between the block and the 4×4 route: <b style="color:var(${allOK ? '--good' : '--bad'})">${allOK ? 'yes' : 'no'}</b>.</li>
   </ul>`;
