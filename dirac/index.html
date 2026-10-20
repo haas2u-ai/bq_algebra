@@ -240,7 +240,7 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
 
   <section class="theme" aria-labelledby="d3">
     <h3 class="tname" id="d3"><span class="tnum">3</span>Lorentz transformations, as global rapidity</h3>
-    <p class="groupnote">The Pauli rotor U doubled into the Weyl boost Λ = diag(U<sup>−1</sup>, U), acting on vectors and on bilinears by one similarity.</p>
+    <p class="groupnote">The Pauli rotor U doubled into the Weyl boost Λ = diag(U<sup>−1</sup>, U), acting on vectors, bilinears and triples by one similarity.</p>
     <div class="grid">
 
     <a class="card" href="models/BQ_Dirac_Lorentz_Transformations.html">
@@ -289,6 +289,26 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
         <span class="open">Open the model</span>
       </div>
     </a>
+    <a class="card" href="models/BQ_Dirac_Triple_Product_Covariance.html">
+      <svg class="art" viewBox="0 0 320 200" role="img" aria-label="Under a boost the vector and the pseudovector sector of a triple product each move as a four-vector">
+        <rect width="320" height="200" fill="#03050b"/>
+        <g font-family="Source Serif 4, Georgia, serif">
+          <text x="20" y="42" fill="#e7ebf3" font-size="17">E<tspan font-size="11" baseline-shift="super">L</tspan> = ΛEΛ⁻¹</text>
+          <text x="20" y="80" fill="#f2a24a" font-size="15">(e₀, e) → Λ<tspan font-size="10" baseline-shift="sub">ν</tspan><tspan font-size="10" baseline-shift="super">μ</tspan> : vector</text>
+          <text x="20" y="108" fill="#5fd38a" font-size="15">(r₀, r) → Λ<tspan font-size="10" baseline-shift="sub">ν</tspan><tspan font-size="10" baseline-shift="super">μ</tspan> : pseudovector</text>
+          <text x="20" y="146" fill="#e7ebf3" font-size="14">∂B = −μ₀J in every frame</text>
+          <text x="20" y="184" fill="#97a2b9" font-size="12" font-family="IBM Plex Sans, sans-serif">upper block: the Pauli rule U⁻¹EU⁻¹</text>
+        </g>
+      </svg>
+      <div class="body">
+        <span class="step">Dirac step 7 · covariance of the triple</span>
+        <h3>Covariance of the triple-product equations</h3>
+        <p>Choose D, A and B freely, or click an equation from the papers (Maxwell, the Lorentz force, the interaction and fluid equations), and set a velocity. The triple is boosted by the same similarity, <span class="sl">E</span><sup>L</sup> = Λ<span class="sl">E</span>Λ<sup>−1</sup>, and its vector and pseudovector sectors each move as a four-vector, so the equations keep their form. With the invariants, the Pauli rule U<sup>−1</sup>EU<sup>−1</sup> as a block, and the four-gradient acting on a boosted field.</p>
+        <div class="rule"><span class="sl">D</span><sup>L</sup>(<span class="sl">A</span><sup>L</sup><span class="sl">B</span><sup>L</sup>) = Λ<span class="sl">D</span>Λ<sup>−1</sup>Λ<span class="sl">C</span>Λ<sup>−1</sup> = Λ<span class="sl">E</span>Λ<sup>−1</sup></div>
+        <div class="tags"><span>Maxwell covariant</span><span>two four-vectors</span><span>Pauli U⁻¹EU⁻¹ inside</span></div>
+        <span class="open">Open the model</span>
+      </div>
+    </a>
 
     </div>
   </section>
@@ -307,6 +327,7 @@ h3.tname{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-
         <li class="fh">3 · Lorentz transformations</li>
         <li><code>bq_dirac_lorentz.py</code> · Λ = diag(U<sup>−1</sup>, U) = e<sup>−ψα<sub>I</sub>/2</sup> as the double of U, the boost of a vector and its blocks, the Dirac lemma, boosts along any <b>n</b>, rotations, and the composition of two boosts with the Thomas–Wigner angle</li>
         <li><code>bq_dirac_bilinear_lorentz.py</code> · the boost of <span class="sl">C</span> = <span class="sl">A</span><span class="sl">B</span> as Λ<span class="sl">C</span>Λ<sup>−1</sup>, the block form with U(A<sup>T</sup>B)U<sup>−1</sup>, the channel rule, the invariants, the complex form and the Pauli correspondence</li>
+        <li><code>bq_dirac_triple_lorentz.py</code> · the boost of <span class="sl">E</span> = <span class="sl">D</span>(<span class="sl">A</span><span class="sl">B</span>) as Λ<span class="sl">E</span>Λ<sup>−1</sup>, both sectors as four-vectors, the invariants, the Pauli rule U<sup>−1</sup>EU<sup>−1</sup>, and the four-gradient on a general boosted field</li>
       </ul>
       <p>Only Python 3 and SymPy are needed.</p>
     </div>
@@ -328,7 +349,8 @@ python bq_dirac_quadratics.py
 
 <span class="cm"># 3 · Lorentz transformations</span>
 python bq_dirac_lorentz.py
-python bq_dirac_bilinear_lorentz.py</pre>
+python bq_dirac_bilinear_lorentz.py
+python bq_dirac_triple_lorentz.py</pre>
   </section>
 
   <section class="about" aria-label="About these models">
